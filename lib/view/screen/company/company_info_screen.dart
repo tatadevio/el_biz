@@ -1,4 +1,3 @@
-import 'package:el_biz/controller/cities_controller.dart';
 import 'package:el_biz/controller/product_controller.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/cities/cities_page.dart';
@@ -70,7 +69,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                 GetBuilder<ProductController>(builder: (productController) {
                   return InkWell(
                     onTap: () {
-                      Get.bottomSheet(CitiesScreen(), isScrollControlled: true);
+                      Get.bottomSheet(const CitiesScreen(), isScrollControlled: true);
                     },
                     child: Container(
                       height: 48,
@@ -238,7 +237,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                     height: 50,
                     title: "continue".tr,
                     onTap: () {
-                      Get.to(() => CompanyContactInfoScreen());
+                      Get.to(() => const CompanyContactInfoScreen());
                     },
                   )
                 : CustomButtonLoader(width: size.width * .9, height: 50);

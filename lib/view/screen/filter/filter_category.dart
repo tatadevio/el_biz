@@ -8,7 +8,6 @@ import '../../../data/model/response/product/add_attribute_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
-import '../../base/custom_textfield.dart';
 import '../category/categories.dart';
 import '../category/main_categories.dart';
 

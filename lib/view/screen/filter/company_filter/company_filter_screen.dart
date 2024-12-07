@@ -1,4 +1,3 @@
-import 'package:el_biz/controller/cities_controller.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -13,8 +12,7 @@ import '../../category/main_categories.dart';
 import '../../cities/cities_page.dart';
 
 class CompanyFilterScreen extends StatefulWidget {
-  final bool fromHome;
-  const CompanyFilterScreen({super.key, required this.fromHome});
+  const CompanyFilterScreen({super.key});
 
   @override
   State<CompanyFilterScreen> createState() => _CompanyFilterScreenState();
@@ -67,11 +65,9 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
   @override
   Widget build(BuildContext context) {
     // var height = Get.height;
-    var width = Get.width;
+    // var width = Get.width;
     return Scaffold(
-      // backgroundColor: ColorResources.background,
       appBar: AppBar(
-        // backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         title: Text(
           "filter".tr,
@@ -396,7 +392,6 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
           }),
         ),
       ),
-
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'filters'.tr),

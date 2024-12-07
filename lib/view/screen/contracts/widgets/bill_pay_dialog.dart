@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,28 +25,25 @@ class _BillPayDialogState extends State<BillPayDialog> {
 
   Future<void> _pickPDF() async {
     try {
-      // Pick a single file
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['pdf'], // Restrict to PDF files
+        allowedExtensions: ['pdf'],
       );
 
       if (result != null) {
-        // Get the file path
         String? path = result.files.single.path;
 
         if (path != null) {
           final file = File(path);
-          final fileBytes = await file.length(); // Get file size in bytes
+          final fileBytes = await file.length();
           setState(() {
             selectedFilePath = path;
             fileSize = _formatFileSize(fileBytes);
           });
         }
       } else {
-        // User canceled the picker
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No file selected.')),
+          const SnackBar(content: Text('No file selected.')),
         );
       }
     } catch (e) {
@@ -90,7 +86,7 @@ class _BillPayDialogState extends State<BillPayDialog> {
             onTap: () {
               _pickPDF();
             },
-            leading: Icon(Icons.file_copy_sharp),
+            leading: const Icon(Icons.file_copy_sharp),
             title: Text(path.basename(selectedFilePath!)),
             subtitle: Text(fileSize.toString()),
           ),

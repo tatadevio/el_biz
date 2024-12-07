@@ -1,13 +1,11 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:el_biz/view/screen/company/my_companies_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class AddCompanyBottomSheet extends StatefulWidget {
@@ -38,7 +36,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                   height: 3,
                   width: 35,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(217, 217, 217, 1),
+                    color: const Color.fromRGBO(217, 217, 217, 1),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),
@@ -67,7 +65,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                         _selectedOption = value;
                       });
                       Get.back();
-                      Get.to(() => CompanyPageScreen());
+                      Get.to(() => const CompanyPageScreen());
                     },
                   ),
                   const SizedBox(
@@ -112,7 +110,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                     borderColor: ColorResources.green,
                     onTap: () {
                       Get.back();
-                      Get.to(() => MyCompaniesScreen());
+                      Get.to(() => const MyCompaniesScreen());
                     },
                   ),
                   // CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'Добавить компанию'),
@@ -135,7 +133,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
         color: ColorResources.lightBlue,
         border: Border.all(width: 1, color: ColorResources.lgColor),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             blurRadius: 8,
             spreadRadius: -2,

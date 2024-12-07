@@ -3,7 +3,6 @@ import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/product_controller.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/product_grid_item.dart';
@@ -14,7 +13,7 @@ class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
-    double width = MediaQuery.sizeOf(context).width;
+    // double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -22,9 +21,9 @@ class FavoriteScreen extends StatelessWidget {
           'Избранное',
           style: h16.copyWith(color: ColorResources.blackText),
         ),
-        actions: [
+        actions: const [
           AppbarNotificationButton(),
-          const SizedBox(
+          SizedBox(
             width: 10,
           ),
         ],

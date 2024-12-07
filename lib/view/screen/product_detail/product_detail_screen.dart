@@ -138,6 +138,7 @@ class ProductDetailScreen extends StatelessWidget {
                                 allowHalfRating: true,
                                 itemCount: 5,
                                 itemSize: 14,
+                                ignoreGestures: true,
                                 itemPadding: EdgeInsets.symmetric(horizontal: 0),
                                 itemBuilder: (context, _) => Icon(
                                   Icons.star,

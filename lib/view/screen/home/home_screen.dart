@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/product_controller.dart';
 import '../company/widgets/fill_company_data_box.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -145,6 +146,7 @@ class HomeScreen extends StatelessWidget {
                   detail: 'Найти товары от производителей и поставщиков',
                   backgroundColor: ColorResources.green,
                   onTap: () {
+                    Get.find<ProductController>().updateShowCategories(false);
                     Get.to(() => ProductScreen());
                   }),
               SizedBox(
@@ -156,6 +158,7 @@ class HomeScreen extends StatelessWidget {
                 detail: 'Посмотреть объявления о закупках товаров или добавить свое',
                 backgroundColor: ColorResources.orange,
                 onTap: () {
+                  Get.find<ProductController>().updateShowCategories(true);
                   Get.to(() => ProductScreen());
                 },
               ),

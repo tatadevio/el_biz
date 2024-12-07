@@ -102,9 +102,9 @@ class ProductScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           onTap: () {
                             if (productController.isShowCategories) {
-                              Get.to(() => const CompanyFilterScreen(fromHome: true));
+                              Get.to(() => const CompanyFilterScreen());
                             } else {
-                              Get.to(() => const ProductsFilterScreen(fromHome: true));
+                              Get.to(() => const ProductsFilterScreen());
                             }
                           },
                           child: Container(

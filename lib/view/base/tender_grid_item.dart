@@ -4,12 +4,11 @@ import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_like_button.dart';
 import 'package:el_biz/view/screen/product_detail/product_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
-class ProductGridItem extends StatelessWidget {
+class TenderGridItem extends StatelessWidget {
   final bool isFavorite;
-  const ProductGridItem({super.key, this.isFavorite = false});
+  const TenderGridItem({super.key, this.isFavorite = false});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,7 @@ class ProductGridItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Стул раскладной',
+                  'Садовая мебель, раскладные стулья',
                   style: h16.copyWith(color: ColorResources.darkGray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -61,38 +60,38 @@ class ProductGridItem extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  '2 500 сом/шт',
+                  'Количество: 20шт',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: h16.copyWith(color: ColorResources.blue),
+                  style: body14.copyWith(color: const Color.fromRGBO(71, 84, 103, 1)),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'Бюджет: 50 000 сом',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: body14.copyWith(color: const Color.fromRGBO(71, 84, 103, 1)),
                 ),
                 const SizedBox(
                   height: 5,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '(4.8) ',
+                      'Юр.лицо',
                       style: body14.copyWith(color: ColorResources.gray),
                     ),
-                    RatingBar.builder(
-                      initialRating: 4.8,
-                      minRating: 0,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 14,
-                      ignoreGestures: true,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: ColorResources.yellow,
-                      ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
-                    ),
+                    Text(
+                      '12 окт. 2024',
+                      style: body14.copyWith(color: ColorResources.gray),
+                    )
                   ],
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
               ],
             ),

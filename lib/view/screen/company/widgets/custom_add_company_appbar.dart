@@ -21,9 +21,11 @@ PreferredSizeWidget CustomAddCompanyAppbar({
                           ? 250
                           : Get.currentRoute == "/CompanyAccountInfoScreen"
                               ? 250
-                              : Get.currentRoute == "/SelectCategoryAddProduct"
-                                  ? 20
-                                  : 20;
+                              : Get.currentRoute == "/AddCompanyDocumentScreen"
+                                  ? 250
+                                  : Get.currentRoute == "/SelectCategoryAddProduct"
+                                      ? 20
+                                      : 20;
 
   double percentage = Get.currentRoute == "/AddCompanyScreen"
       ? 0
@@ -39,9 +41,11 @@ PreferredSizeWidget CustomAddCompanyAppbar({
                           ? 90
                           : Get.currentRoute == "/CompanyAccountInfoScreen"
                               ? 90
-                              : Get.currentRoute == "/SelectCategoryAddProduct"
-                                  ? 10
-                                  : 10;
+                              : Get.currentRoute == "/AddCompanyDocumentScreen"
+                                  ? 90
+                                  : Get.currentRoute == "/SelectCategoryAddProduct"
+                                      ? 10
+                                      : 10;
 
   return AppBar(
     backgroundColor: Colors.white,

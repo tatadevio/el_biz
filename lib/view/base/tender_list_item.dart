@@ -1,7 +1,6 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -9,8 +8,8 @@ import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
 
-class ProductListItem extends StatelessWidget {
-  const ProductListItem({super.key});
+class TenderListItem extends StatelessWidget {
+  const TenderListItem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class ProductListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
-          Get.to(() => const ProductDetailScreen());
+          Get.to(() => ProductDetailScreen());
         },
         child: Container(
           height: 120,
@@ -62,54 +61,58 @@ class ProductListItem extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Стул раскладной',
-                      style: h16.copyWith(color: ColorResources.darkGray),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'Раскладной садовый стул из дерева',
-                      style: body14.copyWith(color: ColorResources.gray),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '2 500 сом/шт',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: h16.copyWith(color: ColorResources.blue),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '(4.8) ',
+                          'Садовая мебель, раскладные стулья',
+                          style: h16.copyWith(color: ColorResources.darkGray),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          'Раскладной садовый стул из дерева',
+                          style: body14.copyWith(color: ColorResources.gray),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Количество: 20шт',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: body14.copyWith(color: Color.fromRGBO(71, 84, 103, 1)),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Бюджет: 50 000 сом',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: body14.copyWith(color: Color.fromRGBO(71, 84, 103, 1)),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Юр.лицо',
                           style: body14.copyWith(color: ColorResources.gray),
                         ),
-                        RatingBar.builder(
-                          initialRating: 4.8,
-                          minRating: 0,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 14,
-                          ignoreGestures: true,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 0),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: ColorResources.yellow,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        ),
+                        Text(
+                          '12 окт. 2024',
+                          style: body14.copyWith(color: ColorResources.gray),
+                        )
                       ],
                     ),
                   ],

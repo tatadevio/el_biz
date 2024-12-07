@@ -2,9 +2,9 @@ import 'package:el_biz/controller/tenders_controller.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/product_grid_item.dart';
-import 'package:el_biz/view/base/product_list_item.dart';
-import 'package:el_biz/view/screen/filter/filter_category.dart';
+import 'package:el_biz/view/base/tender_grid_item.dart';
+import 'package:el_biz/view/base/tender_list_item.dart';
+import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -88,7 +88,7 @@ class TenderScreen extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        Get.to(() => FilterCategory(fromHome: true));
+                        Get.to(() => ProductsFilterScreen());
                       },
                       child: Container(
                         height: 40,
@@ -224,16 +224,16 @@ class TenderScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: tendersController.isGridView
               ? GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.7),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.65),
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return const ProductGridItem();
+                    return const TenderGridItem();
                   },
                 )
               : ListView.builder(
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return const ProductListItem();
+                    return const TenderListItem();
                   },
                 ),
         );

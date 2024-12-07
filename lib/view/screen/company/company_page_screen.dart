@@ -30,7 +30,7 @@ class CompanyPageScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: const [
                 BoxShadow(
                   blurRadius: 4,
                   spreadRadius: -2,
@@ -126,8 +126,8 @@ class CompanyPageScreen extends StatelessWidget {
                               itemCount: 5,
                               itemSize: 14,
                               ignoreGestures: true,
-                              itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                              itemBuilder: (context, _) => Icon(
+                              itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                              itemBuilder: (context, _) => const Icon(
                                 Icons.star,
                                 color: Colors.amber,
                               ),
@@ -165,7 +165,7 @@ class CompanyPageScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: const [
                 BoxShadow(
                   blurRadius: 4,
                   spreadRadius: -2,
@@ -223,7 +223,7 @@ class CompanyPageScreen extends StatelessWidget {
                   children: [
                     CustomButtonWithIcon(
                       onTap: () {
-                        Get.to(() => DeleteCompanyScreen());
+                        Get.to(() => const DeleteCompanyScreen());
                       },
                       title: 'Удалить профиль',
                       svgIcon: Images.svgTrash,
@@ -255,7 +255,7 @@ class CompanyPageScreen extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(width: 1, color: ColorResources.blue),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 2,
                           spreadRadius: 0,
@@ -275,7 +275,7 @@ class CompanyPageScreen extends StatelessWidget {
                     height: 50,
                     title: "continue".tr,
                     onTap: () {
-                      Get.offAll(() => DashboardScreen());
+                      Get.offAll(() => const DashboardScreen());
                     },
                   )),
       ),

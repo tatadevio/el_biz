@@ -1,5 +1,4 @@
 import 'package:el_biz/controller/contracts_controller.dart';
-import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -8,7 +7,6 @@ import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/screen/contracts/sign_contract_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/bill_pay_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ContractPageScreen extends StatelessWidget {
@@ -141,7 +139,7 @@ class ContractPageScreen extends StatelessWidget {
                     height: 44,
                     onTap: () {
                       Get.dialog(
-                        CustomDialog(
+                        const CustomDialog(
                           widget: AlertDialog(content: BillPayDialog()),
                         ),
                       );
@@ -183,7 +181,7 @@ class ContractPageScreen extends StatelessWidget {
                   width: Get.width,
                   height: 44,
                   onTap: () {
-                    Get.to(() => SignContractScreen());
+                    Get.to(() => const SignContractScreen());
                   },
                   title: 'Подписание'),
             ),

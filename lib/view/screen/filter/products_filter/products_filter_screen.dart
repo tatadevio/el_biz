@@ -13,8 +13,7 @@ import '../../../base/custom_button.dart';
 import '../../category/main_categories.dart';
 
 class ProductsFilterScreen extends StatefulWidget {
-  final bool fromHome;
-  const ProductsFilterScreen({super.key, required this.fromHome});
+  const ProductsFilterScreen({super.key});
 
   @override
   State<ProductsFilterScreen> createState() => _ProductsFilterScreenState();
