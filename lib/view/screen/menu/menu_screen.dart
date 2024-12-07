@@ -1,5 +1,6 @@
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/account/account_screen.dart';
+import 'package:el_biz/view/screen/auth/login.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
 import 'package:el_biz/view/screen/menu/profile_information_screen.dart';
 import 'package:el_biz/view/screen/menu/widgets/add_company_bottom_sheet.dart';
@@ -76,7 +77,7 @@ class MenuScreen extends StatelessWidget {
               'Личные данные',
               isSelected: true,
               onTap: () {
-                Get.to(() => ProfileInformationScreen());
+                Get.to(() => const ProfileInformationScreen());
               },
             ),
             cusotmInfoList(
@@ -84,7 +85,7 @@ class MenuScreen extends StatelessWidget {
               'Мои компании',
               isSelected: false,
               onTap: () {
-                Get.bottomSheet(AddCompanyBottomSheet(), backgroundColor: Colors.white, isScrollControlled: true);
+                Get.bottomSheet(const AddCompanyBottomSheet(), backgroundColor: Colors.white, isScrollControlled: true);
               },
             ),
             cusotmInfoList(
@@ -94,7 +95,7 @@ class MenuScreen extends StatelessWidget {
               isSelected: false,
               onTap: () {
                 // Get.to(() => ProfileInformationScreen());
-                Get.to(() => AccountScreen());
+                Get.to(() => const AccountScreen());
               },
             ),
             cusotmInfoList(
@@ -102,7 +103,7 @@ class MenuScreen extends StatelessWidget {
               'Избранное',
               isSelected: false,
               onTap: () {
-                Get.to(() => FavoriteScreen());
+                Get.to(() => const FavoriteScreen());
               },
             ),
             cusotmInfoList(
@@ -110,8 +111,21 @@ class MenuScreen extends StatelessWidget {
               'Помощь',
               isSelected: false,
               onTap: () {
-                Get.to(() => SupportScreen());
+                Get.to(() => const SupportScreen());
               },
+            ),
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                child: Row(
+                  children: [
+                    Text(
+                      'О приложении',
+                      style: body16.copyWith(color: ColorResources.gray),
+                    ),
+                  ],
+                ),
+              ),
             ),
             cusotmInfoList(
               Images.svgLogout,
@@ -125,7 +139,7 @@ class MenuScreen extends StatelessWidget {
                       Container(
                         height: 48,
                         width: 48,
-                        decoration: BoxDecoration(color: ColorResources.lightBlue, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: ColorResources.lightBlue, shape: BoxShape.circle),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(Images.svgHelpCircle),
                       ),
@@ -139,7 +153,7 @@ class MenuScreen extends StatelessWidget {
                       Text(
                         "Выйти из профиля?".tr,
                         style: h16.copyWith(
-                          color: Color.fromRGBO(16, 24, 40, 1),
+                          color: const Color.fromRGBO(16, 24, 40, 1),
                         ),
                       ),
                       const SizedBox(
@@ -159,8 +173,8 @@ class MenuScreen extends StatelessWidget {
                               },
                               color: ColorResources.lgColor,
                               child: Text(
-                                "no".tr,
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                                "Отменить".tr,
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                               ),
                               //  Colors.grey[300],
                             ),
@@ -175,11 +189,12 @@ class MenuScreen extends StatelessWidget {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                               onPressed: () async {
                                 Get.back();
+                                Get.offAll(() => const LoginScreen());
                               },
                               color: ColorResources.primary,
                               child: Text(
-                                "yes".tr,
-                                style: TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                                "Выйти".tr,
+                                style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                               ),
                             ),
                           ),
@@ -202,7 +217,7 @@ class MenuScreen extends StatelessWidget {
                       Container(
                         height: 48,
                         width: 48,
-                        decoration: BoxDecoration(color: Color.fromRGBO(253, 162, 155, 0.5), shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: Color.fromRGBO(253, 162, 155, 0.5), shape: BoxShape.circle),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           Images.svgHelpCircle,
@@ -219,7 +234,7 @@ class MenuScreen extends StatelessWidget {
                       Text(
                         "Удалить профиль?".tr,
                         style: h16.copyWith(
-                          color: Color.fromRGBO(16, 24, 40, 1),
+                          color: const Color.fromRGBO(16, 24, 40, 1),
                         ),
                       ),
                       const SizedBox(
@@ -248,8 +263,8 @@ class MenuScreen extends StatelessWidget {
                               },
                               color: ColorResources.lgColor,
                               child: Text(
-                                "no".tr,
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                                "Отменить".tr,
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                               ),
                               //  Colors.grey[300],
                             ),
@@ -264,11 +279,12 @@ class MenuScreen extends StatelessWidget {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                               onPressed: () async {
                                 Get.back();
+                                Get.offAll(() => const LoginScreen());
                               },
                               color: ColorResources.red,
                               child: Text(
-                                "yes".tr,
-                                style: TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                                "Удалить".tr,
+                                style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                               ),
                             ),
                           ),

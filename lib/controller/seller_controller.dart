@@ -224,61 +224,11 @@ class SellerController extends GetxController implements GetxService {
     update();
   }
 
-  // void pickBannerImage() async {
-  //   XFile? value = await ImagePicker().pickImage(maxWidth: 1024, source: ImageSource.gallery);
-  //   _pickedBanner = await convertHEICtoJPG(File(value!.path));
-  //   update();
-  // }
-
-  // void pickLogoImage(ImageSource source) async {
-  //   XFile? value = await ImagePicker().pickImage(maxWidth: 1024, source: source);
-  //   _pickedLogo = await convertHEICtoJPG(File(value!.path));
-  //   update();
-  // }
-
-  // Future<XFile> convertHEICtoJPG(File heicFile) async {
-  //   final tempDir = await getTemporaryDirectory();
-  //   final tempPath = tempDir.path;
-
-  //   final result = await FlutterImageCompress.compressAndGetFile(
-  //     heicFile.path,
-  //     '$tempPath/${DateTime.now().millisecondsSinceEpoch}.jpg',
-  //     quality: 100,
-  //     format: CompressFormat.jpeg,
-  //   );
-  //   return result!;
-  // }
-
   void changeCompanyInfo(String name, String about) {
     _companyName = name;
     _companyAbout = about;
     update();
   }
-
-  // Future<ResponseModel> completeBusinessProfile(Map<String, String> value) async {
-  //   ResponseModel responseModel;
-  //   _isRegister = true;
-  //   update();
-  //   dynamic response = await managerRepo.completeProfile("", _pickedLogo, _pickedBanner, value);
-  //   Map map = jsonDecode(response.body);
-  //   print(map);
-  //   if (response.statusCode == 200) {
-  //     responseModel = ResponseModel(true, map['message']);
-  //     _pickedBanner = XFile("");
-  //     _pickedLogo = XFile("");
-  //     _longitude = "";
-  //     _latitude = "";
-  //     _locationAddress = "";
-  //     _companyName = "";
-  //     _companyAbout = "";
-  //     getSellerInfo(_sellerInfoModel!.data!.id.toString());
-  //   } else {
-  //     responseModel = ResponseModel(false, map['message']);
-  //   }
-  //   _isRegister = false;
-  //   update();
-  //   return responseModel;
-  // }
 
   Future<void> addToFavSeller(
     String id,

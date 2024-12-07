@@ -68,11 +68,6 @@ Future<void> init() async {
   Get.lazyPut<ReviewRepo>(() => ReviewRepo(Get.find(), Get.find()), fenix: true);
   Get.lazyPut<ContractRepo>(() => ContractRepo(Get.find(), Get.find()), fenix: true);
   Get.lazyPut<CompnayRepo>(() => CompnayRepo(Get.find(), Get.find()), fenix: true);
-  // Get.lazyPut<BankRepo>(() => BankRepo(Get.find(), Get.find()), fenix: true);
-  // Get.lazyPut<PackageRepo>(() => PackageRepo(Get.find(), Get.find()), fenix: true);
-  // Get.lazyPut<PaymentRepo>(() => PaymentRepo( apiClient: Get.find(), ), fenix: true);
-  // Get.lazyPut<WalletRepo>(() => WalletRepo(Get.find(), ), fenix: true);
-  //Get.lazyPut(()=>Rx<User?>(FirebaseAuth.instance.currentUser));
 
   Get.lazyPut<AuthController>(() => AuthController(authRepo: Get.find()), fenix: true);
   // Get.lazyPut<NetworkConnectivityController>(() => NetworkConnectivityController(), fenix: true);
@@ -93,10 +88,6 @@ Future<void> init() async {
   Get.lazyPut<ReviewController>(() => ReviewController(Get.find()), fenix: true);
   Get.lazyPut<ContractsController>(() => ContractsController(Get.find()), fenix: true);
   Get.lazyPut<CompanyController>(() => CompanyController(Get.find()), fenix: true);
-  // Get.lazyPut<BankController>(() => BankController(bankRepo: Get.find()), fenix: true);
-  // Get.lazyPut<PackageController>(() => PackageController( Get.find()), fenix: true);
-  // Get.lazyPut<PaymentController>(() => PaymentController(paymentRepo: Get.find() ), fenix: true);
-  // Get.lazyPut<WalletController>(() => WalletController(walletRepo: Get.find() ), fenix: true);
 
   Get.lazyPut<LocalizationController>(() => LocalizationController(sharedPreferences: Get.find(), apiClient: Get.find()), fenix: true);
 

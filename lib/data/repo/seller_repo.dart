@@ -68,45 +68,4 @@ class SellerRepo {
   Future<Response> getSellerFollowings(int? page, int sellerId) async {
     return await apiClient.getData('${AppConstants.sellerFollowingsUri}/$sellerId?page=${page ?? 1}');
   }
-
-  // Future completeProfile(String id, XFile logoImage, XFile bannerImage,
-  //     Map<String, String> value) async {
-  //   String? token = sharedPreferences.getString("token");
-  //   Uri url = id == ""
-  //       ? Uri.parse(
-  //           '${AppConstants.baseUrl}${AppConstants.completeSellerUrl}',
-  //         )
-  //       : Uri.parse(
-  //           '${AppConstants.baseUrl}${AppConstants.completeSellerUrl}',
-  //         );
-  //   http.MultipartRequest request = http.MultipartRequest('POST', url);
-  //   request.headers.addAll({
-  //     'Authorization': 'Bearer $token',
-  //   });
-
-  //   File file0 = File(logoImage.path);
-  //   request.files.add(http.MultipartFile(
-  //       'logo', file0.readAsBytes().asStream(), file0.lengthSync(),
-  //       filename: file0.path.split('/').last));
-
-  //   File file1 = File(bannerImage.path);
-  //   request.files.add(http.MultipartFile(
-  //       'banner', file1.readAsBytes().asStream(), file1.lengthSync(),
-  //       filename: file1.path.split('/').last));
-
-  //   Map<String, String> _fields = {};
-  //   _fields.addAll(value);
-
-  //   request.fields.addAll(_fields);
-  //   print('=====> ${request.url.path}\n' + request.fields.toString());
-  //   http.StreamedResponse response = await request.send();
-  //   var res = await http.Response.fromStream(response);
-  //   print('=====Response body is here==>${res.body}');
-  //   try {
-  //     return res;
-  //   } catch (e) {
-  //     return res;
-  //   }
-  //   //return await apiClient.getData(AppConstants.courseDetailUrl+"/"+id);
-  // }
 }
