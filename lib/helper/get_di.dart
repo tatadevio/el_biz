@@ -1,0 +1,115 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:el_biz/controller/company_controller.dart';
+import 'package:el_biz/controller/contracts_controller.dart';
+import 'package:el_biz/controller/notification_controller.dart';
+import 'package:el_biz/controller/review_controller.dart';
+import 'package:el_biz/controller/tenders_controller.dart';
+import 'package:el_biz/data/repo/compnay_repo.dart';
+import 'package:el_biz/data/repo/contract_repo.dart';
+import 'package:el_biz/data/repo/notification_repo.dart';
+import 'package:el_biz/data/repo/review_repo.dart';
+import 'package:el_biz/data/repo/tenders_repo.dart';
+import 'package:flutter/services.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+
+import '../controller/auth_controller.dart';
+import '../controller/category_controller.dart';
+import '../controller/chat_controller.dart';
+import '../controller/cities_controller.dart';
+import '../controller/config_controller.dart';
+import '../controller/favorite_controller.dart';
+import '../controller/home_controller.dart';
+import '../controller/localization_controller.dart';
+import '../controller/network_check_controller.dart';
+import '../controller/post_ad_controller.dart';
+import '../controller/product_controller.dart';
+import '../controller/product_detail_controller.dart';
+import '../controller/seller_controller.dart';
+import '../controller/user_controller.dart';
+import '../data/api/api_client.dart';
+import '../data/model/base/language_model.dart';
+import '../data/repo/auth_repo.dart';
+import '../data/repo/category_repo.dart';
+import '../data/repo/chat_repo.dart';
+import '../data/repo/cities_repo.dart';
+import '../data/repo/config_repo.dart';
+import '../data/repo/favorite_repo.dart';
+import '../data/repo/home_repo.dart';
+import '../data/repo/post_ad_repo.dart';
+import '../data/repo/product_repo.dart';
+import '../data/repo/seller_repo.dart';
+import '../data/repo/user_repo.dart';
+import '../utils/appConstant.dart';
+
+// Future<Map<String, Map<String, String>>>
+
+Future<void> init() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  Get.lazyPut(() => sharedPreferences);
+
+  Get.lazyPut(() => ApiClient(appBaseUrl: AppConstants.baseUrl, sharedPreferences: Get.find()), fenix: true);
+  Get.lazyPut<ConfigRepo>(() => ConfigRepo(Get.find()), fenix: true);
+  Get.lazyPut<AuthRepo>(() => AuthRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<UserRepo>(() => UserRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<HomeRepo>(() => HomeRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<ProductRepo>(() => ProductRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<CategoryRepo>(() => CategoryRepo(Get.find()), fenix: true);
+  Get.lazyPut<CitiesRepo>(() => CitiesRepo(Get.find()), fenix: true);
+  Get.lazyPut<ChatRepo>(() => ChatRepo(Get.find()), fenix: true);
+  Get.lazyPut<PostAdRepo>(() => PostAdRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<FavoriteRepo>(() => FavoriteRepo(Get.find()), fenix: true);
+  Get.lazyPut<SellerRepo>(() => SellerRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<TendersRepo>(() => TendersRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<NotificationRepo>(() => NotificationRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<ReviewRepo>(() => ReviewRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<ContractRepo>(() => ContractRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<CompnayRepo>(() => CompnayRepo(Get.find(), Get.find()), fenix: true);
+  // Get.lazyPut<BankRepo>(() => BankRepo(Get.find(), Get.find()), fenix: true);
+  // Get.lazyPut<PackageRepo>(() => PackageRepo(Get.find(), Get.find()), fenix: true);
+  // Get.lazyPut<PaymentRepo>(() => PaymentRepo( apiClient: Get.find(), ), fenix: true);
+  // Get.lazyPut<WalletRepo>(() => WalletRepo(Get.find(), ), fenix: true);
+  //Get.lazyPut(()=>Rx<User?>(FirebaseAuth.instance.currentUser));
+
+  Get.lazyPut<AuthController>(() => AuthController(authRepo: Get.find()), fenix: true);
+  // Get.lazyPut<NetworkConnectivityController>(() => NetworkConnectivityController(), fenix: true);
+  Get.lazyPut<ConfigController>(() => ConfigController(Get.find()), fenix: true);
+  Get.lazyPut<UserController>(() => UserController(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
+  Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
+  Get.lazyPut<ProductController>(() => ProductController(Get.find()), fenix: true);
+  Get.lazyPut<CategoryController>(() => CategoryController(Get.find()), fenix: true);
+  Get.lazyPut<ProductDetailController>(() => ProductDetailController(Get.find()), fenix: true);
+  Get.lazyPut<CitiesController>(() => CitiesController(Get.find()), fenix: true);
+  Get.lazyPut<ChatController>(() => ChatController(Get.find()), fenix: true);
+  Get.lazyPut<PostAdController>(() => PostAdController(Get.find()), fenix: true);
+  Get.lazyPut<FavoriteController>(() => FavoriteController(Get.find()), fenix: true);
+  Get.lazyPut<SellerController>(() => SellerController(Get.find()), fenix: true);
+  Get.lazyPut<TendersController>(() => TendersController(Get.find()), fenix: true);
+  Get.lazyPut<NotificationController>(() => NotificationController(Get.find()), fenix: true);
+  Get.lazyPut<ReviewController>(() => ReviewController(Get.find()), fenix: true);
+  Get.lazyPut<ContractsController>(() => ContractsController(Get.find()), fenix: true);
+  Get.lazyPut<CompanyController>(() => CompanyController(Get.find()), fenix: true);
+  // Get.lazyPut<BankController>(() => BankController(bankRepo: Get.find()), fenix: true);
+  // Get.lazyPut<PackageController>(() => PackageController( Get.find()), fenix: true);
+  // Get.lazyPut<PaymentController>(() => PaymentController(paymentRepo: Get.find() ), fenix: true);
+  // Get.lazyPut<WalletController>(() => WalletController(walletRepo: Get.find() ), fenix: true);
+
+  Get.lazyPut<LocalizationController>(() => LocalizationController(sharedPreferences: Get.find(), apiClient: Get.find()), fenix: true);
+
+  // Retrieving localized data
+  // Map<String, Map<String, String>> _languages = Map();
+  // for (LanguageModel languageModel in AppConstants.languages) {
+  //   String jsonStringValues = await rootBundle.loadString('assets/language/${languageModel.languageCode}.json');
+  //   Map<String, dynamic> _mappedJson = json.decode(jsonStringValues);
+  //   Map<String, String> _json = Map();
+  //   _mappedJson.forEach((key, value) {
+  //     _json[key] = value.toString();
+  //   });
+  //   _languages['${languageModel.languageCode}_${languageModel.countryCode}'] = _json;
+  // }
+  // return _languages;
+}
