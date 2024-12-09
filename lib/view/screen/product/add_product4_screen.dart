@@ -5,10 +5,12 @@ import 'package:el_biz/view/screen/product/preview_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../data/model/base/add_product_model.dart';
 import '../../base/custom_button.dart';
 
 class AddProduct4Screen extends StatefulWidget {
-  const AddProduct4Screen({super.key});
+  final AddProductModel productData;
+  const AddProduct4Screen({super.key, required this.productData});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -68,6 +70,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                       dense: false,
                       contentPadding: const EdgeInsets.all(0),
                       controlAffinity: ListTileControlAffinity.leading,
+                      activeColor: ColorResources.primary,
                       title: Text(
                         materialData[index]['title'],
                       ),
@@ -95,12 +98,13 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                 padding: const EdgeInsets.all(0),
                 border: Border.all(width: 1, color: ColorResources.blue),
                 borderRadius: BorderRadius.circular(12),
-                boxShaow: [ColorResources.shadow1],
+                boxShaow: const [ColorResources.shadow1],
                 child: Text(
                   'Предпросмотр',
                   style: textMd.copyWith(color: ColorResources.blue),
                 ),
                 onTap: () {
+                  selectedMaterials = [];
                   selectedMaterials = materialData.where((item) => item['isChecked'] == false).toList();
                 },
               ),
@@ -113,8 +117,12 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                   width: Get.width,
                   height: Get.height,
                   onTap: () {
+                    selectedMaterials = [];
                     selectedMaterials = materialData.where((item) => item['isChecked'] == false).toList();
-                    Get.to(() => PreviewProductScreen());
+                    Get.to(() => PreviewProductScreen(
+                          selectedMaterial: selectedMaterials,
+                          productData: widget.productData,
+                        ));
                   },
                   title: 'Сохранить'),
             ),

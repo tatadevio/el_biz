@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:el_biz/controller/product_controller.dart';
+import 'package:el_biz/data/model/base/add_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
@@ -15,7 +16,8 @@ import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
 
 class AddProduct3Screen extends StatefulWidget {
-  const AddProduct3Screen({super.key});
+  final AddProductModel addProductData;
+  const AddProduct3Screen({super.key, required this.addProductData});
 
   @override
   State<AddProduct3Screen> createState() => _AddProduct3ScreenState();
@@ -216,7 +218,14 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
             width: Get.width,
             height: Get.height,
             onTap: () {
-              Get.to(() => AddProduct4Screen());
+              AddProductModel productData = widget.addProductData.copyWith(
+                description: descriptionController.text,
+                keywords: keywordsController.text,
+                size: sizeController.text,
+              );
+              Get.to(() => AddProduct4Screen(
+                    productData: productData,
+                  ));
             },
             title: 'Продолжить'),
       ),

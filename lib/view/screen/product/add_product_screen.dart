@@ -29,7 +29,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController weightUnitController = TextEditingController();
   final TextEditingController regionController = TextEditingController();
 
-  bool isCheckAvailibity = false;
+  String? checkAvailibity;
 
   @override
   void initState() {
@@ -111,7 +111,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   Expanded(
                       flex: 6,
                       child: CustomTextField1(
-                        controller: priceController,
+                        controller: quantityController,
                         hintColor: '',
                         inputType: TextInputType.number,
                         lableText: 'Количество',
@@ -141,11 +141,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
               RadioListTile(
                 dense: true,
                 contentPadding: const EdgeInsets.all(0),
-                value: isCheckAvailibity,
-                groupValue: 'checkAvailability',
+                value: 'Уточнять наличие',
+                groupValue: checkAvailibity,
                 onChanged: (val) {
                   setState(() {
-                    isCheckAvailibity = true;
+                    checkAvailibity = val ?? '';
                   });
                 },
                 title: Text(
@@ -237,29 +237,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
             width: Get.width,
             height: Get.height,
             onTap: () {
-              // final TextEditingController brandController = TextEditingController();
-              // final TextEditingController productNameController = TextEditingController();
-              // final TextEditingController productCodeController = TextEditingController();
-              // final TextEditingController priceController = TextEditingController();
-              // TextEditingController currencyController = TextEditingController();
-              // final TextEditingController quantityController = TextEditingController();
-              // TextEditingController unitController = TextEditingController();
-              // final TextEditingController dimensionsController = TextEditingController();
-              // TextEditingController dimensionsUnitController = TextEditingController();
-              // final TextEditingController weightController = TextEditingController();
-              // TextEditingController weightUnitController = TextEditingController();
-              // final TextEditingController regionController = TextEditingController();
               AddProductModel addProduct = AddProductModel(
-                brandName: brandController.text,
-                productName: productNameController.text,
-                productCode: productCodeController.text,
-                price: priceController.text,
-                currency: currencyController.text,
-                quantity: quantityController.text,
-                quantityUnit: unitController.text,
-              );
+                  brandName: brandController.text,
+                  productName: productNameController.text,
+                  productCode: productCodeController.text,
+                  price: priceController.text,
+                  currency: currencyController.text,
+                  quantity: quantityController.text,
+                  quantityUnit: unitController.text,
+                  dimensions: dimensionsController.text,
+                  dimensionsUnit: dimensionsUnitController.text,
+                  weight: weightController.text,
+                  weightUnit: weightUnitController.text,
+                  region: regionController.text,
+                  availability: checkAvailibity);
 
-              Get.to(() => AddProduct3Screen());
+              Get.to(() => AddProduct3Screen(
+                    addProductData: addProduct,
+                  ));
             },
             title: 'Продолжить'),
       ),

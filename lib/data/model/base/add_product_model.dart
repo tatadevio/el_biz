@@ -14,6 +14,7 @@ class AddProductModel {
   final String? description;
   final String? keywords;
   final String? size;
+  final String? availability;
 
   // Constructor
   const AddProductModel({
@@ -32,6 +33,7 @@ class AddProductModel {
     this.description,
     this.keywords,
     this.size,
+    this.availability,
   });
 
   // Factory method for JSON deserialization
@@ -52,6 +54,7 @@ class AddProductModel {
       description: json['description'],
       keywords: json['keywords'],
       size: json['size'],
+      availability: json['availability'],
     );
   }
 
@@ -73,6 +76,7 @@ class AddProductModel {
       'description': description,
       'keywords': keywords,
       'size': size,
+      'availability': availability,
     };
   }
 
@@ -93,6 +97,7 @@ class AddProductModel {
     String? description,
     String? keywords,
     String? size,
+    String? availability,
   }) {
     return AddProductModel(
       brandName: brandName ?? this.brandName,
@@ -110,12 +115,13 @@ class AddProductModel {
       description: description ?? this.description,
       keywords: keywords ?? this.keywords,
       size: size ?? this.size,
+      availability: availability ?? this.availability,
     );
   }
 
   // Override toString for debugging
   @override
   String toString() {
-    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size)';
+    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability)';
   }
 }
