@@ -6,6 +6,7 @@ import 'package:el_biz/view/screen/company/widgets/company_data.dart/company_ite
 import 'package:el_biz/view/screen/company/widgets/company_data.dart/company_tenders.dart';
 import 'package:el_biz/view/screen/company/widgets/company_data.dart/my_reviews_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CompanyDataWidget extends StatefulWidget {
   const CompanyDataWidget({super.key});
@@ -55,7 +56,7 @@ class _CompanyDataWidgetState extends State<CompanyDataWidget> with TickerProvid
   final List<String> headingItems = [
     'О компании',
     'Товары',
-    'Тендеры',
+    'tenders'.tr,
     'Отзывы',
     'Документы',
   ];
@@ -115,7 +116,7 @@ class _CompanyDataWidgetState extends State<CompanyDataWidget> with TickerProvid
           //   tabs: const [
           //     Tab(text: 'О компании'),
           //     Tab(text: 'Товары'),
-          //     Tab(text: 'Тендеры'),
+          //     Tab(text: 'tenders'),
           //     Tab(text: 'Отзывы'),
           //     Tab(text: 'Документы'),
           //   ],

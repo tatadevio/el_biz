@@ -1,6 +1,5 @@
-import 'package:el_biz/view/screen/auth/otp_screen.dart';
 import 'package:el_biz/view/screen/auth/password_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -58,14 +57,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Вход в личный кабинет',
+                    'login_to_your_personal_account'.tr,
                     style: h24,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'Введите номер телефона для получения кода авторизации',
+                    'Enter_your_phone_number_to_receive_an_authorization_code'.tr,
                     textAlign: TextAlign.center,
                     style: body14,
                   ),
@@ -75,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     children: [
                       Text(
-                        'Номер телефона',
+                        'phone_number'.tr,
                         style: body14,
                       ),
                     ],
@@ -197,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Отправить код".tr,
+                              "send_code".tr,
                               style: button16,
                             ),
                           ],
@@ -235,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Get.to(() => const Privacy());
                       },
                       child: Text(
-                        'I agree to the terms of use and privacy policy'.tr,
+                        'i_agree_to_the_terms_of_use_and_privacy_policy'.tr,
                         style: body14.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -244,6 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               InkWell(
                 onTap: () async {
+                  Get.offAll(() => const DashboardScreen());
                   // final SharedPreferences prefers = await SharedPreferences.getInstance();
                   // prefers.clear();
                   // //   prefers.setBool(AppConstants.showLang, false);
@@ -254,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Пропустить".tr,
+                      "skip".tr,
                       style: button16.copyWith(color: ColorResources.gray),
                     ),
                   ],

@@ -31,7 +31,7 @@ class PasswordChangedScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'Пароль успешно обновлён!',
+                    'password_successfully_updated'.tr,
                     textAlign: TextAlign.center,
                     style: h24,
                   ),
@@ -39,7 +39,7 @@ class PasswordChangedScreen extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    'Ваш пароль был успешно обновлён, запомните или сохраните новый пароль',
+                    'your_password_has_been_successfully_updated_remember_or_save_the_new_password'.tr,
                     style: body14,
                     textAlign: TextAlign.center,
                   ),
@@ -53,8 +53,8 @@ class PasswordChangedScreen extends StatelessWidget {
                     child: Container(
                       width: Get.width * 0.9,
                       height: 48,
-                      decoration: BoxDecoration(color: ColorResources.blue, borderRadius: BorderRadius.circular(12.0), boxShadow: [
-                        const BoxShadow(color: Color.fromRGBO(16, 24, 40, 0.05), blurRadius: 2, spreadRadius: 0, offset: Offset(0, 1)),
+                      decoration: BoxDecoration(color: ColorResources.blue, borderRadius: BorderRadius.circular(12.0), boxShadow: const [
+                        BoxShadow(color: Color.fromRGBO(16, 24, 40, 0.05), blurRadius: 2, spreadRadius: 0, offset: Offset(0, 1)),
                       ]),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
@@ -62,7 +62,7 @@ class PasswordChangedScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Готово".tr,
+                              "ready".tr,
                               style: button16,
                             ),
                           ],

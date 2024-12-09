@@ -123,7 +123,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                   ),
                   alignment: Alignment.center,
                   child: Text(
-                    'Пропустить',
+                    'skip'.tr,
                     style: textMd.copyWith(color: ColorResources.blue),
                   ),
                 ),

@@ -94,18 +94,21 @@ class CustomTextField1 extends StatefulWidget {
   final bool validate;
   final int maxLength;
   final bool isObsureText;
-  const CustomTextField1(
-      {super.key,
-      required this.controller,
-      required this.hintColor,
-      required this.inputType,
-      required this.lableText,
-      required this.leading,
-      // required this.color,
-      required this.readOnly,
-      this.maxLength = 200,
-      this.validate = false,
-      this.isObsureText = false});
+  final TextStyle? lableStyle;
+  const CustomTextField1({
+    super.key,
+    required this.controller,
+    required this.hintColor,
+    required this.inputType,
+    required this.lableText,
+    required this.leading,
+    // required this.color,
+    required this.readOnly,
+    this.maxLength = 200,
+    this.validate = false,
+    this.isObsureText = false,
+    this.lableStyle,
+  });
 
   @override
   State<CustomTextField1> createState() => _CustomTextField1State();
@@ -128,7 +131,7 @@ class _CustomTextField1State extends State<CustomTextField1> {
       children: [
         Text(
           widget.lableText,
-          style: body14,
+          style: widget.lableStyle ?? body14,
         ),
         const SizedBox(
           height: 8,

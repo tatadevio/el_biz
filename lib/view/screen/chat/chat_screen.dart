@@ -20,7 +20,7 @@ class ChatScreen extends StatelessWidget {
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Чат'),
+        title: Text('chat'.tr),
         actions: const [
           AppbarNotificationButton(),
           SizedBox(
@@ -55,7 +55,7 @@ class ChatScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Сообщения',
+                                  'messages'.tr,
                                   style: button16.copyWith(color: chatController.isShowChat ? ColorResources.darkGray : ColorResources.gray),
                                 ),
                                 //Unseen Count
@@ -76,7 +76,7 @@ class ChatScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Договора',
+                                  'treaty'.tr,
                                   style: button16.copyWith(color: !chatController.isShowChat ? ColorResources.darkGray : ColorResources.gray),
                                 ),
                                 //Unseen Count

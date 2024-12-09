@@ -12,27 +12,27 @@ import 'theme/light_theme.dart';
 import 'utils/appConstant.dart';
 import 'utils/color_resources.dart';
 import 'helper/get_di.dart' as di;
+import 'utils/messages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   // HttpOverrides.global = MyHttpOverrides();
 
-  // Map<String, Map<String, String>> _languages =
-  await di.init();
+  Map<String, Map<String, String>> _languages = await di.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(MyApp(
-    // languages: _languages,
+    languages: _languages,
     prefs: prefs,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  // final Map<String, Map<String, String>> languages;
+  final Map<String, Map<String, String>> languages;
   final SharedPreferences prefs;
   MyApp({
     super.key,
-    // required this.languages,
+    required this.languages,
     required this.prefs,
   });
 
@@ -46,9 +46,9 @@ class MyApp extends StatelessWidget {
           //GlobalMaterialLocalizations.delegate,
           //GlobalWidgetsLocalizations.delegate,
         ],
-        // locale: localizationController.locale,
-        // translations: Messages(languages: languages),
-        // fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
+        locale: localizationController.locale,
+        translations: Messages(languages: languages),
+        fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
         builder: BotToastInit(),
         title: AppConstants.appName,
         debugShowCheckedModeBanner: false,

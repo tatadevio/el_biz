@@ -125,7 +125,7 @@ class SearchScreen extends StatelessWidget {
                                         : [],
                                   ),
                                   child: Center(
-                                      child: Text("Товары".tr,
+                                      child: Text("goods".tr,
                                           style: mediumTextStyle.copyWith(
                                             color: productController.showFavSearch == 1 ? ColorResources.primary : ColorResources.black,
                                           ))),

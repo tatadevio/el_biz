@@ -40,7 +40,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Все сообщения',
+                      'all_messages'.tr,
                       style: textSm.copyWith(color: chatController.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
@@ -63,7 +63,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Непрочитанные',
+                      'unread'.tr,
                       style: textSm.copyWith(color: !chatController.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
@@ -74,7 +74,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
           const SizedBox(height: 10),
           CustomTextField(
             controller: searchController,
-            hintColor: 'Поиск в чатах',
+            hintColor: 'search_in_chats'.tr,
             inputType: TextInputType.text,
             leading: Images.svgSearch,
             readOnly: false,

@@ -1,3 +1,7 @@
+import 'package:el_biz/utils/Images.dart';
+
+import '../data/model/base/language_model.dart';
+
 class AppConstants {
   static const String baseUrl = "https://isooq.kg/";
   static const String appName = "El Biz";
@@ -132,21 +136,9 @@ class AppConstants {
   static const String settingsTitle = "Settings";
   static const String fullPhotoTitle = "Full Photo";
 
-  // static List<LanguageModel> languages = [
-  //   LanguageModel(
-  //       imageUrl: Images.svgLock,
-  //       languageName: 'Русский',
-  //       countryCode: 'RU',
-  //       languageCode: 'ru'),
-  //   LanguageModel(
-  //       imageUrl: Images.svgLock,
-  //       languageName: 'Кыргызча',
-  //       countryCode: 'KG',
-  //       languageCode: 'ky'),
-  //   LanguageModel(
-  //       imageUrl: Images.svgLock,
-  //       languageName: 'English',
-  //       countryCode: 'US',
-  //       languageCode: 'en'),
-  // ];
+  static List<LanguageModel> languages = [
+    LanguageModel(imageUrl: Images.svgLock, languageName: 'Русский', countryCode: 'RU', languageCode: 'ru'),
+    // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
+    LanguageModel(imageUrl: Images.svgLock, languageName: 'English', countryCode: 'US', languageCode: 'en'),
+  ];
 }

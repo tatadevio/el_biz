@@ -93,7 +93,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       //   showShortToast("invalid_phone_number".tr);
                       // }
                       // Get.to(() => p);
-                      Get.to(() => DashboardScreen());
+                      Get.to(() => const DashboardScreen());
                     },
                     child: Container(
                       width: Get.width * 0.9,
@@ -178,7 +178,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.close,
                                       color: ColorResources.gray,
                                     ),
@@ -199,6 +199,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               ),
               InkWell(
                 onTap: () async {
+                  Get.offAll(() => const DashboardScreen());
                   // final SharedPreferences prefers = await SharedPreferences.getInstance();
                   // prefers.clear();
                   // //   prefers.setBool(AppConstants.showLang, false);
@@ -209,7 +210,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Пропустить".tr,
+                      "skip".tr,
                       style: button16.copyWith(color: ColorResources.gray),
                     ),
                   ],

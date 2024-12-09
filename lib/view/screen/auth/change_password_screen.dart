@@ -51,7 +51,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Установите новый пароль',
+                    'set_a_new_password'.tr,
                     style: h24,
                   ),
                   const SizedBox(
@@ -59,7 +59,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   CustomTextField1(
                     controller: passwordController,
-                    lableText: 'Новый пароль',
+                    lableText: 'new_password'.tr,
                     hintColor: '',
                     inputType: TextInputType.visiblePassword,
                     leading: '',
@@ -71,7 +71,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   CustomTextField1(
                     controller: confPasswordController,
-                    lableText: 'Повторите новый пароль',
+                    lableText: 'repeat_new_password'.tr,
                     hintColor: '',
                     inputType: TextInputType.visiblePassword,
                     leading: '',
@@ -90,7 +90,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       });
                     },
                     title: Text(
-                      'Запомнить этот пароль',
+                      'remember_this_password'.tr,
                       style: body14.copyWith(color: ColorResources.darkGray),
                     ),
                   ),
@@ -128,7 +128,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Сбросить пароль".tr,
+                              "reset_password".tr,
                               style: button16,
                             ),
                           ],

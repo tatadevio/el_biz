@@ -2,6 +2,8 @@ import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/account/account_screen.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
+import 'package:el_biz/view/screen/language/change_language.dart';
+import 'package:el_biz/view/screen/language/language_screen.dart';
 import 'package:el_biz/view/screen/menu/profile_information_screen.dart';
 import 'package:el_biz/view/screen/menu/widgets/add_company_bottom_sheet.dart';
 import 'package:el_biz/view/screen/support/support_screen.dart';
@@ -100,7 +102,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgHeartBorder,
-              'Избранное',
+              'favorites'.tr,
               isSelected: false,
               onTap: () {
                 Get.to(() => const FavoriteScreen());
@@ -108,10 +110,14 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgFileText,
-              'Помощь',
+              'language',
               isSelected: false,
               onTap: () {
-                Get.to(() => const SupportScreen());
+                Get.bottomSheet(
+                    isScrollControlled: true,
+                    const ChooseLanguageScreen(
+                      fromMenu: false,
+                    ));
               },
             ),
             InkWell(

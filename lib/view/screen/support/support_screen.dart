@@ -68,7 +68,7 @@ class _SupportScreenState extends State<SupportScreen> {
               ),
 
               Text(
-                'Номер телефона',
+                'phone_number'.tr,
                 style: body14,
               ),
               const SizedBox(

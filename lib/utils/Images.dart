@@ -87,6 +87,8 @@ class Images {
   static const String saleStarSvg = "";
   static const String svgTelegram = "";
   static const String instagramPng = "";
+  static const String svgLock = "assets/images/lock.png";
+  static const String language = "assets/images/language.png";
   // static const String saleStarSvg = "";
 
   // png

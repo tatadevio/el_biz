@@ -5,6 +5,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/tender_grid_item.dart';
 import 'package:el_biz/view/base/tender_list_item.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
+import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,7 @@ class TenderScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Тендера',
+                  'tender'.tr,
                   style: h16.copyWith(color: ColorResources.blackText),
                 ),
               ),
@@ -40,37 +41,42 @@ class TenderScreen extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    12,
+              InkWell(
+                onTap: () {
+                  Get.to(() => const AddProductScreen());
+                },
+                child: Container(
+                  height: 40,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      12,
+                    ),
+                    color: ColorResources.green,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 2,
+                        spreadRadius: 0,
+                        offset: Offset(0, 1),
+                        color: Color.fromRGBO(16, 24, 40, 0.05),
+                      ),
+                    ],
                   ),
-                  color: ColorResources.green,
-                  boxShadow: [
-                    const BoxShadow(
-                      blurRadius: 2,
-                      spreadRadius: 0,
-                      offset: Offset(0, 1),
-                      color: Color.fromRGBO(16, 24, 40, 0.05),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SvgPicture.asset(
-                      Images.svgPlus,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Новый тендер',
-                      style: button16,
-                    ),
-                  ],
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        Images.svgPlus,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'new_tender'.tr,
+                        style: button16,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -98,8 +104,8 @@ class TenderScreen extends StatelessWidget {
                             12,
                           ),
                           color: ColorResources.green,
-                          boxShadow: [
-                            const BoxShadow(
+                          boxShadow: const [
+                            BoxShadow(
                               blurRadius: 2,
                               spreadRadius: 0,
                               offset: Offset(0, 1),
@@ -117,7 +123,7 @@ class TenderScreen extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              'Фильтр',
+                              'filter'.tr,
                               style: button16,
                             ),
                           ],
@@ -138,8 +144,8 @@ class TenderScreen extends StatelessWidget {
                           ),
                           border: Border.all(width: 1, color: ColorResources.lgColor),
                           color: ColorResources.lightBlue,
-                          boxShadow: [
-                            const BoxShadow(
+                          boxShadow: const [
+                            BoxShadow(
                               blurRadius: 2,
                               spreadRadius: 0,
                               offset: Offset(0, 1),
@@ -157,7 +163,7 @@ class TenderScreen extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              'Новые',
+                              'new'.tr,
                               style: body14.copyWith(color: ColorResources.gray),
                             ),
                           ],

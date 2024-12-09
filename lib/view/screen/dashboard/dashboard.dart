@@ -33,7 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       const HomeScreen(),
       const ProductScreen(),
       const TenderScreen(),
-      ChatScreen(),
+      const ChatScreen(),
       const MenuScreen(),
     ];
   }
@@ -62,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   iconData: Images.svgCategory,
                   isSelected: configController.selectedIndex == 1,
                   onTap: () => _setPage(1),
-                  title: "category".tr,
+                  title: "products".tr,
                 ),
                 BottomNavItem(
                   iconData: Images.svgTenders,

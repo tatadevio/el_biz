@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
           InkWell(
             borderRadius: BorderRadius.circular(12),
             onTap: () {
-              Get.to(() => SearchScreen());
+              Get.to(() => const SearchScreen());
             },
             child: Container(
               height: 40,
@@ -85,15 +85,15 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 24,
                                 ),
                                 Text(
-                                  'Проверенные компании',
+                                  'verified_companies'.tr,
                                   style: h24.copyWith(color: ColorResources.darkGray),
                                 ),
                                 Text(
-                                  'Ваша площадка  для партнерства  и сотрудничества',
+                                  'your_platform_for_partnership_and_cooperation'.tr,
                                   style: body16.copyWith(color: ColorResources.gray),
                                 ),
                                 const SizedBox(
@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           flex: 8,
                           child: SizedBox(),
                           // Image.asset(
@@ -130,53 +130,53 @@ class HomeScreen extends StatelessWidget {
                 height: height * 0.04,
               ),
               homeOptions(
-                  title: 'Компании',
+                  title: 'companies'.tr,
                   titleImage: Images.svgBriefcase,
-                  detail: 'База оптовых поставщиков, производителей товаров или услуги по логистике',
+                  detail: 'base_of_wholesale_suppliers_manufacturers_of_goods_or_logistics_services'.tr,
                   backgroundColor: ColorResources.blue,
                   onTap: () {
-                    Get.to(() => MyCompaniesScreen());
+                    Get.to(() => const MyCompaniesScreen());
                   }),
               SizedBox(
                 height: height * 0.025,
               ),
               homeOptions(
-                  title: 'Товары',
+                  title: 'goods'.tr,
                   titleImage: Images.svgShoppingBag,
-                  detail: 'Найти товары от производителей и поставщиков',
+                  detail: 'find_products_from_manufacturers_and_suppliers'.tr,
                   backgroundColor: ColorResources.green,
                   onTap: () {
                     Get.find<ProductController>().updateShowCategories(false);
-                    Get.to(() => ProductScreen());
+                    Get.to(() => const ProductScreen());
                   }),
               SizedBox(
                 height: height * 0.025,
               ),
               homeOptions(
-                title: 'Тендеры',
+                title: 'tenders'.tr,
                 titleImage: Images.svgTenders,
-                detail: 'Посмотреть объявления о закупках товаров или добавить свое',
+                detail: 'view_advertisements_for_purchasing_goods_or_add_your_own'.tr,
                 backgroundColor: ColorResources.orange,
                 onTap: () {
                   Get.find<ProductController>().updateShowCategories(true);
-                  Get.to(() => ProductScreen());
+                  Get.to(() => const ProductScreen());
                 },
               ),
               SizedBox(
                 height: height * 0.025,
               ),
               homeOptions(
-                  title: 'Избранное',
+                  title: 'favorites'.tr,
                   titleImage: Images.svgHeart,
-                  detail: 'Сохранённые товары, компании и тендеры.',
+                  detail: 'saved_goods_companies_and_tenders'.tr,
                   backgroundColor: ColorResources.red,
                   onTap: () {
-                    Get.to(() => FavoriteScreen());
+                    Get.to(() => const FavoriteScreen());
                   }),
               SizedBox(
                 height: height * 0.025,
               ),
-              NewCompaniesWidget(),
+              const NewCompaniesWidget(),
               SizedBox(
                 height: height * 0.03,
               ),
@@ -184,8 +184,8 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Color.fromRGBO(22, 77, 160, 1),
-                  gradient: LinearGradient(
+                  color: const Color.fromRGBO(22, 77, 160, 1),
+                  gradient: const LinearGradient(
                     colors: [
                       Color.fromRGBO(255, 255, 255, 1),
                       Color.fromRGBO(22, 77, 160, 1),
@@ -199,14 +199,14 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Добавьте свою компанию',
+                      'add_your_company'.tr,
                       style: h24.copyWith(color: Colors.white),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'Чтобы найти поставщиков или покупателей, необходимо добавить компанию',
+                      'to_find_suppliers_or_buyers_you_need_to_add_a_company'.tr,
                       style: body16.copyWith(color: Colors.white),
                     ),
                     const SizedBox(
@@ -230,7 +230,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      title: 'Добавить',
+                      title: 'add',
                       color: ColorResources.orange,
                     ),
                   ],

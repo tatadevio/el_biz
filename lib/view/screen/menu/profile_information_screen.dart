@@ -89,7 +89,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
               //   readOnly: false,
               // ),
               Text(
-                'Номер телефона',
+                'phone_number'.tr,
                 style: body14,
               ),
               const SizedBox(

@@ -18,7 +18,7 @@ class FavoriteScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'Избранное',
+          'favorites'.tr,
           style: h16.copyWith(color: ColorResources.blackText),
         ),
         actions: const [
@@ -88,7 +88,7 @@ class FavoriteScreen extends StatelessWidget {
                                     ),
                                   ),
                                   child: Center(
-                                      child: Text("Товары".tr,
+                                      child: Text("goods".tr,
                                           style: mediumTextStyle.copyWith(
                                             color: !favoriteController.isShowCategories ? ColorResources.primary : ColorResources.black,
                                           ))),

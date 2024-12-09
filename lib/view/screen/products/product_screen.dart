@@ -28,7 +28,7 @@ class ProductScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Каталог',
+                  'products'.tr,
                   style: h16.copyWith(color: ColorResources.blackText),
                 ),
               ),
@@ -134,7 +134,7 @@ class ProductScreen extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  'Фильтр',
+                                  'filter'.tr,
                                   style: button16,
                                 ),
                               ],
@@ -174,7 +174,7 @@ class ProductScreen extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  'Новые',
+                                  'new'.tr,
                                   style: body14.copyWith(color: ColorResources.gray),
                                 ),
                               ],
@@ -322,7 +322,7 @@ class ProductScreen extends StatelessWidget {
                                   ]),
                         alignment: Alignment.center,
                         child: Text(
-                          'Товары',
+                          'goods'.tr,
                           style: button16.copyWith(color: productController.isShowCategories ? ColorResources.gray : Colors.white),
                         ),
                       ),

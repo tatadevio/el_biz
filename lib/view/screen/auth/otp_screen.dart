@@ -66,14 +66,14 @@ class _OtpScreenState extends State<OtpScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Введите СМС код".tr,
+                        "enter_sms_code".tr,
                         style: h24,
                       ),
                     ),
                     SizedBox(
                       width: Get.width * 0.8,
                       child: Text(
-                        "На ваш номер телефона был отправлен код для авторизации".tr,
+                        "an_authorization_code_has_been_sent_to_your_phone_number".tr,
                         style: body14,
                         textAlign: TextAlign.center,
                       ).paddingOnly(
@@ -132,31 +132,8 @@ class _OtpScreenState extends State<OtpScreen> {
                               setState(() {
                                 currentText = value;
                               });
-                              // authController.verifyOtp(textEditingController.text, context).then((value) {
-                              //   if (value) {
-                              //     if (widget.type == "1") {
-                              //       authController.loginWithOtp().then((value) {
-                              //         if (value.isSuccess) {
-                              //           showShortToast(value.message);
-                              //         } else {
-                              //           showShortToast(value.message);
-                              //         }
-                              //       });
-                              //     } else {
-                              //       authController.loginWithExisting().then((value) {
-                              //         if (value.isSuccess) {
-                              //           showShortToast(value.message);
-                              //         } else {
-                              //           showShortToast(value.message);
-                              //         }
-                              //       });
-                              //     }
-                              //   } else {
-                              //     showShortToast("enter_correct_otp".tr);
-                              //   }
-                              // });
-                              // Get.offAll(() => EditProfileScreen());
-                              Get.offAll(() => ChangePasswordScreen());
+
+                              Get.offAll(() => const ChangePasswordScreen());
                             },
                             // onTap: () {
                             //   print("Pressed");
@@ -196,7 +173,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Повторно отправить код $seconds sec',
+                                  '${"resend_code".tr} $seconds sec',
                                   style: button16.copyWith(color: (widget.secondsNotifier.value == 0) ? Colors.white : ColorResources.gray),
                                 ),
                               ],

@@ -6,7 +6,6 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
-import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/reviews/my_reviews_screen.dart';
 import 'package:flutter/material.dart';

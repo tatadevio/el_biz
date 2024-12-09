@@ -40,7 +40,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                   height: 20,
                 ),
                 Text(
-                  "Номер телефона".tr,
+                  "phone_number".tr,
                   style: h16.copyWith(color: ColorResources.darkGray),
                 ),
                 const SizedBox(

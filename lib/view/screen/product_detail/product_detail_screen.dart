@@ -142,7 +142,7 @@ class ProductDetailScreen extends StatelessWidget {
                                 itemPadding: EdgeInsets.symmetric(horizontal: 0),
                                 itemBuilder: (context, _) => Icon(
                                   Icons.star,
-                                  color: Colors.amber,
+                                  color: ColorResources.yellow,
                                 ),
                                 onRatingUpdate: (rating) {
                                   print(rating);

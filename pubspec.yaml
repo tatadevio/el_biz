@@ -62,6 +62,7 @@ dependencies:
   flutter_image_compress: ^2.3.0
   file_picker: ^8.1.4
   path: ^1.9.0
+  flutter_bloc: ^8.1.6
 
 
 dev_dependencies:
@@ -91,6 +92,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/fonts/inter/
+    - assets/language/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

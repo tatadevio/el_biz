@@ -23,7 +23,7 @@ class _ContractTopBarState extends State<ContractTopBar> {
         children: [
           CustomTextField(
             controller: searchController,
-            hintColor: 'Поиск в чатах',
+            hintColor: 'search_in_chats'.tr,
             inputType: TextInputType.text,
             leading: Images.svgSearch,
             readOnly: false,
@@ -56,7 +56,7 @@ class _ContractTopBarState extends State<ContractTopBar> {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Мои покупки',
+                      'my_purchases'.tr,
                       style: textSm.copyWith(color: !chatController.isShowMySales ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
@@ -79,7 +79,7 @@ class _ContractTopBarState extends State<ContractTopBar> {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Мои продажи',
+                      'my_sales'.tr,
                       style: textSm.copyWith(color: chatController.isShowMySales ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),

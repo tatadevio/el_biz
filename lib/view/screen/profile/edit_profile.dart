@@ -117,7 +117,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 height: height * 0.09,
               ),
               Text(
-                'Пропустить',
+                'skip'.tr,
                 style: button16.copyWith(color: ColorResources.gray),
               ),
               SizedBox(
