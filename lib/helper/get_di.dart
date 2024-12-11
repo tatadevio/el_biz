@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/controller/company_controller.dart';
 import 'package:el_biz/controller/contracts_controller.dart';
 import 'package:el_biz/controller/notification_controller.dart';
@@ -10,6 +11,7 @@ import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
 import 'package:el_biz/data/repo/notification_repo.dart';
 import 'package:el_biz/data/repo/review_repo.dart';
+import 'package:el_biz/data/repo/search_repo.dart';
 import 'package:el_biz/data/repo/tenders_repo.dart';
 import 'package:flutter/services.dart';
 
@@ -66,23 +68,24 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<ReviewRepo>(() => ReviewRepo(Get.find(), Get.find()), fenix: true);
   Get.lazyPut<ContractRepo>(() => ContractRepo(Get.find(), Get.find()), fenix: true);
   Get.lazyPut<CompnayRepo>(() => CompnayRepo(Get.find(), Get.find()), fenix: true);
+  Get.lazyPut<SearchRepo>(() => SearchRepo(Get.find(), Get.find()), fenix: true);
 
-  Get.lazyPut<AuthController>(() => AuthController(authRepo: Get.find()), fenix: true);
+  // Get.lazyPut<AuthController>(() => AuthController(authRepo: Get.find()), fenix: true);
   // Get.lazyPut<NetworkConnectivityController>(() => NetworkConnectivityController(), fenix: true);
   Get.lazyPut<ConfigController>(() => ConfigController(Get.find()), fenix: true);
   Get.lazyPut<UserController>(() => UserController(Get.find(), Get.find()), fenix: true);
-  Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
-  Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
+  // Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
+  // Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
   Get.lazyPut<ProductController>(() => ProductController(Get.find()), fenix: true);
-  Get.lazyPut<CategoryController>(() => CategoryController(Get.find()), fenix: true);
+  // Get.lazyPut<CategoryController>(() => CategoryController(Get.find()), fenix: true);
   Get.lazyPut<ProductDetailController>(() => ProductDetailController(Get.find()), fenix: true);
-  Get.lazyPut<CitiesController>(() => CitiesController(Get.find()), fenix: true);
-  Get.lazyPut<ChatController>(() => ChatController(Get.find()), fenix: true);
+  // Get.lazyPut<CitiesController>(() => CitiesController(Get.find()), fenix: true);
+  // Get.lazyPut<ChatController>(() => ChatController(Get.find()), fenix: true);
   Get.lazyPut<PostAdController>(() => PostAdController(Get.find()), fenix: true);
-  Get.lazyPut<FavoriteController>(() => FavoriteController(Get.find()), fenix: true);
+  // Get.lazyPut<FavoriteController>(() => FavoriteController(Get.find()), fenix: true);
   Get.lazyPut<SellerController>(() => SellerController(Get.find()), fenix: true);
-  Get.lazyPut<TendersController>(() => TendersController(Get.find()), fenix: true);
-  Get.lazyPut<NotificationController>(() => NotificationController(Get.find()), fenix: true);
+  Get.lazyPut<TendersBloc>(() => TendersBloc(Get.find()), fenix: true);
+  // Get.lazyPut<NotificationController>(() => NotificationController(Get.find()), fenix: true);
   Get.lazyPut<ReviewController>(() => ReviewController(Get.find()), fenix: true);
   Get.lazyPut<ContractsController>(() => ContractsController(Get.find()), fenix: true);
   Get.lazyPut<CompanyController>(() => CompanyController(Get.find()), fenix: true);

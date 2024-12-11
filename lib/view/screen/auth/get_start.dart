@@ -1,15 +1,12 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../controller/auth_controller.dart';
-import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
-import '../../base/custom_textfield.dart';
-import '../../base/custom_toast.dart';
 
 class GetStartScreen extends StatefulWidget {
   final String phoneNumber;
@@ -70,7 +67,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: GetBuilder<AuthController>(builder: (authController) {
+        child: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(18.0),
@@ -121,11 +118,12 @@ class _GetStartScreenState extends State<GetStartScreen> {
                             prefixIcon: CountryCodePicker(
                               enabled: widget.phoneNumber.isEmpty ? true : false,
                               onChanged: (value) {
-                                authController.updateCountryCode(value.dialCode!);
+                                context.read<AuthBloc>().add(UpdateCountryCode(value.dialCode!));
+                                // authState.updateCountryCode(value.dialCode!);
                                 print(value.dialCode);
                               },
                               // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                              initialSelection: authController.countryCode,
+                              initialSelection: authState.countryCode,
                               favorite: ['+996', 'KG'],
                               // optional. Shows only country name and flag
                               showCountryOnly: false,
@@ -173,7 +171,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  !authController.isLoading
+                  !authState.isLoading
                       ? InkWell(
                           onTap: () async {
                             // if (_fNamecontroller.text.isEmpty || _phoneController.text.isEmpty) {
@@ -190,7 +188,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
                             //   showShortToast("enter_a_valid_email_address".tr);
                             // } else {
                             //   if (widget.type == "1") {
-                            //     authController
+                            //     authState
                             //         .registration(
                             //       _fNamecontroller.text,
                             //       _emailController.text,
@@ -201,10 +199,10 @@ class _GetStartScreenState extends State<GetStartScreen> {
                             //       }
                             //     });
                             //   } else if (widget.type == "2") {
-                            //     authController.verifyPhoneGoogle(_fNamecontroller.text, "${authController.countryCode}${_phoneController.text}", _emailController.text).then((value) {});
+                            //     authState.verifyPhoneGoogle(_fNamecontroller.text, "${authState.countryCode}${_phoneController.text}", _emailController.text).then((value) {});
                             //   } else if (widget.type == "3") {
-                            //     print("phone number is ${"${authController.countryCode}${_phoneController.text}"}");
-                            //     authController.verifyPhoneApple(_fNamecontroller.text, "${authController.countryCode}${_phoneController.text}", _emailController.text).then((value) {});
+                            //     print("phone number is ${"${authState.countryCode}${_phoneController.text}"}");
+                            //     authState.verifyPhoneApple(_fNamecontroller.text, "${authState.countryCode}${_phoneController.text}", _emailController.text).then((value) {});
                             //   }
                             // }
                           },

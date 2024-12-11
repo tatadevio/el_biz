@@ -1,7 +1,9 @@
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../controller/auth_controller.dart';
+
 import '../../../controller/product_controller.dart';
 import '../../../controller/product_detail_controller.dart';
 import '../../../data/model/response/product/product_model.dart';
@@ -23,7 +25,8 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-    bool _isLogin = Get.find<AuthController>().isLoggedIn();
+    bool _isLogin = context.watch<AuthBloc>().state.isLoggedIn;
+    // Get.find<AuthController>().isLoggedIn();
     return GetBuilder<ProductController>(builder: (productController) {
       return Padding(
         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 18.0),

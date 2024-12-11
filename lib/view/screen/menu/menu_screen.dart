@@ -2,11 +2,9 @@ import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/account/account_screen.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
-import 'package:el_biz/view/screen/language/change_language.dart';
 import 'package:el_biz/view/screen/language/language_screen.dart';
 import 'package:el_biz/view/screen/menu/profile_information_screen.dart';
 import 'package:el_biz/view/screen/menu/widgets/add_company_bottom_sheet.dart';
-import 'package:el_biz/view/screen/support/support_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -16,7 +14,7 @@ import '../../../utils/custom_text_style.dart';
 import '../../base/custom_dialog.dart';
 
 class MenuScreen extends StatelessWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+  const MenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +108,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgFileText,
-              'language',
+              'language'.tr,
               isSelected: false,
               onTap: () {
                 Get.bottomSheet(

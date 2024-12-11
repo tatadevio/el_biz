@@ -1,10 +1,10 @@
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/auth/password_changed_screen.dart';
-import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import '../../../controller/auth_controller.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 
@@ -40,7 +40,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     // var width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
-      body: GetBuilder<AuthController>(builder: (authController) {
+      body: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Column(
@@ -108,8 +108,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       //   return;
                       // }
 
-                      // if (!authController.isLoading) {
-                      //   authController.phoneAuthentication(authController.countryCode + passwordController.text, "1");
+                      // if (!authState.isLoading) {
+                      //   authState.phoneAuthentication(authState.countryCode + passwordController.text, "1");
                       // } else {
                       //   showShortToast("invalid_phone_number".tr);
                       // }
@@ -139,7 +139,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  !authController.isLoading
+                  !authState.isLoading
                       ? const SizedBox()
                       : const Row(
                           mainAxisAlignment: MainAxisAlignment.center,

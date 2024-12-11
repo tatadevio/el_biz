@@ -1,5 +1,6 @@
-import 'package:el_biz/controller/chat_controller.dart';
+import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/Images.dart';
@@ -18,7 +19,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ChatController>(builder: (chatController) {
+    return BlocBuilder<ChatBloc, ChatState>(builder: (context, chatState) {
       return Column(
         children: [
           Row(
@@ -26,22 +27,23 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    chatController.updateShowAllMessages(true);
+                    context.read<ChatBloc>().add(const UpdateShowAllMessages(showAllMessages: true));
+                    // chatState.updateShowAllMessages(true);
                   },
                   child: Container(
                     height: 36,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: chatController.isShowAllMessage ? 2 : 1,
-                          color: chatController.isShowAllMessage ? ColorResources.blue : ColorResources.lgColor,
+                          width: chatState.isShowAllMessage ? 2 : 1,
+                          color: chatState.isShowAllMessage ? ColorResources.blue : ColorResources.lgColor,
                         ),
                       ),
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
                       'all_messages'.tr,
-                      style: textSm.copyWith(color: chatController.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
+                      style: textSm.copyWith(color: chatState.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
                 ),
@@ -49,22 +51,23 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    chatController.updateShowAllMessages(false);
+                    context.read<ChatBloc>().add(const UpdateShowAllMessages(showAllMessages: false));
+                    // chatState.updateShowAllMessages(false);
                   },
                   child: Container(
                     height: 36,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: !chatController.isShowAllMessage ? 2 : 1,
-                          color: !chatController.isShowAllMessage ? ColorResources.blue : ColorResources.lgColor,
+                          width: !chatState.isShowAllMessage ? 2 : 1,
+                          color: !chatState.isShowAllMessage ? ColorResources.blue : ColorResources.lgColor,
                         ),
                       ),
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
                       'unread'.tr,
-                      style: textSm.copyWith(color: !chatController.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
+                      style: textSm.copyWith(color: !chatState.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
                 ),

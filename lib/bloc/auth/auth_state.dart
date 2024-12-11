@@ -1,12 +1,21 @@
 part of 'auth_bloc.dart';
 
-@immutable
-sealed class AuthState {}
+class AuthState extends Equatable {
+  final bool isLoading;
+  final bool isLoggedIn;
+  final String countryCode;
+  const AuthState({this.isLoading = false, this.isLoggedIn = false, this.countryCode = '+996'});
 
-final class AuthInitial extends AuthState {}
+  AuthState copywith({bool? isLoading, bool? isLoggedIn, String? countryCode}) {
+    return AuthState(
+      isLoading: isLoading ?? this.isLoading,
+      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
+      countryCode: countryCode ?? this.countryCode,
+    );
+  }
 
-final class AuthLoading extends AuthState {}
+  @override
+  List<Object> get props => [isLoading, isLoggedIn, countryCode];
+}
 
-final class AuthSuccess extends AuthState {}
-
-final class AuthFailure extends AuthState {}
+// final class AuthInitial extends AuthState {}

@@ -1,19 +1,20 @@
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:get/get.dart';
 
-import '../data/repo/tenders_repo.dart';
+// import '../data/repo/tenders_repo.dart';
 
-class TendersController extends GetxController implements GetxService {
-  final TendersRepo tendersRepo;
+// class TendersController extends GetxController implements GetxService {
+//   final TendersRepo tendersRepo;
 
-  TendersController(this.tendersRepo);
+//   TendersController(this.tendersRepo);
 
-  bool _isGridView = false;
+//   bool _isLoading = false;
+//   bool _isGridView = false;
 
-  bool get isGridView => _isGridView;
+//   bool get isLoading => _isLoading;
+//   bool get isGridView => _isGridView;
 
-  void updateGridView(bool gridView) {
-    _isGridView = gridView;
-    update();
-  }
-}
+//   void updateGridView(bool gridView) {
+//     _isGridView = gridView;
+//     update();
+//   }
+// }

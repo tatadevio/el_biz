@@ -1,7 +1,8 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import '../../../../controller/auth_controller.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../base/custom_button.dart';
 import '../../../base/custom_toast.dart';
@@ -19,7 +20,6 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller.text = widget.phone;
   }
@@ -39,7 +39,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: GetBuilder<AuthController>(builder: (authController) {
+      body: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -68,12 +68,13 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                     prefixIcon: CountryCodePicker(
                       enabled: false,
                       onChanged: (value) {
-                        authController.updateCountryCode(value.dialCode!);
+                        context.read<AuthBloc>().add(UpdateCountryCode(value.dialCode!));
+                        // authState.updateCountryCode(value.dialCode!);
                         print(value.dialCode);
                       },
 
                       // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                      initialSelection: authController.countryCode,
+                      initialSelection: authState.countryCode,
                       favorite: ['+996', 'KG'],
                       // optional. Shows only country name and flag
                       showCountryOnly: false,
@@ -94,14 +95,14 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
               SizedBox(
                 height: 50,
               ),
-              !authController.isLoading
+              !authState.isLoading
                   ? CustomButton(
                       onTap: () {
-                        if (!authController.isLoading) {
-                          authController.phoneAuthentication(authController.countryCode + _controller.text, "2");
-                        } else {
-                          showShortToast("invalid_phone_number".tr);
-                        }
+                        // if (!authState.isLoading) {
+                        //   authState.phoneAuthentication(authState.countryCode + _controller.text, "2");
+                        // } else {
+                        //   showShortToast("invalid_phone_number".tr);
+                        // }
                       },
                       width: Get.width * 0.9,
                       height: Get.height * 0.05,

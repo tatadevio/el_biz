@@ -1,7 +1,16 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
+import 'package:el_biz/bloc/category/category_bloc.dart';
+import 'package:el_biz/bloc/chat/chat_bloc.dart';
+import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
+import 'package:el_biz/bloc/notification/notification_bloc.dart';
+import 'package:el_biz/bloc/search/search_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,47 +48,59 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LocalizationController>(builder: (localizationController) {
-      return GetMaterialApp(
-        localizationsDelegates: const [
-          FormBuilderLocalizations.delegate,
-          //GlobalMaterialLocalizations.delegate,
-          //GlobalWidgetsLocalizations.delegate,
-        ],
-        locale: localizationController.locale,
-        translations: Messages(languages: languages),
-        fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
-        builder: BotToastInit(),
-        title: AppConstants.appName,
-        debugShowCheckedModeBanner: false,
-        navigatorKey: Get.key,
-        theme: light(
-          color: ColorResources.primary,
-        ).copyWith(
-          unselectedWidgetColor: ColorResources.lgColor,
-          progressIndicatorTheme: const ProgressIndicatorThemeData(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => TendersBloc(Get.find())),
+        BlocProvider(create: (_) => SearchBloc(Get.find())),
+        BlocProvider(create: (_) => ChatBloc(Get.find())),
+        BlocProvider(create: (_) => FavoriteBloc(Get.find())),
+        BlocProvider(create: (_) => NotificationBloc(Get.find())),
+        BlocProvider(create: (_) => CategoryBloc(Get.find())),
+        BlocProvider(create: (_) => AuthBloc(Get.find())),
+        BlocProvider(create: (_) => CitiesBloc(Get.find())),
+      ],
+      child: GetBuilder<LocalizationController>(builder: (localizationController) {
+        return GetMaterialApp(
+          localizationsDelegates: const [
+            FormBuilderLocalizations.delegate,
+            //GlobalMaterialLocalizations.delegate,
+            //GlobalWidgetsLocalizations.delegate,
+          ],
+          locale: localizationController.locale,
+          translations: Messages(languages: languages),
+          fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
+          builder: BotToastInit(),
+          title: AppConstants.appName,
+          debugShowCheckedModeBanner: false,
+          navigatorKey: Get.key,
+          theme: light(
             color: ColorResources.primary,
-          ),
-          scaffoldBackgroundColor: ColorResources.backgroundColor,
-          radioTheme: RadioThemeData(
-            // fillColor: WidgetStateProperty.all(ColorResources.primary),
-            fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-              if (states.contains(WidgetState.selected)) {
-                return ColorResources.primary;
-              }
-              return ColorResources.lgColor;
-            }),
-          ),
-          checkboxTheme: CheckboxThemeData(
+          ).copyWith(
+            unselectedWidgetColor: ColorResources.lgColor,
+            progressIndicatorTheme: const ProgressIndicatorThemeData(
+              color: ColorResources.primary,
+            ),
+            scaffoldBackgroundColor: ColorResources.backgroundColor,
+            radioTheme: RadioThemeData(
               // fillColor: WidgetStateProperty.all(ColorResources.primary),
-              // checkColor: WidgetStateProperty.all(ColorResources.blue),
+              fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return ColorResources.primary;
+                }
+                return ColorResources.lgColor;
+              }),
+            ),
+            checkboxTheme: CheckboxThemeData(
+                // fillColor: WidgetStateProperty.all(ColorResources.primary),
+                // checkColor: WidgetStateProperty.all(ColorResources.blue),
 
-              ),
-        ),
-        initialRoute: RouteHelper.getSplashRoute(),
-        getPages: RouteHelper.routes,
-      );
-    });
+                ),
+          ),
+          initialRoute: RouteHelper.getSplashRoute(),
+          getPages: RouteHelper.routes,
+        );
+      }),
+    );
   }
 }
 

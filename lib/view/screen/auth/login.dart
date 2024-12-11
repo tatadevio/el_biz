@@ -1,6 +1,8 @@
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/view/screen/auth/password_screen.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -43,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // var width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
-      body: GetBuilder<AuthController>(builder: (authController) {
+      body: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Column(
@@ -128,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 0),
                                 child: Text(
-                                  authController.countryCode,
+                                  authState.countryCode,
                                   style: body16,
                                 ),
                               ),
@@ -172,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       //   return;
                       // }
 
-                      // if (!authController.isLoading) {
-                      //   authController.phoneAuthentication(authController.countryCode + phoneController.text, "1");
+                      // if (!authState.isLoading) {
+                      //   authState.phoneAuthentication(authState.countryCode + phoneController.text, "1");
                       // } else {
                       //   showShortToast("invalid_phone_number".tr);
                       // }
@@ -207,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  !authController.isLoading
+                  !authState.isLoading
                       ? const SizedBox()
                       : const Row(
                           mainAxisAlignment: MainAxisAlignment.center,

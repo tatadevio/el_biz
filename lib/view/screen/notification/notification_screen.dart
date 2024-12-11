@@ -1,8 +1,8 @@
-import 'package:el_biz/controller/notification_controller.dart';
+import 'package:el_biz/bloc/notification/notification_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/notification_item.dart';
 
@@ -13,17 +13,17 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Уведомления'),
+        title: const Text('Уведомления'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: GetBuilder<NotificationController>(builder: (notificationController) {
-          if (notificationController.isLoading) {
-            return Center(
+        child: BlocBuilder<NotificationBloc, NotificationState>(builder: (context, notificationState) {
+          if (notificationState.isLoading) {
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (notificationController.notificationList.isNotEmpty) {
+          if (notificationState.notificationsList.isNotEmpty) {
             return Center(
               child: Text(
                 'Нет уведомлений',

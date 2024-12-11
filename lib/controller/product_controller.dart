@@ -185,16 +185,16 @@ class ProductController extends GetxController implements GetxService {
   int get pageSizeF => _pageSizeF;
   int get currentPageSizeF => _currentPageSizeF;
 
-  @override
-  void onInit() {
-    super.onInit();
-    getRecommendedProduct(true, 1);
-    getLatestProduct(true, 1);
-    if (Get.find<AuthController>().isLoggedIn()) {
-      getFavProduct(true, 1);
-      getLikesProduct();
-    }
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   getRecommendedProduct(true, 1);
+  //   getLatestProduct(true, 1);
+  //   if (Get.find<AuthController>().isLoggedIn()) {
+  //     getFavProduct(true, 1);
+  //     getLikesProduct();
+  //   }
+  // }
 
   Future<void> getRecommendedProduct(bool reload, int pageSize) async {
     if (reload) {

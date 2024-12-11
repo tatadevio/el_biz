@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../bloc/category/category_bloc.dart';
 import '../../../../controller/localization_controller.dart';
 import '../../../../data/model/base/language_model.dart';
 import '../../../../utils/appConstant.dart';
@@ -12,12 +14,7 @@ class LanguageWidget extends StatelessWidget {
   final LocalizationController localizationController;
   final int index;
   final bool fromMenu;
-  const LanguageWidget(
-      {super.key,
-      required this.languageModel,
-      required this.localizationController,
-      required this.index,
-      required this.fromMenu});
+  const LanguageWidget({super.key, required this.languageModel, required this.localizationController, required this.index, required this.fromMenu});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +22,7 @@ class LanguageWidget extends StatelessWidget {
       children: [
         ListTile(
           onTap: () async {
-            final SharedPreferences preferences =
-                await SharedPreferences.getInstance();
+            final SharedPreferences preferences = await SharedPreferences.getInstance();
             preferences.setBool("new", false);
 
             if (localizationController.selectedIndex != index) {
@@ -36,6 +32,10 @@ class LanguageWidget extends StatelessWidget {
                     AppConstants.languages[index].countryCode,
                   ),
                   fromMenu);
+              if (fromMenu) {
+                context.read<CategoryBloc>().add(GetCategory());
+                context.read<CategoryBloc>().add(GetCategoryFilter());
+              }
               localizationController.setSelectIndex(index);
               Get.back();
             } else {
@@ -43,13 +43,7 @@ class LanguageWidget extends StatelessWidget {
             }
           },
           title: Center(
-            child: Text(languageModel.languageName,
-                style: TextStyle(
-                    fontSize: 18,
-                    color: localizationController.selectedIndex == index
-                        ? ColorResources.primary
-                        : Colors.black,
-                    fontWeight: FontWeight.w500)),
+            child: Text(languageModel.languageName, style: TextStyle(fontSize: 18, color: localizationController.selectedIndex == index ? ColorResources.primary : Colors.black, fontWeight: FontWeight.w500)),
           ),
           dense: true,
         ),

@@ -1,7 +1,8 @@
+import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../../../controller/chat_controller.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
@@ -18,7 +19,7 @@ class _ContractTopBarState extends State<ContractTopBar> {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ChatController>(builder: (chatController) {
+    return BlocBuilder<ChatBloc, ChatState>(builder: (context, chatState) {
       return Column(
         children: [
           CustomTextField(
@@ -42,22 +43,23 @@ class _ContractTopBarState extends State<ContractTopBar> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    chatController.updateShowMySales(false);
+                    context.read<ChatBloc>().add(const UpdateShowMySales(showMySales: false));
+                    // chatState.updateShowMySales(false);
                   },
                   child: Container(
                     height: 36,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: !chatController.isShowMySales ? 2 : 1,
-                          color: !chatController.isShowMySales ? ColorResources.blue : ColorResources.lgColor,
+                          width: !chatState.isShowMySales ? 2 : 1,
+                          color: !chatState.isShowMySales ? ColorResources.blue : ColorResources.lgColor,
                         ),
                       ),
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
                       'my_purchases'.tr,
-                      style: textSm.copyWith(color: !chatController.isShowMySales ? ColorResources.blue : ColorResources.gray),
+                      style: textSm.copyWith(color: !chatState.isShowMySales ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
                 ),
@@ -65,22 +67,23 @@ class _ContractTopBarState extends State<ContractTopBar> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    chatController.updateShowMySales(true);
+                    context.read<ChatBloc>().add(const UpdateShowMySales(showMySales: true));
+                    // chatState.updateShowMySales(true);
                   },
                   child: Container(
                     height: 36,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: chatController.isShowMySales ? 2 : 1,
-                          color: chatController.isShowMySales ? ColorResources.blue : ColorResources.lgColor,
+                          width: chatState.isShowMySales ? 2 : 1,
+                          color: chatState.isShowMySales ? ColorResources.blue : ColorResources.lgColor,
                         ),
                       ),
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
                       'my_sales'.tr,
-                      style: textSm.copyWith(color: chatController.isShowMySales ? ColorResources.blue : ColorResources.gray),
+                      style: textSm.copyWith(color: chatState.isShowMySales ? ColorResources.blue : ColorResources.gray),
                     ),
                   ),
                 ),

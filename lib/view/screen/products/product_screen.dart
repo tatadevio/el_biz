@@ -5,7 +5,6 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/product_grid_item.dart';
 import 'package:el_biz/view/base/product_list_item.dart';
 import 'package:el_biz/view/screen/filter/company_filter/company_filter_screen.dart';
-import 'package:el_biz/view/screen/filter/filter_category.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

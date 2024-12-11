@@ -1,11 +1,11 @@
 import 'dart:math';
 
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/auth_controller.dart';
-import '../../../controller/favorite_controller.dart';
 import '../../../controller/product_controller.dart';
 import '../../../data/model/response/category/category_model.dart';
 import '../../../utils/Images.dart';
@@ -196,7 +196,7 @@ class _CategoriesState extends State<Categories> {
                                 Get.back();
                               },
                             ),
-                      if (productController.catProductItem.isNotEmpty && Get.find<AuthController>().isLoggedIn())
+                      if (productController.catProductItem.isNotEmpty && context.read<AuthBloc>().state.isLoggedIn)
                         Positioned(
                           top: 40,
                           child: InkWell(
@@ -207,11 +207,11 @@ class _CategoriesState extends State<Categories> {
                                 isFollow = !isFollow;
                               });
 
-                              if (isFollow) {
-                                Get.find<FavoriteController>().saveSearch(widget.title, productController.currentQuery, "1");
-                              } else {
-                                Get.find<FavoriteController>().deleteSearch(widget.title);
-                              }
+                              // if (isFollow) {
+                              //   Get.find<FavoriteController>().saveSearch(widget.title, productController.currentQuery, "1");
+                              // } else {
+                              //   Get.find<FavoriteController>().deleteSearch(widget.title);
+                              // }
                             },
                             child: Container(
                               decoration: BoxDecoration(

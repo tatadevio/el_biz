@@ -44,9 +44,9 @@ class UserController extends GetxController implements GetxService {
   @override
   void onInit() {
     super.onInit();
-    if (Get.find<AuthController>().isLoggedIn()) {
-      getUserInfo(false);
-    }
+    // if (Get.find<AuthController>().isLoggedIn()) {
+    //   getUserInfo(false);
+    // }
   }
 
   Future<ResponseModel> getUserInfo(bool fromUpdate) async {

@@ -1,7 +1,10 @@
-import 'package:path_provider/path_provider.dart';
-
+import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/data/model/response/cities_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'dart:convert';
 import '../data/model/base/response_model.dart';
 import '../data/model/response/attribute_model.dart';
@@ -9,10 +12,6 @@ import '../data/model/response/product/add_attribute_model.dart';
 import '../data/model/response/product/edit_ads_model.dart';
 import '../data/model/response/product/product_model.dart';
 import '../data/repo/post_ad_repo.dart';
-import 'auth_controller.dart';
-import 'dart:io';
-
-import 'cities_controller.dart';
 
 class PostAdController extends GetxController implements GetxService {
   final PostAdRepo postAdRepo;
@@ -102,15 +101,15 @@ class PostAdController extends GetxController implements GetxService {
   List<List<String>> get contactList => _contactList;
   ProductItem? get shareProduct => _shareProduct;
 
-  @override
-  void onInit() {
-    super.onInit();
-    if (Get.find<AuthController>().isLoggedIn()) {
-      getMyAds("active");
-      getMyAds("inactive");
-      getMyAds("pending");
-    }
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   if (Get.find<AuthController>().isLoggedIn()) {
+  //     getMyAds("active");
+  //     getMyAds("inactive");
+  //     getMyAds("pending");
+  //   }
+  // }
 
   void shareProductItem(ProductItem value) {
     _shareProduct = value;
@@ -190,7 +189,7 @@ class PostAdController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> getEditAds(String id) async {
+  Future<void> getEditAds(String id, BuildContext context) async {
     _isLoading = true;
     update();
     Response response = await postAdRepo.getEditAds(id);
@@ -211,7 +210,7 @@ class PostAdController extends GetxController implements GetxService {
       _addAttributeList.clear();
       _selectedCurrency = _editAds!.data.currency;
       addLocationAddress(_editAds!.data.address, _editAds!.data.latitude, _editAds!.data.longitude);
-      getCityValue();
+      getCityValue(context);
       changeEnablePhone(_editAds!.data.enablePhone == 1 ? true : false);
       update();
     } else {}
@@ -220,14 +219,15 @@ class PostAdController extends GetxController implements GetxService {
     update();
   }
 
-  void getCityValue() {
+  void getCityValue(BuildContext context) {
     _selectedCityId = _editAds!.data.cityId.toString();
     _selectedCategoryId = _editAds!.data.categoryId.toString();
     _selectedCategory = _editAds!.data.parentCats[_editAds!.data.parentCats.length - 1].title;
-    for (int i = 0; i < Get.find<CitiesController>().cityItem.length; i++) {
-      if (_selectedCityId == Get.find<CitiesController>().cityItem[i].id.toString()) {
-        _selectedCityName = Get.find<CitiesController>().cityItem[i].name;
-        _selectedCityId = Get.find<CitiesController>().cityItem[i].id.toString();
+    final cityItems = context.read<CitiesBloc>().state.cityItem;
+    for (int i = 0; i < cityItems.length; i++) {
+      if (_selectedCityId == cityItems[i].id.toString()) {
+        _selectedCityName = cityItems[i].name;
+        _selectedCityId = cityItems[i].id.toString();
         print(_selectedCityName);
         print("coty name");
       }

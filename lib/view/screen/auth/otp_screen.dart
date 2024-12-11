@@ -1,12 +1,11 @@
 import 'dart:async';
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/screen/auth/change_password_screen.dart';
-import 'package:el_biz/view/screen/profile/edit_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../controller/auth_controller.dart';
 import '../../../utils/color_resources.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -54,7 +53,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
         //extendBodyBehindAppBar: true,
         appBar: AppBar(),
-        body: GetBuilder<AuthController>(builder: (authController) {
+        body: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           return Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -128,7 +127,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             keyboardType: TextInputType.number,
 
                             onCompleted: (value) async {
-                              final SharedPreferences _prefer = await SharedPreferences.getInstance();
+                              // final SharedPreferences _prefer = await SharedPreferences.getInstance();
                               setState(() {
                                 currentText = value;
                               });
@@ -210,17 +209,17 @@ class _OtpScreenState extends State<OtpScreen> {
                 //               //       print("cancel notifier..");
                 //               //     }
                 //               //   });
-                //               //   authController.updateOtpLoading(true);
-                //               //   authController
+                //               //   authState.updateOtpLoading(true);
+                //               //   authState
                 //               //       .phoneAuthentication(widget.phone, "1")
                 //               //       .then((value) {
-                //               //     authController.updateOtpLoading(false);
-                //               //     /*authController.verifyOtp(textEditingController.text,context).then((value) {
+                //               //     authState.updateOtpLoading(false);
+                //               //     /*authState.verifyOtp(textEditingController.text,context).then((value) {
                 //               //     if(value){
-                //               //       authController.loginWithOtp();
+                //               //       authState.loginWithOtp();
                 //               //     }else{
                 //               //       showShortToast("enter_correct_otp".tr);
-                //               //       authController.updateOtpLoading(false);
+                //               //       authState.updateOtpLoading(false);
                 //               //     }
                 //               //   });*/
                 //               //   });
@@ -242,7 +241,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 // const SizedBox(
                 //   height: 14,
                 // ),
-                if (authController.isOtpLoading) const CircularProgressIndicator(),
+                // if (authState.isOtpLoading) const CircularProgressIndicator(),
               ],
             ),
           );

@@ -1,6 +1,7 @@
-import 'package:el_biz/controller/favorite_controller.dart';
+import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/color_resources.dart';
@@ -29,7 +30,7 @@ class FavoriteScreen extends StatelessWidget {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(55),
-          child: GetBuilder<FavoriteController>(builder: (favoriteController) {
+          child: BlocBuilder<FavoriteBloc, FavoriteState>(builder: (context, favoriteState) {
             return Container(
               // decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(24.0), bottomRight: Radius.circular(24.0))),
               color: ColorResources.background,
@@ -46,7 +47,8 @@ class FavoriteScreen extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  favoriteController.updateShowCategories(true);
+                                  context.read<FavoriteBloc>().add(const UpdateShowCategories(true));
+                                  // favoriteState.updateShowCategories(true);
                                 },
                                 child: Container(
                                   height: height * 0.06,
@@ -54,8 +56,8 @@ class FavoriteScreen extends StatelessWidget {
                                     // borderRadius: BorderRadius.circular(6),
                                     border: Border(
                                       bottom: BorderSide(
-                                        width: favoriteController.isShowCategories ? 2 : 1,
-                                        color: favoriteController.isShowCategories ? ColorResources.blue : ColorResources.lgColor,
+                                        width: favoriteState.isShowCategories ? 2 : 1,
+                                        color: favoriteState.isShowCategories ? ColorResources.blue : ColorResources.lgColor,
                                       ),
                                     ),
                                   ),
@@ -63,7 +65,7 @@ class FavoriteScreen extends StatelessWidget {
                                       child: Text(
                                     "Закупки".tr,
                                     style: mediumTextStyle.copyWith(
-                                      color: favoriteController.isShowCategories ? ColorResources.primary : ColorResources.black,
+                                      color: favoriteState.isShowCategories ? ColorResources.primary : ColorResources.black,
                                     ),
                                   )),
                                 ),
@@ -75,22 +77,23 @@ class FavoriteScreen extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  favoriteController.updateShowCategories(false);
+                                  context.read<FavoriteBloc>().add(const UpdateShowCategories(false));
+                                  // favoriteState.updateShowCategories(false);
                                 },
                                 child: Container(
                                   height: height * 0.06,
                                   decoration: BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
-                                        width: !favoriteController.isShowCategories ? 2 : 1,
-                                        color: !favoriteController.isShowCategories ? ColorResources.blue : ColorResources.lgColor,
+                                        width: !favoriteState.isShowCategories ? 2 : 1,
+                                        color: !favoriteState.isShowCategories ? ColorResources.blue : ColorResources.lgColor,
                                       ),
                                     ),
                                   ),
                                   child: Center(
                                       child: Text("goods".tr,
                                           style: mediumTextStyle.copyWith(
-                                            color: !favoriteController.isShowCategories ? ColorResources.primary : ColorResources.black,
+                                            color: !favoriteState.isShowCategories ? ColorResources.primary : ColorResources.black,
                                           ))),
                                 ),
                               ),

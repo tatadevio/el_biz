@@ -43,6 +43,12 @@
   "unread" : "Непрочитанные",
   "search_in_chats" : "Поиск в чатах",
   "my_purchases" : "Мои покупки",
-  "my_sales" : "Мои продажи"
+  "my_sales" : "Мои продажи",
+  "language" : "язык",
+  "enter_your_password" : "Введите пароль",
+  "password" : "Пароль",
+  "forgot_your_password" : "Забыли пароль?",
+  "a_one_time_SMS_code_has_been_sent_to_your_phone_number" : "На ваш номер телефона был отправлен одноразовый СМС код",
+  "continue" : "Продолжить"
 
 }

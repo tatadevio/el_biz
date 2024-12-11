@@ -1,4 +1,6 @@
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../controller/category_controller.dart';
@@ -18,8 +20,8 @@ class ShowBottomCategory extends StatelessWidget {
     var height = Get.height;
     // var width = Get.width;
 
-    return GetBuilder<CategoryController>(
-      builder: (categoryController) {
+    return BlocBuilder<CategoryBloc, CategoryState>(
+      builder: (context, categoryState) {
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
@@ -32,7 +34,7 @@ class ShowBottomCategory extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 18.0),
             child: ListView(
-              children: categoryController.categoryItem.map((tile) {
+              children: categoryState.categoryItem.map((tile) {
                 final widget = BasicTileWidget(
                   tile: tile,
                   isEdit: isEdit,

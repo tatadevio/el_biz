@@ -1,9 +1,18 @@
 part of 'auth_bloc.dart';
 
-@immutable
-sealed class AuthEvent {}
+sealed class AuthEvent extends Equatable {
+  const AuthEvent();
 
-final class AuthSignUp extends AuthEvent {
-  final String email;
-  AuthSignUp({required this.email});
+  @override
+  List<Object> get props => [];
+}
+
+class CheckLoginStatus extends AuthEvent {}
+
+class UpdateCountryCode extends AuthEvent {
+  final String code;
+  const UpdateCountryCode(this.code);
+
+  @override
+  List<Object> get props => [code];
 }

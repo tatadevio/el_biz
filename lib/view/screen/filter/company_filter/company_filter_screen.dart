@@ -183,7 +183,7 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                                     onTap: () {
                                       Get.to(() => const MainCategories(
                                             type: true,
-                                            fromHome: false,
+                                            fromHome: true,
                                           ));
                                     },
                                     child: Row(

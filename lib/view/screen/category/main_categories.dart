@@ -1,8 +1,9 @@
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../controller/category_controller.dart';
 import '../../../controller/product_controller.dart';
 import '../../../helper/route_helper.dart';
 import '../../../utils/Images.dart';
@@ -12,14 +13,27 @@ import '../../base/no_data.dart';
 import 'categories.dart';
 import 'sub_category.dart';
 
-class MainCategories extends StatelessWidget {
+class MainCategories extends StatefulWidget {
   final bool type;
   final bool fromHome;
   const MainCategories({
-    Key? key,
+    super.key,
     required this.type,
     required this.fromHome,
-  }) : super(key: key);
+  });
+
+  @override
+  State<MainCategories> createState() => _MainCategoriesState();
+}
+
+class _MainCategoriesState extends State<MainCategories> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      context.read<CategoryBloc>().add(GetCategory());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +45,13 @@ class MainCategories extends StatelessWidget {
         elevation: 0,
         title: Text("category".tr),
       ),
-      body: GetBuilder<CategoryController>(builder: (categoryController) {
-        return categoryController.categoryItem.isNotEmpty
+      body: BlocBuilder<CategoryBloc, CategoryState>(builder: (context, categoryState) {
+        if (categoryState.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return categoryState.categoryItem.isNotEmpty
             ? Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Container(
@@ -103,24 +122,24 @@ class MainCategories extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             physics: const AlwaysScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: categoryController.categoryItem.length,
+                            itemCount: categoryState.categoryItem.length,
                             itemBuilder: (context, i) {
                               return InkWell(
                                 onTap: () {
-                                  if (categoryController.categoryItem[i].childs.isNotEmpty) {
-                                    // Get.to(() => SubCategories(title: categoryController.categoryItem[i].name,
-                                    //   categoryItem: categoryController.categoryItem[i].childs,type: type,));
+                                  if (categoryState.categoryItem[i].childs.isNotEmpty) {
+                                    // Get.to(() => SubCategories(title: categoryState.categoryItem[i].name,
+                                    //   categoryItem: categoryState.categoryItem[i].childs,type: type,));
 
                                     Get.to(() => CategoryScreens(
-                                          category: categoryController.categoryItem[i],
-                                          fromHome: fromHome,
+                                          category: categoryState.categoryItem[i],
+                                          fromHome: widget.fromHome,
                                         ));
                                   } else {
-                                    Get.find<ProductController>().getProductWithCat(categoryController.categoryItem[i].id.toString(), categoryController.categoryItem[i].name);
+                                    Get.find<ProductController>().getProductWithCat(categoryState.categoryItem[i].id.toString(), categoryState.categoryItem[i].name);
                                     Get.to(() => Categories(
-                                          title: categoryController.categoryItem[i].name,
-                                          categoryItem: categoryController.categoryItem[i].childs,
-                                          id: categoryController.categoryItem[i].id.toString(),
+                                          title: categoryState.categoryItem[i].name,
+                                          categoryItem: categoryState.categoryItem[i].childs,
+                                          id: categoryState.categoryItem[i].id.toString(),
                                         ));
                                   }
                                 },
@@ -129,13 +148,13 @@ class MainCategories extends StatelessWidget {
                                     ListTile(
                                       dense: true,
                                       leading: CustomImage(
-                                        image: categoryController.categoryItem[i].image,
+                                        image: categoryState.categoryItem[i].image,
                                         height: 24,
                                         width: 24,
                                         radius: 0.0,
                                       ),
                                       title: Text(
-                                        categoryController.categoryItem[i].name,
+                                        categoryState.categoryItem[i].name,
                                         style: body16.copyWith(color: ColorResources.darkGray),
 
                                         //  const TextStyle(color: ColorResources.textBlack, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Inter'),

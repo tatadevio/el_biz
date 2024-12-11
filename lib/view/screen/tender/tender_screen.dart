@@ -1,4 +1,6 @@
-import 'package:el_biz/controller/tenders_controller.dart';
+import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_event.dart';
+import 'package:el_biz/bloc/tenders/tenders_state.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -7,6 +9,7 @@ import 'package:el_biz/view/base/tender_list_item.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -83,7 +86,7 @@ class TenderScreen extends StatelessWidget {
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(55),
-            child: GetBuilder<TendersController>(builder: (tendersController) {
+            child: BlocBuilder<TendersBloc, TendersState>(builder: (context, tendersController) {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: const BoxDecoration(
@@ -174,7 +177,8 @@ class TenderScreen extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        tendersController.updateGridView(true);
+                        context.read<TendersBloc>().add(const UpdateGridView(true));
+                        // tendersController.updateGridView(true);
                       },
                       child: Container(
                         height: 40,
@@ -200,7 +204,8 @@ class TenderScreen extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        tendersController.updateGridView(false);
+                        context.read<TendersBloc>().add(const UpdateGridView(false));
+                        // tendersController.updateGridView(false);
                       },
                       child: Container(
                         height: 40,
@@ -225,7 +230,7 @@ class TenderScreen extends StatelessWidget {
               );
             }),
           )),
-      body: GetBuilder<TendersController>(builder: (tendersController) {
+      body: BlocBuilder<TendersBloc, TendersState>(builder: (context, tendersController) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: tendersController.isGridView

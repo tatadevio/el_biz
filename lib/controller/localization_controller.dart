@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/api/api_client.dart';
 import '../data/model/base/language_model.dart';
 import '../utils/appConstant.dart';
-import 'category_controller.dart';
 
 class LocalizationController extends GetxController implements GetxService {
   final SharedPreferences sharedPreferences;
@@ -52,12 +52,14 @@ class LocalizationController extends GetxController implements GetxService {
     print("lang is $lang");
     apiClient.updateHeader(token ?? "", lang ?? "ru");
     bool reload = true;
-    if (fromMenu) {
-      /// Refreshing application while changing languages
+    // if (fromMenu) {
+    /// Refreshing application while changing languages
+    ///
+    // context.read<CategoryBloc>().
 
-      Get.find<CategoryController>().getCategory();
-      Get.find<CategoryController>().getCategoryFilter();
-    }
+    // Get.find<CategoryController>().getCategory();
+    // Get.find<CategoryController>().getCategoryFilter();
+    // }
 
     //sharedPreferences.setString(AppConstants.COUNTRY_CODE, locale.countryCode);
   }

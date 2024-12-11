@@ -1,6 +1,7 @@
-import 'package:el_biz/controller/category_controller.dart';
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../controller/product_controller.dart';
@@ -64,7 +65,7 @@ class _CategoryScreensState extends State<CategoryScreens> {
             )
           ],
         ),
-        body: GetBuilder<CategoryController>(builder: (categoryController) {
+        body: BlocBuilder<CategoryBloc, CategoryState>(builder: (context, categoryState) {
           return Padding(
             padding: const EdgeInsets.only(top: 0.0),
             child: Container(
@@ -84,10 +85,10 @@ class _CategoryScreensState extends State<CategoryScreens> {
                               // leading: _categoryStack.last.childs[index].childs.isNotEmpty
                               //     ? null
                               //     : Checkbox(
-                              //         value: categoryController.isFilterSelectedCategory(_categoryStack.last.childs[index]),
+                              //         value: categoryState.isFilterSelectedCategory(_categoryStack.last.childs[index]),
                               //         onChanged: (value) {
-                              //           categoryController.updateFilterSelectedCategory(_categoryStack.last.childs[index]);
-                              //           print(categoryController.filterCategories);
+                              //           categoryState.updateFilterSelectedCategory(_categoryStack.last.childs[index]);
+                              //           print(categoryState.filterCategories);
                               //         },
                               //       ),
                               title: Text(
