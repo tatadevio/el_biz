@@ -1,8 +1,9 @@
+import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:el_biz/view/screen/tender/tender_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import '../../../controller/config_controller.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../chat/chat_screen.dart';
@@ -42,7 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
-      bottomNavigationBar: GetBuilder<ConfigController>(builder: (configController) {
+      bottomNavigationBar: BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configState) {
         return BottomAppBar(
           color: ColorResources.white,
           clipBehavior: Clip.antiAlias,
@@ -54,31 +55,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(children: [
                 BottomNavItem(
                   iconData: Images.svgHome,
-                  isSelected: configController.selectedIndex == 0,
+                  isSelected: configState.selectedIndex == 0,
+                  // configState.selectedIndex == 0,
                   onTap: () => _setPage(0),
                   title: "home".tr,
                 ),
                 BottomNavItem(
                   iconData: Images.svgCategory,
-                  isSelected: configController.selectedIndex == 1,
+                  isSelected: configState.selectedIndex == 1,
                   onTap: () => _setPage(1),
                   title: "products".tr,
                 ),
                 BottomNavItem(
                   iconData: Images.svgTenders,
-                  isSelected: configController.selectedIndex == 2,
+                  isSelected: configState.selectedIndex == 2,
                   onTap: () => _setPage(2),
                   title: "tenders".tr,
                 ),
                 BottomNavItem(
                   iconData: Images.svgChat,
-                  isSelected: configController.selectedIndex == 3,
+                  isSelected: configState.selectedIndex == 3,
                   onTap: () => _setPage(3),
                   title: "chats".tr,
                 ),
                 BottomNavItem(
                   iconData: Images.svgProfile,
-                  isSelected: configController.selectedIndex == 4,
+                  isSelected: configState.selectedIndex == 4,
                   onTap: () => _setPage(4),
                   title: "profile".tr,
                 ),
@@ -87,13 +89,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         );
       }),
-      body: GetBuilder<ConfigController>(builder: (configController) {
+      body: BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configState) {
         return PageView.builder(
           controller: _pageController,
           itemCount: _screens.length,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            return _screens[configController.selectedIndex];
+            return _screens[configState.selectedIndex];
           },
         );
       }),
@@ -105,6 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _pageController.jumpToPage(pageIndex);
       _pageIndex = pageIndex;
     });
-    Get.find<ConfigController>().changeIndex(_pageIndex);
+    // Get.find<ConfigController>().changeIndex(_pageIndex);
+    context.read<ConfigBloc>().add(ChangeIndex(_pageIndex));
   }
 }

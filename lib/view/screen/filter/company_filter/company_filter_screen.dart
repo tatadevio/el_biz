@@ -1,7 +1,11 @@
+import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import '../../../../controller/post_ad_controller.dart';
 import '../../../../controller/product_controller.dart';
 import '../../../../utils/Images.dart';
@@ -75,30 +79,30 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
         ),
         actions: [
           Center(
-            child: GetBuilder<ProductController>(builder: (productController) {
-              return InkWell(
-                onTap: () {
-                  productController.updateNameId("", "");
-                  Get.find<PostAdController>().addCategoryName("", false);
-                  Get.find<PostAdController>().updateCategoryId("", "");
-                  Get.find<PostAdController>().attributeItem.clear();
-                  productController.selectCurrency("");
-                  productController.changeCityId("", "");
-                  value = 0;
-                  _minController.clear();
-                  _maxController.clear();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Text(
-                    "reset".tr,
-                    style: const TextStyle(
-                      color: ColorResources.primary,
-                    ),
+            child: InkWell(
+              onTap: () {
+                // productController.updateNameId("", "");
+                // Get.find<postAdState>().addCategoryName("", false);
+                // Get.find<postAdState>().updateCategoryId("", "");
+                context.read<PostAdBloc>().add(AddCategoryName("", false));
+                context.read<PostAdBloc>().add(UpdateCategoryId("", ""));
+                // Get.find<postAdState>().attributeItem.clear();
+                // productController.selectCurrency("");
+                // productController.changeCityId("", "");
+                value = 0;
+                _minController.clear();
+                _maxController.clear();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Text(
+                  "reset".tr,
+                  style: const TextStyle(
+                    color: ColorResources.primary,
                   ),
                 ),
-              );
-            }),
+              ),
+            ),
           )
         ],
       ),
@@ -108,8 +112,8 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
         },
         child: FormBuilder(
           key: _formKey,
-          child: GetBuilder<ProductController>(builder: (productController) {
-            return GetBuilder<PostAdController>(builder: (postAdController) {
+          child: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
+            return BlocBuilder<PostAdBloc, PostAdState>(builder: (context, postAdState) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 0),
                 child: SingleChildScrollView(
@@ -249,19 +253,20 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                                     InkWell(
                                       borderRadius: BorderRadius.circular(30),
                                       onTap: () {
-                                        productController.updateKeywordSelected(keyword);
+                                        // productController.updateKeywordSelected(keyword);
+                                        context.read<ProductBloc>().add(UpdateKeywordSelected(keyword));
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                                         decoration: BoxDecoration(
-                                          color: productController.keywordSelected(keyword) ? ColorResources.green : null,
+                                          color: productController.keywordsSelected(keyword) ? ColorResources.green : null,
                                           borderRadius: BorderRadius.circular(30),
                                           border: Border.all(width: 1, color: ColorResources.lgColor),
                                         ),
                                         alignment: Alignment.center,
                                         child: Text(
                                           keyword,
-                                          style: body14.copyWith(color: productController.keywordSelected(keyword) ? ColorResources.white : ColorResources.gray),
+                                          style: body14.copyWith(color: productController.keywordsSelected(keyword) ? ColorResources.white : ColorResources.gray),
                                         ),
                                       ),
                                     ),
@@ -314,7 +319,7 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      GetBuilder<ProductController>(builder: (productcontroller) {
+                      BlocBuilder<ProductBloc, ProductState>(builder: (context, productcontroller) {
                         return InkWell(
                           onTap: () {
                             Get.bottomSheet(CitiesScreen(), backgroundColor: Colors.white, isScrollControlled: true);

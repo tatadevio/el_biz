@@ -1,4 +1,4 @@
-import 'package:el_biz/controller/product_detail_controller.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/about_product_widget.dart';
@@ -6,9 +6,9 @@ import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_reviews_widget.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/similar_products_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -21,7 +21,7 @@ class ProductDetailScreen extends StatelessWidget {
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('product detail'),
+        title: const Text('product detail'),
         actions: [
           Container(
             height: 40,
@@ -46,12 +46,12 @@ class ProductDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: GetBuilder<ProductDetailController>(builder: (productDetialController) {
+      body: BlocBuilder<ProductDetailBloc, ProductDetailState>(builder: (context, productDetialController) {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: ProductImages(),
               ),
               const SizedBox(
@@ -62,7 +62,7 @@ class ProductDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
                       spreadRadius: -2,
@@ -90,7 +90,7 @@ class ProductDetailScreen extends StatelessWidget {
                             color: Colors.white,
                             border: Border.all(width: 1, color: ColorResources.lgColor),
                             borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 blurRadius: 2,
                                 spreadRadius: 0,
@@ -139,8 +139,8 @@ class ProductDetailScreen extends StatelessWidget {
                                 itemCount: 5,
                                 itemSize: 14,
                                 ignoreGestures: true,
-                                itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                                itemBuilder: (context, _) => Icon(
+                                itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                                itemBuilder: (context, _) => const Icon(
                                   Icons.star,
                                   color: ColorResources.yellow,
                                 ),
@@ -208,7 +208,8 @@ class ProductDetailScreen extends StatelessWidget {
                         InkWell(
                           borderRadius: BorderRadius.circular(6),
                           onTap: () {
-                            productDetialController.toggleShowProductReview(false);
+                            // productDetialController.toggleShowProductReview(false);
+                            context.read<ProductDetailBloc>().add(const ToggleShowProductReview(false));
                           },
                           child: Container(
                             height: 40,
@@ -228,7 +229,8 @@ class ProductDetailScreen extends StatelessWidget {
                         InkWell(
                           borderRadius: BorderRadius.circular(6),
                           onTap: () {
-                            productDetialController.toggleShowProductReview(true);
+                            // productDetialController.toggleShowProductReview(true);
+                            context.read<ProductDetailBloc>().add(const ToggleShowProductReview(true));
                           },
                           child: Container(
                             height: 40,
@@ -249,9 +251,9 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                     const Divider(),
                     if (productDetialController.showProductReviews) ...[
-                      ProductReviewsWidget(),
+                      const ProductReviewsWidget(),
                     ] else ...[
-                      AboutProductWidget(),
+                      const AboutProductWidget(),
                     ],
                   ],
                 ),
@@ -264,7 +266,7 @@ class ProductDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
                       spreadRadius: -2,

@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import '../../../controller/auth_controller.dart';
-import '../../../controller/config_controller.dart';
+import '../../../bloc/config/config_bloc.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
@@ -232,7 +231,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     title: InkWell(
                       onTap: () {
-                        Get.find<ConfigController>().getPrivacy();
+                        context.read<ConfigBloc>().add(GetPrivacy());
+                        // Get.find<ConfigController>().getPrivacy();
                         Get.to(() => const Privacy());
                       },
                       child: Text(

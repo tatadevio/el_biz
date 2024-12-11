@@ -1,11 +1,11 @@
-import 'package:el_biz/controller/review_controller.dart';
+import 'package:el_biz/bloc/review/review_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/widgets/company_data.dart/review_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
 
 class MyReviewsScreen extends StatelessWidget {
   const MyReviewsScreen({super.key});
@@ -14,12 +14,12 @@ class MyReviewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Мои отзывы'),
+        title: const Text('Мои отзывы'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: GetBuilder<ReviewController>(builder: (reviewController) {
-          if (reviewController.myReviews.isEmpty) {
+        child: BlocBuilder<ReviewBloc, ReviewState>(builder: (context, reviewController) {
+          if (reviewController.myReviews!.isEmpty) {
             return Center(
               child: Text(
                 'Вы еще не оставляли отзывов',
@@ -89,8 +89,8 @@ class MyReviewsScreen extends StatelessWidget {
                         itemCount: 5,
                         itemSize: 14,
                         ignoreGestures: true,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                        itemBuilder: (context, _) => Icon(
+                        itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                        itemBuilder: (context, _) => const Icon(
                           Icons.star,
                           color: ColorResources.yellow,
                         ),

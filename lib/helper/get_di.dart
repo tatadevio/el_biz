@@ -72,23 +72,23 @@ Future<Map<String, Map<String, String>>> init() async {
 
   // Get.lazyPut<AuthController>(() => AuthController(authRepo: Get.find()), fenix: true);
   // Get.lazyPut<NetworkConnectivityController>(() => NetworkConnectivityController(), fenix: true);
-  Get.lazyPut<ConfigController>(() => ConfigController(Get.find()), fenix: true);
-  Get.lazyPut<UserController>(() => UserController(Get.find(), Get.find()), fenix: true);
+  // Get.lazyPut<ConfigController>(() => ConfigController(Get.find()), fenix: true);
+  // Get.lazyPut<UserController>(() => UserController(Get.find(), Get.find()), fenix: true);
   // Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
   // Get.lazyPut<HomeController>(() => HomeController(Get.find()), fenix: true);
-  Get.lazyPut<ProductController>(() => ProductController(Get.find()), fenix: true);
+  // Get.lazyPut<ProductController>(() => ProductController(Get.find()), fenix: true);
   // Get.lazyPut<CategoryController>(() => CategoryController(Get.find()), fenix: true);
-  Get.lazyPut<ProductDetailController>(() => ProductDetailController(Get.find()), fenix: true);
+  // Get.lazyPut<ProductDetailController>(() => ProductDetailController(Get.find()), fenix: true);
   // Get.lazyPut<CitiesController>(() => CitiesController(Get.find()), fenix: true);
   // Get.lazyPut<ChatController>(() => ChatController(Get.find()), fenix: true);
-  Get.lazyPut<PostAdController>(() => PostAdController(Get.find()), fenix: true);
+  // Get.lazyPut<PostAdController>(() => PostAdController(Get.find()), fenix: true);
   // Get.lazyPut<FavoriteController>(() => FavoriteController(Get.find()), fenix: true);
-  Get.lazyPut<SellerController>(() => SellerController(Get.find()), fenix: true);
+  // Get.lazyPut<SellerController>(() => SellerController(Get.find()), fenix: true);
   Get.lazyPut<TendersBloc>(() => TendersBloc(Get.find()), fenix: true);
   // Get.lazyPut<NotificationController>(() => NotificationController(Get.find()), fenix: true);
-  Get.lazyPut<ReviewController>(() => ReviewController(Get.find()), fenix: true);
-  Get.lazyPut<ContractsController>(() => ContractsController(Get.find()), fenix: true);
-  Get.lazyPut<CompanyController>(() => CompanyController(Get.find()), fenix: true);
+  // Get.lazyPut<ReviewController>(() => ReviewController(Get.find()), fenix: true);
+  // Get.lazyPut<ContractsController>(() => ContractsController(Get.find()), fenix: true);
+  // Get.lazyPut<CompanyController>(() => CompanyController(Get.find()), fenix: true);
 
   Get.lazyPut<LocalizationController>(() => LocalizationController(sharedPreferences: Get.find(), apiClient: Get.find()), fenix: true);
 

@@ -5,8 +5,15 @@ import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/bloc/config/config_bloc.dart';
+import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
+import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/bloc/review/review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:flutter/material.dart';
@@ -45,11 +52,11 @@ class MyApp extends StatelessWidget {
     required this.prefs,
   });
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => ConfigBloc(Get.find())),
         BlocProvider(create: (_) => TendersBloc(Get.find())),
         BlocProvider(create: (_) => SearchBloc(Get.find())),
         BlocProvider(create: (_) => ChatBloc(Get.find())),
@@ -58,6 +65,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CategoryBloc(Get.find())),
         BlocProvider(create: (_) => AuthBloc(Get.find())),
         BlocProvider(create: (_) => CitiesBloc(Get.find())),
+        BlocProvider(create: (_) => CompanyBloc(Get.find())),
+        BlocProvider(create: (_) => ContractsBloc(Get.find())),
+        BlocProvider(create: (_) => PostAdBloc(Get.find())),
+        BlocProvider(create: (_) => ProductBloc(Get.find())),
+        BlocProvider(create: (_) => ProductDetailBloc(Get.find())),
+        BlocProvider(create: (_) => ReviewBloc(Get.find())),
       ],
       child: GetBuilder<LocalizationController>(builder: (localizationController) {
         return GetMaterialApp(

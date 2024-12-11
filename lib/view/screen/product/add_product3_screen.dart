@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:el_biz/controller/product_controller.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/data/model/base/add_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -8,6 +8,7 @@ import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/product/add_product4_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -32,11 +33,11 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: GetBuilder<ProductController>(builder: (productController) {
+        child: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +82,8 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  productController.removeGallery(image);
+                                  // productController.removeGallery(image);
+                                  context.read<ProductBloc>().add(RemoveGallery(image));
                                 },
                                 child: SizedBox(
                                   height: 80,
@@ -112,18 +114,20 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                             ListTile(
                               onTap: () {
                                 Get.back();
-                                productController.pickImageDocsCamera();
+                                // productController.pickImageDocsCamera();
+                                context.read<ProductBloc>().add(PickImageDocsCamera());
                               },
                               leading: const Icon(Icons.camera),
-                              title: Text('Camera'),
+                              title: const Text('Camera'),
                             ),
                             ListTile(
                               onTap: () {
                                 Get.back();
-                                productController.pickImageDocs();
+                                // productController.pickImageDocs();
+                                context.read<ProductBloc>().add(PickImageDocs());
                               },
                               leading: const Icon(Icons.image),
-                              title: Text('Galler'),
+                              title: const Text('Galler'),
                             ),
                           ],
                         )));

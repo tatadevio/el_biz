@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 
 import '../../../controller/product_controller.dart';
 import '../../../data/model/response/category/category_model.dart';
@@ -51,7 +53,7 @@ class _CategoriesState extends State<Categories> {
     return Scaffold(
       backgroundColor: ColorResources.background,
       extendBodyBehindAppBar: false,
-      body: GetBuilder<ProductController>(builder: (productController) {
+      body: BlocBuilder<ProductBloc, ProductState>(builder: (context, productState) {
         return CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -136,20 +138,21 @@ class _CategoriesState extends State<Categories> {
                                 for (int i = 0; i < widget.categoryItem.length; i++)
                                   InkWell(
                                     onTap: () {
-                                      productController.getProductWithCat(widget.categoryItem[i].id.toString(), widget.categoryItem[i].name);
+                                      // productState.getProductWithCat(widget.categoryItem[i].id.toString(), widget.categoryItem[i].name);
+                                      context.read<ProductBloc>().add(GetProductWithCat(widget.categoryItem[i].id.toString(), widget.categoryItem[i].name));
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 10.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: widget.categoryItem[i].id.toString() == productController.selectedSubCatId ? ColorResources.primary : Colors.white,
+                                            color: widget.categoryItem[i].id.toString() == productState.selectedSubCatId ? ColorResources.primary : Colors.white,
                                             borderRadius: BorderRadius.circular(5.0),
                                             border: Border.all(color: ColorResources.hintColor.withOpacity(0.7))),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             widget.categoryItem[i].name,
-                                            style: TextStyle(fontSize: 18, color: widget.categoryItem[i].id.toString() == productController.selectedSubCatId ? Colors.white : ColorResources.black),
+                                            style: TextStyle(fontSize: 18, color: widget.categoryItem[i].id.toString() == productState.selectedSubCatId ? Colors.white : ColorResources.black),
                                           ),
                                         ),
                                       ),
@@ -168,14 +171,14 @@ class _CategoriesState extends State<Categories> {
                 child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
-              children: !productController.isCatLoading
+              children: !productState.isCatLoading
                   ? [
-                      productController.catProductItem.isNotEmpty
-                          ? GetBuilder<ProductController>(builder: (productController) {
+                      productState.catProductItem.isNotEmpty
+                          ? BlocBuilder<ProductBloc, ProductState>(builder: (context, productState) {
                               return ProductCard(
                                 isFavorite: false,
                                 isEdit: "",
-                                productItem: productController.catProductItem,
+                                productItem: productState.catProductItem,
                               );
                             })
                           : NoDataWidget(
@@ -196,7 +199,7 @@ class _CategoriesState extends State<Categories> {
                                 Get.back();
                               },
                             ),
-                      if (productController.catProductItem.isNotEmpty && context.read<AuthBloc>().state.isLoggedIn)
+                      if (productState.catProductItem.isNotEmpty && context.read<AuthBloc>().state.isLoggedIn)
                         Positioned(
                           top: 40,
                           child: InkWell(
@@ -208,7 +211,7 @@ class _CategoriesState extends State<Categories> {
                               });
 
                               // if (isFollow) {
-                              //   Get.find<FavoriteController>().saveSearch(widget.title, productController.currentQuery, "1");
+                              //   Get.find<FavoriteController>().saveSearch(widget.title, productState.currentQuery, "1");
                               // } else {
                               //   Get.find<FavoriteController>().deleteSearch(widget.title);
                               // }

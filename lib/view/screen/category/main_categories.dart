@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -135,7 +136,8 @@ class _MainCategoriesState extends State<MainCategories> {
                                           fromHome: widget.fromHome,
                                         ));
                                   } else {
-                                    Get.find<ProductController>().getProductWithCat(categoryState.categoryItem[i].id.toString(), categoryState.categoryItem[i].name);
+                                    // Get.find<ProductController>().getProductWithCat();
+                                    context.read<ProductBloc>().add(GetProductWithCat(categoryState.categoryItem[i].id.toString(), categoryState.categoryItem[i].name));
                                     Get.to(() => Categories(
                                           title: categoryState.categoryItem[i].name,
                                           categoryItem: categoryState.categoryItem[i].childs,

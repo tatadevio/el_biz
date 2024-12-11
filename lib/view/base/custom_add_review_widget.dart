@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:el_biz/controller/review_controller.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -9,9 +8,12 @@ import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/reviews/my_reviews_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../../bloc/review/review_bloc.dart';
 
 class CustomAddReviewWidget extends StatefulWidget {
   const CustomAddReviewWidget({super.key});
@@ -27,7 +29,7 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    return GetBuilder<ReviewController>(builder: (reviewController) {
+    return BlocBuilder<ReviewBloc, ReviewState>(builder: (context, reviewController) {
       return Container(
         height: height * 0.7,
         width: double.infinity,
@@ -134,7 +136,8 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      reviewController.removeGallery(image);
+                                      // reviewController.removeGallery(image);
+                                      context.read<ReviewBloc>().add(RemoveGallery(image));
                                     },
                                     child: SizedBox(
                                       height: 80,
@@ -165,7 +168,8 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                 ListTile(
                                   onTap: () {
                                     Get.back();
-                                    reviewController.pickImageDocsCamera();
+                                    // reviewController.pickImageDocsCamera();
+                                    context.read<ReviewBloc>().add(PickImageDocsCamera());
                                   },
                                   leading: const Icon(Icons.camera),
                                   title: Text('Camera'),
@@ -173,7 +177,8 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                 ListTile(
                                   onTap: () {
                                     Get.back();
-                                    reviewController.pickImageDocs();
+                                    // reviewController.pickImageDocs();
+                                    context.read<ReviewBloc>().add(PickImageDocs());
                                   },
                                   leading: const Icon(Icons.image),
                                   title: Text('Galler'),

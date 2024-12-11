@@ -1,4 +1,6 @@
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -90,12 +92,15 @@ class CitiesScreen extends StatelessWidget {
                           ListTile(
                             dense: true,
                             onTap: () {
-                              Get.find<ProductController>().changeCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
+                              // Get.find<ProductController>().changeCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
+
+                              context.read<ProductBloc>().add(ChangeCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name));
 
                               context.read<CitiesBloc>().add(ChangeCity(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name));
 
                               // citiesState.changeCity(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
-                              Get.find<PostAdController>().updateCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
+
+                              context.read<PostAdBloc>().add(UpdateCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name));
                               Get.back();
                             },
                             title: Text(

@@ -1,12 +1,13 @@
+import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/config_controller.dart';
 import '../settings/privacy_page.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -93,7 +94,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
                 title: InkWell(
                   onTap: () {
-                    Get.find<ConfigController>().getPrivacy();
+                    // Get.find<ConfigController>().getPrivacy();
+                    context.read<ConfigBloc>().add(GetPrivacy());
                     Get.to(() => const Privacy());
                   },
                   child: Text(

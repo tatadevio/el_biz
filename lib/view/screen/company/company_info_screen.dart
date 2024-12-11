@@ -1,14 +1,15 @@
-import 'package:el_biz/controller/product_controller.dart';
+import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/cities/cities_page.dart';
 import 'package:el_biz/view/screen/company/company_contact_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../data/model/base/timing_date_model.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
-import '../../../controller/seller_controller.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/custom_button.dart';
 import './widgets/add_open_close_time.dart';
@@ -42,7 +43,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
     var size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: CustomAddCompanyAppbar(title: ''),
-      body: GetBuilder<SellerController>(builder: (sellerController) {
+      body: BlocBuilder<CompanyBloc, CompanyState>(builder: (context, sellerController) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
           child: SingleChildScrollView(
@@ -66,7 +67,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                GetBuilder<ProductController>(builder: (productController) {
+                BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
                   return InkWell(
                     onTap: () {
                       Get.bottomSheet(const CitiesScreen(), isScrollControlled: true);
@@ -230,18 +231,14 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: GetBuilder<SellerController>(builder: (sellerController) {
-            return !sellerController.isRegister
-                ? CustomButton(
-                    width: size.width * .9,
-                    height: 50,
-                    title: "continue".tr,
-                    onTap: () {
-                      Get.to(() => const CompanyContactInfoScreen());
-                    },
-                  )
-                : CustomButtonLoader(width: size.width * .9, height: 50);
-          }),
+          child: CustomButton(
+            width: size.width * .9,
+            height: 50,
+            title: "continue".tr,
+            onTap: () {
+              Get.to(() => const CompanyContactInfoScreen());
+            },
+          ),
         ),
       ),
     );

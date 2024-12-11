@@ -1,4 +1,4 @@
-import 'package:el_biz/controller/company_controller.dart';
+import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -6,6 +6,7 @@ import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -14,8 +15,8 @@ class CompanyDocumentsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CompanyController>(builder: (companyController) {
-      if (companyController.isLoading) {
+    return BlocBuilder<CompanyBloc, CompanyState>(builder: (context, companyState) {
+      if (companyState.isLoading) {
         return const SizedBox(
           height: 100,
           child: Center(
@@ -23,7 +24,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
           ),
         );
       }
-      if (companyController.companyDocuments.isEmpty) {
+      if (companyState.companyDocuments.isEmpty) {
         return const SizedBox(
           height: 100,
           child: Center(
@@ -34,10 +35,10 @@ class CompanyDocumentsWidget extends StatelessWidget {
       return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: companyController.companyDocuments.length,
+        itemCount: companyState.companyDocuments.length,
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
-          final document = companyController.companyDocuments[index];
+          final document = companyState.companyDocuments[index];
           return Column(
             children: [
               const SizedBox(

@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:el_biz/controller/product_controller.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../base/custom_image.dart';
@@ -21,7 +22,7 @@ class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
 
-    return GetBuilder<ProductController>(builder: (productController) {
+    return BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
       if (productController.pickedLogo.isEmpty) {
         return CustomImage(image: '', height: height * 0.4, width: Get.width, radius: 12);
       }

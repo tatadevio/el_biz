@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -10,10 +11,10 @@ import 'package:el_biz/view/screen/home/widgets/new_companies_widget.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:el_biz/view/screen/search/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/product_controller.dart';
 import '../company/widgets/fill_company_data_box.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -29,11 +30,12 @@ class HomeScreen extends StatelessWidget {
         //   Images.splashLogo,
         //   height: 40,
         // ),
-        title: Image.asset(
-          Images.splashLogo,
-          height: 40,
-          width: 40,
-        ),
+        title: SvgPicture.asset(Images.svgsplashLogo, height: 40, width: 40),
+        // Image.asset(
+        //   Images.splashLogo,
+        //   height: 40,
+        //   width: 40,
+        // ),
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(12),
@@ -146,7 +148,9 @@ class HomeScreen extends StatelessWidget {
                   detail: 'find_products_from_manufacturers_and_suppliers'.tr,
                   backgroundColor: ColorResources.green,
                   onTap: () {
-                    Get.find<ProductController>().updateShowCategories(false);
+                    // Get.find<ProductController>().updateShowCategories(false);
+
+                    context.read<ProductBloc>().add(const UpdateShowCategories(false));
                     Get.to(() => const ProductScreen());
                   }),
               SizedBox(
@@ -158,7 +162,8 @@ class HomeScreen extends StatelessWidget {
                 detail: 'view_advertisements_for_purchasing_goods_or_add_your_own'.tr,
                 backgroundColor: ColorResources.orange,
                 onTap: () {
-                  Get.find<ProductController>().updateShowCategories(true);
+                  // Get.find<ProductController>().updateShowCategories(true);
+                  context.read<ProductBloc>().add(const UpdateShowCategories(true));
                   Get.to(() => const ProductScreen());
                 },
               ),

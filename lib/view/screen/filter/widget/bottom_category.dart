@@ -1,8 +1,10 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/post_ad/post_ad_bloc.dart';
 import '../../../../controller/category_controller.dart';
 import '../../../../controller/post_ad_controller.dart';
 import '../../../../controller/product_controller.dart';
@@ -68,33 +70,32 @@ class BasicTileWidget extends StatelessWidget {
     final tiles = tile.childs;
 
     if (tiles.isEmpty) {
-      return GetBuilder<PostAdController>(
-        builder: (postAdController) {
-          return GetBuilder<ProductController>(
-            builder: (productController) {
-              return ListTile(
-                leading: showLeadingImage
-                    ? CustomImage(
-                        image: tile.image,
-                        height: Get.height * 0.035,
-                        width: Get.height * 0.035,
-                        radius: 6.0,
-                      )
-                    : null,
-                title: Text(
-                  title,
-                  style: TextStyle(
-                    color: tile.id.toString() == productController.selectedSubCatId ? ColorResources.primary : Colors.black,
-                  ),
-                ),
-                onTap: () {
-                  productController.updateNameId(tile.id.toString(), tile.name);
-                  postAdController.addCategoryName(tile.name, isEdit);
-                  postAdController.updateCategoryId(tile.id.toString(), tile.name);
-                  Get.back();
-                  print("I am");
-                },
-              );
+      return BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, productController) {
+          return ListTile(
+            leading: showLeadingImage
+                ? CustomImage(
+                    image: tile.image,
+                    height: Get.height * 0.035,
+                    width: Get.height * 0.035,
+                    radius: 6.0,
+                  )
+                : null,
+            title: Text(
+              title,
+              style: TextStyle(
+                color: tile.id.toString() == productController.selectedSubCatId ? ColorResources.primary : Colors.black,
+              ),
+            ),
+            onTap: () {
+              context.read<ProductBloc>().add(UpdateNameId(tile.id.toString(), tile.name));
+              // productController.updateNameId(tile.id.toString(), tile.name);
+              // postAdController.addCategoryName(tile.name, isEdit);
+              // postAdController.updateCategoryId(tile.id.toString(), tile.name);
+              context.read<PostAdBloc>().add(AddCategoryName(tile.name, isEdit));
+              context.read<PostAdBloc>().add(UpdateCategoryId(tile.id.toString(), tile.name));
+              Get.back();
+              print("I am");
             },
           );
         },
@@ -113,9 +114,11 @@ class BasicTileWidget extends StatelessWidget {
         onExpansionChanged: (value) {
           print(value);
           if (value) {
-            Get.find<PostAdController>().addCategoryName(tile.name, false);
+            context.read<PostAdBloc>().add(AddCategoryName(tile.name, false));
+            // Get.find<PostAdController>().addCategoryName(tile.name, false);
           } else {
-            Get.find<PostAdController>().addCategoryName(tile.name, false);
+            // Get.find<PostAdController>().addCategoryName(tile.name, false);
+            context.read<PostAdBloc>().add(AddCategoryName(tile.name, false));
           }
         },
         title: Text(

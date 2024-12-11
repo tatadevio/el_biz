@@ -1,8 +1,8 @@
+import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:get/get.dart';
 
-import '../../../controller/config_controller.dart';
 import '../../../utils/color_resources.dart';
 
 class Privacy extends StatelessWidget {
@@ -13,11 +13,11 @@ class Privacy extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorResources.background,
       appBar: AppBar(
-        title: GetBuilder<ConfigController>(builder: (configController) {
+        title: BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configController) {
           return !configController.isLoading && configController.privacy != null ? Text(configController.privacy!.data.title) : const Text("");
         }),
       ),
-      body: GetBuilder<ConfigController>(builder: (configController) {
+      body: BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configController) {
         return !configController.isLoading && configController.privacy != null
             ? Padding(
                 padding: const EdgeInsets.only(top: 28.0),

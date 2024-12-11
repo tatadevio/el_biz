@@ -1,4 +1,4 @@
-import 'package:el_biz/controller/product_controller.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -7,6 +7,7 @@ import 'package:el_biz/view/base/product_list_item.dart';
 import 'package:el_biz/view/screen/filter/company_filter/company_filter_screen.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -84,7 +85,7 @@ class ProductScreen extends StatelessWidget {
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(55),
-            child: GetBuilder<ProductController>(builder: (productController) {
+            child: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
               return Column(
                 children: [
                   const Divider(
@@ -186,7 +187,9 @@ class ProductScreen extends StatelessWidget {
                           InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () {
-                              productController.updateGridView(true);
+                              // productController.updateGridView(true);
+
+                              context.read<ProductBloc>().add(const UpdateGridView(true));
                             },
                             child: Container(
                               height: 40,
@@ -212,7 +215,8 @@ class ProductScreen extends StatelessWidget {
                           InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () {
-                              productController.updateGridView(false);
+                              // productController.updateGridView(false);
+                              context.read<ProductBloc>().add(const UpdateGridView(false));
                             },
                             child: Container(
                               height: 40,
@@ -240,7 +244,7 @@ class ProductScreen extends StatelessWidget {
               );
             }),
           )),
-      body: GetBuilder<ProductController>(builder: (productController) {
+      body: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -253,7 +257,8 @@ class ProductScreen extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        productController.updateShowCategories(true);
+                        // productController.updateShowCategories(true);
+                        context.read<ProductBloc>().add(const UpdateShowCategories(true));
                       },
                       child: Container(
                         height: 40,
@@ -291,7 +296,8 @@ class ProductScreen extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        productController.updateShowCategories(false);
+                        // productController.updateShowCategories(false);
+                        context.read<ProductBloc>().add(const UpdateShowCategories(false));
                       },
                       child: Container(
                         height: 40,

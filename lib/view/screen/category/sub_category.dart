@@ -1,4 +1,6 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
+import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,8 +108,8 @@ class _CategoryScreensState extends State<CategoryScreens> {
                                   //   categoryItem: _categoryStack.last.childs,
                                   //   id: _categoryStack.last.childs[index].id.toString(),));
 
-                                  Get.find<ProductController>().updateNameId(_categoryStack.last.childs[index].id.toString(), _categoryStack.last.childs[index].name, callProduct: widget.fromHome);
-
+                                  // Get.find<ProductController>().updateNameId(_categoryStack.last.childs[index].id.toString(), _categoryStack.last.childs[index].name, callProduct: widget.fromHome);
+                                  context.read<ProductBloc>().add(UpdateNameId(_categoryStack.last.childs[index].id.toString(), _categoryStack.last.childs[index].name, callProduct: widget.fromHome));
                                   if (!widget.fromHome) {
                                     Get.until((route) => route.settings.name == "/FilterCategory");
                                   } else {

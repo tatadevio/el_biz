@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
-import '../../../controller/seller_controller.dart';
 import '../../../utils/color_resources.dart';
 import 'widgets/custom_add_company_appbar.dart';
 import 'widgets/select_currency_widget.dart';
@@ -28,74 +27,72 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
     // var size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: CustomAddCompanyAppbar(title: ''),
-      body: GetBuilder<SellerController>(builder: (sellerController) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Реквизиты",
-                      style: h16.copyWith(color: ColorResources.darkGray),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Посмотреть банки',
-                          style: button16.copyWith(color: ColorResources.blue),
-                        ),
-                        SvgPicture.asset(Images.svgArrowForwardIcon),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Счёт №1',
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField1(controller: accountName, hintColor: '', inputType: TextInputType.name, lableText: 'Дайте название для вашего счёта', leading: '', readOnly: false),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField1(controller: bikController, hintColor: '', inputType: TextInputType.text, lableText: 'БИК', leading: '', readOnly: false),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField1(controller: accountNumberController, hintColor: '', inputType: TextInputType.number, lableText: 'Номер счёта', leading: '', readOnly: false),
-                const SizedBox(
-                  height: 15,
-                ),
-                const CustomButtonWithIcon(
-                  title: 'Добавить реквизит',
-                  svgIcon: Images.svgPlus,
-                  isMaxSize: false,
-                  textColor: ColorResources.gray,
-                  buttonColor: ColorResources.lgColor,
-                  borderColor: ColorResources.lgColor,
-                  svgIconColor: ColorResources.gray,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Реквизиты",
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Посмотреть банки',
+                        style: button16.copyWith(color: ColorResources.blue),
+                      ),
+                      SvgPicture.asset(Images.svgArrowForwardIcon),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Счёт №1',
+                style: h16.copyWith(color: ColorResources.darkGray),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField1(controller: accountName, hintColor: '', inputType: TextInputType.name, lableText: 'Дайте название для вашего счёта', leading: '', readOnly: false),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomTextField1(controller: bikController, hintColor: '', inputType: TextInputType.text, lableText: 'БИК', leading: '', readOnly: false),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomTextField1(controller: accountNumberController, hintColor: '', inputType: TextInputType.number, lableText: 'Номер счёта', leading: '', readOnly: false),
+              const SizedBox(
+                height: 15,
+              ),
+              const CustomButtonWithIcon(
+                title: 'Добавить реквизит',
+                svgIcon: Images.svgPlus,
+                isMaxSize: false,
+                textColor: ColorResources.gray,
+                buttonColor: ColorResources.lgColor,
+                borderColor: ColorResources.lgColor,
+                svgIconColor: ColorResources.gray,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
           ),
-        );
-      }),
+        ),
+      ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         elevation: 0,

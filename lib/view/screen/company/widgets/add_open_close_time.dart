@@ -1,4 +1,6 @@
+import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../controller/seller_controller.dart';
@@ -14,7 +16,7 @@ class BottomSheetContentTiming extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
-    return GetBuilder<SellerController>(builder: (sellerController) {
+    return BlocBuilder<CompanyBloc, CompanyState>(builder: (conetxt, sellerController) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -63,7 +65,7 @@ class BottomSheetContentTiming extends StatelessWidget {
 
 class DayRow extends StatelessWidget {
   final DaySchedule daySchedule;
-  final SellerController sellerController;
+  final CompanyState sellerController;
   final int index;
   final TextEditingController openingTimeController = TextEditingController();
   final TextEditingController closingTimeController = TextEditingController();
@@ -89,7 +91,8 @@ class DayRow extends StatelessWidget {
                   value: sellerController.scheduleTiming[index].isOpen,
                   onChanged: (value) {
                     daySchedule.isOpen = value ?? false;
-                    sellerController.updateDay(index, value!);
+                    // sellerController.updateDay(index, value!);
+                    context.read<CompanyBloc>().add(UpdateDay(index, value!));
                   },
                 ),
                 Text(

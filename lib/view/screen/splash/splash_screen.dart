@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,7 +21,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     call();
-    context.read<CitiesBloc>().add(const GetCitites(50, true));
+    Future.delayed(Duration.zero, () {
+      context.read<CitiesBloc>().add(const GetCitites(50, true));
+      context.read<ConfigBloc>().add(GetPrivacy());
+      context.read<ConfigBloc>().add(GetTerms());
+      context.read<ConfigBloc>().add(GetAbout());
+      context.read<ConfigBloc>().add(GetConfig());
+    });
   }
 
   call() async {
