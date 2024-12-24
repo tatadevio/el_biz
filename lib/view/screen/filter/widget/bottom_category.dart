@@ -5,9 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../bloc/post_ad/post_ad_bloc.dart';
-import '../../../../controller/category_controller.dart';
-import '../../../../controller/post_ad_controller.dart';
-import '../../../../controller/product_controller.dart';
 import '../../../../data/model/response/category/category_model.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../base/custom_image.dart';
@@ -15,7 +12,7 @@ import '../../../base/custom_image.dart';
 class ShowBottomCategory extends StatelessWidget {
   final bool isEdit;
 
-  const ShowBottomCategory({Key? key, required this.isEdit}) : super(key: key);
+  const ShowBottomCategory({super.key, required this.isEdit});
 
   @override
   Widget build(BuildContext context) {

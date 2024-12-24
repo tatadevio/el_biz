@@ -1,9 +1,10 @@
+import 'package:el_biz/bloc/localization/localization_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../controller/localization_controller.dart';
 import '../../../helper/route_helper.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/appConstant.dart';
@@ -24,7 +25,7 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       backgroundColor: ColorResources.background,
-      body: GetBuilder<LocalizationController>(builder: (localizationController) {
+      body: BlocBuilder<LocalizationBloc, LocalizationState>(builder: (context, localizationController) {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: (kIsWeb && width > 600) ? width * 0.1 : 18, vertical: 18),
           // padding: const EdgeInsets.all(18),

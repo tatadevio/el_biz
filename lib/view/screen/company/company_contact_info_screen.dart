@@ -27,7 +27,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: ''),
+      appBar: customAddCompanyAppbar(title: ''),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
         child: SingleChildScrollView(
@@ -161,7 +161,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                 height: 5,
               ),
               Text(
-                'Необязательное поле',
+                'optional_field'.tr,
                 style: body12.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(

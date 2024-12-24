@@ -2,11 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
-import 'package:el_biz/controller/company_controller.dart';
-import 'package:el_biz/controller/contracts_controller.dart';
-import 'package:el_biz/controller/notification_controller.dart';
-import 'package:el_biz/controller/review_controller.dart';
-import 'package:el_biz/controller/tenders_controller.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
 import 'package:el_biz/data/repo/notification_repo.dart';
@@ -18,20 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
-import '../controller/auth_controller.dart';
-import '../controller/category_controller.dart';
-import '../controller/chat_controller.dart';
-import '../controller/cities_controller.dart';
-import '../controller/config_controller.dart';
-import '../controller/favorite_controller.dart';
-import '../controller/home_controller.dart';
-import '../controller/localization_controller.dart';
-import '../controller/network_check_controller.dart';
-import '../controller/post_ad_controller.dart';
-import '../controller/product_controller.dart';
-import '../controller/product_detail_controller.dart';
-import '../controller/seller_controller.dart';
-import '../controller/user_controller.dart';
 import '../data/api/api_client.dart';
 import '../data/model/base/language_model.dart';
 import '../data/repo/auth_repo.dart';
@@ -90,7 +71,7 @@ Future<Map<String, Map<String, String>>> init() async {
   // Get.lazyPut<ContractsController>(() => ContractsController(Get.find()), fenix: true);
   // Get.lazyPut<CompanyController>(() => CompanyController(Get.find()), fenix: true);
 
-  Get.lazyPut<LocalizationController>(() => LocalizationController(sharedPreferences: Get.find(), apiClient: Get.find()), fenix: true);
+  // Get.lazyPut<LocalizationController>(() => LocalizationController(sharedPreferences: Get.find(), apiClient: Get.find()), fenix: true);
 
   // Retrieving localized data
   Map<String, Map<String, String>> _languages = Map();

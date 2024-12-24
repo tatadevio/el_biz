@@ -16,7 +16,7 @@ class CompanyReviewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Отзывы на компанию',
+          'reviews_of_the_company'.tr,
           style: h16.copyWith(color: ColorResources.darkGray),
         ),
       ),
@@ -77,10 +77,11 @@ class CompanyReviewsScreen extends StatelessWidget {
                                 allowHalfRating: true,
                                 itemCount: 5,
                                 itemSize: 14,
+                                ignoreGestures: true,
                                 itemPadding: const EdgeInsets.symmetric(horizontal: 0),
                                 itemBuilder: (context, _) => const Icon(
                                   Icons.star,
-                                  color: Colors.amber,
+                                  color: ColorResources.yellow,
                                 ),
                                 onRatingUpdate: (rating) {
                                   print(rating);
@@ -110,11 +111,11 @@ class CompanyReviewsScreen extends StatelessWidget {
               ),
               ListView.separated(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: 8,
                 itemBuilder: (context, index) {
-                  return ReviewItem();
+                  return const ReviewItem();
                 },
               ),
               const Divider(),
@@ -127,7 +128,7 @@ class CompanyReviewsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         child: CustomBorderButton(
           onTap: () {
-            Get.bottomSheet(CustomAddReviewWidget(), isScrollControlled: true, backgroundColor: Colors.white);
+            Get.bottomSheet(const CustomAddReviewWidget(), isScrollControlled: true, backgroundColor: Colors.white);
           },
           height: 44,
           width: Get.width,
@@ -138,7 +139,7 @@ class CompanyReviewsScreen extends StatelessWidget {
             ColorResources.shadow1,
           ],
           child: Text(
-            'Написать отзыв',
+            'write_a_review'.tr,
             style: textMd.copyWith(color: ColorResources.blue),
           ),
         ),

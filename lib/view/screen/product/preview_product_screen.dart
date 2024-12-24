@@ -1,4 +1,6 @@
 import 'package:el_biz/data/model/base/add_product_model.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
+import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,7 +14,8 @@ import './widgets/add_product_images_preview.dart';
 class PreviewProductScreen extends StatefulWidget {
   final List<Map<String, dynamic>> selectedMaterial;
   final AddProductModel productData;
-  const PreviewProductScreen({super.key, required this.selectedMaterial, required this.productData});
+  final bool isEdit;
+  const PreviewProductScreen({super.key, required this.selectedMaterial, required this.productData, required this.isEdit});
 
   @override
   State<PreviewProductScreen> createState() => _PreviewProductScreenState();
@@ -266,7 +269,19 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomButton(width: Get.width, height: Get.height, onTap: () {}, title: 'Сохранить'),
+        child: CustomButton(
+            width: Get.width,
+            height: Get.height,
+            onTap: () {
+              if (widget.isEdit) {
+                showCustomSnackBar('Product Updated....');
+                Get.offAll(const DashboardScreen());
+              } else {
+                showCustomSnackBar('Product Added');
+                Get.offAll(() => const DashboardScreen());
+              }
+            },
+            title: 'Сохранить'),
       ),
     );
   }
@@ -289,7 +304,7 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
 
   Widget characteristicsItem({String title = '', String value = ''}) {
     if (value == '') {
-      return SizedBox();
+      return const SizedBox();
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),

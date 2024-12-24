@@ -1,0 +1,88 @@
+import 'package:el_biz/utils/Images.dart';
+import 'package:el_biz/utils/color_resources.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+
+class ReviewReplyBottomWidget extends StatefulWidget {
+  const ReviewReplyBottomWidget({super.key});
+
+  @override
+  State<ReviewReplyBottomWidget> createState() => _ReviewReplyBottomWidgetState();
+}
+
+class _ReviewReplyBottomWidgetState extends State<ReviewReplyBottomWidget> {
+  final TextEditingController replyController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  bool isActiveSendButton = false;
+
+  @override
+  void initState() {
+    focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    replyController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 40,
+            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.zero),
+            child: TextFormField(
+              controller: replyController,
+              focusNode: focusNode,
+              textAlignVertical: TextAlignVertical.center,
+              decoration: InputDecoration(
+                // isDense: true,
+                // isCollapsed: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                border: const OutlineInputBorder(),
+                suffixIcon: InkWell(
+                  onTap: () {
+                    replyController.clear();
+                    focusNode.unfocus();
+                    Get.back();
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(3),
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: isActiveSendButton ? ColorResources.blue : ColorResources.greyLight,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(Images.svgSendArrow),
+                  ),
+                ),
+              ),
+              onChanged: (val) {
+                if (val.isEmpty) {
+                  setState(() {
+                    isActiveSendButton = false;
+                  });
+                } else if (val.length == 1) {
+                  setState(() {
+                    isActiveSendButton = true;
+                  });
+                }
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

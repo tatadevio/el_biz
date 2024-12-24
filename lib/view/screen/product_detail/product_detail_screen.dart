@@ -1,6 +1,8 @@
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/about_product_widget.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_reviews_widget.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -310,7 +313,7 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            'Проверенный поставщик',
+                            'verified_supplier'.tr,
                             style: body14.copyWith(color: ColorResources.gray),
                           ),
                         ),
@@ -330,6 +333,51 @@ class ProductDetailScreen extends StatelessWidget {
           ),
         );
       }),
+      bottomNavigationBar: "user" == "user"
+          ? BottomAppBar(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomBorderButton(
+                      height: Get.height,
+                      width: Get.width,
+                      padding: const EdgeInsets.all(0),
+                      border: Border.all(width: 1, color: ColorResources.blue),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShaow: const [ColorResources.shadow1],
+                      child: Text(
+                        "edit".tr,
+                        style: button16.copyWith(color: ColorResources.blue),
+                      ),
+                      onTap: () {
+                        Get.to(() => AddProductScreen(isEdit: true));
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: CustomBorderButton(
+                      height: Get.height,
+                      width: Get.width,
+                      padding: const EdgeInsets.all(0),
+                      border: Border.all(width: 1, color: ColorResources.red),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShaow: const [ColorResources.shadow1],
+                      child: Text(
+                        "not_active".tr,
+                        style: button16.copyWith(color: ColorResources.red),
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
     );
   }
 }

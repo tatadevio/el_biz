@@ -43,7 +43,7 @@ class _SelectCurrencyWidgetState extends State<SelectCurrencyWidget> {
             height: 10,
           ),
           Text(
-            'Выберите основной счёт',
+            'select_main_account'.tr,
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           const SizedBox(
@@ -80,7 +80,7 @@ class _SelectCurrencyWidgetState extends State<SelectCurrencyWidget> {
               Get.back();
               Get.to(() => AddCompanyDocumentScreen());
             },
-            title: 'Готово',
+            title: 'ready'.tr,
           ),
           const SizedBox(
             height: 20,

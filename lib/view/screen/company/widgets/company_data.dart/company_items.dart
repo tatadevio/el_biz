@@ -5,6 +5,7 @@ import 'package:el_biz/view/base/custom_gridview_widget.dart';
 import 'package:el_biz/view/base/custom_listview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../../../../base/product_grid_item.dart';
 import '../../../../base/product_list_item.dart';
@@ -37,7 +38,7 @@ class CompanyItems extends StatelessWidget {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Активно',
+                      'actively'.tr,
                       style: textSm.copyWith(color: compnayState.isShowActiveGoods ? ColorResources.blue : ColorResources.lgColor),
                     ),
                   ),
@@ -58,7 +59,7 @@ class CompanyItems extends StatelessWidget {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Неактивно',
+                      'inactive'.tr,
                       style: textSm.copyWith(color: !compnayState.isShowActiveGoods ? ColorResources.blue : ColorResources.lgColor),
                     ),
                   ),
@@ -95,7 +96,7 @@ class CompanyItems extends StatelessWidget {
           if (compnayState.isShowGoodsGridView) ...[
             GridView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.7),
               itemCount: 8,
               itemBuilder: (context, index) {
@@ -105,7 +106,7 @@ class CompanyItems extends StatelessWidget {
           ] else ...[
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: 8,
               itemBuilder: (context, index) {
                 return const ProductListItem();

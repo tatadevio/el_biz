@@ -22,7 +22,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: "register company".tr),
+      appBar: customAddCompanyAppbar(title: "register company".tr),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -73,7 +73,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 5,
               ),
               Text(
-                'Необязательное поле',
+                'optional_field'.tr,
                 style: body12.copyWith(color: ColorResources.green),
               ),
               const SizedBox(
@@ -84,7 +84,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 5,
               ),
               Text(
-                'Необязательное поле',
+                'optional_field'.tr,
                 style: body12.copyWith(color: ColorResources.green),
               ),
               const SizedBox(
@@ -183,7 +183,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 5,
               ),
               Text(
-                'Необязательное поле',
+                'optional_field'.tr,
                 style: body12,
               ),
               const SizedBox(
@@ -201,7 +201,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
             onTap: () {
               Get.to(() => CompanyDescriptionScreen());
             },
-            title: 'Продолжить'),
+            title: 'continue'.tr),
       ),
     );
   }

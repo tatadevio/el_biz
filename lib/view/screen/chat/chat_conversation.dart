@@ -68,7 +68,7 @@ class ChatConversation extends StatelessWidget {
                   child: Row(
                     children: [
                       if (!isSeller) ...[
-                        Expanded(child: SizedBox()),
+                        const Expanded(child: SizedBox()),
                         const SizedBox(
                           width: 10,
                         ),
@@ -80,9 +80,9 @@ class ChatConversation extends StatelessWidget {
                           padding: const EdgeInsets.all(0),
                           border: Border.all(width: 1, color: ColorResources.blue),
                           borderRadius: BorderRadius.circular(8),
-                          boxShaow: [ColorResources.shadow1],
+                          boxShaow: const [ColorResources.shadow1],
                           child: Text(
-                            'Выбрать товары',
+                            'select_products'.tr,
                             style: textSm.copyWith(color: ColorResources.blue),
                           ),
                           onTap: () {},
@@ -109,7 +109,7 @@ class ChatConversation extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  'Новый договор',
+                                  'new_treaty',
                                   style: textSm.copyWith(color: ColorResources.white),
                                 ),
                               ],
@@ -135,12 +135,12 @@ class ChatConversation extends StatelessWidget {
             child: ListView.builder(
               itemCount: 10,
               itemBuilder: (context, index) {
-                return SizedBox();
+                return const SizedBox();
                 // MessageBubble(chat: chatList[index], addDate: false);
               },
             ),
           ),
-          NewMessageWidget(),
+          const NewMessageWidget(),
         ],
       ),
     );

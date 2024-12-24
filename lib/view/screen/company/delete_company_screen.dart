@@ -3,6 +3,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/Images.dart';
 
@@ -16,12 +17,12 @@ class DeleteCompanyScreen extends StatefulWidget {
 class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
   final TextEditingController otherTextController = TextEditingController();
   List deleteReason = [
-    'Зарегистрировались по ошибке',
-    'Компания прекратила деятельность',
-    'Больше не хотите пользоваться нашим сервисом',
-    'Другое',
+    'registered_by_mistake'.tr,
+    'the_company_ceased_operations'.tr,
+    'you_no_longer_want_to_use_our_service'.tr,
+    'other'.tr,
   ];
-  String selectedReason = 'Зарегистрировались по ошибке';
+  String selectedReason = 'registered_by_mistake'.tr;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,26 +37,26 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
                 height: 20,
               ),
               Text(
-                'Удаление профиля Садовая мебель Loft',
+                'removing_the_profile_garden_furniture_Loft'.tr,
                 style: h24.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Нам очень жаль что вы удаляете свой профиль  с приложения. Пожалуйста, укажите причину своего решения. Мы делаем все  чтобы наша платформа была полезна пользователям.  Возможно, именно ваш отзыв поможет улучшить наш сервис.  Спасибо что были с нами.',
+                'we_are_very_sorry_that_you_are_deleting_your_profile_from_the_application'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Причина',
+                'cause'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: deleteReason.length,
                 itemBuilder: (context, index) {
                   return RadioListTile<String>(
@@ -75,10 +76,10 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
                   );
                 },
               ),
-              if (selectedReason == 'Другое') ...[
+              if (selectedReason == 'other'.tr) ...[
                 CustomTextField(
                   controller: otherTextController,
-                  hintColor: 'Напишите свой комментарий',
+                  hintColor: 'write_your_comment'.tr,
                   inputType: TextInputType.text,
                   leading: '',
                   readOnly: false,
@@ -88,7 +89,7 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
                   height: 5,
                 ),
                 Text(
-                  'Обязательное поле',
+                  'required_field'.tr,
                   style: body12.copyWith(color: ColorResources.green),
                 ),
                 const SizedBox(
@@ -103,7 +104,7 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
         color: Colors.white,
         child: CustomButtonWithIcon(
           onTap: () {},
-          title: 'Продолжить',
+          title: 'continue'.tr,
           svgIcon: Images.svgTrash,
           textColor: Colors.white,
           svgIconColor: Colors.white,

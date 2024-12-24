@@ -20,7 +20,7 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: ''),
+      appBar: customAddCompanyAppbar(title: ''),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -30,14 +30,14 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
               height: 20,
             ),
             Text(
-              'Описание',
+              'description'.tr,
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Опишите деятельность вашей компании, товары и услуги.\nВНИМАНИЕ! Описание должно быть уникальным и подробным (иначе компания не попадет в поисковые системы Яндекс и Google). Не копируйте описание с других сайтов. Потратьте 5 минут на составление хорошего описания, это позволит увеличить посещаемость вашей страницы. Контактные данные и ссылки запрещены в этом поле.',
+              'describe_your_companys_activities_products_and_services'.tr,
               style: body14.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -45,7 +45,7 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
             ),
             CustomTextField(
               controller: descriptionController,
-              hintColor: 'Описание',
+              hintColor: 'description'.tr,
               inputType: TextInputType.none,
               leading: '',
               readOnly: false,
@@ -55,7 +55,7 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
               height: 5,
             ),
             Text(
-              'Необязательное поле',
+              'optional_field'.tr,
               style: body12.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -71,9 +71,9 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
             height: 44,
             onTap: () {
               // Get.to(() => MainCategories(type: false, fromHome: false));
-              Get.to(() => KeywordsTagsScreen());
+              Get.to(() => const KeywordsTagsScreen());
             },
-            title: 'Продолжить'),
+            title: 'continue'.tr),
       ),
     );
   }

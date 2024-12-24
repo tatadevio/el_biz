@@ -26,14 +26,14 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'ИНН',
+            'TIN',
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           const SizedBox(
             height: 20,
           ),
           Text(
-            'Пожалуйста заполните ИНН вашей компании ',
+            'please_fill_in_the_TIN_of_your_company'.tr,
             style: body14.copyWith(color: ColorResources.gray),
           ),
           const SizedBox(
@@ -52,7 +52,7 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: ColorResources.lgColor, width: 1),
+                    side: const BorderSide(color: ColorResources.lgColor, width: 1),
                   ),
 
                   onPressed: () {
@@ -60,8 +60,8 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   },
                   color: ColorResources.white,
                   child: Text(
-                    "no".tr,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                    "cancel".tr,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                   ),
                   //  Colors.grey[300],
                 ),
@@ -78,13 +78,13 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   onPressed: () async {
                     Get.back();
                     Get.dialog(
-                      CustomDialog(
+                      const CustomDialog(
                         widget: AlertDialog(
                           backgroundColor: Colors.white,
-                          titlePadding: const EdgeInsets.all(0),
-                          contentPadding: const EdgeInsets.all(5),
+                          titlePadding: EdgeInsets.all(0),
+                          contentPadding: EdgeInsets.all(5),
                           content: Padding(
-                            padding: const EdgeInsets.all(0),
+                            padding: EdgeInsets.all(0),
                             child: ShowLlcIssueBox(),
                           ),
                         ),
@@ -93,8 +93,8 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   },
                   color: ColorResources.primary,
                   child: Text(
-                    "yes".tr,
-                    style: TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                    "send".tr,
+                    style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

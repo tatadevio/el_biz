@@ -44,7 +44,6 @@ class Images {
 
   // images used
   static const String emptySvg = "";
-  static const String edit = "";
   static const String filter = "assets/icons/Filters_lines.svg";
   static const String svgHome = "assets/icons/home.svg";
   static const String svgCategory = "assets/icons/grid.svg";
@@ -56,22 +55,9 @@ class Images {
   static const String dollarSignSvg = "";
   static const String calenderSvg = "";
   static const String svgStarFill = "";
-  static const String editSvg = "";
   static const String svgAlert = "assets/icons/alert-triangle.svg";
-  static const String uploadSvg = "";
-  static const String cameraSvg = "";
-  static const String gallerySvg = "";
   static const String done = "assets/icons/sucess_check.svg";
-  static const String archive = "";
-  static const String delete = "";
-  static const String pieChart = "";
-  static const String svgCheckIcon = "";
-  static const String svgMoreVertical = "";
-  static const String svgPhoneCall = "";
-  static const String svgWhatsapp = "";
   static const String svgArrowForward = "assets/icons/arrowForwardIcon.svg";
-  static const String doneSuccess = "";
-  static const String svgLocation = "";
   static const String whatsappFillSvg = "";
   static const String telegramSvg = "";
   static const String instagramSvg = "";
@@ -80,16 +66,8 @@ class Images {
   static const String globeSvg = "";
   static const String whatsappSvg = "";
   static const String phoneFieldLogo = "";
-  static const String upArrowSvg = "";
-  static const String networkSvg = "";
-  static const String packageSvg = "";
-  static const String hotSaleSvg = "";
-  static const String saleStarSvg = "";
-  static const String svgTelegram = "";
-  static const String instagramPng = "";
   static const String svgLock = "assets/images/lock.png";
   static const String language = "assets/images/language.png";
-  // static const String saleStarSvg = "";
 
   // png
   static const String uploadImagePng = "assets/images/upload-image.png";

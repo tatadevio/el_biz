@@ -3,7 +3,7 @@ import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../controller/company_controller.dart';
+import '../../data/model/base/compnay_document_model.dart';
 import '../../data/model/base/timing_date_model.dart';
 
 part 'company_event.dart';

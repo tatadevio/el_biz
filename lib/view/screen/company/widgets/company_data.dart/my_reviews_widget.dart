@@ -26,13 +26,13 @@ class MyReviewsWidget extends StatelessWidget {
         const Divider(),
         InkWell(
           onTap: () {
-            Get.to(() => CompanyReviewsScreen());
+            Get.to(() => const CompanyReviewsScreen());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Все отзывы',
+                'all_reviews'.tr,
                 style: button16.copyWith(color: ColorResources.blue),
               ),
               const SizedBox(

@@ -21,7 +21,7 @@ class MyCompaniesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Мои компании',
+          'my_companies'.tr,
           style: h16.copyWith(
             color: ColorResources.blackText,
           ),
@@ -55,7 +55,7 @@ class MyCompaniesScreen extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: CustomButtonWithIcon(
-          title: 'Добавить компанию',
+          title: 'add_a_company'.tr,
           svgIcon: Images.svgPlus,
           borderColor: ColorResources.green,
           onTap: () {
@@ -95,8 +95,8 @@ class MyCompaniesScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: ColorResources.lightBlue,
             borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 blurRadius: 4,
                 spreadRadius: -2,
                 offset: Offset(0, 2),

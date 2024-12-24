@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../controller/post_ad_controller.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
@@ -118,7 +117,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Добавьте способы связи",
+                      "add_communication_methods".tr,
                       style: boldTextStyle,
                     ),
                   ),

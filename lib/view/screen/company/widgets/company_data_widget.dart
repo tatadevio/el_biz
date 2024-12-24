@@ -85,9 +85,9 @@ class _CompanyDataWidgetState extends State<CompanyDataWidget> with TickerProvid
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: const Divider(
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Divider(
                   height: 0,
                 ),
               ),

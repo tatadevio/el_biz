@@ -14,3 +14,11 @@ class UpdateShowCategories extends FavoriteEvent {
   @override
   List<Object> get props => [showCategories];
 }
+
+class UpdateShowGridView extends FavoriteEvent {
+  final bool showGridView;
+  const UpdateShowGridView(this.showGridView);
+
+  @override
+  List<Object> get props => [showGridView];
+}

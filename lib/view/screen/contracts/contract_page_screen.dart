@@ -1,4 +1,3 @@
-import 'package:el_biz/controller/contracts_controller.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -8,6 +7,9 @@ import 'package:el_biz/view/screen/contracts/sign_contract_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/bill_pay_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../data/model/base/contract_model.dart';
+import 'widgets/show_contract_files.dart';
 
 class ContractPageScreen extends StatelessWidget {
   final ContractModel contractModel;
@@ -94,18 +96,23 @@ class ContractPageScreen extends StatelessWidget {
             ),
             dataItem(
               'Статус оплаты',
-              Container(
-                // height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: ColorResources.blue,
-                  border: Border.all(width: 1, color: ColorResources.blue),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [ColorResources.shadow1],
-                ),
-                child: Text(
-                  contractModel.document,
-                  style: body16.copyWith(color: ColorResources.white),
+              InkWell(
+                onTap: () {
+                  Get.bottomSheet(const ShowContractFiles(), backgroundColor: Colors.white, isScrollControlled: true);
+                },
+                child: Container(
+                  // height: 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: ColorResources.blue,
+                    border: Border.all(width: 1, color: ColorResources.blue),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [ColorResources.shadow1],
+                  ),
+                  child: Text(
+                    contractModel.document,
+                    style: body16.copyWith(color: ColorResources.white),
+                  ),
                 ),
               ),
             ),

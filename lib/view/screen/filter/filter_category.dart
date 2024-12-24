@@ -185,6 +185,7 @@ class _FilterCategoryState extends State<FilterCategory> {
                                     Get.to(() => const MainCategories(
                                           type: true,
                                           fromHome: false,
+                                          screenName: 'FilterCategory',
                                         ));
                                   },
                                   child: Row(

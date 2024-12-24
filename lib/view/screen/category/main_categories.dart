@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../controller/product_controller.dart';
 import '../../../helper/route_helper.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -17,10 +16,12 @@ import 'sub_category.dart';
 class MainCategories extends StatefulWidget {
   final bool type;
   final bool fromHome;
+  final String screenName;
   const MainCategories({
     super.key,
     required this.type,
     required this.fromHome,
+    required this.screenName,
   });
 
   @override
@@ -134,10 +135,12 @@ class _MainCategoriesState extends State<MainCategories> {
                                     Get.to(() => CategoryScreens(
                                           category: categoryState.categoryItem[i],
                                           fromHome: widget.fromHome,
+                                          screenName: widget.screenName,
                                         ));
                                   } else {
                                     // Get.find<ProductController>().getProductWithCat();
                                     context.read<ProductBloc>().add(GetProductWithCat(categoryState.categoryItem[i].id.toString(), categoryState.categoryItem[i].name));
+
                                     Get.to(() => Categories(
                                           title: categoryState.categoryItem[i].name,
                                           categoryItem: categoryState.categoryItem[i].childs,

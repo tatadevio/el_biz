@@ -1,12 +1,10 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
-import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../controller/product_controller.dart';
 import '../../../data/model/response/category/category_model.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
@@ -15,8 +13,9 @@ import 'categories.dart';
 class CategoryScreens extends StatefulWidget {
   final CategoriesItem category;
   final bool fromHome;
+  final String screenName;
 
-  const CategoryScreens({super.key, required this.category, this.fromHome = false});
+  const CategoryScreens({super.key, required this.category, this.fromHome = false, required this.screenName});
 
   @override
   _CategoryScreensState createState() => _CategoryScreensState();
@@ -109,15 +108,23 @@ class _CategoryScreensState extends State<CategoryScreens> {
                                   //   id: _categoryStack.last.childs[index].id.toString(),));
 
                                   // Get.find<ProductController>().updateNameId(_categoryStack.last.childs[index].id.toString(), _categoryStack.last.childs[index].name, callProduct: widget.fromHome);
-                                  context.read<ProductBloc>().add(UpdateNameId(_categoryStack.last.childs[index].id.toString(), _categoryStack.last.childs[index].name, callProduct: widget.fromHome));
-                                  if (!widget.fromHome) {
-                                    Get.until((route) => route.settings.name == "/FilterCategory");
+
+                                  if (widget.screenName == "/ProductsFilterScreen") {
+                                    context.read<ProductBloc>().add(AddProductFilterCategory(_categoryStack.last.childs[index]));
+                                    Get.until((route) => route.settings.name == widget.screenName);
                                   } else {
-                                    Get.to(() => Categories(
-                                          title: _categoryStack.last.childs[index].name,
-                                          categoryItem: _categoryStack.last.childs,
-                                          id: _categoryStack.last.childs[index].id.toString(),
-                                        ));
+                                    context.read<ProductBloc>().add(UpdateNameId(_categoryStack.last.childs[index].id.toString(), _categoryStack.last.childs[index].name, callProduct: widget.fromHome));
+
+                                    if (!widget.fromHome) {
+                                      print("screen name = ${widget.screenName}");
+                                      Get.until((route) => route.settings.name == widget.screenName);
+                                    } else {
+                                      Get.to(() => Categories(
+                                            title: _categoryStack.last.childs[index].name,
+                                            categoryItem: _categoryStack.last.childs,
+                                            id: _categoryStack.last.childs[index].id.toString(),
+                                          ));
+                                    }
                                   }
                                 }
                                 // Navigate to the child category screen on tap

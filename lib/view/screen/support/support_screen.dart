@@ -203,7 +203,12 @@ class _SupportScreenState extends State<SupportScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
-        child: CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'Продолжить'),
+        child: CustomButton(
+          width: Get.width,
+          height: 44,
+          onTap: () {},
+          title: 'continue'.tr,
+        ),
       ),
     );
   }

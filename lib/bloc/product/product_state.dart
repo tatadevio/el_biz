@@ -15,6 +15,7 @@ class ProductState extends Equatable {
   final String selectedCityName;
   final String selectedCity;
   final String sortType;
+  final List<CategoriesItem> filterCategories;
 
   const ProductState({
     this.isLoading = false,
@@ -31,6 +32,7 @@ class ProductState extends Equatable {
     this.selectedCityName = '',
     this.selectedCity = '',
     this.sortType = '',
+    this.filterCategories = const [],
   });
 
   ProductState copywith({
@@ -48,23 +50,24 @@ class ProductState extends Equatable {
     String? selectedCityName,
     String? selectedCity,
     String? sortType,
+    List<CategoriesItem>? filterCategories,
   }) {
     return ProductState(
-      isLoading: isLoading ?? this.isLoading,
-      isGridView: isGridView ?? this.isGridView,
-      isShowCategories: isShowCategories ?? this.isShowCategories,
-      selectedKeywords: selectedKeywords ?? this.selectedKeywords,
-      selectedMaterial: selectedMaterial ?? this.selectedMaterial,
-      pickedLogo: pickedLogo ?? this.pickedLogo,
-      selectedSubCatId: selectedSubCatId ?? this.selectedSubCatId,
-      selectedSubCatName: selectedSubCatName ?? this.selectedSubCatName,
-      isCatLoading: isCatLoading ?? this.isCatLoading,
-      currentQuery: currentQuery ?? this.currentQuery,
-      catProductItem: catProductItem ?? this.catProductItem,
-      selectedCityName: selectedCityName ?? this.selectedCityName,
-      selectedCity: selectedCity ?? this.selectedCity,
-      sortType: sortType ?? this.sortType,
-    );
+        isLoading: isLoading ?? this.isLoading,
+        isGridView: isGridView ?? this.isGridView,
+        isShowCategories: isShowCategories ?? this.isShowCategories,
+        selectedKeywords: selectedKeywords ?? this.selectedKeywords,
+        selectedMaterial: selectedMaterial ?? this.selectedMaterial,
+        pickedLogo: pickedLogo ?? this.pickedLogo,
+        selectedSubCatId: selectedSubCatId ?? this.selectedSubCatId,
+        selectedSubCatName: selectedSubCatName ?? this.selectedSubCatName,
+        isCatLoading: isCatLoading ?? this.isCatLoading,
+        currentQuery: currentQuery ?? this.currentQuery,
+        catProductItem: catProductItem ?? this.catProductItem,
+        selectedCityName: selectedCityName ?? this.selectedCityName,
+        selectedCity: selectedCity ?? this.selectedCity,
+        sortType: sortType ?? this.sortType,
+        filterCategories: filterCategories ?? this.filterCategories);
   }
 
   bool keywordsSelected(String keyword) {
@@ -90,5 +93,6 @@ class ProductState extends Equatable {
   }
 
   @override
-  List<Object> get props => [isLoading, isGridView, isShowCategories, selectedKeywords, selectedMaterial, pickedLogo, selectedSubCatId, selectedSubCatName, isCatLoading, currentQuery, catProductItem, selectedCityName, selectedCity, sortType];
+  List<Object> get props =>
+      [isLoading, isGridView, isShowCategories, selectedKeywords, selectedMaterial, pickedLogo, selectedSubCatId, selectedSubCatName, isCatLoading, currentQuery, catProductItem, selectedCityName, selectedCity, sortType, filterCategories];
 }

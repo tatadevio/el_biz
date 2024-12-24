@@ -90,7 +90,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
                         Get.dialog(CustomDialog(widget: AlertDialog(content: deleteDocument())));
                       },
                       child: Text(
-                        'Удалить документ',
+                        'delete_document'.tr,
                         style: button16.copyWith(color: ColorResources.red),
                       ),
                     ),
@@ -119,7 +119,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
             height: 10,
           ),
           Text(
-            'Удалить документ?',
+            '${'delete_document'.tr}?',
             style: h16.copyWith(color: ColorResources.titleColor),
           ),
           const SizedBox(
@@ -134,7 +134,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
                   onTap: () {
                     Get.back();
                   },
-                  title: 'Отменить',
+                  title: 'cancel',
                   color: ColorResources.lgColor,
                   textColor: ColorResources.gray,
                 ),
@@ -149,7 +149,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
                   onTap: () {
                     Get.back();
                   },
-                  title: 'Удалить',
+                  title: 'delete',
                   color: ColorResources.red,
                 ),
               ),

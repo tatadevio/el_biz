@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 
 import '../../base/custom_image.dart';
 import '../company/company_page_screen.dart';
+import '../product/add_product_screen.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
@@ -48,39 +49,44 @@ class ProductScreen extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              // Container(
-              //   height: 40,
-              //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(
-              //       12,
-              //     ),
-              //     color: ColorResources.green,
-              //     boxShadow: const [
-              //       BoxShadow(
-              //         blurRadius: 2,
-              //         spreadRadius: 0,
-              //         offset: Offset(0, 1),
-              //         color: Color.fromRGBO(16, 24, 40, 0.05),
-              //       ),
-              //     ],
-              //   ),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       SvgPicture.asset(
-              //         Images.svgPlus,
-              //       ),
-              //       const SizedBox(
-              //         width: 5,
-              //       ),
-              //       Text(
-              //         'Новый тендер',
-              //         style: button16,
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              InkWell(
+                onTap: () {
+                  Get.to(() => const AddProductScreen());
+                },
+                child: Container(
+                  height: 40,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      12,
+                    ),
+                    color: ColorResources.green,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 2,
+                        spreadRadius: 0,
+                        offset: Offset(0, 1),
+                        color: Color.fromRGBO(16, 24, 40, 0.05),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        Images.svgPlus,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Новый тендер',
+                        style: button16,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           bottom: PreferredSize(
@@ -447,10 +453,11 @@ class ProductScreen extends StatelessWidget {
                                         allowHalfRating: true,
                                         itemCount: 5,
                                         itemSize: 14,
+                                        ignoreGestures: true,
                                         itemPadding: const EdgeInsets.symmetric(horizontal: 0),
                                         itemBuilder: (context, _) => const Icon(
                                           Icons.star,
-                                          color: Colors.amber,
+                                          color: ColorResources.yellow,
                                         ),
                                         onRatingUpdate: (rating) {
                                           print(rating);
@@ -463,7 +470,7 @@ class ProductScreen extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      'Подробнее',
+                                      'more_details'.tr,
                                       style: button16.copyWith(color: ColorResources.blue),
                                     ),
                                     const SizedBox(

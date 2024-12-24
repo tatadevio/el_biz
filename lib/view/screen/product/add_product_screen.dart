@@ -9,7 +9,8 @@ import 'package:get/get.dart';
 import 'add_product3_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key});
+  final bool isEdit;
+  const AddProductScreen({super.key, this.isEdit = false});
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -38,6 +39,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
     unitController = TextEditingController(text: 'шт');
     dimensionsUnitController = TextEditingController(text: 'см');
     weightUnitController = TextEditingController(text: 'кг');
+    if (widget.isEdit) {
+      loadProductData();
+    }
+  }
+
+  loadProductData() {
+    brandController.text = 'Loft';
+    productNameController.text = 'product';
+    productCodeController.text = '123456';
+    priceController.text = '2350';
+    quantityController.text = '2';
+    dimensionsController.text = '22/32/25';
+    weightController.text = '12';
+    regionController.text = 'qwertyui';
+    checkAvailibity = 'Уточнять наличие';
   }
 
   @override
@@ -254,9 +270,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
               Get.to(() => AddProduct3Screen(
                     addProductData: addProduct,
+                    isEdit: widget.isEdit,
                   ));
             },
-            title: 'Продолжить'),
+            title: 'continue'.tr),
       ),
     );
   }

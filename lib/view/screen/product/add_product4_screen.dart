@@ -10,7 +10,8 @@ import '../../base/custom_button.dart';
 
 class AddProduct4Screen extends StatefulWidget {
   final AddProductModel productData;
-  const AddProduct4Screen({super.key, required this.productData});
+  final bool isEdit;
+  const AddProduct4Screen({super.key, required this.productData, required this.isEdit});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -29,6 +30,17 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
   ];
 
   List<Map<String, dynamic>> selectedMaterials = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      updateProductData();
+    }
+  }
+
+  updateProductData() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,6 +134,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                     Get.to(() => PreviewProductScreen(
                           selectedMaterial: selectedMaterials,
                           productData: widget.productData,
+                          isEdit: widget.isEdit,
                         ));
                   },
                   title: 'Сохранить'),

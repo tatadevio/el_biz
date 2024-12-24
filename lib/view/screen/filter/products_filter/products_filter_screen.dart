@@ -127,8 +127,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                   // Get.find<PostAdController>().addCategoryName("", false);
                   // Get.find<PostAdController>().updateCategoryId("", "");
                   // Get.find<PostAdController>().attributeItem.clear();
-                  context.read<PostAdBloc>().add(AddCategoryName("", false));
-                  context.read<PostAdBloc>().add(UpdateCategoryId("", ""));
+                  context.read<PostAdBloc>().add(const AddCategoryName("", false));
+                  context.read<PostAdBloc>().add(const UpdateCategoryId("", ""));
                   // productController.selectCurrency("");
                   // productController.changeCityId("", "");
                   value = 0;
@@ -213,12 +213,53 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                       ),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 5.0, bottom: 4),
-                              child: Divider(
-                                thickness: 1,
-                                color: ColorResources.background,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            if (productController.filterCategories.isNotEmpty)
+                              Wrap(
+                                spacing: 8.0, // Horizontal spacing
+                                runSpacing: 8.0, // Vertical spacing
+
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: productController.filterCategories.map(
+                                  (category) {
+                                    return Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                          // margin: const EdgeInsets.all(3),
+                                          decoration: BoxDecoration(border: Border.all(width: 1, color: ColorResources.lgColor), borderRadius: BorderRadius.circular(12), color: Colors.white, boxShadow: const [ColorResources.shadow1]),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                category.name,
+                                                style: body14,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  context.read<ProductBloc>().add(RemoveFilterCategory(category));
+                                                },
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  size: 16,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ).toList(),
                               ),
+                            const SizedBox(
+                              height: 10,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -228,6 +269,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                     Get.to(() => const MainCategories(
                                           type: true,
                                           fromHome: false,
+                                          screenName: '/ProductsFilterScreen',
                                         ));
                                   },
                                   child: Row(

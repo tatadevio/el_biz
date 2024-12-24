@@ -21,7 +21,7 @@ class ShowCompanyDetailBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Информация по ИНН',
+                'TIN_information'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
             ],
@@ -36,7 +36,7 @@ class ShowCompanyDetailBox extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'ИНН НП',
+                    'TIN_NP',
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                 ),
@@ -57,7 +57,7 @@ class ShowCompanyDetailBox extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Код УГНС',
+                    'UGNS_code'.tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                 ),
@@ -106,7 +106,7 @@ class ShowCompanyDetailBox extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: ColorResources.lgColor, width: 1),
+                    side: const BorderSide(color: ColorResources.lgColor, width: 1),
                   ),
 
                   onPressed: () {
@@ -114,8 +114,8 @@ class ShowCompanyDetailBox extends StatelessWidget {
                   },
                   color: ColorResources.white,
                   child: Text(
-                    "no".tr,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                    "cancel".tr,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                   ),
                   //  Colors.grey[300],
                 ),
@@ -131,12 +131,12 @@ class ShowCompanyDetailBox extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   onPressed: () async {
                     Get.back();
-                    Get.to(() => AddCompanyScreen());
+                    Get.to(() => const AddCompanyScreen());
                   },
                   color: ColorResources.primary,
                   child: Text(
-                    "yes".tr,
-                    style: TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                    "continue".tr,
+                    style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

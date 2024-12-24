@@ -20,7 +20,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: ''),
+      appBar: customAddCompanyAppbar(title: ''),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -30,14 +30,14 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
               height: 20,
             ),
             Text(
-              'Ключевые слова для поиска/Теги',
+              'search_keywords'.tr,
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Введите через запятую ключевые слова и синонимы по которым будут искать вашу компанию. Например: Мебель для дома, диваны, стулья, кресло, комод, стол',
+              'enter_the_keywords_and_synonyms_for_which_your_company_will_be_searched'.tr,
               style: body14.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -45,7 +45,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
             ),
             CustomTextField(
               controller: keywordsController,
-              hintColor: 'Ключевые слова',
+              hintColor: 'keywords'.tr,
               inputType: TextInputType.none,
               leading: '',
               readOnly: false,
@@ -55,7 +55,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
               height: 5,
             ),
             Text(
-              'Необязательное поле',
+              'optional_field'.tr,
               style: body12.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -72,7 +72,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
             onTap: () {
               Get.to(() => CompanyInfoScreen());
             },
-            title: 'Продолжить'),
+            title: 'continue'.tr),
       ),
     );
   }
