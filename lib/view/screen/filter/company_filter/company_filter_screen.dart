@@ -5,9 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
-import '../../../../controller/post_ad_controller.dart';
-import '../../../../controller/product_controller.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
@@ -188,6 +185,7 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                                       Get.to(() => const MainCategories(
                                             type: true,
                                             fromHome: true,
+                                            screenName: 'CompanyFilterScreen',
                                           ));
                                     },
                                     child: Row(

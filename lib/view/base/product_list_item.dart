@@ -10,7 +10,8 @@ import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
 
 class ProductListItem extends StatelessWidget {
-  const ProductListItem({super.key});
+  final bool isFavorite;
+  const ProductListItem({super.key, this.isFavorite = false});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,10 @@ class ProductListItem extends StatelessWidget {
                         ],
                       ),
                       alignment: Alignment.center,
-                      child: SvgPicture.asset(Images.svgHeartBorder),
+                      child: SvgPicture.asset(
+                        isFavorite ? Images.svgHeart : Images.svgHeartBorder,
+                        color: isFavorite ? ColorResources.primaryRed : null,
+                      ),
                     ),
                   ),
                 ],

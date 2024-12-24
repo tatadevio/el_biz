@@ -1,6 +1,5 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
-import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -19,7 +18,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
     return Container(
       height: 50,
       padding: const EdgeInsets.only(top: 5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(
           top: BorderSide(width: 1, color: ColorResources.lgColor),
@@ -29,7 +28,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         children: [
           IconButton(
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.add,
                 color: ColorResources.gray,
               )),
@@ -64,9 +63,9 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 counterStyle: const TextStyle(color: ColorResources.lightGrey),
                 filled: true,
                 fillColor: Colors.white,
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
                 errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.primaryRed)),
                 hintText: '',
                 hintStyle: const TextStyle(color: Color(0xff646F7F)),

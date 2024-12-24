@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
 
 abstract class TendersEvent extends Equatable {
   const TendersEvent();
@@ -17,3 +18,15 @@ class UpdateGridView extends TendersEvent {
 }
 
 class FetchAllTenders extends TendersEvent {}
+
+class PickImageDocs extends TendersEvent {}
+
+class PickImageDocsCamera extends TendersEvent {}
+
+class RemoveGallery extends TendersEvent {
+  final XFile image;
+  const RemoveGallery(this.image);
+
+  @override
+  List<Object> get props => [image];
+}

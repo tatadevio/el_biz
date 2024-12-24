@@ -11,5 +11,9 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     on<UpdateShowCategories>((event, emit) {
       emit(state.copyWith(isShowCategories: event.showCategories));
     });
+
+    on<UpdateShowGridView>((event, emit) {
+      emit(state.copyWith(isShowGridView: event.showGridView));
+    });
   }
 }

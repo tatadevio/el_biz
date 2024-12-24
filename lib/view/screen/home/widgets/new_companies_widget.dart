@@ -18,7 +18,7 @@ class NewCompaniesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Новые компании',
+          'new_companies'.tr,
           style: h16.copyWith(color: ColorResources.darkGray),
         ),
         const SizedBox(
@@ -42,13 +42,13 @@ class NewCompaniesWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Get.to(() => MyCompaniesScreen());
+                Get.to(() => const MyCompaniesScreen());
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Все компании ',
+                    'all_companies'.tr,
                     style: button16.copyWith(color: ColorResources.blue),
                   ),
                   SvgPicture.asset(Images.svgArrowForwardIcon),
@@ -113,7 +113,7 @@ class NewCompaniesWidget extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.favorite,
                       ),
                     ),
@@ -158,10 +158,10 @@ class NewCompaniesWidget extends StatelessWidget {
                             allowHalfRating: true,
                             itemCount: 5,
                             itemSize: 14,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                            itemBuilder: (context, _) => Icon(
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                            itemBuilder: (context, _) => const Icon(
                               Icons.star,
-                              color: Colors.amber,
+                              color: ColorResources.yellow,
                             ),
                             onRatingUpdate: (rating) {
                               print(rating);
@@ -173,7 +173,7 @@ class NewCompaniesWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Подробнее',
+                          'more_details'.tr,
                           style: button16.copyWith(color: ColorResources.blue),
                         ),
                         Padding(

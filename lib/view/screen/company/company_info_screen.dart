@@ -42,7 +42,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: ''),
+      appBar: customAddCompanyAppbar(title: ''),
       body: BlocBuilder<CompanyBloc, CompanyState>(builder: (context, sellerController) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
@@ -54,14 +54,14 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                   height: 10,
                 ),
                 Text(
-                  'Город',
+                  'city'.tr,
                   style: h16.copyWith(color: ColorResources.darkGray),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Text(
-                  'Для выбора города начните вводить название в поле ниже, или выберите из списка.',
+                  'to_select_a_city,_start_typing_the_name_in_the_field_below_or_select_from_the_list',
                   style: body14.copyWith(color: ColorResources.gray),
                 ),
                 const SizedBox(
@@ -87,7 +87,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            productController.selectedCityName == '' ? 'Select City' : productController.selectedCityName,
+                            productController.selectedCityName == '' ? 'select_city'.tr : productController.selectedCityName,
                             style: body16.copyWith(color: ColorResources.gray),
                           ),
                           SvgPicture.asset(Images.svgArrowRight),
@@ -100,14 +100,14 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                   height: 5,
                 ),
                 Text(
-                  'Обязательное поле',
+                  'required_field'.tr,
                   style: body12.copyWith(color: ColorResources.green),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 Text(
-                  'Адрес',
+                  'address'.tr,
                   style: h16.copyWith(color: ColorResources.darkGray),
                 ),
                 const SizedBox(
@@ -115,22 +115,22 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                 ),
                 Row(
                   children: [
-                    Expanded(flex: 2, child: CustomTextField1(controller: streetController, hintColor: '', inputType: TextInputType.name, lableText: 'Улица', leading: '', readOnly: false)),
+                    Expanded(flex: 2, child: CustomTextField1(controller: streetController, hintColor: '', inputType: TextInputType.name, lableText: 'street'.tr, leading: '', readOnly: false)),
                     const SizedBox(
                       width: 10,
                     ),
-                    Expanded(child: CustomTextField1(controller: streetController, hintColor: '', inputType: TextInputType.name, lableText: 'Дом', leading: '', readOnly: false)),
+                    Expanded(child: CustomTextField1(controller: streetController, hintColor: '', inputType: TextInputType.name, lableText: 'house'.tr, leading: '', readOnly: false)),
                     const SizedBox(
                       width: 10,
                     ),
-                    Expanded(child: CustomTextField1(controller: streetController, hintColor: '', inputType: TextInputType.name, lableText: 'Офис', leading: '', readOnly: false)),
+                    Expanded(child: CustomTextField1(controller: streetController, hintColor: '', inputType: TextInputType.name, lableText: 'office'.tr, leading: '', readOnly: false)),
                   ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 Text(
-                  'Почтовый индекс',
+                  'postal_code'.tr,
                   style: h16.copyWith(color: ColorResources.darkGray),
                 ),
                 const SizedBox(
@@ -141,7 +141,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                   height: 5,
                 ),
                 Text(
-                  'Обязательное поле',
+                  'required_field',
                   style: body12.copyWith(color: ColorResources.gray),
                 ),
                 const SizedBox(

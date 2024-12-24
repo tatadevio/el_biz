@@ -5,6 +5,7 @@ import 'package:el_biz/view/base/tender_grid_item.dart';
 import 'package:el_biz/view/base/tender_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../../../../base/custom_gridview_widget.dart';
 import '../../../../base/custom_listview_widget.dart';
@@ -37,7 +38,7 @@ class CompanyTenders extends StatelessWidget {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Активно',
+                      'actively'.tr,
                       style: textSm.copyWith(color: companyState.isShowActiveTenders ? ColorResources.blue : ColorResources.lgColor),
                     ),
                   ),
@@ -58,7 +59,7 @@ class CompanyTenders extends StatelessWidget {
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'Неактивно',
+                      'inactive'.tr,
                       style: textSm.copyWith(color: !companyState.isShowActiveTenders ? ColorResources.blue : ColorResources.lgColor),
                     ),
                   ),

@@ -34,14 +34,14 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                 height: 20,
               ),
               Text(
-                'Личные данные',
+                'personal_information'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 5,
               ),
               Text(
-                'Заполните личные данные',
+                'fill_in_your_personal_information'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(
@@ -49,9 +49,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
               ),
               CustomTextField1(
                 controller: nameController,
-                hintColor: 'Имя',
+                hintColor: 'name'.tr,
                 inputType: TextInputType.name,
-                lableText: 'Имя',
+                lableText: 'name'.tr,
                 leading: '',
                 readOnly: false,
               ),
@@ -60,9 +60,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
               ),
               CustomTextField1(
                 controller: familyNameController,
-                hintColor: 'Фамилия',
+                hintColor: 'fullName'.tr,
                 inputType: TextInputType.name,
-                lableText: 'Фамилия',
+                lableText: 'fullName'.tr,
                 leading: '',
                 readOnly: false,
               ),
@@ -71,9 +71,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
               ),
               CustomTextField1(
                 controller: emailController,
-                hintColor: 'Адрес электронной почты',
+                hintColor: 'email_address'.tr,
                 inputType: TextInputType.emailAddress,
-                lableText: 'Адрес электронной почты',
+                lableText: 'email_address'.tr,
                 leading: Images.svgMail,
                 readOnly: false,
               ),
@@ -179,7 +179,14 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13), color: Colors.white, child: CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'Сохранить изменения'),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        color: Colors.white,
+        child: CustomButton(
+          width: Get.width,
+          height: 44,
+          onTap: () {},
+          title: 'save_changes'.tr,
+        ),
 
         // Container(
         //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

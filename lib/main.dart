@@ -9,6 +9,7 @@ import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
+import 'package:el_biz/bloc/localization/localization_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
 import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
@@ -22,7 +23,6 @@ import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'controller/localization_controller.dart';
 import 'helper/route_helper.dart';
 import 'theme/light_theme.dart';
 import 'utils/appConstant.dart';
@@ -71,8 +71,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ProductBloc(Get.find())),
         BlocProvider(create: (_) => ProductDetailBloc(Get.find())),
         BlocProvider(create: (_) => ReviewBloc(Get.find())),
+        BlocProvider(create: (_) => LocalizationBloc(Get.find(), Get.find())),
       ],
-      child: GetBuilder<LocalizationController>(builder: (localizationController) {
+      child: BlocBuilder<LocalizationBloc, LocalizationState>(builder: (context, localizationController) {
         return GetMaterialApp(
           localizationsDelegates: const [
             FormBuilderLocalizations.delegate,
@@ -103,10 +104,9 @@ class MyApp extends StatelessWidget {
                 return ColorResources.lgColor;
               }),
             ),
-            checkboxTheme: CheckboxThemeData(
+            checkboxTheme: const CheckboxThemeData(
                 // fillColor: WidgetStateProperty.all(ColorResources.primary),
                 // checkColor: WidgetStateProperty.all(ColorResources.blue),
-
                 ),
           ),
           initialRoute: RouteHelper.getSplashRoute(),

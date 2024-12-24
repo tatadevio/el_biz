@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../data/model/response/category/category_model.dart';
 import '../../data/model/response/product/product_model.dart';
 
 part 'product_event.dart';
@@ -69,6 +70,20 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     on<SetSortType>((event, emit) {
       emit(state.copywith(sortType: event.id));
+    });
+
+    on<AddProductFilterCategory>(
+      (event, emit) {
+        List<CategoriesItem> categoryList = List.from(state.filterCategories);
+        categoryList.add(event.categoryItem);
+        emit(state.copywith(filterCategories: categoryList));
+      },
+    );
+
+    on<RemoveFilterCategory>((event, emit) {
+      List<CategoriesItem> categoryList = List.from(state.filterCategories);
+      categoryList.remove(event.categoryItem);
+      emit(state.copywith(filterCategories: categoryList));
     });
 
     on<PickImageDocs>(_onPickImageDocs);

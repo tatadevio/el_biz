@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
@@ -25,7 +26,7 @@ class NoCompanyWidget extends StatelessWidget {
           height: 10,
         ),
         Text(
-          'Добавьте свою компанию,  и сотрудничайте  с проверенными компаниями',
+          'add_your_company_and_collaborate_with_trusted_companies'.tr,
           style: h24.copyWith(color: ColorResources.darkGray),
           textAlign: TextAlign.center,
         ),
@@ -39,14 +40,14 @@ class NoCompanyWidget extends StatelessWidget {
         RichText(
           text: TextSpan(
             style: body16.copyWith(color: ColorResources.gray, height: 1.6),
-            children: const [
-              TextSpan(text: 'После регистрации вашей компании  вы можете:\n'),
-              TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: 'Создавать тендера\n'),
-              TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: 'Заключать договоры с покупателями\n'),
-              TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: 'Загружать свои товары и продавать их на нашей платформе'),
+            children: [
+              TextSpan(text: 'after_registering_your_company_you_can'.tr),
+              const TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: 'create_a_tender'.tr),
+              const TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: 'conclude_contracts_with_buyers'.tr),
+              const TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: 'upload_your_products_and_sell_them_on_our_platform'.tr),
             ],
           ),
         ),

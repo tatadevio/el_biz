@@ -26,7 +26,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
   Widget build(BuildContext context) {
     // var size = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: ''),
+      appBar: customAddCompanyAppbar(title: ''),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
         child: SingleChildScrollView(
@@ -155,7 +155,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      'Продолжить',
+                      'continue'.tr,
                       style: textMd.copyWith(color: Colors.white),
                     ),
                   ),

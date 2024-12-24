@@ -1,7 +1,7 @@
+import 'package:el_biz/bloc/localization/localization_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../controller/localization_controller.dart';
 import 'widget/language_widget.dart';
 
 class ChooseLanguageScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _ChooseLanguageScreenState extends State<ChooseLanguageScreen> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LocalizationController>(builder: (localizationController) {
+    return BlocBuilder<LocalizationBloc, LocalizationState>(builder: (context, localizationController) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(children: [
@@ -67,7 +67,11 @@ class _ChooseLanguageScreenState extends State<ChooseLanguageScreen> {
                             itemCount: localizationController.languages.length,
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemBuilder: (context, index) => LanguageWidget(languageModel: localizationController.languages[index], localizationController: localizationController, index: index, fromMenu: true),
+                            itemBuilder: (context, index) => LanguageWidget(
+                                languageModel: localizationController.languages[index],
+                                //  localizationController: localizationController,
+                                index: index,
+                                fromMenu: true),
                           ),
                         ),
 

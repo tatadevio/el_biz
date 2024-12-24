@@ -33,7 +33,7 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
               Container(
                 height: 48,
                 width: 48,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color.fromRGBO(254, 228, 226, 1),
                 ),
@@ -48,7 +48,7 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
             height: 20,
           ),
           Text(
-            'По данному ИНН ничего не найдено',
+            'nothing_was_found_for_this_TIN'.tr,
             style: h16.copyWith(color: ColorResources.darkGray),
             textAlign: TextAlign.center,
           ),
@@ -56,7 +56,7 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
             height: 20,
           ),
           Text(
-            'Проверьте правильность введённого ИНН и повторите попытку ещё раз.',
+            'check_that_the_TIN_entered_is_correct_and_try_again'.tr,
             style: body14.copyWith(color: ColorResources.gray),
             textAlign: TextAlign.center,
           ),
@@ -69,7 +69,7 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
             inputType: TextInputType.name,
             leading: '',
             readOnly: false,
-            lableText: 'ИНН вашей компании ',
+            lableText: 'TIN_of_your_company'.tr,
           ),
           const SizedBox(
             height: 20,
@@ -83,7 +83,7 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: ColorResources.lgColor, width: 1),
+                    side: const BorderSide(color: ColorResources.lgColor, width: 1),
                   ),
 
                   onPressed: () {
@@ -91,8 +91,8 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   },
                   color: ColorResources.white,
                   child: Text(
-                    "no".tr,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                    "cancel".tr,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                   ),
                   //  Colors.grey[300],
                 ),
@@ -109,13 +109,13 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   onPressed: () async {
                     Get.back();
                     Get.dialog(
-                      CustomDialog(
+                      const CustomDialog(
                         widget: AlertDialog(
                           backgroundColor: Colors.white,
-                          titlePadding: const EdgeInsets.all(0),
-                          contentPadding: const EdgeInsets.all(5),
+                          titlePadding: EdgeInsets.all(0),
+                          contentPadding: EdgeInsets.all(5),
                           content: Padding(
-                            padding: const EdgeInsets.all(0),
+                            padding: EdgeInsets.all(0),
                             child: ShowCompanyDetailBox(),
                           ),
                         ),
@@ -124,8 +124,8 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   },
                   color: ColorResources.primary,
                   child: Text(
-                    "yes".tr,
-                    style: TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                    "submit".tr,
+                    style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

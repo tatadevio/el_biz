@@ -1,4 +1,3 @@
-import 'package:el_biz/controller/contracts_controller.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -6,6 +5,8 @@ import 'package:el_biz/view/screen/contracts/contract_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../../../../data/model/base/contract_model.dart';
 
 class ContractItem extends StatelessWidget {
   final ContractModel contractModel;

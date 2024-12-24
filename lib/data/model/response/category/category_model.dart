@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 CategoryListModel categoryListModelFromJson(String str) => CategoryListModel.fromJson(json.decode(str));
@@ -19,18 +18,18 @@ class CategoryListModel {
   String status;
 
   factory CategoryListModel.fromJson(Map<String, dynamic> json) => CategoryListModel(
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-    statusCode: json["status_code"],
-    status: json["status"],
-  );
+        message: json["message"],
+        data: Data.fromJson(json["data"]),
+        statusCode: json["status_code"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": data.toJson(),
-    "status_code": statusCode,
-    "status": status,
-  };
+        "message": message,
+        "data": data.toJson(),
+        "status_code": statusCode,
+        "status": status,
+      };
 }
 
 class Data {
@@ -51,22 +50,22 @@ class Data {
   int count;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: List<CategoriesItem>.from(json["items"].map((x) => CategoriesItem.fromJson(x))),
-    totalPages: json["totalPages"],
-    currentPage: json["currentPage"],
-    total: json["total"],
-    perPage: json["perPage"],
-    count: json["count"],
-  );
+        items: List<CategoriesItem>.from(json["items"].map((x) => CategoriesItem.fromJson(x))),
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        total: json["total"],
+        perPage: json["perPage"],
+        count: json["count"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "totalPages": totalPages,
-    "currentPage": currentPage,
-    "total": total,
-    "perPage": perPage,
-    "count": count,
-  };
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "total": total,
+        "perPage": perPage,
+        "count": count,
+      };
 }
 
 class CategoriesItem {
@@ -93,26 +92,26 @@ class CategoriesItem {
   DateTime updatedAt;
 
   factory CategoriesItem.fromJson(Map<String, dynamic> json) => CategoriesItem(
-    id: json["id"],
-    name: json["name"],
-    description: json["description"],
-    image: json["image"],
-    bgColor: json["bg_color"],
-    textColor: json["text_color"],
-    childs: List<CategoriesItem>.from(json["childs"].map((x) => CategoriesItem.fromJson(x))),
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-  );
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        image: json["image"],
+        bgColor: json["bg_color"],
+        textColor: json["text_color"],
+        childs: List<CategoriesItem>.from(json["childs"].map((x) => CategoriesItem.fromJson(x))),
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "description": description,
-    "image": image,
-    "bg_color": bgColor,
-    "text_color": textColor,
-    "childs": List<dynamic>.from(childs.map((x) => x.toJson())),
-    "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
-    "updated_at": updatedAt.toIso8601String(),
-  };
+        "id": id,
+        "name": name,
+        "description": description,
+        "image": image,
+        "bg_color": bgColor,
+        "text_color": textColor,
+        "childs": List<dynamic>.from(childs.map((x) => x.toJson())),
+        "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
+        "updated_at": updatedAt.toIso8601String(),
+      };
 }

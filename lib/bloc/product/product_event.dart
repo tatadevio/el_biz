@@ -86,3 +86,19 @@ class SetSortType extends ProductEvent {
   @override
   List<Object> get props => [id];
 }
+
+class AddProductFilterCategory extends ProductEvent {
+  final CategoriesItem categoryItem;
+  const AddProductFilterCategory(this.categoryItem);
+
+  @override
+  List<Object> get props => [categoryItem];
+}
+
+class RemoveFilterCategory extends ProductEvent {
+  final CategoriesItem categoryItem;
+  const RemoveFilterCategory(this.categoryItem);
+
+  @override
+  List<Object> get props => [categoryItem];
+}

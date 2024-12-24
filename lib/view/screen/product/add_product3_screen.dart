@@ -18,7 +18,8 @@ import '../../base/custom_dialog.dart';
 
 class AddProduct3Screen extends StatefulWidget {
   final AddProductModel addProductData;
-  const AddProduct3Screen({super.key, required this.addProductData});
+  final bool isEdit;
+  const AddProduct3Screen({super.key, required this.addProductData, required this.isEdit});
 
   @override
   State<AddProduct3Screen> createState() => _AddProduct3ScreenState();
@@ -28,6 +29,20 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController keywordsController = TextEditingController();
   final TextEditingController sizeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      updateProductData();
+    }
+  }
+
+  updateProductData() {
+    descriptionController.text = 'updated description here';
+    keywordsController.text = 'keyword keyword2';
+    sizeController.text = '12/32';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,9 +244,10 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
               );
               Get.to(() => AddProduct4Screen(
                     productData: productData,
+                    isEdit: widget.isEdit,
                   ));
             },
-            title: 'Продолжить'),
+            title: 'continue'.tr),
       ),
     );
   }

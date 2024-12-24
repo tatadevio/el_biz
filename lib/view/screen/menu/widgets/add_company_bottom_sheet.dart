@@ -51,7 +51,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      'Личный профиль',
+                      'personal_profile'.tr,
                       style: h16.copyWith(color: ColorResources.darkGray),
                     ),
                   ),
@@ -72,7 +72,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                     height: 20,
                   ),
                   Text(
-                    'Мои компании',
+                    'my_companies'.tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                   const SizedBox(
@@ -105,7 +105,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                   ),
                   // addNewCompanyButton(),
                   CustomButtonWithIcon(
-                    title: 'Добавить компанию',
+                    title: 'add_a_company'.tr,
                     svgIcon: Images.svgPlus,
                     borderColor: ColorResources.green,
                     onTap: () {

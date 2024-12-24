@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 
-PreferredSizeWidget CustomAddCompanyAppbar({
+PreferredSizeWidget customAddCompanyAppbar({
   required String title,
 }) {
   double width = Get.currentRoute == "/AddCompanyScreen"
@@ -51,9 +51,9 @@ PreferredSizeWidget CustomAddCompanyAppbar({
     backgroundColor: Colors.white,
     title: Text(title),
     bottom: PreferredSize(
-      preferredSize: Size.fromHeight(30),
+      preferredSize: const Size.fromHeight(30),
       child: Padding(
-        padding: EdgeInsets.only(left: 12.0, bottom: 15, top: 10, right: 12),
+        padding: const EdgeInsets.only(left: 12.0, bottom: 15, top: 10, right: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -73,7 +73,7 @@ PreferredSizeWidget CustomAddCompanyAppbar({
             ),
             Text(
               "${percentage.toStringAsFixed(0)}%",
-              style: normalTextStyle.copyWith(color: Color(0xff646F7F)),
+              style: normalTextStyle.copyWith(color: const Color(0xff646F7F)),
             )
           ],
         ),

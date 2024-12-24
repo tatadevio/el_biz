@@ -1,4 +1,5 @@
 import 'package:el_biz/view/base/custom_dialog.dart';
+import 'package:el_biz/view/screen/company/widgets/company_data.dart/review_reply_bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,10 +41,10 @@ class ReviewItem extends StatelessWidget {
                   itemCount: 5,
                   itemSize: 14,
                   ignoreGestures: true,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                  itemBuilder: (context, _) => Icon(
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  itemBuilder: (context, _) => const Icon(
                     Icons.star,
-                    color: Colors.amber,
+                    color: ColorResources.yellow,
                   ),
                   onRatingUpdate: (rating) {
                     print(rating);
@@ -62,21 +63,27 @@ class ReviewItem extends StatelessWidget {
                         backgroundColor: ColorResources.white,
                         children: [
                           ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              Get.back();
+                            },
                             title: Text(
                               'Пожаловаться',
                               style: textMd.copyWith(color: ColorResources.titleColor),
                             ),
                           ),
                           ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              Get.back();
+                            },
                             title: Text(
                               'Пожаловаться на ответ',
                               style: textMd.copyWith(color: ColorResources.titleColor),
                             ),
                           ),
                           ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              Get.back();
+                            },
                             title: Text(
                               'Удалить отзыв',
                               style: textMd.copyWith(color: ColorResources.red),
@@ -85,7 +92,7 @@ class ReviewItem extends StatelessWidget {
                         ],
                       )));
                     },
-                    child: Icon(Icons.more_vert)),
+                    child: const Icon(Icons.more_vert)),
               ],
             ),
           ],
@@ -141,6 +148,33 @@ class ReviewItem extends StatelessWidget {
               style: body12.copyWith(color: ColorResources.gray),
             ),
           ],
+        ),
+        if ("user" == "user") ...[
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Get.bottomSheet(
+                    const ReviewReplyBottomWidget(),
+                    backgroundColor: Colors.white,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                  );
+                },
+                child: Text(
+                  'Ответить',
+                  style: button16.copyWith(color: ColorResources.blue),
+                ),
+              ),
+            ],
+          ),
+        ],
+        const SizedBox(
+          height: 10,
         ),
       ],
     );

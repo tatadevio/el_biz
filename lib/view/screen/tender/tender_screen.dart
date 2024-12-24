@@ -6,6 +6,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/tender_grid_item.dart';
 import 'package:el_biz/view/base/tender_list_item.dart';
+import 'package:el_biz/view/screen/category/main_categories.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,8 @@ class TenderScreen extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => const AddProductScreen());
+                  Get.to(() => MainCategories(type: true, fromHome: true, screenName: '/AddNewTender'));
+                  // Get.to(() => const AddProductScreen());
                 },
                 child: Container(
                   height: 40,

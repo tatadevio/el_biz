@@ -15,7 +15,7 @@ class AddCompanyDocumentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAddCompanyAppbar(title: ""),
+      appBar: customAddCompanyAppbar(title: ""),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -25,14 +25,14 @@ class AddCompanyDocumentScreen extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Свидетльство о государственной регистрации юридического лица',
+              'certificate_of_state_registration_of_a_legal_entity'.tr,
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Загрузите документ со свидетельством ',
+              'upload_your_certificate_document'.tr,
               style: body14.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -54,7 +54,7 @@ class AddCompanyDocumentScreen extends StatelessWidget {
                 child: SvgPicture.asset(Images.svgDownload),
               ),
               title: Text(
-                'Загрузить документ',
+                'upload_document'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               subtitle: Text(
@@ -66,14 +66,14 @@ class AddCompanyDocumentScreen extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Другие документы и сертификаты',
+              'other_documents_and_certificates'.tr,
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Вы можете загрузить только до 10 документов',
+              'you_can_only_upload_up_to_10_documents'.tr,
               style: body14.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -95,7 +95,7 @@ class AddCompanyDocumentScreen extends StatelessWidget {
                 child: SvgPicture.asset(Images.svgDownload),
               ),
               title: Text(
-                'Загрузить документ',
+                'upload_document'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               subtitle: Text(
@@ -114,7 +114,7 @@ class AddCompanyDocumentScreen extends StatelessWidget {
             onTap: () {
               Get.to(() => CompanyPageScreen());
             },
-            title: 'Продолжить'),
+            title: 'continue'.tr),
       ),
     );
   }

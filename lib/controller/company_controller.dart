@@ -1,16 +1,7 @@
 // import 'package:el_biz/data/repo/compnay_repo.dart';
 // import 'package:get/get.dart';
 
-class ComapnyDocumentModel {
-  final String id;
-  final String title;
-  final String size;
-  final String date;
-  final String urlLink;
-  final String documentType;
 
-  ComapnyDocumentModel({required this.id, required this.title, required this.size, required this.date, required this.urlLink, required this.documentType});
-}
 
 // class CompanyController extends GetxController implements GetxService {
 //   final CompnayRepo compnayRepo;

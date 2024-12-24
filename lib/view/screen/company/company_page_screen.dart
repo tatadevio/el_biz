@@ -77,7 +77,7 @@ class CompanyPageScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    'Проверенный пользователь',
+                                    'verified_user'.tr,
                                     style: body14.copyWith(color: ColorResources.gray),
                                   ),
                                 ),
@@ -181,7 +181,7 @@ class CompanyPageScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Время работы: ',
+                          'opening_hours'.tr,
                           style: body14.copyWith(color: ColorResources.darkGray, fontWeight: FontWeight.w700),
                         ),
                         Text(
@@ -225,7 +225,7 @@ class CompanyPageScreen extends StatelessWidget {
                       onTap: () {
                         Get.to(() => const DeleteCompanyScreen());
                       },
-                      title: 'Удалить профиль',
+                      title: 'delete_profile'.tr,
                       svgIcon: Images.svgTrash,
                       textColor: Colors.white,
                       svgIconColor: Colors.white,
@@ -266,7 +266,7 @@ class CompanyPageScreen extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      'Редактировать профиль',
+                      'edit_profile'.tr,
                       style: button16.copyWith(color: ColorResources.blue),
                     ),
                   )

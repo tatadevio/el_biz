@@ -74,7 +74,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgUser,
-              'Личные данные',
+              'personal_information'.tr,
               isSelected: true,
               onTap: () {
                 Get.to(() => const ProfileInformationScreen());
@@ -82,7 +82,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgCompanies,
-              'Мои компании',
+              'my_companies'.tr,
               isSelected: false,
               onTap: () {
                 Get.bottomSheet(const AddCompanyBottomSheet(), backgroundColor: Colors.white, isScrollControlled: true);
@@ -90,7 +90,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgCreditCard,
-              'Расчётные счета',
+              'current_accounts'.tr,
               // 'Счета на оплату',
               isSelected: false,
               onTap: () {
@@ -107,7 +107,7 @@ class MenuScreen extends StatelessWidget {
               },
             ),
             cusotmInfoList(
-              Images.svgFileText,
+              Images.language,
               'language'.tr,
               isSelected: false,
               onTap: () {
@@ -124,7 +124,7 @@ class MenuScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'О приложении',
+                      'about_application'.tr,
                       style: body16.copyWith(color: ColorResources.gray),
                     ),
                   ],
@@ -133,7 +133,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgLogout,
-              'Выйти из профиля',
+              'logout_of_profile'.tr,
               isSelected: false,
               onTap: () {
                 Get.dialog(CustomDialog(
@@ -155,7 +155,7 @@ class MenuScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Выйти из профиля?".tr,
+                        '${"logout_of_profile".tr}?',
                         style: h16.copyWith(
                           color: const Color.fromRGBO(16, 24, 40, 1),
                         ),
@@ -177,7 +177,7 @@ class MenuScreen extends StatelessWidget {
                               },
                               color: ColorResources.lgColor,
                               child: Text(
-                                "Отменить".tr,
+                                "cancel".tr,
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                               ),
                               //  Colors.grey[300],
@@ -197,7 +197,7 @@ class MenuScreen extends StatelessWidget {
                               },
                               color: ColorResources.primary,
                               child: Text(
-                                "Выйти".tr,
+                                "logout".tr,
                                 style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                               ),
                             ),
@@ -211,7 +211,7 @@ class MenuScreen extends StatelessWidget {
             ),
             cusotmInfoList(
               Images.svgTrash,
-              'Удалить профиль',
+              'delete_profile'.tr,
               isSelected: false,
               onTap: () {
                 Get.dialog(CustomDialog(
@@ -236,7 +236,7 @@ class MenuScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Удалить профиль?".tr,
+                        "${'delete_profile'.tr}?",
                         style: h16.copyWith(
                           color: const Color.fromRGBO(16, 24, 40, 1),
                         ),
@@ -245,7 +245,7 @@ class MenuScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "После удаления профиля все данные и истории вашей компании будут удалены.".tr,
+                        "once_your_profile_is_deleted_all_your_company_data_and_history_will_be_deleted".tr,
                         style: body14.copyWith(
                           color: ColorResources.gray,
                         ),
@@ -267,7 +267,7 @@ class MenuScreen extends StatelessWidget {
                               },
                               color: ColorResources.lgColor,
                               child: Text(
-                                "Отменить".tr,
+                                "cancel".tr,
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
                               ),
                               //  Colors.grey[300],
@@ -287,7 +287,7 @@ class MenuScreen extends StatelessWidget {
                               },
                               color: ColorResources.red,
                               child: Text(
-                                "Удалить".tr,
+                                "delete".tr,
                                 style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                               ),
                             ),
@@ -320,7 +320,12 @@ class MenuScreen extends StatelessWidget {
           ),
           child: Row(
             children: [
-              SvgPicture.asset(icon),
+              icon.contains('.svg')
+                  ? SvgPicture.asset(icon)
+                  : Image.asset(
+                      icon,
+                      color: ColorResources.gray,
+                    ),
               const SizedBox(
                 width: 10,
               ),
