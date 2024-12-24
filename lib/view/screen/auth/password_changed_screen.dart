@@ -49,7 +49,7 @@ class PasswordChangedScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.to(() => const DashboardScreen());
+                      Get.offAll(() => const DashboardScreen());
                     },
                     child: Container(
                       width: Get.width * 0.9,

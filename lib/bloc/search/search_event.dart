@@ -6,3 +6,11 @@ sealed class SearchEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class ChangeStatusSearch extends SearchEvent {
+  final bool showProducts ;
+  ChangeStatusSearch(this.showProducts);
+
+  @override
+  List<Object> get props => [showProducts];
+}

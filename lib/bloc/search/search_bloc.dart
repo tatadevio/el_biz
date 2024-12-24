@@ -11,5 +11,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<SearchEvent>((event, emit) {
       // TODO: implement event handler
     });
+
+    on<ChangeStatusSearch>((event, emit) {
+      emit(state.copyWith(isSearchProducts: event.showProducts));
+    });
   }
 }

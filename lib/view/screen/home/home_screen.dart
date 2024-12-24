@@ -192,8 +192,8 @@ class HomeScreen extends StatelessWidget {
                   color: const Color.fromRGBO(22, 77, 160, 1),
                   gradient: const LinearGradient(
                     colors: [
-                      Color.fromRGBO(255, 255, 255, 1),
-                      Color.fromRGBO(22, 77, 160, 1),
+                      // Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(22, 77, 160, 0.35),
                       Color.fromRGBO(22, 77, 160, 1),
                     ],
                     begin: Alignment.bottomRight,
@@ -235,7 +235,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      title: 'add',
+                      title: 'add'.tr,
                       color: ColorResources.orange,
                     ),
                   ],

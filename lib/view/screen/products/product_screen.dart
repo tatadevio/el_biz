@@ -16,8 +16,47 @@ import '../../base/custom_image.dart';
 import '../company/company_page_screen.dart';
 import '../product/add_product_screen.dart';
 
-class ProductScreen extends StatelessWidget {
+class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
+
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollToTopButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      // Show the button if the user scrolls down 300 pixels or more
+      if (_scrollController.offset > 300 && !_showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = true;
+        });
+      } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0, // Scroll to the top
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,14 +130,16 @@ class ProductScreen extends StatelessWidget {
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(55),
-            child: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
+            child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, productController) {
               return Column(
                 children: [
                   const Divider(
                     height: 3,
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
@@ -115,7 +156,8 @@ class ProductScreen extends StatelessWidget {
                           },
                           child: Container(
                             height: 40,
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 14),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                 12,
@@ -154,12 +196,14 @@ class ProductScreen extends StatelessWidget {
                         Expanded(
                           child: Container(
                             height: 40,
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 14),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                 12,
                               ),
-                              border: Border.all(width: 1, color: ColorResources.lgColor),
+                              border: Border.all(
+                                  width: 1, color: ColorResources.lgColor),
                               color: ColorResources.lightBlue,
                               boxShadow: const [
                                 BoxShadow(
@@ -181,7 +225,8 @@ class ProductScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   'new'.tr,
-                                  style: body14.copyWith(color: ColorResources.gray),
+                                  style: body14.copyWith(
+                                      color: ColorResources.gray),
                                 ),
                               ],
                             ),
@@ -195,23 +240,31 @@ class ProductScreen extends StatelessWidget {
                             onTap: () {
                               // productController.updateGridView(true);
 
-                              context.read<ProductBloc>().add(const UpdateGridView(true));
+                              context
+                                  .read<ProductBloc>()
+                                  .add(const UpdateGridView(true));
                             },
                             child: Container(
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: productController.isGridView ? ColorResources.primary : null,
+                                color: productController.isGridView
+                                    ? ColorResources.primary
+                                    : null,
                                 border: Border.all(
                                   width: 1,
-                                  color: productController.isGridView ? ColorResources.primary : ColorResources.lgColor,
+                                  color: productController.isGridView
+                                      ? ColorResources.primary
+                                      : ColorResources.lgColor,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               alignment: Alignment.center,
                               child: SvgPicture.asset(
                                 Images.svgCategory,
-                                color: productController.isGridView ? ColorResources.white : ColorResources.gray,
+                                color: productController.isGridView
+                                    ? ColorResources.white
+                                    : ColorResources.gray,
                               ),
                             ),
                           ),
@@ -222,23 +275,31 @@ class ProductScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             onTap: () {
                               // productController.updateGridView(false);
-                              context.read<ProductBloc>().add(const UpdateGridView(false));
+                              context
+                                  .read<ProductBloc>()
+                                  .add(const UpdateGridView(false));
                             },
                             child: Container(
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: productController.isGridView ? null : ColorResources.primary,
+                                color: productController.isGridView
+                                    ? null
+                                    : ColorResources.primary,
                                 border: Border.all(
                                   width: 1,
-                                  color: !productController.isGridView ? ColorResources.primary : ColorResources.lgColor,
+                                  color: !productController.isGridView
+                                      ? ColorResources.primary
+                                      : ColorResources.lgColor,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               alignment: Alignment.center,
                               child: SvgPicture.asset(
                                 Images.svgList,
-                                color: !productController.isGridView ? ColorResources.white : ColorResources.gray,
+                                color: !productController.isGridView
+                                    ? ColorResources.white
+                                    : ColorResources.gray,
                               ),
                             ),
                           ),
@@ -250,124 +311,176 @@ class ProductScreen extends StatelessWidget {
               );
             }),
           )),
-      body: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        // productController.updateShowCategories(true);
-                        context.read<ProductBloc>().add(const UpdateShowCategories(true));
-                      },
-                      child: Container(
-                        height: 40,
-                        width: width * 0.42,
-                        decoration: BoxDecoration(
-                            color: !productController.isShowCategories ? null : ColorResources.primary,
-                            border: Border.all(
-                              width: 1,
-                              color: productController.isGridView ? ColorResources.primary : ColorResources.lgColor,
+      body: Stack(
+        children: [
+          BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, productController) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            // productController.updateShowCategories(true);
+                            context
+                                .read<ProductBloc>()
+                                .add(const UpdateShowCategories(true));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: width * 0.42,
+                            decoration: BoxDecoration(
+                                color: !productController.isShowCategories
+                                    ? null
+                                    : ColorResources.primary,
+                                border: Border.all(
+                                  width: 1,
+                                  color: productController.isGridView
+                                      ? ColorResources.primary
+                                      : ColorResources.lgColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: !productController.isShowCategories
+                                    ? []
+                                    : [
+                                        const BoxShadow(
+                                          blurRadius: 3,
+                                          spreadRadius: 0,
+                                          offset: Offset(0, 1),
+                                          color:
+                                              Color.fromRGBO(16, 24, 40, 0.1),
+                                        ),
+                                        const BoxShadow(
+                                          blurRadius: 2,
+                                          spreadRadius: 0,
+                                          offset: Offset(0, 1),
+                                          color:
+                                              Color.fromRGBO(16, 24, 40, 0.06),
+                                        ),
+                                      ]),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Компании',
+                              style: button16.copyWith(
+                                  color: !productController.isShowCategories
+                                      ? ColorResources.gray
+                                      : Colors.white),
                             ),
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: !productController.isShowCategories
-                                ? []
-                                : [
-                                    const BoxShadow(
-                                      blurRadius: 3,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 1),
-                                      color: Color.fromRGBO(16, 24, 40, 0.1),
-                                    ),
-                                    const BoxShadow(
-                                      blurRadius: 2,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 1),
-                                      color: Color.fromRGBO(16, 24, 40, 0.06),
-                                    ),
-                                  ]),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Компании',
-                          style: button16.copyWith(color: !productController.isShowCategories ? ColorResources.gray : Colors.white),
+                          ),
                         ),
-                      ),
-                    ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        // productController.updateShowCategories(false);
-                        context.read<ProductBloc>().add(const UpdateShowCategories(false));
-                      },
-                      child: Container(
-                        height: 40,
-                        width: width * 0.42,
-                        decoration: BoxDecoration(
-                            color: productController.isShowCategories ? null : ColorResources.primary,
-                            border: Border.all(
-                              width: 1,
-                              color: !productController.isGridView ? ColorResources.primary : ColorResources.lgColor,
+                        InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            // productController.updateShowCategories(false);
+                            context
+                                .read<ProductBloc>()
+                                .add(const UpdateShowCategories(false));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: width * 0.42,
+                            decoration: BoxDecoration(
+                                color: productController.isShowCategories
+                                    ? null
+                                    : ColorResources.primary,
+                                border: Border.all(
+                                  width: 1,
+                                  color: !productController.isGridView
+                                      ? ColorResources.primary
+                                      : ColorResources.lgColor,
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: productController.isShowCategories
+                                    ? []
+                                    : [
+                                        const BoxShadow(
+                                          blurRadius: 3,
+                                          spreadRadius: 0,
+                                          offset: Offset(0, 1),
+                                          color:
+                                              Color.fromRGBO(16, 24, 40, 0.1),
+                                        ),
+                                        const BoxShadow(
+                                          blurRadius: 2,
+                                          spreadRadius: 0,
+                                          offset: Offset(0, 1),
+                                          color:
+                                              Color.fromRGBO(16, 24, 40, 0.06),
+                                        ),
+                                      ]),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'goods'.tr,
+                              style: button16.copyWith(
+                                  color: productController.isShowCategories
+                                      ? ColorResources.gray
+                                      : Colors.white),
                             ),
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: productController.isShowCategories
-                                ? []
-                                : [
-                                    const BoxShadow(
-                                      blurRadius: 3,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 1),
-                                      color: Color.fromRGBO(16, 24, 40, 0.1),
-                                    ),
-                                    const BoxShadow(
-                                      blurRadius: 2,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 1),
-                                      color: Color.fromRGBO(16, 24, 40, 0.06),
-                                    ),
-                                  ]),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'goods'.tr,
-                          style: button16.copyWith(color: productController.isShowCategories ? ColorResources.gray : Colors.white),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
+                  Expanded(
+                    child: !productController.isShowCategories
+                        ? productController.isGridView
+                            ? GridView.builder(
+                                controller: _scrollController,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10,
+                                        childAspectRatio: 0.7),
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return const ProductGridItem();
+                                },
+                              )
+                            : ListView.builder(
+                                controller: _scrollController,
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return const ProductListItem();
+                                },
+                              )
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              return myCompanyWidget();
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            );
+          }),
+          if (_showScrollToTopButton)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: _scrollToTop,
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorResources.primary,
+                  ),
+                  child: Icon(Icons.keyboard_arrow_up, color: Colors.white,),
                 ),
               ),
-              Expanded(
-                child: !productController.isShowCategories
-                    ? productController.isGridView
-                        ? GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.7),
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return const ProductGridItem();
-                            },
-                          )
-                        : ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return const ProductListItem();
-                            },
-                          )
-                    : ListView.builder(
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return myCompanyWidget();
-                        },
-                      ),
-              ),
-            ],
-          ),
-        );
-      }),
+            ),
+        ],
+      ),
     );
   }
 
@@ -414,7 +527,8 @@ class ProductScreen extends StatelessWidget {
                             ),
                             Text(
                               'ОсОО Исхаков',
-                              style: body14.copyWith(color: ColorResources.darkGray),
+                              style: body14.copyWith(
+                                  color: ColorResources.darkGray),
                             ),
                             const SizedBox(
                               height: 5,
@@ -428,7 +542,8 @@ class ProductScreen extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     'Кыргызстан, Бишкек',
-                                    style: body14.copyWith(color: ColorResources.gray),
+                                    style: body14.copyWith(
+                                        color: ColorResources.gray),
                                   ),
                                 ),
                               ],
@@ -444,7 +559,8 @@ class ProductScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         '(4.8)',
-                                        style: body14.copyWith(color: ColorResources.gray),
+                                        style: body14.copyWith(
+                                            color: ColorResources.gray),
                                       ),
                                       RatingBar.builder(
                                         initialRating: 4.8,
@@ -454,7 +570,8 @@ class ProductScreen extends StatelessWidget {
                                         itemCount: 5,
                                         itemSize: 14,
                                         ignoreGestures: true,
-                                        itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 0),
                                         itemBuilder: (context, _) => const Icon(
                                           Icons.star,
                                           color: ColorResources.yellow,
@@ -471,7 +588,8 @@ class ProductScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       'more_details'.tr,
-                                      style: button16.copyWith(color: ColorResources.blue),
+                                      style: button16.copyWith(
+                                          color: ColorResources.blue),
                                     ),
                                     const SizedBox(
                                       width: 5,

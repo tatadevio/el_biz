@@ -14,9 +14,47 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class TenderScreen extends StatelessWidget {
+class TenderScreen extends StatefulWidget {
   const TenderScreen({super.key});
 
+  @override
+  State<TenderScreen> createState() => _TenderScreenState();
+}
+
+class _TenderScreenState extends State<TenderScreen> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollToTopButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      // Show the button if the user scrolls down 300 pixels or more
+      if (_scrollController.offset > 300 && !_showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = true;
+        });
+      } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0, // Scroll to the top
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -232,25 +270,48 @@ class TenderScreen extends StatelessWidget {
               );
             }),
           )),
-      body: BlocBuilder<TendersBloc, TendersState>(builder: (context, tendersController) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: tendersController.isGridView
-              ? GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.65),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return const TenderGridItem();
-                  },
-                )
-              : ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return const TenderListItem();
-                  },
+      body: Stack(
+        children: [
+          BlocBuilder<TendersBloc, TendersState>(builder: (context, tendersController) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: tendersController.isGridView
+                  ? GridView.builder(
+                controller: _scrollController,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.65),
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return const TenderGridItem();
+                      },
+                    )
+                  : ListView.builder(
+                controller: _scrollController,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return const TenderListItem();
+                      },
+                    ),
+            );
+          }),
+          if (_showScrollToTopButton)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: _scrollToTop,
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorResources.primary,
+                  ),
+                  child: Icon(Icons.keyboard_arrow_up, color: Colors.white,),
                 ),
-        );
-      }),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

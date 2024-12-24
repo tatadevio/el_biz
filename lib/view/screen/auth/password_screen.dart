@@ -165,6 +165,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                         width: Get.width,
                                         height: 44,
                                         onTap: () {
+                                          Get.back();
                                           Get.to(
                                             () => OtpScreen(phone: widget.phoneNumber, type: ''),
                                           );

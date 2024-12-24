@@ -153,32 +153,25 @@ class _OtpScreenState extends State<OtpScreen> {
                     SizedBox(
                       height: Get.height * 0.02,
                     ),
-                    Container(
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: (widget.secondsNotifier.value == 0) ? ColorResources.blue : ColorResources.lgColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Text(
-                          //   'Повторно отправить код 0,15c',
-                          //   style: button16.copyWith(color: ColorResources.gray),
-                          // ),
-                          ValueListenableBuilder(
-                            valueListenable: widget.secondsNotifier,
-                            builder: (ctx, seconds, _) => (Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${"resend_code".tr} $seconds sec',
-                                  style: button16.copyWith(color: (widget.secondsNotifier.value == 0) ? Colors.white : ColorResources.gray),
-                                ),
-                              ],
-                            )),
-                          ),
-                        ],
+                    ValueListenableBuilder(
+                      valueListenable: widget.secondsNotifier,
+                      builder: (ctx, seconds, _) => Container(
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: (widget.secondsNotifier.value == 0) ? ColorResources.blue : ColorResources.lgColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: (Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              (widget.secondsNotifier.value == 0) ? 'resend_code'.tr:
+                              '${"resend_code".tr} $seconds sec',
+                              style: button16.copyWith(color: (widget.secondsNotifier.value == 0) ? Colors.white : ColorResources.gray),
+                            ),
+                          ],
+                        )),
                       ),
                     ),
                   ],

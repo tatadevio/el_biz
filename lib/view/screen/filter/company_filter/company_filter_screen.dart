@@ -26,24 +26,24 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
   final TextEditingController _maxController = TextEditingController();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  List<Map> sort = [
-    {
-      "value": "popular",
-      "type": "popular".tr,
-    },
-    {
-      "value": "latest",
-      "type": "newest_first".tr,
-    },
-    {
-      "value": "low-high",
-      "type": "cheapest_first".tr,
-    },
-    {
-      "value": "high-low",
-      "type": "expensive_first".tr,
-    },
-  ];
+  // List<Map> sort = [
+  //   {
+  //     "value": "popular",
+  //     "type": "popular".tr,
+  //   },
+  //   {
+  //     "value": "latest",
+  //     "type": "newest_first".tr,
+  //   },
+  //   {
+  //     "value": "low-high",
+  //     "type": "cheapest_first".tr,
+  //   },
+  //   {
+  //     "value": "high-low",
+  //     "type": "expensive_first".tr,
+  //   },
+  // ];
 
   List<String> keywordsList = [
     'Мебель',
@@ -251,7 +251,7 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                                     InkWell(
                                       borderRadius: BorderRadius.circular(30),
                                       onTap: () {
-                                        // productController.updateKeywordSelected(keyword);
+
                                         context.read<ProductBloc>().add(UpdateKeywordSelected(keyword));
                                       },
                                       child: Container(
@@ -397,7 +397,9 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
-        child: CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'filters'.tr),
+        child: CustomButton(width: Get.width, height: 44, onTap: () {
+          Get.back();
+        }, title: 'filters'.tr),
       ),
     );
   }

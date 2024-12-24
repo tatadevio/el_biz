@@ -25,19 +25,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<UpdateKeywordSelected>((event, emit) {
-      if (state.selectedKeywords.isEmpty) {
-        emit(state.copywith(selectedKeywords: state.selectedKeywords..add(event.keyword)));
+      print('keyword selected button is pressed...${event.keyword}');
+      List<String> data =      List.from(state.selectedKeywords);
+      if (data.isEmpty) {
+
+        emit(state.copywith(selectedKeywords: data..add(event.keyword)));
+        // emit(state.copywith(selectedKeywords: state.selectedKeywords..add(event.keyword)));
       } else {
-        if (state.selectedKeywords.contains(event.keyword)) {
+        if (data.contains(event.keyword)) {
           emit(
             state.copywith(
-              selectedKeywords: state.selectedKeywords..remove(event.keyword),
+              selectedKeywords: data..remove(event.keyword),
             ),
           );
         } else {
-          emit(state.copywith(
-            selectedKeywords: state.selectedKeywords..add(event.keyword),
-          ));
+          emit(state.copywith(selectedKeywords: data..add(event.keyword)));
         }
       }
     });

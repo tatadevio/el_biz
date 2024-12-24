@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "send_code".tr,
+                              "continue".tr,
                               style: button16,
                             ),
                           ],

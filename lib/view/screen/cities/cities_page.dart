@@ -11,26 +11,22 @@ import '../../../controller/product_controller.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 
-class CitiesScreen extends StatelessWidget {
+class CitiesScreen extends StatefulWidget {
   const CitiesScreen({Key? key}) : super(key: key);
 
-  // call(ScrollController scrollController) {
+  @override
+  State<CitiesScreen> createState() => _CitiesScreenState();
+}
 
-  //   final citiesBloc = context.read<CitiesBloc>();
-  //   print("i am called");
-  //   scrollController.addListener(() {
-  //     if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !context.read().find<citiesState>().isLoading) {
-  //       int pageSize = Get.find<citiesState>().pageSize;
-  //       if (Get.find<citiesState>().currentPageSize <= pageSize) {
-  //         int nextPage = Get.find<citiesState>().currentPageSize;
-  //         // Get.find<ArticlePostController>().setOffset(Get.find<ArticlePostController>().offset+1);
-  //         print('end of the page');
-  //         Get.find<citiesState>().showBottomLoader();
-  //         Get.find<citiesState>().getCities(nextPage, false);
-  //       }
-  //     }
-  //   });
-  // }
+class _CitiesScreenState extends State<CitiesScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CitiesBloc>().add(GetCitites(1, true));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +35,9 @@ class CitiesScreen extends StatelessWidget {
     //call(_scrollController);
     var height = Get.height;
     return BlocBuilder<CitiesBloc, CitiesState>(builder: (context, citiesState) {
+      if(citiesState.isLoading){
+        return Center(child: CircularProgressIndicator(),);
+      }
       return Padding(
         padding: const EdgeInsets.only(top: 68.0),
         child: Container(
