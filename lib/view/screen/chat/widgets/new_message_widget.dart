@@ -16,8 +16,9 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      padding: const EdgeInsets.only(top: 5),
+      // height: 50,
+      padding: const EdgeInsets.all(5),
+      // only(top: 5),
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -33,53 +34,76 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 color: ColorResources.gray,
               )),
           Expanded(
-            child: TextFormField(
-              readOnly: false,
-              controller: textController,
-              focusNode: focusNode,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                counterText: "",
-                suffixIcon: InkWell(
-                  borderRadius: BorderRadius.circular(22),
-                  onTap: () {
-                    textController.clear();
-                    // focusNode.unfocus();
-                    setState(() {});
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(3),
-                    height: 22,
-                    width: 22,
-                    decoration: BoxDecoration(
-                      color: textController.text.isEmpty ? ColorResources.lgColor : ColorResources.blue,
-                      shape: BoxShape.circle,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SingleChildScrollView(
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 100),
+                  child: TextFormField(
+                    readOnly: false,
+                    controller: textController,
+                    focusNode: focusNode,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      counterText: "",
+                      suffixIcon: InkWell(
+                        borderRadius: BorderRadius.circular(22),
+                        onTap: () {
+                          textController.clear();
+                          // focusNode.unfocus();
+                          setState(() {});
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(3),
+                          height: 22,
+                          width: 22,
+                          decoration: BoxDecoration(
+                            color: textController.text.isEmpty
+                                ? ColorResources.lgColor
+                                : ColorResources.blue,
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(Images.svgSendArrow),
+                        ),
+                      ),
+                      isDense: true,
+                      counterStyle:
+                          const TextStyle(color: ColorResources.lightGrey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                              color: ColorResources.dividerColor)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                              color: ColorResources.dividerColor)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                              color: ColorResources.dividerColor)),
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                              color: ColorResources.primaryRed)),
+                      hintText: '',
+                      hintStyle: const TextStyle(color: Color(0xff646F7F)),
                     ),
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(Images.svgSendArrow),
+                    maxLines: null,
+                    onChanged: (value) {
+                      if (textController.text.isEmpty) {
+                        setState(() {});
+                      } else {
+                        if (textController.text.length == 1) {
+                          setState(() {});
+                        }
+                      }
+                    },
                   ),
                 ),
-                isDense: true,
-                counterStyle: const TextStyle(color: ColorResources.lightGrey),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.primaryRed)),
-                hintText: '',
-                hintStyle: const TextStyle(color: Color(0xff646F7F)),
               ),
-              maxLines: 1,
-              onChanged: (value) {
-                if (textController.text.isEmpty) {
-                  setState(() {});
-                } else {
-                  if (textController.text.length == 1) {
-                    setState(() {});
-                  }
-                }
-              },
             ),
 
             // CustomTextField(

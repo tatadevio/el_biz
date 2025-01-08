@@ -14,7 +14,7 @@ class CustomTextField extends StatelessWidget {
   // final Color color;
   final bool readOnly;
   final bool validate;
-  final int maxLength;
+  final int? maxLength;
   final int? maxLines;
   final Widget? suffix;
   const CustomTextField(
@@ -25,7 +25,7 @@ class CustomTextField extends StatelessWidget {
       required this.leading,
       // required this.color,
       required this.readOnly,
-      this.maxLength = 200,
+      this.maxLength,
       this.validate = false,
       this.maxLines,
       this.suffix});
@@ -55,13 +55,17 @@ class CustomTextField extends StatelessWidget {
             }
             return null;
           },
-          inputFormatters: maxLength == 9 ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly] : null,
+          inputFormatters: maxLength == 9
+              ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+              : null,
           decoration: InputDecoration(
             counterText: "",
             prefixIcon: leading != ""
                 ? Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: leading.contains('.svg') ? SvgPicture.asset(leading) : Image.asset(leading),
+                    child: leading.contains('.svg')
+                        ? SvgPicture.asset(leading)
+                        : Image.asset(leading),
                   )
                 : null,
             suffixIcon: suffix,
@@ -69,10 +73,18 @@ class CustomTextField extends StatelessWidget {
             counterStyle: const TextStyle(color: ColorResources.lightGrey),
             filled: true,
             fillColor: Colors.white,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-            errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.primaryRed)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: ColorResources.dividerColor)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: ColorResources.dividerColor)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: ColorResources.dividerColor)),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: ColorResources.primaryRed)),
             hintText: hintColor,
             hintStyle: const TextStyle(color: Color(0xff646F7F)),
           ),
@@ -95,6 +107,7 @@ class CustomTextField1 extends StatefulWidget {
   final int maxLength;
   final bool isObsureText;
   final TextStyle? lableStyle;
+  final List<TextInputFormatter>? inputFormatters;
   const CustomTextField1({
     super.key,
     required this.controller,
@@ -108,6 +121,7 @@ class CustomTextField1 extends StatefulWidget {
     this.validate = false,
     this.isObsureText = false,
     this.lableStyle,
+    this.inputFormatters,
   });
 
   @override
@@ -159,23 +173,36 @@ class _CustomTextField1State extends State<CustomTextField1> {
                 }
                 return null;
               },
-              inputFormatters: widget.maxLength == 9 ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly] : null,
+              inputFormatters: widget.maxLength == 9
+                  ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+                  : widget.inputFormatters,
               decoration: InputDecoration(
                 counterText: "",
                 prefixIcon: widget.leading != ""
                     ? Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: widget.leading.contains('.png') ? Image.asset(widget.leading) : SvgPicture.asset(widget.leading),
+                        child: widget.leading.contains('.png')
+                            ? Image.asset(widget.leading)
+                            : SvgPicture.asset(widget.leading),
                       )
                     : null,
                 isDense: true,
                 counterStyle: const TextStyle(color: ColorResources.lightGrey),
                 filled: true,
                 fillColor: Colors.white,
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.primaryRed)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: ColorResources.dividerColor)),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: ColorResources.dividerColor)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: ColorResources.dividerColor)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide:
+                        const BorderSide(color: ColorResources.primaryRed)),
                 hintText: widget.hintColor,
                 hintStyle: const TextStyle(color: Color(0xff646F7F)),
                 suffixIcon: widget.isObsureText
@@ -185,7 +212,8 @@ class _CustomTextField1State extends State<CustomTextField1> {
                             isHide = !isHide;
                           });
                         },
-                        icon: Icon(isHide ? Icons.visibility_off : Icons.visibility))
+                        icon: Icon(
+                            isHide ? Icons.visibility_off : Icons.visibility))
                     : null,
               ),
             ),
@@ -207,7 +235,16 @@ class CustomTextFieldWithCountryCode extends StatelessWidget {
   final bool showCountryCode;
   final String prefix;
   const CustomTextFieldWithCountryCode(
-      {Key? key, required this.hintText, this.title = "", required this.controller, this.line = 1, required this.textInputType, this.maxLength = 0, this.validate = false, this.prefix = "", this.showCountryCode = false})
+      {Key? key,
+      required this.hintText,
+      this.title = "",
+      required this.controller,
+      this.line = 1,
+      required this.textInputType,
+      this.maxLength = 0,
+      this.validate = false,
+      this.prefix = "",
+      this.showCountryCode = false})
       : super(key: key);
 
   @override
@@ -252,13 +289,29 @@ class CustomTextFieldWithCountryCode extends StatelessWidget {
         filled: true,
         fillColor: Colors.white,
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xffAFAFAF), fontSize: 14, fontWeight: FontWeight.w400),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: const BorderSide(color: ColorResources.dividerColor)),
-        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.dividerColor)),
-        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: ColorResources.primaryRed.withOpacity(0.4))),
+        hintStyle: const TextStyle(
+            color: Color(0xffAFAFAF),
+            fontSize: 14,
+            fontWeight: FontWeight.w400),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: ColorResources.dividerColor)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: ColorResources.dividerColor)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: ColorResources.dividerColor)),
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(color: ColorResources.dividerColor)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(color: ColorResources.dividerColor)),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide:
+                BorderSide(color: ColorResources.primaryRed.withOpacity(0.4))),
       ),
     ).paddingOnly(bottom: 10);
   }

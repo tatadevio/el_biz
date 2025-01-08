@@ -26,7 +26,7 @@ class _AccountScreenState extends State<AccountScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                'Основной счёт на оплату',
+                'main_invoice_for_payment'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
             ),
@@ -40,9 +40,12 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Optima USD',
-                    style: TextStyle(fontSize: 18, fontFamily: 'Inter', fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400),
                   ),
                   Text(
                     '0202020202002',
@@ -55,7 +58,7 @@ class _AccountScreenState extends State<AccountScreen> {
               height: 20,
             ),
             Text(
-              'Все счета',
+              'all_accounts'.tr,
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
             ListView(
@@ -91,7 +94,10 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Color.fromRGBO(33, 32, 32, 1)),
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromRGBO(33, 32, 32, 1)),
                   ),
                   Text(
                     subTitle,
@@ -112,10 +118,12 @@ class _AccountScreenState extends State<AccountScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.bottomSheet(EditAccountInfoBottomSheet(), backgroundColor: Colors.white, isScrollControlled: true);
+                    Get.bottomSheet(const EditAccountInfoBottomSheet(),
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true);
                   },
                   child: Text(
-                    'Редактировать',
+                    'edit'.tr,
                     style: button16.copyWith(color: ColorResources.blue),
                   ),
                 ),

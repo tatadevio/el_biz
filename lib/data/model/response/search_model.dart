@@ -2,12 +2,13 @@
 //
 //     final searchResultModel = searchResultModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-SearchResultModel searchResultModelFromJson(String str) => SearchResultModel.fromJson(json.decode(str));
+SearchResultModel searchResultModelFromJson(String str) =>
+    SearchResultModel.fromJson(json.decode(str));
 
-String searchResultModelToJson(SearchResultModel data) => json.encode(data.toJson());
+String searchResultModelToJson(SearchResultModel data) =>
+    json.encode(data.toJson());
 
 class SearchResultModel {
   SearchResultModel({
@@ -22,19 +23,20 @@ class SearchResultModel {
   int statusCode;
   String status;
 
-  factory SearchResultModel.fromJson(Map<String, dynamic> json) => SearchResultModel(
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-    statusCode: json["status_code"],
-    status: json["status"],
-  );
+  factory SearchResultModel.fromJson(Map<String, dynamic> json) =>
+      SearchResultModel(
+        message: json["message"],
+        data: Data.fromJson(json["data"]),
+        statusCode: json["status_code"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": data.toJson(),
-    "status_code": statusCode,
-    "status": status,
-  };
+        "message": message,
+        "data": data.toJson(),
+        "status_code": statusCode,
+        "status": status,
+      };
 }
 
 class Data {
@@ -55,22 +57,23 @@ class Data {
   int count;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    items: List<SearchItem>.from(json["items"].map((x) => SearchItem.fromJson(x))),
-    totalPages: json["totalPages"],
-    currentPage: json["currentPage"],
-    total: json["total"],
-    perPage: json["perPage"],
-    count: json["count"],
-  );
+        items: List<SearchItem>.from(
+            json["items"].map((x) => SearchItem.fromJson(x))),
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        total: json["total"],
+        perPage: json["perPage"],
+        count: json["count"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "totalPages": totalPages,
-    "currentPage": currentPage,
-    "total": total,
-    "perPage": perPage,
-    "count": count,
-  };
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "total": total,
+        "perPage": perPage,
+        "count": count,
+      };
 }
 
 class SearchItem {
@@ -87,16 +90,16 @@ class SearchItem {
   int type;
 
   factory SearchItem.fromJson(Map<String, dynamic> json) => SearchItem(
-    id: json["id"],
-    title: json["title"],
-    query: json["query"],
-    type: json["type"],
-  );
+        id: json["id"],
+        title: json["title"],
+        query: json["query"],
+        type: json["type"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "title": title,
-    "query": query,
-    "type": type,
-  };
+        "id": id,
+        "title": title,
+        "query": query,
+        "type": type,
+      };
 }

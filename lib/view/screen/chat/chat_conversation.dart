@@ -4,6 +4,8 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/chat/widgets/new_message_widget.dart';
+import 'package:el_biz/view/screen/contracts/new_contract_screen.dart';
+import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -78,14 +80,19 @@ class ChatConversation extends StatelessWidget {
                           height: 36,
                           width: Get.width,
                           padding: const EdgeInsets.all(0),
-                          border: Border.all(width: 1, color: ColorResources.blue),
+                          border:
+                              Border.all(width: 1, color: ColorResources.blue),
                           borderRadius: BorderRadius.circular(8),
                           boxShaow: const [ColorResources.shadow1],
                           child: Text(
                             'select_products'.tr,
                             style: textSm.copyWith(color: ColorResources.blue),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(
+                              () => const ProductScreen(isSelectProduct: true),
+                            );
+                          },
                         ),
                       ),
                       if (isSeller) ...[
@@ -93,26 +100,34 @@ class ChatConversation extends StatelessWidget {
                           width: 10,
                         ),
                         Expanded(
-                          child: Container(
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: ColorResources.green,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(width: 1, color: ColorResources.green),
-                              boxShadow: const [ColorResources.shadow1],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(Images.svgPlus),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'new_treaty',
-                                  style: textSm.copyWith(color: ColorResources.white),
-                                ),
-                              ],
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              Get.to(() => const NewContractScreen());
+                            },
+                            child: Container(
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: ColorResources.green,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    width: 1, color: ColorResources.green),
+                                boxShadow: const [ColorResources.shadow1],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(Images.svgPlus),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'agreement'.tr,
+                                    style: textSm.copyWith(
+                                        color: ColorResources.white),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

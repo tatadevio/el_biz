@@ -102,6 +102,7 @@ class NewCompaniesWidget extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Row(
                   children: [
@@ -111,12 +112,12 @@ class NewCompaniesWidget extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite,
-                      ),
-                    ),
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: const Icon(
+                    //     Icons.favorite,
+                    //   ),
+                    // ),
                   ],
                 ),
                 Text(
@@ -158,6 +159,8 @@ class NewCompaniesWidget extends StatelessWidget {
                             allowHalfRating: true,
                             itemCount: 5,
                             itemSize: 14,
+                            ignoreGestures: true
+                            ,
                             itemPadding: const EdgeInsets.symmetric(horizontal: 0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,

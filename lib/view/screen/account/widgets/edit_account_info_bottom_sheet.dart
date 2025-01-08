@@ -8,13 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EditAccountInfoBottomSheet extends StatefulWidget {
-  const EditAccountInfoBottomSheet({super.key});
+  final bool isAddNew;
+  const EditAccountInfoBottomSheet({super.key, this.isAddNew = false});
 
   @override
-  State<EditAccountInfoBottomSheet> createState() => _EditAccountInfoBottomSheetState();
+  State<EditAccountInfoBottomSheet> createState() =>
+      _EditAccountInfoBottomSheetState();
 }
 
-class _EditAccountInfoBottomSheetState extends State<EditAccountInfoBottomSheet> {
+class _EditAccountInfoBottomSheetState
+    extends State<EditAccountInfoBottomSheet> {
   final TextEditingController accountNameController = TextEditingController();
   final TextEditingController accountBIKController = TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
@@ -34,7 +37,7 @@ class _EditAccountInfoBottomSheetState extends State<EditAccountInfoBottomSheet>
                   Container(
                     height: 5,
                     width: 35,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: ColorResources.lgColor,
                     ),
                   ),
@@ -47,37 +50,62 @@ class _EditAccountInfoBottomSheetState extends State<EditAccountInfoBottomSheet>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Реквизит',
+                      'props'.tr,
                       style: h16.copyWith(color: ColorResources.darkGray),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomTextField1(controller: accountNameController, hintColor: 'Optima USD', inputType: TextInputType.text, lableText: 'Дайте название для вашего счёта', leading: '', readOnly: false),
+                    CustomTextField1(
+                        controller: accountNameController,
+                        hintColor: 'Optima USD',
+                        inputType: TextInputType.text,
+                        lableText: 'give_a_name_for_your_account'.tr,
+                        leading: '',
+                        readOnly: false),
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomTextField1(controller: accountBIKController, hintColor: '0202020202002', inputType: TextInputType.text, lableText: 'БИК', leading: '', readOnly: false),
+                    CustomTextField1(
+                        controller: accountBIKController,
+                        hintColor: '0202020202002',
+                        inputType: TextInputType.text,
+                        lableText: 'bic'.tr,
+                        leading: '',
+                        readOnly: false),
                     const SizedBox(
                       height: 10,
                     ),
-                    CustomTextField1(controller: accountNameController, hintColor: '0202020202002', inputType: TextInputType.text, lableText: 'Номер счёта', leading: '', readOnly: false),
+                    CustomTextField1(
+                        controller: accountNameController,
+                        hintColor: '0202020202002',
+                        inputType: TextInputType.text,
+                        lableText: 'account_number'.tr,
+                        leading: '',
+                        readOnly: false),
                     const SizedBox(
                       height: 30,
                     ),
                     // CustomButton(width: Get.width * 0.7, height: 45, onTap: onTap, title: title)
-                    CustomButtonWithIcon(
-                      title: 'Удалить реквизит',
-                      svgIcon: Images.svgTrash,
-                      buttonColor: ColorResources.red,
-                      borderColor: ColorResources.red,
-                      isMaxSize: false,
-                      onTap: () {},
-                    ),
+                    if (!widget.isAddNew)
+                      CustomButtonWithIcon(
+                        title: 'delete_props'.tr,
+                        svgIcon: Images.svgTrash,
+                        buttonColor: ColorResources.red,
+                        borderColor: ColorResources.red,
+                        isMaxSize: false,
+                        onTap: () {},
+                      ),
                     const SizedBox(
                       height: 30,
                     ),
-                    CustomButton(width: Get.width, height: 48, onTap: () {}, title: 'Сохранить'),
+                    CustomButton(
+                        width: Get.width,
+                        height: 48,
+                        onTap: () {
+                          Get.back();
+                        },
+                        title: 'save'.tr),
                     const SizedBox(
                       height: 20,
                     ),

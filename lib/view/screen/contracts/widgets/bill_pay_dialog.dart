@@ -75,7 +75,7 @@ class _BillPayDialogState extends State<BillPayDialog> {
           height: 10,
         ),
         Text(
-          'Пожалуйста прикрепите  квитанцию оплаты',
+          'please_attach_your_payment_receipt'.tr,
           style: h16.copyWith(color: ColorResources.titleColor),
         ),
         if (selectedFilePath != null) ...[
@@ -100,12 +100,13 @@ class _BillPayDialogState extends State<BillPayDialog> {
               child: CustomBorderButton(
                 height: 44,
                 width: Get.width,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                 border: Border.all(width: 1, color: ColorResources.blue),
                 borderRadius: BorderRadius.circular(12),
                 boxShaow: const [ColorResources.shadow1],
                 child: Text(
-                  'Отмена',
+                  'cancel'.tr,
                   style: textMd.copyWith(color: ColorResources.blue),
                 ),
                 onTap: () {
@@ -127,7 +128,7 @@ class _BillPayDialogState extends State<BillPayDialog> {
                       _pickPDF();
                     }
                   },
-                  title: selectedFilePath == null ? 'Загрузить' : 'Отправить'),
+                  title: selectedFilePath == null ? 'download'.tr : 'send'.tr),
             ),
           ],
         ),

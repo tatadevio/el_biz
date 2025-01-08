@@ -72,7 +72,8 @@ class ContractPageScreen extends StatelessWidget {
             dataItem(
               'Статус согласования:',
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
                 decoration: BoxDecoration(
                   color: contractModel.status == "Подписан"
                       ? ColorResources.green
@@ -88,21 +89,27 @@ class ContractPageScreen extends StatelessWidget {
               ),
             ),
             dataItem(
-              'Статус оплаты',
+              'payment_status'.tr,
               Text(
                 contractModel.paymentStatus,
-                style: body16.copyWith(fontWeight: FontWeight.w500, color: contractModel.paymentStatus == "Оплачен" ? ColorResources.green : ColorResources.red),
+                style: body16.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: contractModel.paymentStatus == "Оплачен"
+                        ? ColorResources.green
+                        : ColorResources.red),
               ),
             ),
             dataItem(
               'Статус оплаты',
               InkWell(
                 onTap: () {
-                  Get.bottomSheet(const ShowContractFiles(), backgroundColor: Colors.white, isScrollControlled: true);
+                  Get.bottomSheet(const ShowContractFiles(),
+                      backgroundColor: Colors.white, isScrollControlled: true);
                 },
                 child: Container(
                   // height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
                     color: ColorResources.blue,
                     border: Border.all(width: 1, color: ColorResources.blue),
@@ -120,7 +127,7 @@ class ContractPageScreen extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Счет был оплачен?',
+              'has_the_bill_been_paid'.tr,
               style: h16.copyWith(color: ColorResources.blue),
             ),
             const SizedBox(
@@ -133,7 +140,7 @@ class ContractPageScreen extends StatelessWidget {
                     width: Get.width,
                     height: 44,
                     onTap: () {},
-                    title: 'Не оплачено',
+                    title: 'not_paid'.tr,
                     color: ColorResources.red,
                   ),
                 ),
@@ -147,11 +154,13 @@ class ContractPageScreen extends StatelessWidget {
                     onTap: () {
                       Get.dialog(
                         const CustomDialog(
-                          widget: AlertDialog(content: BillPayDialog()),
+                          widget: AlertDialog(
+                              backgroundColor: Colors.white,
+                              content: BillPayDialog()),
                         ),
                       );
                     },
-                    title: 'Оплачено',
+                    title: 'paid'.tr,
                     color: ColorResources.green,
                   ),
                 ),
@@ -169,12 +178,13 @@ class ContractPageScreen extends StatelessWidget {
               child: CustomBorderButton(
                 height: 44,
                 width: Get.width,
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 border: Border.all(width: 1, color: ColorResources.blue),
                 borderRadius: BorderRadius.circular(12),
                 boxShaow: const [ColorResources.shadow1],
                 child: Text(
-                  'Редактировать',
+                  'edit'.tr,
                   style: textMd.copyWith(color: ColorResources.blue),
                 ),
                 onTap: () {},
@@ -190,7 +200,7 @@ class ContractPageScreen extends StatelessWidget {
                   onTap: () {
                     Get.to(() => const SignContractScreen());
                   },
-                  title: 'Подписание'),
+                  title: 'signing'.tr),
             ),
           ],
         ),

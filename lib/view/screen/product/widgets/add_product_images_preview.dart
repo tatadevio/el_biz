@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../data/model/base/add_product_model.dart';
 import '../../../base/custom_image.dart';
+import 'review_photo_gallery.dart';
 
 class AddProductImagesPreview extends StatefulWidget {
-  const AddProductImagesPreview({super.key});
+  final AddProductModel productData;
+  const AddProductImagesPreview({super.key, required this.productData});
 
   @override
-  State<AddProductImagesPreview> createState() => _AddProductImagesPreviewState();
+  State<AddProductImagesPreview> createState() =>
+      _AddProductImagesPreviewState();
 }
 
 class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
@@ -22,9 +26,11 @@ class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
 
-    return BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
+    return BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, productController) {
       if (productController.pickedLogo.isEmpty) {
-        return CustomImage(image: '', height: height * 0.4, width: Get.width, radius: 12);
+        return CustomImage(
+            image: '', height: height * 0.4, width: Get.width, radius: 12);
       }
       return Column(
         children: [
@@ -32,11 +38,11 @@ class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
             padding: const EdgeInsets.all(0),
             child: InkWell(
               onTap: () {
-                // Get.to(() => PhotoGalleryView(
-                //       galleries: productDetailController.productDetailModel!.galleries,
-                //       productName: productDetailController.productDetailModel!.description,
-                //       selectedIndex: _selectImageIndex,
-                //     ));
+                Get.to(() => ReviewPhotoGalleryView(
+                      galleries: productController.pickedLogo,
+                      productName: widget.productData.productName ?? '',
+                      // selectedIndex: _selectImageIndex,
+                    ));
               },
               child: SizedBox(
                 height: height * 0.4,
@@ -70,11 +76,14 @@ class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
                             bottom: 10,
                             right: 10,
                             child: Container(
-                              decoration: BoxDecoration(color: Colors.white38, borderRadius: BorderRadius.circular(6.0)),
+                              decoration: BoxDecoration(
+                                  color: Colors.white38,
+                                  borderRadius: BorderRadius.circular(6.0)),
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 12.0, top: 5, bottom: 5, right: 12),
+                                padding: const EdgeInsets.only(
+                                    left: 12.0, top: 5, bottom: 5, right: 12),
                                 child: Text(
-                                  "${i + 1}/${productController.pickedLogo.length + 1}",
+                                  "${i + 1}/${productController.pickedLogo.length}",
                                   style: const TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -101,8 +110,8 @@ class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
                 itemCount: productController.pickedLogo.length,
                 // productDetailController.productDetailModel!.galleries.length,
                 itemBuilder: (context, index) {
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(10),
+                  return GestureDetector(
+                    // borderRadius: BorderRadius.circular(10),
                     onTap: () {
                       _pageController.jumpToPage(index);
                     },
@@ -111,7 +120,9 @@ class _AddProductImagesPreviewState extends State<AddProductImagesPreview> {
                       width: 70,
                       margin: const EdgeInsets.symmetric(horizontal: 5),
                       decoration: BoxDecoration(
-                        border: index == _selectImageIndex ? Border.all(width: 2, color: Colors.white) : null,
+                        border: index != _selectImageIndex
+                            ? Border.all(width: 1, color: Colors.white)
+                            : null,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ClipRRect(

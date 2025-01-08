@@ -5,10 +5,9 @@ class ErrorResponse {
 
   List<Errors> get errors => _errors;
 
-  ErrorResponse({
-      required List<Errors> errors}){
+  ErrorResponse({required List<Errors> errors}) {
     _errors = errors;
-}
+  }
 
   ErrorResponse.fromJson(dynamic json) {
     if (json["errors"] != null) {
@@ -21,12 +20,11 @@ class ErrorResponse {
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    if (_errors != null) {
+    if (_errors.isNotEmpty) {
       map["errors"] = _errors.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
 
 /// code : "l_name"
@@ -39,12 +37,10 @@ class Errors {
   String get code => _code;
   String get message => _message;
 
-  Errors({
-      required String code,
-      required String message}){
+  Errors({required String code, required String message}) {
     _code = code;
     _message = message;
-}
+  }
 
   Errors.fromJson(dynamic json) {
     _code = json["code"];
@@ -57,5 +53,4 @@ class Errors {
     map["message"] = _message;
     return map;
   }
-
 }

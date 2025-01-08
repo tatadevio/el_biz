@@ -1,38 +1,45 @@
-import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/product_detail_controller.dart';
 import '../../../data/model/response/product/product_model.dart';
 import '../../../data/repo/product_repo.dart';
 import '../../../helper/route_helper.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/custom_image.dart';
-import '../../base/custom_toast.dart';
 
 class ProductCard extends StatelessWidget {
   final bool isFavorite;
   final String isEdit;
   final List<ProductItem> productItem;
 
-  const ProductCard({Key? key, required this.isFavorite, required this.productItem, required this.isEdit}) : super(key: key);
+  const ProductCard(
+      {Key? key,
+      required this.isFavorite,
+      required this.productItem,
+      required this.isEdit})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
     var width = Get.width;
-    bool _isLogin = context.watch<AuthBloc>().state.isLoggedIn;
+    // bool _isLogin = context.watch<AuthBloc>().state.isLoggedIn;
     // Get.find<AuthController>().isLoggedIn();
-    return BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
+    return BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, productController) {
       return Padding(
         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 18.0),
         child: GridView.builder(
           padding: EdgeInsets.zero,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: isEdit != "" ? 1 / 1.68 : 1 / 1.68, crossAxisSpacing: 12, mainAxisSpacing: 12),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: isEdit != "" ? 1 / 1.68 : 1 / 1.68,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: productItem.length,
@@ -65,7 +72,9 @@ class ProductCard extends StatelessWidget {
                       children: [
                         CustomImage(
                           radius: 10.0,
-                          image: productItem[i].galleries.isNotEmpty ? productItem[i].galleries[0].image : "",
+                          image: productItem[i].galleries.isNotEmpty
+                              ? productItem[i].galleries[0].image
+                              : "",
                           height: height * 0.2,
                           width: width * 0.48,
                         ),
@@ -103,7 +112,9 @@ class ProductCard extends StatelessWidget {
                                 height: height * 0.006,
                               ),
                               Text(
-                                productItem[i].name.isNotEmpty ? productItem[i].name : productItem[i].description,
+                                productItem[i].name.isNotEmpty
+                                    ? productItem[i].name
+                                    : productItem[i].description,
                                 style: const TextStyle(color: Colors.black87),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -123,7 +134,8 @@ class ProductCard extends StatelessWidget {
                                         ),
                                       )
                                     : Text(
-                                        productItem[i].exchangePriceAfterDiscount,
+                                        productItem[i]
+                                            .exchangePriceAfterDiscount,
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -185,7 +197,10 @@ class ProductCard extends StatelessWidget {
                               ),
                               const Text(
                                 "VIP",
-                                style: TextStyle(color: ColorResources.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: ColorResources.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           )),

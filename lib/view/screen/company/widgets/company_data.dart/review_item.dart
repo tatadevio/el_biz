@@ -1,4 +1,3 @@
-import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/screen/company/widgets/company_data.dart/review_reply_bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -58,39 +57,43 @@ class ReviewItem extends StatelessWidget {
                 // ),
                 InkWell(
                     onTap: () {
-                      Get.dialog(CustomDialog(
-                          widget: SimpleDialog(
-                        backgroundColor: ColorResources.white,
-                        children: [
-                          ListTile(
-                            onTap: () {
-                              Get.back();
-                            },
-                            title: Text(
-                              'Пожаловаться',
-                              style: textMd.copyWith(color: ColorResources.titleColor),
+                      Get.dialog(
+                        SimpleDialog(
+                          backgroundColor: ColorResources.white,
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                Get.back();
+                              },
+                              title: Text(
+                                'complain'.tr,
+                                style: textMd.copyWith(
+                                    color: ColorResources.titleColor),
+                              ),
                             ),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Get.back();
-                            },
-                            title: Text(
-                              'Пожаловаться на ответ',
-                              style: textMd.copyWith(color: ColorResources.titleColor),
+                            ListTile(
+                              onTap: () {
+                                Get.back();
+                              },
+                              title: Text(
+                                'complain_about_reply'.tr,
+                                style: textMd.copyWith(
+                                    color: ColorResources.titleColor),
+                              ),
                             ),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Get.back();
-                            },
-                            title: Text(
-                              'Удалить отзыв',
-                              style: textMd.copyWith(color: ColorResources.red),
+                            ListTile(
+                              onTap: () {
+                                Get.back();
+                              },
+                              title: Text(
+                                'delete_review'.tr,
+                                style:
+                                    textMd.copyWith(color: ColorResources.red),
+                              ),
                             ),
-                          ),
-                        ],
-                      )));
+                          ],
+                        ),
+                      );
                     },
                     child: const Icon(Icons.more_vert)),
               ],
@@ -162,11 +165,12 @@ class ReviewItem extends StatelessWidget {
                     const ReviewReplyBottomWidget(),
                     backgroundColor: Colors.white,
                     isScrollControlled: true,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0)),
                   );
                 },
                 child: Text(
-                  'Ответить',
+                  'reply'.tr,
                   style: button16.copyWith(color: ColorResources.blue),
                 ),
               ),

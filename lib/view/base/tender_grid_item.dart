@@ -14,7 +14,7 @@ class TenderGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const ProductDetailScreen());
+        Get.to(() => const ProductDetailScreen(isProduct: false,));
       },
       child: Container(
         decoration: const BoxDecoration(

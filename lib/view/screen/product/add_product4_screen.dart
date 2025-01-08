@@ -11,7 +11,8 @@ import '../../base/custom_button.dart';
 class AddProduct4Screen extends StatefulWidget {
   final AddProductModel productData;
   final bool isEdit;
-  const AddProduct4Screen({super.key, required this.productData, required this.isEdit});
+  const AddProduct4Screen(
+      {super.key, required this.productData, required this.isEdit});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -45,7 +46,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Новый товар'),
+        title: Text('new_product'.tr),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -58,12 +59,12 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
               children: [
                 Expanded(
                   child: Text(
-                    'Выберите материал',
+                    'select_material'.tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                 ),
                 Text(
-                  'Выбрано: 0 из 20',
+                  '${"selected".tr}: ${materialData.where((item) => item['isChecked'] == true).length} ${"from".tr} ${materialData.length}',
                   style: body14,
                 ),
                 const SizedBox(
@@ -112,12 +113,14 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                 borderRadius: BorderRadius.circular(12),
                 boxShaow: const [ColorResources.shadow1],
                 child: Text(
-                  'Предпросмотр',
+                  'preview'.tr,
                   style: textMd.copyWith(color: ColorResources.blue),
                 ),
                 onTap: () {
                   selectedMaterials = [];
-                  selectedMaterials = materialData.where((item) => item['isChecked'] == false).toList();
+                  selectedMaterials = materialData
+                      .where((item) => item['isChecked'] == false)
+                      .toList();
                 },
               ),
             ),
@@ -130,14 +133,16 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                   height: Get.height,
                   onTap: () {
                     selectedMaterials = [];
-                    selectedMaterials = materialData.where((item) => item['isChecked'] == false).toList();
+                    selectedMaterials = materialData
+                        .where((item) => item['isChecked'] == false)
+                        .toList();
                     Get.to(() => PreviewProductScreen(
                           selectedMaterial: selectedMaterials,
                           productData: widget.productData,
                           isEdit: widget.isEdit,
                         ));
                   },
-                  title: 'Сохранить'),
+                  title: 'save'.tr),
             ),
           ],
         ),

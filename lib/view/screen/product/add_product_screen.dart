@@ -4,6 +4,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'add_product3_screen.dart';
@@ -60,7 +61,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Новый товар'),
+        title: Text('new_product'.tr),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -72,51 +73,76 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 height: 20,
               ),
               Text(
-                'Бренд',
+                'brand'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 10,
               ),
-              CustomTextField1(controller: brandController, hintColor: '', inputType: TextInputType.text, lableText: 'Например: Loft', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: brandController,
+                  hintColor: '',
+                  inputType: TextInputType.text,
+                  lableText: 'Например: Loft',
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField1(controller: productNameController, hintColor: '', inputType: TextInputType.text, lableText: 'Название товара', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: productNameController,
+                  hintColor: '',
+                  inputType: TextInputType.text,
+                  lableText: 'product_name'.tr,
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField1(controller: productCodeController, hintColor: '', inputType: TextInputType.text, lableText: 'Артикул товара', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: productCodeController,
+                  hintColor: '',
+                  inputType: TextInputType.text,
+                  lableText: 'product_code'.tr,
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
                   Expanded(
-                      flex: 6,
-                      child: CustomTextField1(
-                        controller: priceController,
-                        hintColor: '',
-                        inputType: TextInputType.number,
-                        lableText: 'Стоимость',
-                        leading: '',
-                        readOnly: false,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
-                      )),
+                    flex: 6,
+                    child: CustomTextField1(
+                      controller: priceController,
+                      hintColor: '',
+                      inputType: TextInputType.number,
+                      lableText: 'price'.tr,
+                      leading: '',
+                      readOnly: false,
+                      lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d*\.?\d*'),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     width: 5,
                   ),
                   Expanded(
-                      flex: 2,
-                      child: CustomTextField1(
-                        controller: currencyController,
-                        hintColor: '',
-                        inputType: TextInputType.none,
-                        lableText: 'Валюта',
-                        leading: '',
-                        readOnly: true,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
-                      )),
+                    flex: 2,
+                    child: CustomTextField1(
+                      controller: currencyController,
+                      hintColor: '',
+                      inputType: TextInputType.none,
+                      lableText: 'currency'.tr,
+                      leading: '',
+                      readOnly: true,
+                      lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(
@@ -125,16 +151,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
               Row(
                 children: [
                   Expanded(
-                      flex: 6,
-                      child: CustomTextField1(
-                        controller: quantityController,
-                        hintColor: '',
-                        inputType: TextInputType.number,
-                        lableText: 'Количество',
-                        leading: '',
-                        readOnly: false,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
-                      )),
+                    flex: 6,
+                    child: CustomTextField1(
+                      controller: quantityController,
+                      hintColor: '',
+                      inputType: TextInputType.number,
+                      lableText: 'quantity'.tr,
+                      leading: '',
+                      readOnly: false,
+                      lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     width: 5,
                   ),
@@ -147,7 +177,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         lableText: 'Ед.изм',
                         leading: '',
                         readOnly: true,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                        lableStyle:
+                            h16.copyWith(color: ColorResources.darkGray),
                       )),
                 ],
               ),
@@ -165,7 +196,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   });
                 },
                 title: Text(
-                  'Уточнять наличие',
+                  'check_availability'.tr,
                   style: body16.copyWith(color: ColorResources.darkGray),
                 ),
               ),
@@ -173,12 +204,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 height: 20,
               ),
               Text(
-                'Габариты в упаковке',
+                'dimensions_in_packaging'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               Row(
                 children: [
-                  Expanded(flex: 6, child: CustomTextField1(controller: dimensionsController, hintColor: '', inputType: TextInputType.text, lableText: 'Д/Ш/В. Например: 23/45/60', leading: '', readOnly: false)),
+                  Expanded(
+                    flex: 6,
+                    child: CustomTextField1(
+                      controller: dimensionsController,
+                      hintColor: '',
+                      inputType: TextInputType.text,
+                      lableText: 'Д/Ш/В. Например: 23/45/60',
+                      leading: '',
+                      readOnly: false,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d*\/?\d*\/?\d*'),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(
                     width: 5,
                   ),
@@ -191,7 +237,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         lableText: 'Ед.изм',
                         leading: '',
                         readOnly: true,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                        lableStyle:
+                            h16.copyWith(color: ColorResources.darkGray),
                       )),
                 ],
               ),
@@ -206,10 +253,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         controller: weightController,
                         hintColor: '',
                         inputType: TextInputType.text,
-                        lableText: 'Вес в упаковке',
+                        lableText: 'package_weight'.tr,
                         leading: '',
                         readOnly: false,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                        lableStyle:
+                            h16.copyWith(color: ColorResources.darkGray),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d*'),
+                          ),
+                        ],
                       )),
                   const SizedBox(
                     width: 5,
@@ -223,7 +276,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         lableText: 'Ед.изм',
                         leading: '',
                         readOnly: true,
-                        lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                        lableStyle:
+                            h16.copyWith(color: ColorResources.darkGray),
                       )),
                 ],
               ),
@@ -234,7 +288,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 controller: regionController,
                 hintColor: '',
                 inputType: TextInputType.text,
-                lableText: 'Страна производства',
+                lableText: 'country_of_manufacture'.tr,
                 leading: '',
                 readOnly: false,
                 lableStyle: h16.copyWith(color: ColorResources.darkGray),

@@ -12,7 +12,8 @@ class CompanyDescriptionScreen extends StatefulWidget {
   const CompanyDescriptionScreen({super.key});
 
   @override
-  State<CompanyDescriptionScreen> createState() => _CompanyDescriptionScreenState();
+  State<CompanyDescriptionScreen> createState() =>
+      _CompanyDescriptionScreenState();
 }
 
 class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {

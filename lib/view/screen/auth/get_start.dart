@@ -13,7 +13,13 @@ class GetStartScreen extends StatefulWidget {
   final String email;
   final String name;
   final String type;
-  const GetStartScreen({Key? key, required this.phoneNumber, required this.email, required this.name, required this.type}) : super(key: key);
+  const GetStartScreen(
+      {Key? key,
+      required this.phoneNumber,
+      required this.email,
+      required this.name,
+      required this.type})
+      : super(key: key);
 
   @override
   State<GetStartScreen> createState() => _GetStartScreenState();
@@ -21,10 +27,10 @@ class GetStartScreen extends StatefulWidget {
 
 class _GetStartScreenState extends State<GetStartScreen> {
   final TextEditingController _fNamecontroller = TextEditingController();
-  final TextEditingController _lNamecontroller = TextEditingController();
+  // final TextEditingController _lNamecontroller = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
+  // final TextEditingController _addressController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
@@ -43,14 +49,18 @@ class _GetStartScreenState extends State<GetStartScreen> {
       nextFocus: true,
       defaultDoneWidget: Text("next".tr),
       actions: [
-        if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
+        if (GetPlatform.isIOS)
+          KeyboardActionsItem(
+              displayArrows: false,
+              displayDoneButton: true,
+              focusNode: _nodeText1),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = Get.height;
+    // var height = Get.height;
     var width = Get.width;
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
@@ -60,7 +70,8 @@ class _GetStartScreenState extends State<GetStartScreen> {
         leadingWidth: 120,
         title: Text(
           "registration".tr,
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
         ),
       ),
       body: InkWell(
@@ -103,7 +114,9 @@ class _GetStartScreenState extends State<GetStartScreen> {
                         maxLength: 12,
                         controller: _phoneController,
                         keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly], // Only numbers can be entered
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ], // Only numbers can be entered
                         onChanged: (value) {},
                         onEditingComplete: () {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -112,13 +125,25 @@ class _GetStartScreenState extends State<GetStartScreen> {
                             fillColor: Theme.of(context).cardColor,
                             isDense: true,
                             filled: true,
-                            border: OutlineInputBorder(borderSide: const BorderSide(color: ColorResources.greyHard, width: 0.5), borderRadius: BorderRadius.circular(10.0)),
-                            focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: ColorResources.greyHard, width: 0.5), borderRadius: BorderRadius.circular(10.0)),
-                            enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: ColorResources.greyHard, width: 0.5), borderRadius: BorderRadius.circular(10.0)),
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: ColorResources.greyHard, width: 0.5),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: ColorResources.greyHard, width: 0.5),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: ColorResources.greyHard, width: 0.5),
+                                borderRadius: BorderRadius.circular(10.0)),
                             prefixIcon: CountryCodePicker(
-                              enabled: widget.phoneNumber.isEmpty ? true : false,
+                              enabled:
+                                  widget.phoneNumber.isEmpty ? true : false,
                               onChanged: (value) {
-                                context.read<AuthBloc>().add(UpdateCountryCode(value.dialCode!));
+                                context
+                                    .read<AuthBloc>()
+                                    .add(UpdateCountryCode(value.dialCode!));
                                 // authState.updateCountryCode(value.dialCode!);
                                 print(value.dialCode);
                               },
@@ -133,7 +158,8 @@ class _GetStartScreenState extends State<GetStartScreen> {
                               alignLeft: false,
                             ),
                             hintText: "phone_number".tr,
-                            hintStyle: const TextStyle(color: ColorResources.lightGrey),
+                            hintStyle: const TextStyle(
+                                color: ColorResources.lightGrey),
                             counterText: ""),
                       ),
                     ),
@@ -146,7 +172,10 @@ class _GetStartScreenState extends State<GetStartScreen> {
                     height: 10,
                   ),
                   TextFormField(
-                    readOnly: _emailController.text.isNotEmpty || widget.type == "3" ? true : false,
+                    readOnly:
+                        _emailController.text.isNotEmpty || widget.type == "3"
+                            ? true
+                            : false,
                     keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     validator: (va) {
@@ -157,9 +186,21 @@ class _GetStartScreenState extends State<GetStartScreen> {
                     },
                     decoration: InputDecoration(
                       isDense: true,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: ColorResources.hintColor.withOpacity(0.8))),
-                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: ColorResources.hintColor.withOpacity(0.8))),
-                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: ColorResources.hintColor.withOpacity(0.8))),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(
+                              color:
+                                  ColorResources.hintColor.withOpacity(0.8))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(
+                              color:
+                                  ColorResources.hintColor.withOpacity(0.8))),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(
+                              color:
+                                  ColorResources.hintColor.withOpacity(0.8))),
                       prefixIcon: const Icon(
                         Icons.email,
                         color: ColorResources.darkGray,
@@ -212,19 +253,28 @@ class _GetStartScreenState extends State<GetStartScreen> {
                             child: Center(
                               child: Text(
                                 "confirm".tr,
-                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 18),
                               ),
                             ),
-                            decoration: BoxDecoration(color: ColorResources.primary, borderRadius: BorderRadius.circular(12.0), boxShadow: [
-                              BoxShadow(
-                                  color: ColorResources.primary.withOpacity(0.3),
-                                  blurRadius: 24,
-                                  //spreadRadius: 20,
-                                  offset: const Offset(0, 8))
-                            ]),
+                            decoration: BoxDecoration(
+                                color: ColorResources.primary,
+                                borderRadius: BorderRadius.circular(12.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: ColorResources.primary
+                                          .withOpacity(0.3),
+                                      blurRadius: 24,
+                                      //spreadRadius: 20,
+                                      offset: const Offset(0, 8))
+                                ]),
                           ),
                         )
-                      : const Align(alignment: Alignment.center, child: CircularProgressIndicator()),
+                      : const Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator()),
                 ],
               ),
             ),
@@ -237,7 +287,8 @@ class _GetStartScreenState extends State<GetStartScreen> {
   Widget customTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+      style: const TextStyle(
+          fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
       textAlign: TextAlign.left,
     ).paddingOnly(bottom: 15);
   }

@@ -32,7 +32,7 @@ class _SignContractScreenState extends State<SignContractScreen> {
                     height: 20,
                   ),
                   Text(
-                    'Согласование между',
+                    'agreement_between'.tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                   const SizedBox(
@@ -45,7 +45,7 @@ class _SignContractScreenState extends State<SignContractScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Поставщик',
+                            'supplier'.tr,
                             style: body14.copyWith(color: ColorResources.gray),
                           ),
                         ),
@@ -54,12 +54,14 @@ class _SignContractScreenState extends State<SignContractScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Юр наименование',
-                                style: body16.copyWith(color: ColorResources.titleColor),
+                                'legal_name'.tr,
+                                style: body16.copyWith(
+                                    color: ColorResources.titleColor),
                               ),
                               Text(
                                 'ФИО директора',
-                                style: body16.copyWith(color: ColorResources.titleColor),
+                                style: body16.copyWith(
+                                    color: ColorResources.titleColor),
                               ),
                             ],
                           ),
@@ -74,7 +76,7 @@ class _SignContractScreenState extends State<SignContractScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Заказчик',
+                            'customer'.tr,
                             style: body14.copyWith(color: ColorResources.gray),
                           ),
                         ),
@@ -83,12 +85,14 @@ class _SignContractScreenState extends State<SignContractScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Юр наименование',
-                                style: body16.copyWith(color: ColorResources.titleColor),
+                                'legal_name'.tr,
+                                style: body16.copyWith(
+                                    color: ColorResources.titleColor),
                               ),
                               Text(
                                 'ФИО директора',
-                                style: body16.copyWith(color: ColorResources.titleColor),
+                                style: body16.copyWith(
+                                    color: ColorResources.titleColor),
                               ),
                             ],
                           ),
@@ -100,25 +104,30 @@ class _SignContractScreenState extends State<SignContractScreen> {
                     height: 20,
                   ),
                   Text(
-                    'Подписание договора',
+                    'signing_the_contract'.tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'Для того чтобы подписать договор, необходимо написать полное ФИО',
+                    'in_order_to_sign_the_contract'.tr,
                     style: body14.copyWith(color: ColorResources.gray),
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'ФИО Директора ',
+                    'full_name_of_the_director'.tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  CustomTextField(controller: directorNameController, hintColor: 'ФИО', inputType: TextInputType.name, leading: '', readOnly: false),
+                  CustomTextField(
+                      controller: directorNameController,
+                      hintColor: 'full_name'.tr,
+                      inputType: TextInputType.name,
+                      leading: '',
+                      readOnly: false),
                   CheckboxListTile(
                     value: termsAgreed,
                     onChanged: (val) {
@@ -129,7 +138,7 @@ class _SignContractScreenState extends State<SignContractScreen> {
                     activeColor: ColorResources.primary,
                     dense: true,
                     title: Text(
-                      'Я соглашаюсь с условиями договора',
+                      'i_agree_to_the_terms_of_the_agreement'.tr,
                       style: body14.copyWith(color: ColorResources.blackText),
                     ),
                   ),
@@ -153,7 +162,7 @@ class _SignContractScreenState extends State<SignContractScreen> {
                   Row(
                     children: [
                       Text(
-                        'Покупатель: ',
+                        'buyer'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                       Text(
@@ -166,7 +175,7 @@ class _SignContractScreenState extends State<SignContractScreen> {
                     height: 10,
                   ),
                   Text(
-                    'Вы получили электронный договор для подписания, если вы не согласны или вас не устраивают условия, отклоните подписание договора.',
+                    'you_have_received_an_electronic_contract_to_sign'.tr,
                     style: body14.copyWith(color: ColorResources.gray),
                   ),
                   const SizedBox(
@@ -175,12 +184,13 @@ class _SignContractScreenState extends State<SignContractScreen> {
                   CustomBorderButton(
                     height: 44,
                     width: Get.width,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                     border: Border.all(color: ColorResources.red, width: 1),
                     borderRadius: BorderRadius.circular(12),
                     boxShaow: const [ColorResources.shadow1],
                     child: Text(
-                      'Отклонить',
+                      'reject'.tr,
                       style: textMd.copyWith(color: ColorResources.red),
                     ),
                     onTap: () {},
@@ -197,7 +207,8 @@ class _SignContractScreenState extends State<SignContractScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'Подписать'),
+        child: CustomButton(
+            width: Get.width, height: 44, onTap: () {}, title: 'subscribe'.tr),
       ),
     );
   }

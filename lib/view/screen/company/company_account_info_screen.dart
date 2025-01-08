@@ -14,7 +14,8 @@ class CompanyAccountInfoScreen extends StatefulWidget {
   const CompanyAccountInfoScreen({super.key});
 
   @override
-  State<CompanyAccountInfoScreen> createState() => _CompanyAccountInfoScreenState();
+  State<CompanyAccountInfoScreen> createState() =>
+      _CompanyAccountInfoScreenState();
 }
 
 class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
@@ -40,14 +41,14 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Реквизиты",
+                    "details".tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Посмотреть банки',
+                        'view_banks'.tr,
                         style: button16.copyWith(color: ColorResources.blue),
                       ),
                       SvgPicture.asset(Images.svgArrowForwardIcon),
@@ -59,26 +60,44 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                 height: 10,
               ),
               Text(
-                'Счёт №1',
+                'account_no_1'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 10,
               ),
-              CustomTextField1(controller: accountName, hintColor: '', inputType: TextInputType.name, lableText: 'Дайте название для вашего счёта', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: accountName,
+                  hintColor: '',
+                  inputType: TextInputType.name,
+                  lableText: 'give_a_name_for_your_account'.tr,
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField1(controller: bikController, hintColor: '', inputType: TextInputType.text, lableText: 'БИК', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: bikController,
+                  hintColor: '',
+                  inputType: TextInputType.text,
+                  lableText: 'БИК',
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField1(controller: accountNumberController, hintColor: '', inputType: TextInputType.number, lableText: 'Номер счёта', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: accountNumberController,
+                  hintColor: '',
+                  inputType: TextInputType.number,
+                  lableText: 'account_number'.tr,
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 15,
               ),
-              const CustomButtonWithIcon(
-                title: 'Добавить реквизит',
+              CustomButtonWithIcon(
+                title: 'add_props'.tr,
                 svgIcon: Images.svgPlus,
                 isMaxSize: false,
                 textColor: ColorResources.gray,
@@ -185,7 +204,8 @@ Map<String, List<String>> convertContactsToMap(List<List<String>> contacts) {
   return contactMap;
 }
 
-Map<String, String> convertContactsToMapString(Map<String, List<String>> contactMap) {
+Map<String, String> convertContactsToMapString(
+    Map<String, List<String>> contactMap) {
   Map<String, String> mapString = {};
 
   contactMap.forEach((key, value) {
@@ -198,7 +218,8 @@ Map<String, String> convertContactsToMapString(Map<String, List<String>> contact
 
 String convertScheduleToString(List<dynamic> scheduleTiming) {
   // Convert each schedule to JSON format
-  List<String> schedules = scheduleTiming.map((schedule) => jsonEncode(schedule.toJson())).toList();
+  List<String> schedules =
+      scheduleTiming.map((schedule) => jsonEncode(schedule.toJson())).toList();
 
   // Join JSON strings with a delimiter (e.g., newline or comma)
   return schedules.join(', ');

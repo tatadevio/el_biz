@@ -10,6 +10,7 @@ import '../screen/product_detail/product_detail_screen.dart';
 
 class TenderListItem extends StatelessWidget {
   final bool isFavorite;
+
   const TenderListItem({super.key, this.isFavorite = false});
 
   @override
@@ -18,7 +19,9 @@ class TenderListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
-          Get.to(() => ProductDetailScreen());
+          Get.to(() => ProductDetailScreen(
+                isProduct: false,
+              ));
         },
         child: Container(
           height: 120,
@@ -90,7 +93,8 @@ class TenderListItem extends StatelessWidget {
                           'Количество: 20шт',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: body14.copyWith(color: Color.fromRGBO(71, 84, 103, 1)),
+                          style: body14.copyWith(
+                              color: Color.fromRGBO(71, 84, 103, 1)),
                         ),
                         const SizedBox(
                           height: 5,
@@ -99,7 +103,8 @@ class TenderListItem extends StatelessWidget {
                           'Бюджет: 50 000 сом',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: body14.copyWith(color: Color.fromRGBO(71, 84, 103, 1)),
+                          style: body14.copyWith(
+                              color: Color.fromRGBO(71, 84, 103, 1)),
                         ),
                         const SizedBox(
                           height: 5,

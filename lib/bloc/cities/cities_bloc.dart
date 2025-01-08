@@ -1,5 +1,4 @@
 import 'package:el_biz/data/repo/cities_repo.dart';
-import 'package:el_biz/helper/get_di.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,8 +33,13 @@ class CitiesBloc extends Bloc<CitiesEvent, CitiesState> {
       if (response.statusCode == 200) {
         final model = CitesModel.fromJson(response.body);
 
-        final updatedCities = event.reload ? model.data.items : List<CityItem>.from(state.cityItem)
-          ..addAll(model.data.items);
+        List<CityItem> updatedCities;
+        updatedCities = model.data.items;
+
+        // event.reload
+        //     ? model.data.items
+        //     : List<CityItem>.from(state.cityItem)
+        //   ..addAll(model.data.items);
 
         emit(state.copywith(
           isLoading: false,

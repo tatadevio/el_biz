@@ -6,6 +6,7 @@ import 'package:el_biz/view/screen/company/widgets/company_data.dart/review_item
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/utils.dart';
 
 class MyReviewsScreen extends StatelessWidget {
   const MyReviewsScreen({super.key});
@@ -14,15 +15,16 @@ class MyReviewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Мои отзывы'),
+        title: Text('my_reviews'.tr),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<ReviewBloc, ReviewState>(builder: (context, reviewController) {
+        child: BlocBuilder<ReviewBloc, ReviewState>(
+            builder: (context, reviewController) {
           if (reviewController.myReviews!.isEmpty) {
             return Center(
               child: Text(
-                'Вы еще не оставляли отзывов',
+                'you_havent_left_any_reviews_yet'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
             );
@@ -115,7 +117,7 @@ class MyReviewsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Удалить отзыв',
+                'delete_review'.tr,
                 style: button16.copyWith(color: ColorResources.red),
               ),
             ],

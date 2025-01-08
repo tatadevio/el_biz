@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 
-import '../../../controller/product_controller.dart';
 import '../../../data/model/response/category/category_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/appConstant.dart';
@@ -24,7 +22,13 @@ class Categories extends StatefulWidget {
   final String id;
   final bool fromFavSearch;
   final List<CategoriesItem> categoryItem;
-  const Categories({Key? key, required this.title, required this.categoryItem, required this.id, this.fromFavSearch = false}) : super(key: key);
+  const Categories(
+      {Key? key,
+      required this.title,
+      required this.categoryItem,
+      required this.id,
+      this.fromFavSearch = false})
+      : super(key: key);
 
   @override
   State<Categories> createState() => _CategoriesState();
@@ -53,13 +57,15 @@ class _CategoriesState extends State<Categories> {
     return Scaffold(
       backgroundColor: ColorResources.background,
       extendBodyBehindAppBar: false,
-      body: BlocBuilder<ProductBloc, ProductState>(builder: (context, productState) {
+      body: BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, productState) {
         return CustomScrollView(
           slivers: [
             SliverAppBar(
               backgroundColor: Theme.of(context).cardColor,
               leadingWidth: 25,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only()),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only()),
               title: Container(
                 decoration: BoxDecoration(
                   color: ColorResources.background,
@@ -76,11 +82,13 @@ class _CategoriesState extends State<Categories> {
                         border: InputBorder.none,
                         hintText: "search".tr,
                         filled: true,
-                        hintStyle: const TextStyle(color: ColorResources.greyLight),
+                        hintStyle:
+                            const TextStyle(color: ColorResources.greyLight),
                         fillColor: ColorResources.background,
                         prefixIcon: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: SvgPicture.asset(Images.svgSearch, color: ColorResources.greyLight),
+                          child: SvgPicture.asset(Images.svgSearch,
+                              color: ColorResources.greyLight),
                         )),
                   ),
                 ),
@@ -123,7 +131,11 @@ class _CategoriesState extends State<Categories> {
               SliverPersistentHeader(
                 delegate: SliverDelegate(
                   child: Container(
-                    decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: const BorderRadius.only(bottomRight: Radius.circular(24.0), bottomLeft: Radius.circular(24.0))),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(24.0),
+                            bottomLeft: Radius.circular(24.0))),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -135,24 +147,46 @@ class _CategoriesState extends State<Categories> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                for (int i = 0; i < widget.categoryItem.length; i++)
+                                for (int i = 0;
+                                    i < widget.categoryItem.length;
+                                    i++)
                                   InkWell(
                                     onTap: () {
                                       // productState.getProductWithCat(widget.categoryItem[i].id.toString(), widget.categoryItem[i].name);
-                                      context.read<ProductBloc>().add(GetProductWithCat(widget.categoryItem[i].id.toString(), widget.categoryItem[i].name));
+                                      context.read<ProductBloc>().add(
+                                          GetProductWithCat(
+                                              widget.categoryItem[i].id
+                                                  .toString(),
+                                              widget.categoryItem[i].name));
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: 10.0),
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: widget.categoryItem[i].id.toString() == productState.selectedSubCatId ? ColorResources.primary : Colors.white,
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            border: Border.all(color: ColorResources.hintColor.withOpacity(0.7))),
+                                            color: widget.categoryItem[i].id
+                                                        .toString() ==
+                                                    productState
+                                                        .selectedSubCatId
+                                                ? ColorResources.primary
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            border: Border.all(
+                                                color: ColorResources.hintColor
+                                                    .withOpacity(0.7))),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             widget.categoryItem[i].name,
-                                            style: TextStyle(fontSize: 18, color: widget.categoryItem[i].id.toString() == productState.selectedSubCatId ? Colors.white : ColorResources.black),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: widget.categoryItem[i].id
+                                                            .toString() ==
+                                                        productState
+                                                            .selectedSubCatId
+                                                    ? Colors.white
+                                                    : ColorResources.black),
                                           ),
                                         ),
                                       ),
@@ -174,7 +208,8 @@ class _CategoriesState extends State<Categories> {
               children: !productState.isCatLoading
                   ? [
                       productState.catProductItem.isNotEmpty
-                          ? BlocBuilder<ProductBloc, ProductState>(builder: (context, productState) {
+                          ? BlocBuilder<ProductBloc, ProductState>(
+                              builder: (context, productState) {
                               return ProductCard(
                                 isFavorite: false,
                                 isEdit: "",
@@ -189,7 +224,12 @@ class _CategoriesState extends State<Categories> {
                               imageWidget: Container(
                                 height: 50,
                                 width: 50,
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: const Color(0xffF2F4F7), border: Border.all(color: const Color(0xffF9FAFB), width: 7.2)),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: const Color(0xffF2F4F7),
+                                    border: Border.all(
+                                        color: const Color(0xffF9FAFB),
+                                        width: 7.2)),
                                 child: SvgPicture.asset(
                                   Images.svgSearch,
                                   color: ColorResources.primary,
@@ -199,12 +239,14 @@ class _CategoriesState extends State<Categories> {
                                 Get.back();
                               },
                             ),
-                      if (productState.catProductItem.isNotEmpty && context.read<AuthBloc>().state.isLoggedIn)
+                      if (productState.catProductItem.isNotEmpty &&
+                          context.read<AuthBloc>().state.isLoggedIn)
                         Positioned(
                           top: 40,
                           child: InkWell(
                             onTap: () {
-                              print("${AppConstants.productWithCatId}${widget.id}");
+                              print(
+                                  "${AppConstants.productWithCatId}${widget.id}");
 
                               setState(() {
                                 isFollow = !isFollow;
@@ -218,7 +260,9 @@ class _CategoriesState extends State<Categories> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: !isFollow ? Colors.white : ColorResources.primary,
+                                  color: !isFollow
+                                      ? Colors.white
+                                      : ColorResources.primary,
                                   borderRadius: BorderRadius.circular(30.0),
                                   border: Border.all(
                                     color: ColorResources.primary,
@@ -237,7 +281,9 @@ class _CategoriesState extends State<Categories> {
                                           ),
                                           Text(
                                             "unfollow_this_search".tr,
-                                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
                                           )
                                         ],
                                       )
@@ -252,7 +298,9 @@ class _CategoriesState extends State<Categories> {
                                           ),
                                           Text(
                                             "follow_this_search".tr,
-                                            style: const TextStyle(color: ColorResources.primary, fontSize: 18),
+                                            style: const TextStyle(
+                                                color: ColorResources.primary,
+                                                fontSize: 18),
                                           )
                                         ],
                                       ),
@@ -276,7 +324,8 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
   SliverDelegate({required this.child});
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return child;
   }
 
@@ -288,6 +337,8 @@ class SliverDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverDelegate oldDelegate) {
-    return oldDelegate.maxExtent != 80 || oldDelegate.minExtent != 80 || child != oldDelegate.child;
+    return oldDelegate.maxExtent != 80 ||
+        oldDelegate.minExtent != 80 ||
+        child != oldDelegate.child;
   }
 }

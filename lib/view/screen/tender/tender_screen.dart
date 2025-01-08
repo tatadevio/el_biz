@@ -8,7 +8,6 @@ import 'package:el_biz/view/base/tender_grid_item.dart';
 import 'package:el_biz/view/base/tender_list_item.dart';
 import 'package:el_biz/view/screen/category/main_categories.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
-import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -50,11 +49,12 @@ class _TenderScreenState extends State<TenderScreen> {
 
   void _scrollToTop() {
     _scrollController.animateTo(
-      0, // Scroll to the top
-      duration: Duration(milliseconds: 500),
+      0,
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,12 +85,14 @@ class _TenderScreenState extends State<TenderScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => MainCategories(type: true, fromHome: true, screenName: '/AddNewTender'));
+                  Get.to(() => const MainCategories(
+                      type: true, fromHome: true, screenName: '/AddNewTender'));
                   // Get.to(() => const AddProductScreen());
                 },
                 child: Container(
                   height: 40,
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       12,
@@ -126,9 +128,11 @@ class _TenderScreenState extends State<TenderScreen> {
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(55),
-            child: BlocBuilder<TendersBloc, TendersState>(builder: (context, tendersController) {
+            child: BlocBuilder<TendersBloc, TendersState>(
+                builder: (context, tendersController) {
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                 ),
@@ -137,11 +141,12 @@ class _TenderScreenState extends State<TenderScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        Get.to(() => ProductsFilterScreen());
+                        Get.to(() => const ProductsFilterScreen());
                       },
                       child: Container(
                         height: 40,
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 14),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                             12,
@@ -180,12 +185,14 @@ class _TenderScreenState extends State<TenderScreen> {
                     Expanded(
                       child: Container(
                         height: 40,
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 14),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                             12,
                           ),
-                          border: Border.all(width: 1, color: ColorResources.lgColor),
+                          border: Border.all(
+                              width: 1, color: ColorResources.lgColor),
                           color: ColorResources.lightBlue,
                           boxShadow: const [
                             BoxShadow(
@@ -207,7 +214,8 @@ class _TenderScreenState extends State<TenderScreen> {
                             ),
                             Text(
                               'new'.tr,
-                              style: body14.copyWith(color: ColorResources.gray),
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
                             ),
                           ],
                         ),
@@ -217,24 +225,32 @@ class _TenderScreenState extends State<TenderScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        context.read<TendersBloc>().add(const UpdateGridView(true));
+                        context
+                            .read<TendersBloc>()
+                            .add(const UpdateGridView(true));
                         // tendersController.updateGridView(true);
                       },
                       child: Container(
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: tendersController.isGridView ? ColorResources.primary : null,
+                          color: tendersController.isGridView
+                              ? ColorResources.primary
+                              : null,
                           border: Border.all(
                             width: 1,
-                            color: tendersController.isGridView ? ColorResources.primary : ColorResources.lgColor,
+                            color: tendersController.isGridView
+                                ? ColorResources.primary
+                                : ColorResources.lgColor,
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           Images.svgCategory,
-                          color: tendersController.isGridView ? ColorResources.white : ColorResources.gray,
+                          color: tendersController.isGridView
+                              ? ColorResources.white
+                              : ColorResources.gray,
                         ),
                       ),
                     ),
@@ -244,24 +260,32 @@ class _TenderScreenState extends State<TenderScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
-                        context.read<TendersBloc>().add(const UpdateGridView(false));
+                        context
+                            .read<TendersBloc>()
+                            .add(const UpdateGridView(false));
                         // tendersController.updateGridView(false);
                       },
                       child: Container(
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: tendersController.isGridView ? null : ColorResources.primary,
+                          color: tendersController.isGridView
+                              ? null
+                              : ColorResources.primary,
                           border: Border.all(
                             width: 1,
-                            color: !tendersController.isGridView ? ColorResources.primary : ColorResources.lgColor,
+                            color: !tendersController.isGridView
+                                ? ColorResources.primary
+                                : ColorResources.lgColor,
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           Images.svgList,
-                          color: !tendersController.isGridView ? ColorResources.white : ColorResources.gray,
+                          color: !tendersController.isGridView
+                              ? ColorResources.white
+                              : ColorResources.gray,
                         ),
                       ),
                     ),
@@ -272,20 +296,26 @@ class _TenderScreenState extends State<TenderScreen> {
           )),
       body: Stack(
         children: [
-          BlocBuilder<TendersBloc, TendersState>(builder: (context, tendersController) {
+          BlocBuilder<TendersBloc, TendersState>(
+              builder: (context, tendersController) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: tendersController.isGridView
                   ? GridView.builder(
-                controller: _scrollController,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.65),
+                      controller: _scrollController,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 0.65),
                       itemCount: 10,
                       itemBuilder: (context, index) {
                         return const TenderGridItem();
                       },
                     )
                   : ListView.builder(
-                controller: _scrollController,
+                      controller: _scrollController,
                       itemCount: 10,
                       itemBuilder: (context, index) {
                         return const TenderListItem();
@@ -302,11 +332,14 @@ class _TenderScreenState extends State<TenderScreen> {
                 child: Container(
                   height: 32,
                   width: 32,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: ColorResources.primary,
                   ),
-                  child: Icon(Icons.keyboard_arrow_up, color: Colors.white,),
+                  child: const Icon(
+                    Icons.keyboard_arrow_up,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

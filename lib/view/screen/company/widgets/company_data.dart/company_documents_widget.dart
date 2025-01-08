@@ -15,7 +15,8 @@ class CompanyDocumentsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CompanyBloc, CompanyState>(builder: (context, companyState) {
+    return BlocBuilder<CompanyBloc, CompanyState>(
+        builder: (context, companyState) {
       if (companyState.isLoading) {
         return const SizedBox(
           height: 100,
@@ -47,7 +48,10 @@ class CompanyDocumentsWidget extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  document.documentType == 'file' ? SvgPicture.asset(Images.svgFile) : CustomImage(image: '', height: 32, width: 32, radius: 0),
+                  document.documentType == 'file'
+                      ? SvgPicture.asset(Images.svgFile)
+                      : CustomImage(
+                          image: '', height: 32, width: 32, radius: 0),
                   const SizedBox(
                     width: 5,
                   ),
@@ -63,14 +67,16 @@ class CompanyDocumentsWidget extends StatelessWidget {
                           children: [
                             Text(
                               document.size,
-                              style: body14.copyWith(color: ColorResources.gray),
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
                             ),
                             const SizedBox(
                               width: 10,
                             ),
                             Text(
                               document.date,
-                              style: body14.copyWith(color: ColorResources.gray),
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
                             ),
                           ],
                         ),
@@ -87,7 +93,10 @@ class CompanyDocumentsWidget extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        Get.dialog(CustomDialog(widget: AlertDialog(content: deleteDocument())));
+                        Get.dialog(CustomDialog(
+                            widget: AlertDialog(
+                                backgroundColor: Colors.white,
+                                content: deleteDocument())));
                       },
                       child: Text(
                         'delete_document'.tr,
@@ -110,10 +119,13 @@ class CompanyDocumentsWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SvgPicture.asset(
-            Images.svgBoxIcon2,
+          Container(
             height: 48,
             width: 48,
+            decoration: const BoxDecoration(
+                color: ColorResources.lightBlue, shape: BoxShape.circle),
+            alignment: Alignment.center,
+            child: SvgPicture.asset(Images.svgHelpCircle),
           ),
           const SizedBox(
             height: 10,
@@ -134,7 +146,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
                   onTap: () {
                     Get.back();
                   },
-                  title: 'cancel',
+                  title: 'cancel'.tr,
                   color: ColorResources.lgColor,
                   textColor: ColorResources.gray,
                 ),
@@ -149,7 +161,7 @@ class CompanyDocumentsWidget extends StatelessWidget {
                   onTap: () {
                     Get.back();
                   },
-                  title: 'delete',
+                  title: 'delete'.tr,
                   color: ColorResources.red,
                 ),
               ),

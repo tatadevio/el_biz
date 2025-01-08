@@ -1,5 +1,6 @@
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/base/check_box_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_like_button.dart';
 import 'package:el_biz/view/screen/product_detail/product_detail_screen.dart';
@@ -9,7 +10,14 @@ import 'package:get/get.dart';
 
 class ProductGridItem extends StatelessWidget {
   final bool isFavorite;
-  const ProductGridItem({super.key, this.isFavorite = false});
+  final bool isSelectProduct;
+  final int? productId;
+
+  const ProductGridItem(
+      {super.key,
+      this.isFavorite = false,
+      this.isSelectProduct = false,
+      this.productId});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +37,25 @@ class ProductGridItem extends StatelessWidget {
             Expanded(
               child: Stack(
                 children: [
-                  CustomImage(image: '', height: Get.height, width: Get.width, radius: 16),
-                  // Image.asset(Images.splashLogo),
-                  Positioned(
-                    right: 5,
-                    top: 5,
-                    child: CustomLikeButton(isFavorite: isFavorite),
-                  ),
+                  CustomImage(
+                      image: '',
+                      height: Get.height,
+                      width: Get.width,
+                      radius: 16),
+                  if (!isSelectProduct)
+                    Positioned(
+                      right: 5,
+                      top: 5,
+                      child: CustomLikeButton(isFavorite: isFavorite),
+                    ),
+                  if (isSelectProduct)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: CheckBoxButton(
+                        productId: productId,
+                      ),
+                    ),
                 ],
               ),
             ),

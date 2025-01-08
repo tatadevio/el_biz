@@ -69,11 +69,11 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
   ];
 
   List<String> ratingList = [
-    'Компании с рейтингом 4 и 5',
-    'Компании с рейтингом 2 и 3',
-    'Все компании',
+    'companies_rated_4_and_5',
+    'companies_rated_2_and_3',
+    'all_companies',
   ];
-  String selectedRating = 'Компании с рейтингом 4 и 5';
+  String selectedRating = 'companies_rated_4_and_5';
   bool isVerifiedCompany = false;
 
   List<String> colors = [
@@ -91,12 +91,17 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
   String selectedColor = '';
 
   List<String> priceOptions = [
-    'Цена без учёта налогов',
-    'Цена включая НДС',
+    'price_excuding_taxes',
+    'price_including_VAT',
   ];
   String selectedPriceOption = '';
 
-  List<String> dimensions = ['L(40x56x40)', 'S(40x56x40)', 'XL(60x70x60)', 'Все размеры'];
+  List<String> dimensions = [
+    'L(40x56x40)',
+    'S(40x56x40)',
+    'XL(60x70x60)',
+    'all_sizes'
+  ];
   Map<String, bool> selectedDimensions = {};
   double priceSlider = 0.5;
 
@@ -116,19 +121,25 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
         elevation: 0,
         title: Text(
           "filter".tr,
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
         actions: [
           Center(
-            child: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
+            child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, productController) {
               return InkWell(
                 onTap: () {
                   // productController.updateNameId("", "");
                   // Get.find<PostAdController>().addCategoryName("", false);
                   // Get.find<PostAdController>().updateCategoryId("", "");
                   // Get.find<PostAdController>().attributeItem.clear();
-                  context.read<PostAdBloc>().add(const AddCategoryName("", false));
-                  context.read<PostAdBloc>().add(const UpdateCategoryId("", ""));
+                  context
+                      .read<PostAdBloc>()
+                      .add(const AddCategoryName("", false));
+                  context
+                      .read<PostAdBloc>()
+                      .add(const UpdateCategoryId("", ""));
                   // productController.selectCurrency("");
                   // productController.changeCityId("", "");
                   value = 0;
@@ -138,7 +149,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: Text(
-                    "Сбросить".tr,
+                    "reset".tr,
                     style: button16.copyWith(color: ColorResources.red),
                   ),
                 ),
@@ -153,7 +164,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
         },
         child: FormBuilder(
           key: _formKey,
-          child: BlocBuilder<ProductBloc, ProductState>(builder: (context, productController) {
+          child: BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, productController) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 0),
               child: SingleChildScrollView(
@@ -188,7 +200,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18.0, vertical: 15),
                         child: Column(
                           children: [
                             Row(
@@ -205,7 +218,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                 productController.selectedSubCatName == ""
                                     ? Text(
                                         "category".tr,
-                                        style: h16.copyWith(color: ColorResources.darkGray),
+                                        style: h16.copyWith(
+                                            color: ColorResources.darkGray),
                                       )
                                     : Text(
                                         productController.selectedSubCatName,
@@ -222,15 +236,27 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                 runSpacing: 8.0, // Vertical spacing
 
                                 crossAxisAlignment: WrapCrossAlignment.start,
-                                children: productController.filterCategories.map(
+                                children:
+                                    productController.filterCategories.map(
                                   (category) {
                                     return Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 14, vertical: 8),
                                           // margin: const EdgeInsets.all(3),
-                                          decoration: BoxDecoration(border: Border.all(width: 1, color: ColorResources.lgColor), borderRadius: BorderRadius.circular(12), color: Colors.white, boxShadow: const [ColorResources.shadow1]),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 1,
+                                                  color:
+                                                      ColorResources.lgColor),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: Colors.white,
+                                              boxShadow: const [
+                                                ColorResources.shadow1
+                                              ]),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -243,7 +269,10 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                               ),
                                               InkWell(
                                                 onTap: () {
-                                                  context.read<ProductBloc>().add(RemoveFilterCategory(category));
+                                                  context
+                                                      .read<ProductBloc>()
+                                                      .add(RemoveFilterCategory(
+                                                          category));
                                                 },
                                                 child: const Icon(
                                                   Icons.close,
@@ -277,12 +306,14 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                     children: [
                                       Text(
                                         "all_categories".tr,
-                                        style: button16.copyWith(color: ColorResources.blue),
+                                        style: button16.copyWith(
+                                            color: ColorResources.blue),
                                       ),
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      SvgPicture.asset(Images.svgArrowForwardIcon),
+                                      SvgPicture.asset(
+                                          Images.svgArrowForwardIcon),
                                     ],
                                   ),
                                 ),
@@ -301,15 +332,16 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Ключевые слова',
+                            'keywords'.tr,
                             style: h16.copyWith(color: ColorResources.darkGray),
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Все',
-                                style: button16.copyWith(color: ColorResources.blue),
+                                'all'.tr,
+                                style: button16.copyWith(
+                                    color: ColorResources.blue),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -337,19 +369,31 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                     onTap: () {
                                       // productController.updateKeywordSelected(keyword);
 
-                                      context.read<ProductBloc>().add(UpdateKeywordSelected(keyword));
+                                      context
+                                          .read<ProductBloc>()
+                                          .add(UpdateKeywordSelected(keyword));
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 15),
                                       decoration: BoxDecoration(
-                                        color: productController.keywordsSelected(keyword) ? ColorResources.green : null,
+                                        color: productController
+                                                .keywordsSelected(keyword)
+                                            ? ColorResources.green
+                                            : null,
                                         borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(width: 1, color: ColorResources.lgColor),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: ColorResources.lgColor),
                                       ),
                                       alignment: Alignment.center,
                                       child: Text(
                                         keyword,
-                                        style: body14.copyWith(color: productController.keywordsSelected(keyword) ? ColorResources.white : ColorResources.gray),
+                                        style: body14.copyWith(
+                                            color: productController
+                                                    .keywordsSelected(keyword)
+                                                ? ColorResources.white
+                                                : ColorResources.gray),
                                       ),
                                     ),
                                   ),
@@ -361,7 +405,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        'Высокий рейтинг',
+                        'high_rating'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -374,7 +418,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                           contentPadding: const EdgeInsets.all(0),
                           dense: true,
                           title: Text(
-                            ratingList[index],
+                            ratingList[index].tr,
                             style: body16.copyWith(color: ColorResources.gray),
                           ),
                           value: ratingList[index],
@@ -397,15 +441,16 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Материал',
+                            'material'.tr,
                             style: h16.copyWith(color: ColorResources.darkGray),
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Все',
-                                style: button16.copyWith(color: ColorResources.blue),
+                                'all'.tr,
+                                style: button16.copyWith(
+                                    color: ColorResources.blue),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -433,19 +478,30 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                     onTap: () {
                                       // productController.updateMaterialSelected(material);
 
-                                      context.read<ProductBloc>().add(UpdateMaterialSelected(material));
+                                      context.read<ProductBloc>().add(
+                                          UpdateMaterialSelected(material));
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 15),
                                       decoration: BoxDecoration(
-                                        color: productController.materialSelected(material) ? ColorResources.green : null,
+                                        color: productController
+                                                .materialSelected(material)
+                                            ? ColorResources.green
+                                            : null,
                                         borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(width: 1, color: ColorResources.lgColor),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: ColorResources.lgColor),
                                       ),
                                       alignment: Alignment.center,
                                       child: Text(
                                         material,
-                                        style: body14.copyWith(color: productController.materialSelected(material) ? ColorResources.white : ColorResources.gray),
+                                        style: body14.copyWith(
+                                            color: productController
+                                                    .materialSelected(material)
+                                                ? ColorResources.white
+                                                : ColorResources.gray),
                                       ),
                                     ),
                                   ),
@@ -461,15 +517,16 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Цвет',
+                            'color'.tr,
                             style: h16.copyWith(color: ColorResources.darkGray),
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Все',
-                                style: button16.copyWith(color: ColorResources.blue),
+                                'all'.tr,
+                                style: button16.copyWith(
+                                    color: ColorResources.blue),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -498,7 +555,9 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: hexToColor(color),
-                                  border: Border.all(color: ColorResources.lgColor, width: 0.88),
+                                  border: Border.all(
+                                      color: ColorResources.lgColor,
+                                      width: 0.88),
                                 ),
                                 alignment: Alignment.center,
                                 child: selectedColor == color
@@ -519,7 +578,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Размеры',
+                            'dimensions'.tr,
                             style: h16.copyWith(color: ColorResources.darkGray),
                           ),
                         ],
@@ -537,8 +596,9 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: ColorResources.primary,
                           title: Text(
-                            dimension,
-                            style: body16.copyWith(color: ColorResources.darkGray),
+                            dimension.tr,
+                            style:
+                                body16.copyWith(color: ColorResources.darkGray),
                           ),
                           value: selectedDimensions[dimension],
                           onChanged: (bool? value) {
@@ -554,7 +614,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        'Стоимость',
+                        'price1'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -567,7 +627,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                           contentPadding: const EdgeInsets.all(0),
                           dense: true,
                           title: Text(
-                            priceOptions[index],
+                            priceOptions[index].tr,
                             style: body16.copyWith(color: ColorResources.gray),
                           ),
                           value: priceOptions[index],
@@ -586,7 +646,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        'Цена',
+                        'price'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -635,7 +695,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                       child: Divider(),
                     ),
                     Text(
-                      'Валюта',
+                      'currency'.tr,
                       style: h16.copyWith(color: ColorResources.darkGray),
                     ),
                     const SizedBox(
@@ -644,37 +704,61 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
-                          width: width * 0.4,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              width: 1,
-                              color: ColorResources.green,
+                        InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            context
+                                .read<ProductBloc>()
+                                .add(const ChangeCurrency('KGS'));
+                          },
+                          child: Container(
+                            width: width * 0.4,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                width: 1,
+                                color:
+                                    productController.selectedCurrency == 'KGS'
+                                        ? ColorResources.green
+                                        : ColorResources.lgColor,
+                              ),
                             ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'KGS',
-                            style: body16.copyWith(color: ColorResources.gray),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'KGS',
+                              style:
+                                  body16.copyWith(color: ColorResources.gray),
+                            ),
                           ),
                         ),
-                        Container(
-                          width: width * 0.4,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              width: 1,
-                              color: ColorResources.lgColor,
-                              //  ColorResources.green,
+                        InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            context
+                                .read<ProductBloc>()
+                                .add(const ChangeCurrency('USD'));
+                          },
+                          child: Container(
+                            width: width * 0.4,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                width: 1,
+                                color:
+                                    productController.selectedCurrency == 'USD'
+                                        ? ColorResources.green
+                                        : ColorResources.lgColor,
+                                //  ColorResources.green,
+                              ),
                             ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'USD',
-                            style: body16.copyWith(color: ColorResources.gray),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'USD',
+                              style:
+                                  body16.copyWith(color: ColorResources.gray),
+                            ),
                           ),
                         ),
                       ],
@@ -692,7 +776,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
-        child: CustomButton(width: Get.width, height: 44, onTap: () {}, title: 'filters'.tr),
+        child: CustomButton(
+            width: Get.width, height: 44, onTap: () {}, title: 'filter'.tr),
       ),
     );
   }

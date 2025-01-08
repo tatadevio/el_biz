@@ -2,7 +2,6 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../utils/Images.dart';
 import '../../utils/color_resources.dart';
 
 class CustomButtonWithIcon extends StatelessWidget {
@@ -14,7 +13,16 @@ class CustomButtonWithIcon extends StatelessWidget {
   final Color svgIconColor;
   final Function()? onTap;
   final bool isMaxSize;
-  const CustomButtonWithIcon({super.key, required this.title, required this.svgIcon, this.borderColor, this.buttonColor = ColorResources.green, this.textColor = Colors.white, this.svgIconColor = Colors.white, this.onTap, this.isMaxSize = true});
+  const CustomButtonWithIcon(
+      {super.key,
+      required this.title,
+      required this.svgIcon,
+      this.borderColor,
+      this.buttonColor = ColorResources.green,
+      this.textColor = Colors.white,
+      this.svgIconColor = Colors.white,
+      this.onTap,
+      this.isMaxSize = true});
 
   @override
   Widget build(BuildContext context) {

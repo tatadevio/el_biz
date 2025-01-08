@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 import '../../../bloc/config/config_bloc.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -23,20 +22,20 @@ class _LoginScreenState extends State<LoginScreen> {
   // TextEditingController _controller = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   bool terms = false;
-  final FocusNode _nodeText1 = FocusNode();
+  final FocusNode phoneFocus = FocusNode();
   String phoneNumber = "";
 
-  KeyboardActionsConfig _buildConfig(BuildContext context) {
-    return KeyboardActionsConfig(
-      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-      keyboardBarColor: Colors.grey[200],
-      nextFocus: true,
-      defaultDoneWidget: Text("next".tr),
-      actions: [
-        if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
-      ],
-    );
-  }
+  // KeyboardActionsConfig _buildConfig(BuildContext context) {
+  //   return KeyboardActionsConfig(
+  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+  //     keyboardBarColor: Colors.grey[200],
+  //     nextFocus: true,
+  //     defaultDoneWidget: Text("next".tr),
+  //     actions: [
+  //       if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   Text(
-                    'Enter_your_phone_number_to_receive_an_authorization_code'.tr,
+                    'Enter_your_phone_number_to_receive_an_authorization_code'
+                        .tr,
                     textAlign: TextAlign.center,
                     style: body14,
                   ),
@@ -85,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Container(
                     // height: 64,
-                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 3, vertical: 6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white,
@@ -124,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Expanded(
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center, // Aligns both text and input in the center
+                            crossAxisAlignment: CrossAxisAlignment
+                                .center, // Aligns both text and input in the center
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(top: 0),
@@ -138,17 +140,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: TextFormField(
                                   maxLength: 10,
                                   controller: phoneController,
+                                  focusNode: phoneFocus,
                                   keyboardType: TextInputType.phone,
                                   decoration: const InputDecoration(
                                     counterText: "",
                                     isDense: true,
                                     isCollapsed: true,
 
-                                    contentPadding: EdgeInsets.symmetric(vertical: 5), // Adjust vertical padding as needed
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
-                                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
-                                    errorBorder: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
-                                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical:
+                                            5), // Adjust vertical padding as needed
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.zero,
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.zero,
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.zero,
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.zero,
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
                                   ),
                                   style: body16,
                                 ),
@@ -188,9 +205,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       width: Get.width * 0.9,
                       height: 48,
-                      decoration: BoxDecoration(color: ColorResources.blue, borderRadius: BorderRadius.circular(12.0), boxShadow: [
-                        const BoxShadow(color: Color.fromRGBO(16, 24, 40, 0.05), blurRadius: 2, spreadRadius: 0, offset: Offset(0, 1)),
-                      ]),
+                      decoration: BoxDecoration(
+                          color: ColorResources.blue,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color.fromRGBO(16, 24, 40, 0.05),
+                                blurRadius: 2,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1)),
+                          ]),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
@@ -221,7 +245,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   CheckboxListTile(
                     value: terms,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
                     controlAffinity: ListTileControlAffinity.leading,
                     activeColor: ColorResources.primary,
                     onChanged: (value) {

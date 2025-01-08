@@ -5,18 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../base/custom_button.dart';
-import '../../../base/custom_toast.dart';
 
 class VerifyPhoneScreen extends StatefulWidget {
   final String phone;
-  const VerifyPhoneScreen({Key? key, required this.phone}) : super(key: key);
+  const VerifyPhoneScreen({super.key, required this.phone});
 
   @override
   State<VerifyPhoneScreen> createState() => _VerifyPhoneScreenState();
 }
 
 class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -27,7 +26,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
-    var width = Get.width;
+    // var width = Get.width;
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -68,14 +67,16 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                     prefixIcon: CountryCodePicker(
                       enabled: false,
                       onChanged: (value) {
-                        context.read<AuthBloc>().add(UpdateCountryCode(value.dialCode!));
+                        context
+                            .read<AuthBloc>()
+                            .add(UpdateCountryCode(value.dialCode!));
                         // authState.updateCountryCode(value.dialCode!);
                         print(value.dialCode);
                       },
 
                       // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                       initialSelection: authState.countryCode,
-                      favorite: ['+996', 'KG'],
+                      favorite: const ['+996', 'KG'],
                       // optional. Shows only country name and flag
                       showCountryOnly: false,
                       // optional. Shows only country name and flag when popup is closed.
@@ -83,12 +84,22 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                       // optional. aligns the flag and the Text left
                       alignLeft: false,
                     ),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: ColorResources.hintColor.withOpacity(0.8))),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: ColorResources.hintColor.withOpacity(0.8))),
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0), borderSide: BorderSide(color: ColorResources.hintColor.withOpacity(0.8))),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                            color: ColorResources.hintColor.withOpacity(0.8))),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                            color: ColorResources.hintColor.withOpacity(0.8))),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(
+                            color: ColorResources.hintColor.withOpacity(0.8))),
                     hintText: "   --- --- ---",
                     counterText: "",
-                    hintStyle: const TextStyle(fontSize: 17, color: Colors.black),
+                    hintStyle:
+                        const TextStyle(fontSize: 17, color: Colors.black),
                   ),
                 ),
               ),

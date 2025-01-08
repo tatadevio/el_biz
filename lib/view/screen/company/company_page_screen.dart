@@ -30,17 +30,21 @@ class CompanyPageScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: const [
-                BoxShadow(
-                  blurRadius: 4,
-                  spreadRadius: -2,
-                  offset: Offset(0, 2),
-                  color: Color.fromRGBO(16, 24, 40, 0.05),
-                ),
-              ]),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 4,
+                      spreadRadius: -2,
+                      offset: Offset(0, 2),
+                      color: Color.fromRGBO(16, 24, 40, 0.05),
+                    ),
+                  ]),
               child: Column(
                 children: [
-                  CustomImage(image: '', height: 100, width: Get.width, radius: 12),
+                  CustomImage(
+                      image: '', height: 100, width: Get.width, radius: 12),
                   const SizedBox(
                     height: 20,
                   ),
@@ -57,14 +61,16 @@ class CompanyPageScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Садовая мебель Loft',
-                              style: h24.copyWith(color: ColorResources.darkGray),
+                              style:
+                                  h24.copyWith(color: ColorResources.darkGray),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Text(
                               'ОсОО Исхаков',
-                              style: body14.copyWith(color: ColorResources.gray),
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
                             ),
                             const SizedBox(
                               height: 5,
@@ -78,7 +84,8 @@ class CompanyPageScreen extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     'verified_user'.tr,
-                                    style: body14.copyWith(color: ColorResources.gray),
+                                    style: body14.copyWith(
+                                        color: ColorResources.gray),
                                   ),
                                 ),
                               ],
@@ -95,7 +102,8 @@ class CompanyPageScreen extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     'Бишкек, ул.Масалиева 12/3',
-                                    style: body14.copyWith(color: ColorResources.gray),
+                                    style: body14.copyWith(
+                                        color: ColorResources.gray),
                                   ),
                                 ),
                               ],
@@ -116,7 +124,8 @@ class CompanyPageScreen extends StatelessWidget {
                           children: [
                             Text(
                               '(0)',
-                              style: body14.copyWith(color: ColorResources.gray),
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
                             ),
                             RatingBar.builder(
                               initialRating: 0,
@@ -126,7 +135,8 @@ class CompanyPageScreen extends StatelessWidget {
                               itemCount: 5,
                               itemSize: 14,
                               ignoreGestures: true,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 0),
                               itemBuilder: (context, _) => const Icon(
                                 Icons.star,
                                 color: Colors.amber,
@@ -165,14 +175,17 @@ class CompanyPageScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: const [
-                BoxShadow(
-                  blurRadius: 4,
-                  spreadRadius: -2,
-                  offset: Offset(0, 2),
-                  color: Color.fromRGBO(16, 24, 40, 0.05),
-                ),
-              ]),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 4,
+                      spreadRadius: -2,
+                      offset: Offset(0, 2),
+                      color: Color.fromRGBO(16, 24, 40, 0.05),
+                    ),
+                  ]),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -182,11 +195,15 @@ class CompanyPageScreen extends StatelessWidget {
                       children: [
                         Text(
                           'opening_hours'.tr,
-                          style: body14.copyWith(color: ColorResources.darkGray, fontWeight: FontWeight.w700),
+                          style: body14.copyWith(
+                              color: ColorResources.darkGray,
+                              fontWeight: FontWeight.w700),
                         ),
                         Text(
                           'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
-                          style: body14.copyWith(color: ColorResources.darkGray, fontWeight: FontWeight.w400),
+                          style: body14.copyWith(
+                              color: ColorResources.darkGray,
+                              fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
@@ -199,12 +216,17 @@ class CompanyPageScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Юр. лицо: ',
-                          style: body14.copyWith(color: ColorResources.darkGray, fontWeight: FontWeight.w700),
+                          'legal_name'.tr,
+                          // 'Юр. лицо: ',
+                          style: body14.copyWith(
+                              color: ColorResources.darkGray,
+                              fontWeight: FontWeight.w700),
                         ),
                         Text(
                           'ОсОО “Loft”',
-                          style: body14.copyWith(color: ColorResources.darkGray, fontWeight: FontWeight.w400),
+                          style: body14.copyWith(
+                              color: ColorResources.darkGray,
+                              fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
@@ -250,7 +272,8 @@ class CompanyPageScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: isCompany
                 ? Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),

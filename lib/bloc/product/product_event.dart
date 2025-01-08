@@ -102,3 +102,21 @@ class RemoveFilterCategory extends ProductEvent {
   @override
   List<Object> get props => [categoryItem];
 }
+
+class ChangeCurrency extends ProductEvent {
+  final String currency;
+  const ChangeCurrency(this.currency);
+
+  @override
+  List<Object> get props => [currency];
+}
+
+class ChangeSlectedProduct extends ProductEvent {
+  final int productId;
+  const ChangeSlectedProduct(this.productId);
+
+  @override
+  List<Object> get props => [productId];
+}
+
+class ClearSelectedProduct extends ProductEvent {}

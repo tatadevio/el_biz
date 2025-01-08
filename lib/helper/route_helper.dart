@@ -40,7 +40,7 @@ class RouteHelper {
   ];
 
   static getRoute(Widget navigateTo) {
-    int _minimumVersion = 0;
+    // int _minimumVersion = 0;
     if (GetPlatform.isAndroid) {
       //_minimumVersion = Get.find<SplashController>().configModel.appMinimumVersionAndroid;
     } else if (GetPlatform.isIOS) {

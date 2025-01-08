@@ -8,10 +8,18 @@ import 'package:get/get.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
+import 'check_box_button.dart';
 
 class ProductListItem extends StatelessWidget {
   final bool isFavorite;
-  const ProductListItem({super.key, this.isFavorite = false});
+  final bool isSelectProduct;
+  final int? productId;
+
+  const ProductListItem(
+      {super.key,
+      this.isFavorite = false,
+      this.isSelectProduct = false,
+      this.productId});
 
   @override
   Widget build(BuildContext context) {
@@ -33,31 +41,40 @@ class ProductListItem extends StatelessWidget {
                   //   height: 120,
                   //   width: 100,
                   // ),
-                  Positioned(
-                    right: 10,
-                    top: 5,
-                    child: Container(
-                      height: 32,
-                      width: 32,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 2,
-                            spreadRadius: 0,
-                            offset: Offset(0, 1),
-                            color: Color.fromRGBO(16, 24, 40, 0.05),
-                          ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(
-                        isFavorite ? Images.svgHeart : Images.svgHeartBorder,
-                        color: isFavorite ? ColorResources.primaryRed : null,
+                  if (!isSelectProduct)
+                    Positioned(
+                      right: 10,
+                      top: 5,
+                      child: Container(
+                        height: 32,
+                        width: 32,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 2,
+                              spreadRadius: 0,
+                              offset: Offset(0, 1),
+                              color: Color.fromRGBO(16, 24, 40, 0.05),
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: SvgPicture.asset(
+                          isFavorite ? Images.svgHeart : Images.svgHeartBorder,
+                          color: isFavorite ? ColorResources.primaryRed : null,
+                        ),
                       ),
                     ),
-                  ),
+                  if (isSelectProduct)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: CheckBoxButton(
+                        productId: productId,
+                      ),
+                    ),
                 ],
               ),
               const SizedBox(
@@ -105,7 +122,8 @@ class ProductListItem extends StatelessWidget {
                           itemCount: 5,
                           itemSize: 14,
                           ignoreGestures: true,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: ColorResources.yellow,

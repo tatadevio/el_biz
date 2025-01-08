@@ -2,10 +2,10 @@
 //
 //     final editAdsModel = editAdsModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-EditAdsModel editAdsModelFromJson(String str) => EditAdsModel.fromJson(json.decode(str));
+EditAdsModel editAdsModelFromJson(String str) =>
+    EditAdsModel.fromJson(json.decode(str));
 
 String editAdsModelToJson(EditAdsModel data) => json.encode(data.toJson());
 
@@ -23,18 +23,18 @@ class EditAdsModel {
   String status;
 
   factory EditAdsModel.fromJson(Map<String, dynamic> json) => EditAdsModel(
-    message: json["message"],
-    data: EditAdsItem.fromJson(json["data"]),
-    statusCode: json["status_code"],
-    status: json["status"],
-  );
+        message: json["message"],
+        data: EditAdsItem.fromJson(json["data"]),
+        statusCode: json["status_code"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": data.toJson(),
-    "status_code": statusCode,
-    "status": status,
-  };
+        "message": message,
+        "data": data.toJson(),
+        "status_code": statusCode,
+        "status": status,
+      };
 }
 
 class EditAdsItem {
@@ -99,66 +99,69 @@ class EditAdsItem {
   String address;
 
   factory EditAdsItem.fromJson(Map<String, dynamic> json) => EditAdsItem(
-    id: json["id"],
-    categoryId: json["category_id"],
-    cityId: json["city_id"],
-    currency: json["currency"],
-    price: json["price"],
-    name: json["name"],
-    isValidDiscount: json["is_valid_discount"],
-    discountRemainingDays: json["discount_remaining_days"],
-    priceAfterDiscount: json["price_after_discount"],
-    discount: json["discount"],
-    discountStartDate: DateTime.parse(json["discount_start_date"]),
-    attribute: List<Attribute>.from(json["attribute"].map((x) => Attribute.fromJson(x))),
-    parentCats: List<ParentCat>.from(json["parent_cats"].map((x) => ParentCat.fromJson(x))),
-    discountEndDate: DateTime.parse(json["discount_end_date"]),
-    description: json["description"],
-    galleries: List<Gallery>.from(json["galleries"].map((x) => Gallery.fromJson(x))),
-    status: json["status"],
-    phone: json["phone"],
-    createdAt: DateTime.parse(json["created_at"]),
-    socialLink: json["social_link"],
-    additionalInfo: json["addtional_information"],
-    whatsappNumber: json["whatsapp_number"],
-    phoneCountryCode: json["phone_country_code"],
-    whatsappCountryCode: json["whatsapp_country_code"],
-    enablePhone: json["enable_phone"],
-    latitude: json['latitude'],
-    longitude: json['longitude'],
-    address: json['address'],
-  );
+        id: json["id"],
+        categoryId: json["category_id"],
+        cityId: json["city_id"],
+        currency: json["currency"],
+        price: json["price"],
+        name: json["name"],
+        isValidDiscount: json["is_valid_discount"],
+        discountRemainingDays: json["discount_remaining_days"],
+        priceAfterDiscount: json["price_after_discount"],
+        discount: json["discount"],
+        discountStartDate: DateTime.parse(json["discount_start_date"]),
+        attribute: List<Attribute>.from(
+            json["attribute"].map((x) => Attribute.fromJson(x))),
+        parentCats: List<ParentCat>.from(
+            json["parent_cats"].map((x) => ParentCat.fromJson(x))),
+        discountEndDate: DateTime.parse(json["discount_end_date"]),
+        description: json["description"],
+        galleries: List<Gallery>.from(
+            json["galleries"].map((x) => Gallery.fromJson(x))),
+        status: json["status"],
+        phone: json["phone"],
+        createdAt: DateTime.parse(json["created_at"]),
+        socialLink: json["social_link"],
+        additionalInfo: json["addtional_information"],
+        whatsappNumber: json["whatsapp_number"],
+        phoneCountryCode: json["phone_country_code"],
+        whatsappCountryCode: json["whatsapp_country_code"],
+        enablePhone: json["enable_phone"],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
+        address: json['address'],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "category_id": categoryId,
-    "city_id": cityId,
-    "currency": currency,
-    "price": price,
-    "name": name,
-    "is_valid_discount": isValidDiscount,
-    "discount_remaining_days": discountRemainingDays,
-    "price_after_discount": priceAfterDiscount,
-    "discount": discount,
-    "discount_start_date": discountStartDate.toIso8601String(),
-    "attribute": List<dynamic>.from(attribute.map((x) => x.toJson())),
-    "parent_cats": List<dynamic>.from(parentCats.map((x) => x.toJson())),
-    "discount_end_date": discountEndDate.toIso8601String(),
-    "description": description,
-    "galleries": List<dynamic>.from(galleries.map((x) => x.toJson())),
-    "status": status,
-    "phone": phone,
-    "created_at": createdAt.toIso8601String(),
-    "social_link": socialLink,
-    "addtional_information": additionalInfo,
-    "whatsapp_number": phone,
-    "phone_country_code": phoneCountryCode,
-    "whatsapp_country_code": whatsappCountryCode,
-    "enable_phone": enablePhone,
-    "latitude": latitude,
-    "longitude": longitude,
-    "address": address,
-  };
+        "id": id,
+        "category_id": categoryId,
+        "city_id": cityId,
+        "currency": currency,
+        "price": price,
+        "name": name,
+        "is_valid_discount": isValidDiscount,
+        "discount_remaining_days": discountRemainingDays,
+        "price_after_discount": priceAfterDiscount,
+        "discount": discount,
+        "discount_start_date": discountStartDate.toIso8601String(),
+        "attribute": List<dynamic>.from(attribute.map((x) => x.toJson())),
+        "parent_cats": List<dynamic>.from(parentCats.map((x) => x.toJson())),
+        "discount_end_date": discountEndDate.toIso8601String(),
+        "description": description,
+        "galleries": List<dynamic>.from(galleries.map((x) => x.toJson())),
+        "status": status,
+        "phone": phone,
+        "created_at": createdAt.toIso8601String(),
+        "social_link": socialLink,
+        "addtional_information": additionalInfo,
+        "whatsapp_number": phone,
+        "phone_country_code": phoneCountryCode,
+        "whatsapp_country_code": whatsappCountryCode,
+        "enable_phone": enablePhone,
+        "latitude": latitude,
+        "longitude": longitude,
+        "address": address,
+      };
 }
 
 class Attribute {
@@ -173,16 +176,16 @@ class Attribute {
   int id;
 
   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
-    title: json["title"],
-    option: json["option"]??"",
-    id: json["id"],
-  );
+        title: json["title"],
+        option: json["option"] ?? "",
+        id: json["id"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "title": title,
-    "option": option,
-    "id": id,
-  };
+        "title": title,
+        "option": option,
+        "id": id,
+      };
 }
 
 class Gallery {
@@ -195,14 +198,14 @@ class Gallery {
   int id;
 
   factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
-    image: json["image"],
-    id: json["id"],
-  );
+        image: json["image"],
+        id: json["id"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "image": image,
-    "id": id,
-  };
+        "image": image,
+        "id": id,
+      };
 }
 
 class ParentCat {
@@ -215,14 +218,14 @@ class ParentCat {
   String title;
 
   factory ParentCat.fromJson(Map<String, dynamic> json) => ParentCat(
-    id: json["id"],
-    title: json["title"],
-  );
+        id: json["id"],
+        title: json["title"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "title": title,
-  };
+        "id": id,
+        "title": title,
+      };
 }
 
 class SocialLink {
@@ -233,10 +236,10 @@ class SocialLink {
   });
 
   factory SocialLink.fromJson(Map<String, dynamic> json) => SocialLink(
-    value: json["value"],
-  );
+        value: json["value"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "value": value,
-  };
+        "value": value,
+      };
 }

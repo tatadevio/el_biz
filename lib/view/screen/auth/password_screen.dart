@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
@@ -24,20 +23,24 @@ class PasswordScreen extends StatefulWidget {
 class _PasswordScreenState extends State<PasswordScreen> {
   TextEditingController passwordController = TextEditingController();
   // bool terms = false;
-  final FocusNode _nodeText1 = FocusNode();
+  // final FocusNode _nodeText1 = FocusNode();
   // String phoneNumber = "";
 
-  KeyboardActionsConfig _buildConfig(BuildContext context) {
-    return KeyboardActionsConfig(
-      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-      keyboardBarColor: Colors.grey[200],
-      nextFocus: true,
-      defaultDoneWidget: Text("next".tr),
-      actions: [
-        if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
-      ],
-    );
-  }
+  // KeyboardActionsConfig _buildConfig(BuildContext context) {
+  //   return KeyboardActionsConfig(
+  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+  //     keyboardBarColor: Colors.grey[200],
+  //     nextFocus: true,
+  //     defaultDoneWidget: Text("next".tr),
+  //     actions: [
+  //       if (GetPlatform.isIOS)
+  //         KeyboardActionsItem(
+  //             displayArrows: false,
+  //             displayDoneButton: true,
+  //             focusNode: _nodeText1),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +102,16 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     child: Container(
                       width: Get.width * 0.9,
                       height: 48,
-                      decoration: BoxDecoration(color: ColorResources.blue, borderRadius: BorderRadius.circular(12.0), boxShadow: const [
-                        BoxShadow(color: Color.fromRGBO(16, 24, 40, 0.05), blurRadius: 2, spreadRadius: 0, offset: Offset(0, 1)),
-                      ]),
+                      decoration: BoxDecoration(
+                          color: ColorResources.blue,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color.fromRGBO(16, 24, 40, 0.05),
+                                blurRadius: 2,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1)),
+                          ]),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(
@@ -137,6 +147,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         onTap: () {
                           Get.dialog(CustomDialog(
                               widget: AlertDialog(
+                            backgroundColor: Colors.white,
                             content: Stack(
                               children: [
                                 Column(
@@ -149,13 +160,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                     ),
                                     Text(
                                       'forgot_your_password'.tr,
-                                      style: h16.copyWith(color: ColorResources.titleColor),
+                                      style: h16.copyWith(
+                                          color: ColorResources.titleColor),
                                     ),
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
-                                      'a_one_time_SMS_code_has_been_sent_to_your_phone_number'.tr,
+                                      'a_one_time_SMS_code_has_been_sent_to_your_phone_number'
+                                          .tr,
                                       style: body14,
                                     ),
                                     const SizedBox(
@@ -167,7 +180,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                         onTap: () {
                                           Get.back();
                                           Get.to(
-                                            () => OtpScreen(phone: widget.phoneNumber, type: ''),
+                                            () => OtpScreen(
+                                                phone: widget.phoneNumber,
+                                                type: ''),
                                           );
                                         },
                                         title: 'continue'.tr),
@@ -192,7 +207,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         },
                         child: Text(
                           'forgot_your_password'.tr,
-                          style: body14.copyWith(color: ColorResources.gray, decoration: TextDecoration.underline),
+                          style: body14.copyWith(
+                              color: ColorResources.gray,
+                              decoration: TextDecoration.underline),
                         ),
                       ),
                     ],

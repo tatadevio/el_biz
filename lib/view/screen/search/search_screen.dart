@@ -1,4 +1,3 @@
-import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +24,15 @@ class SearchScreen extends StatelessWidget {
               child: SizedBox(
                 height: 40,
                 child: TextFormField(
-                  
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                     border: OutlineInputBorder(),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: SvgPicture.asset(Images.svgSearch),
                     ),
-
                   ),
                 ),
               ),
@@ -67,7 +65,8 @@ class SearchScreen extends StatelessWidget {
                     height: 0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 5),
                     child: SizedBox(
                       height: height * 0.06,
                       child: Padding(
@@ -77,7 +76,9 @@ class SearchScreen extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  context.read<SearchBloc>().add(ChangeStatusSearch(false));
+                                  context
+                                      .read<SearchBloc>()
+                                      .add(ChangeStatusSearch(false));
                                   // productController.changeStatusSearch(0);
                                 },
                                 child: Container(
@@ -85,28 +86,34 @@ class SearchScreen extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
                                     color: ColorResources.lightBlue,
-                                    boxShadow: searchState.isSearchProducts == false
-                                        ? const [
-                                            BoxShadow(
-                                              blurRadius: 2,
-                                              spreadRadius: 0,
-                                              offset: Offset(0, 1),
-                                              color: Color.fromRGBO(16, 24, 40, 0.06),
-                                            ),
-                                            BoxShadow(
-                                              blurRadius: 3,
-                                              spreadRadius: 3,
-                                              offset: Offset(0, 1),
-                                              color: Color.fromRGBO(16, 24, 40, 0.1),
-                                            ),
-                                          ]
-                                        : [],
+                                    boxShadow:
+                                        searchState.isSearchProducts == false
+                                            ? const [
+                                                BoxShadow(
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0,
+                                                  offset: Offset(0, 1),
+                                                  color: Color.fromRGBO(
+                                                      16, 24, 40, 0.06),
+                                                ),
+                                                BoxShadow(
+                                                  blurRadius: 3,
+                                                  spreadRadius: 3,
+                                                  offset: Offset(0, 1),
+                                                  color: Color.fromRGBO(
+                                                      16, 24, 40, 0.1),
+                                                ),
+                                              ]
+                                            : [],
                                   ),
                                   child: Center(
                                       child: Text(
                                     "Компании".tr,
                                     style: mediumTextStyle.copyWith(
-                                      color: searchState.isSearchProducts == false ? ColorResources.primary : ColorResources.black,
+                                      color:
+                                          searchState.isSearchProducts == false
+                                              ? ColorResources.primary
+                                              : ColorResources.black,
                                     ),
                                   )),
                                 ),
@@ -118,7 +125,9 @@ class SearchScreen extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  context.read<SearchBloc>().add(ChangeStatusSearch(true));
+                                  context
+                                      .read<SearchBloc>()
+                                      .add(ChangeStatusSearch(true));
                                   // productController.changeStatusSearch(1);
                                 },
                                 child: Container(
@@ -133,13 +142,15 @@ class SearchScreen extends StatelessWidget {
                                               blurRadius: 2,
                                               spreadRadius: 0,
                                               offset: Offset(0, 1),
-                                              color: Color.fromRGBO(16, 24, 40, 0.06),
+                                              color: Color.fromRGBO(
+                                                  16, 24, 40, 0.06),
                                             ),
                                             BoxShadow(
                                               blurRadius: 3,
                                               spreadRadius: 3,
                                               offset: Offset(0, 1),
-                                              color: Color.fromRGBO(16, 24, 40, 0.1),
+                                              color: Color.fromRGBO(
+                                                  16, 24, 40, 0.1),
                                             ),
                                           ]
                                         : [],
@@ -147,7 +158,9 @@ class SearchScreen extends StatelessWidget {
                                   child: Center(
                                       child: Text("goods".tr,
                                           style: mediumTextStyle.copyWith(
-                                            color: searchState.isSearchProducts  ? ColorResources.primary : ColorResources.black,
+                                            color: searchState.isSearchProducts
+                                                ? ColorResources.primary
+                                                : ColorResources.black,
                                           ))),
                                 ),
                               ),
@@ -157,9 +170,6 @@ class SearchScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
-
-
                 ],
               ),
             );

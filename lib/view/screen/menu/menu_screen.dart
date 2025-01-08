@@ -18,25 +18,25 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // bool isLogin = Get.find<AuthController>().isLoggedIn();
-    // var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: ColorResources.background,
+      // backgroundColor: ColorResources.background,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).cardColor,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0))),
-        //shadowColor: Color(0xff101828).withOpacity(0.6),
-
-        bottomOpacity: 10,
-        toolbarOpacity: 1,
-        elevation: 0.5,
+        // shape: const RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.only(
+        //         bottomLeft: Radius.circular(20.0),
+        //         bottomRight: Radius.circular(20.0))),
+        // bottomOpacity: 10,
+        // toolbarOpacity: 1,
+        // elevation: 0.5,
         centerTitle: false,
         title: Text(
           "profile".tr,
-          style: const TextStyle(color: Color(0xff212020), fontWeight: FontWeight.w700, fontSize: 18),
+          style: const TextStyle(
+              color: Color(0xff212020),
+              fontWeight: FontWeight.w700,
+              fontSize: 18),
         ),
         actions: const [
-          // if (isLogin)
           AppbarNotificationButton(),
           SizedBox(
             width: 10,
@@ -48,6 +48,9 @@ class MenuScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Text(
@@ -85,16 +88,15 @@ class MenuScreen extends StatelessWidget {
               'my_companies'.tr,
               isSelected: false,
               onTap: () {
-                Get.bottomSheet(const AddCompanyBottomSheet(), backgroundColor: Colors.white, isScrollControlled: true);
+                Get.bottomSheet(const AddCompanyBottomSheet(),
+                    backgroundColor: Colors.white, isScrollControlled: true);
               },
             ),
             cusotmInfoList(
               Images.svgCreditCard,
               'current_accounts'.tr,
-              // 'Счета на оплату',
               isSelected: false,
               onTap: () {
-                // Get.to(() => ProfileInformationScreen());
                 Get.to(() => const AccountScreen());
               },
             ),
@@ -119,8 +121,10 @@ class MenuScreen extends StatelessWidget {
               },
             ),
             InkWell(
+              onTap: () {},
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 child: Row(
                   children: [
                     Text(
@@ -138,18 +142,20 @@ class MenuScreen extends StatelessWidget {
               onTap: () {
                 Get.dialog(CustomDialog(
                     widget: AlertDialog(
+                  backgroundColor: Colors.white,
                   title: Row(
                     children: [
                       Container(
                         height: 48,
                         width: 48,
-                        decoration: const BoxDecoration(color: ColorResources.lightBlue, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(
+                            color: ColorResources.lightBlue,
+                            shape: BoxShape.circle),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(Images.svgHelpCircle),
                       ),
                     ],
                   ),
-                  // Text("are_you_sure".tr),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -160,8 +166,9 @@ class MenuScreen extends StatelessWidget {
                           color: const Color.fromRGBO(16, 24, 40, 1),
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 20,
+                        width: Get.width,
                       ),
                       Row(
                         children: [
@@ -178,9 +185,11 @@ class MenuScreen extends StatelessWidget {
                               color: ColorResources.lgColor,
                               child: Text(
                                 "cancel".tr,
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorResources.gray),
                               ),
-                              //  Colors.grey[300],
                             ),
                           ),
                           const SizedBox(
@@ -190,7 +199,8 @@ class MenuScreen extends StatelessWidget {
                             child: MaterialButton(
                               elevation: 0,
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
                               onPressed: () async {
                                 Get.back();
                                 Get.offAll(() => const LoginScreen());
@@ -198,7 +208,10 @@ class MenuScreen extends StatelessWidget {
                               color: ColorResources.primary,
                               child: Text(
                                 "logout".tr,
-                                style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    fontSize: 16,
+                                    color: Colors.white),
                               ),
                             ),
                           ),
@@ -212,16 +225,20 @@ class MenuScreen extends StatelessWidget {
             cusotmInfoList(
               Images.svgTrash,
               'delete_profile'.tr,
+              textColor: ColorResources.red,
               isSelected: false,
               onTap: () {
                 Get.dialog(CustomDialog(
                     widget: AlertDialog(
+                  backgroundColor: Colors.white,
                   title: Row(
                     children: [
                       Container(
                         height: 48,
                         width: 48,
-                        decoration: const BoxDecoration(color: Color.fromRGBO(253, 162, 155, 0.5), shape: BoxShape.circle),
+                        decoration: const BoxDecoration(
+                            color: Color.fromRGBO(253, 162, 155, 0.5),
+                            shape: BoxShape.circle),
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           Images.svgHelpCircle,
@@ -230,7 +247,6 @@ class MenuScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // Text("are_you_sure".tr),
                   content: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -245,7 +261,8 @@ class MenuScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "once_your_profile_is_deleted_all_your_company_data_and_history_will_be_deleted".tr,
+                        "once_your_profile_is_deleted_all_your_company_data_and_history_will_be_deleted"
+                            .tr,
                         style: body14.copyWith(
                           color: ColorResources.gray,
                         ),
@@ -268,9 +285,11 @@ class MenuScreen extends StatelessWidget {
                               color: ColorResources.lgColor,
                               child: Text(
                                 "cancel".tr,
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorResources.gray),
                               ),
-                              //  Colors.grey[300],
                             ),
                           ),
                           const SizedBox(
@@ -280,7 +299,8 @@ class MenuScreen extends StatelessWidget {
                             child: MaterialButton(
                               elevation: 0,
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
                               onPressed: () async {
                                 Get.back();
                                 Get.offAll(() => const LoginScreen());
@@ -288,7 +308,10 @@ class MenuScreen extends StatelessWidget {
                               color: ColorResources.red,
                               child: Text(
                                 "delete".tr,
-                                style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                                style: const TextStyle(
+                                    letterSpacing: 0.5,
+                                    fontSize: 16,
+                                    color: Colors.white),
                               ),
                             ),
                           ),
@@ -305,7 +328,10 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget cusotmInfoList(String icon, String title, {bool isSelected = false, Function()? onTap}) {
+  Widget cusotmInfoList(String icon, String title,
+      {bool isSelected = false,
+      Function()? onTap,
+      Color? textColor = Colors.grey}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
@@ -331,28 +357,13 @@ class MenuScreen extends StatelessWidget {
               ),
               Text(
                 title,
-                style: body16.copyWith(color: isSelected ? Colors.white : ColorResources.gray),
+                style: body16.copyWith(
+                    color: isSelected ? Colors.white : textColor),
               ),
             ],
           ),
         ),
       ),
     );
-
-    // ListTile(
-    //   dense: true,
-    //   onTap: () {
-    //     ontap();
-    //   },
-    //   leading: SvgPicture.asset(
-    //     icon,
-    //     width: 18,
-    //     height: 18,
-    //   ),
-    //   title: Text(
-    //     title,
-    //     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xff212020)),
-    //   ),
-    // );
   }
 }

@@ -29,7 +29,8 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    return BlocBuilder<ReviewBloc, ReviewState>(builder: (context, reviewController) {
+    return BlocBuilder<ReviewBloc, ReviewState>(
+        builder: (context, reviewController) {
       return Container(
         height: height * 0.7,
         width: double.infinity,
@@ -59,14 +60,14 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Оставить отзыв',
+                      'leave_feedback'.tr,
                       style: h16.copyWith(color: ColorResources.darkGray),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'Ваша оценка',
+                      'your_rating'.tr,
                       style: body16.copyWith(color: ColorResources.gray),
                     ),
                     const SizedBox(
@@ -82,8 +83,9 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                           allowHalfRating: true,
                           itemCount: 5,
                           itemSize: width * 0.15,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 5),
-                          itemBuilder: (context, _) => Icon(
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 5),
+                          itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: ColorResources.yellow,
                           ),
@@ -98,17 +100,18 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                     ),
                     CustomTextField(
                       controller: detailController,
-                      hintColor: 'Ваш отзыв...',
+                      hintColor: 'your_review'.tr,
                       inputType: TextInputType.text,
                       leading: '',
                       readOnly: false,
                       maxLines: 5,
+                      maxLength: null,
                     ),
                     const SizedBox(
                       height: 30,
                     ),
                     Text(
-                      'Фото',
+                      'photo'.tr,
                       style: body14.copyWith(color: ColorResources.gray),
                     ),
                     const SizedBox(
@@ -137,13 +140,16 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                   InkWell(
                                     onTap: () {
                                       // reviewController.removeGallery(image);
-                                      context.read<ReviewBloc>().add(RemoveGallery(image));
+                                      context
+                                          .read<ReviewBloc>()
+                                          .add(RemoveGallery(image));
                                     },
                                     child: SizedBox(
                                       height: 80,
                                       width: 80,
                                       child: Center(
-                                        child: SvgPicture.asset(Images.svgTrash),
+                                        child:
+                                            SvgPicture.asset(Images.svgTrash),
                                       ),
                                     ),
                                   ),
@@ -163,25 +169,40 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                           onTap: () {
                             Get.dialog(CustomDialog(
                                 widget: SimpleDialog(
-                              title: const Text('Select Image'),
+                              backgroundColor: Colors.white,
+                              title: Row(
+                                children: [
+                                  Expanded(child: Text('select_image'.tr)),
+                                  IconButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    icon: const Icon(Icons.close),
+                                  ),
+                                ],
+                              ),
                               children: [
                                 ListTile(
                                   onTap: () {
                                     Get.back();
                                     // reviewController.pickImageDocsCamera();
-                                    context.read<ReviewBloc>().add(PickImageDocsCamera());
+                                    context
+                                        .read<ReviewBloc>()
+                                        .add(PickImageDocsCamera());
                                   },
                                   leading: const Icon(Icons.camera),
-                                  title: Text('Camera'),
+                                  title: Text('camera'.tr),
                                 ),
                                 ListTile(
                                   onTap: () {
                                     Get.back();
                                     // reviewController.pickImageDocs();
-                                    context.read<ReviewBloc>().add(PickImageDocs());
+                                    context
+                                        .read<ReviewBloc>()
+                                        .add(PickImageDocs());
                                   },
                                   leading: const Icon(Icons.image),
-                                  title: Text('Galler'),
+                                  title: Text('gallery'.tr),
                                 ),
                               ],
                             )));
@@ -189,7 +210,9 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                           child: Container(
                             height: 80,
                             width: 80,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: ColorResources.lgColor),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: ColorResources.lgColor),
                             alignment: Alignment.center,
                             child: SvgPicture.asset(
                               Images.svgPlus,
@@ -214,6 +237,7 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                             Get.back();
                             Get.dialog(CustomDialog(
                                 widget: AlertDialog(
+                              backgroundColor: Colors.white,
                               content: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -244,15 +268,18 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                     height: 10,
                                   ),
                                   Text(
-                                    'Ваш отзыв опубликован',
-                                    style: h16.copyWith(color: ColorResources.darkGray),
+                                    'your_review_has_been_published'.tr,
+                                    style: h16.copyWith(
+                                        color: ColorResources.darkGray),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   Text(
-                                    'Спасибо за Ваш отзыв, вы помогаете нам становиться лучше!',
-                                    style: body14.copyWith(color: ColorResources.gray),
+                                    'thank_you_for_your_feedback_you_help_us_become_better'
+                                        .tr,
+                                    style: body14.copyWith(
+                                        color: ColorResources.gray),
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -262,15 +289,18 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                     height: 48,
                                     onTap: () {
                                       Get.back();
-                                      Get.to(() => MyReviewsScreen());
+                                      Get.to(() => const MyReviewsScreen());
                                     },
-                                    title: 'Готово',
+                                    title: 'ready'.tr,
                                   ),
                                 ],
                               ),
                             )));
                           },
-                          title: 'Отправить'),
+                          title: 'send'.tr),
+                    ),
+                    const SizedBox(
+                      height: 30,
                     ),
                   ],
                 ),

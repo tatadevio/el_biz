@@ -34,7 +34,9 @@ class ShowContractFiles extends StatelessWidget {
                       Container(
                         height: 5,
                         width: 35,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: ColorResources.lgColor),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: ColorResources.lgColor),
                       ),
                     ],
                   ),
@@ -46,7 +48,7 @@ class ShowContractFiles extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Документы ',
+                        'documents'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -61,7 +63,7 @@ class ShowContractFiles extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          'Скачать все',
+                          'download_all'.tr,
                           style: button16.copyWith(color: ColorResources.blue),
                         ),
                       ],
@@ -86,7 +88,10 @@ class ShowContractFiles extends StatelessWidget {
                   onTap: () {
                     Get.back();
                   },
-                  title: 'Согласование договора',
+                  title: 'agreement_approval'.tr,
+                ),
+                const SizedBox(
+                  height: 30,
                 ),
               ],
             ),
@@ -104,7 +109,8 @@ class ShowContractFiles extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             document.documentType == 'image'
-                ? CustomImage(image: document.urlLink, height: 40, width: 40, radius: 0)
+                ? CustomImage(
+                    image: document.urlLink, height: 40, width: 40, radius: 0)
                 : SvgPicture.asset(
                     Images.svgFile,
                     height: 40,

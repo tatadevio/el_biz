@@ -15,7 +15,7 @@ class BottomNavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = Get.height;
     return Expanded(
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
           onTap();
         },

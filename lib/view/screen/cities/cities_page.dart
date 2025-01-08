@@ -6,20 +6,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/post_ad_controller.dart';
-import '../../../controller/product_controller.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 
 class CitiesScreen extends StatefulWidget {
-  const CitiesScreen({Key? key}) : super(key: key);
+  const CitiesScreen({super.key});
 
   @override
   State<CitiesScreen> createState() => _CitiesScreenState();
 }
 
 class _CitiesScreenState extends State<CitiesScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -34,14 +31,22 @@ class _CitiesScreenState extends State<CitiesScreen> {
     // String comment = '';
     //call(_scrollController);
     var height = Get.height;
-    return BlocBuilder<CitiesBloc, CitiesState>(builder: (context, citiesState) {
-      if(citiesState.isLoading){
-        return Center(child: CircularProgressIndicator(),);
+    return BlocBuilder<CitiesBloc, CitiesState>(
+        builder: (context, citiesState) {
+      if (citiesState.isLoading) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       }
       return Padding(
         padding: const EdgeInsets.only(top: 68.0),
         child: Container(
-          decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: const BorderRadius.only(topRight: Radius.circular(24.0), topLeft: Radius.circular(24.0))),
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              // color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(24.0),
+                  topLeft: Radius.circular(24.0))),
           child: Column(
             children: [
               const SizedBox(
@@ -50,7 +55,9 @@ class _CitiesScreenState extends State<CitiesScreen> {
               Container(
                 height: 6,
                 width: 100,
-                decoration: BoxDecoration(color: ColorResources.hintColor.withOpacity(0.5), borderRadius: BorderRadius.circular(12.0)),
+                decoration: BoxDecoration(
+                    color: ColorResources.hintColor.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(12.0)),
               ),
               const SizedBox(
                 height: 30,
@@ -66,11 +73,13 @@ class _CitiesScreenState extends State<CitiesScreen> {
                           border: InputBorder.none,
                           hintText: "choose_city".tr,
                           filled: true,
-                          hintStyle: const TextStyle(color: ColorResources.hintColor),
+                          hintStyle:
+                              const TextStyle(color: ColorResources.hintColor),
                           fillColor: ColorResources.hintColor.withOpacity(0.2),
                           prefixIcon: Padding(
                             padding: const EdgeInsets.all(9.0),
-                            child: SvgPicture.asset(Images.svgSearch, color: ColorResources.hintColor),
+                            child: SvgPicture.asset(Images.svgSearch,
+                                color: ColorResources.hintColor),
                           )),
                     ),
                   ),
@@ -93,23 +102,36 @@ class _CitiesScreenState extends State<CitiesScreen> {
                             onTap: () {
                               // Get.find<ProductController>().changeCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
 
-                              context.read<ProductBloc>().add(ChangeCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name));
+                              context.read<ProductBloc>().add(ChangeCityId(
+                                  citiesState.cityItem[i].id.toString(),
+                                  citiesState.cityItem[i].name));
 
-                              context.read<CitiesBloc>().add(ChangeCity(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name));
+                              context.read<CitiesBloc>().add(ChangeCity(
+                                  citiesState.cityItem[i].id.toString(),
+                                  citiesState.cityItem[i].name));
 
                               // citiesState.changeCity(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
 
-                              context.read<PostAdBloc>().add(UpdateCityId(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name));
+                              context.read<PostAdBloc>().add(UpdateCityId(
+                                  citiesState.cityItem[i].id.toString(),
+                                  citiesState.cityItem[i].name));
                               Get.back();
                             },
                             title: Text(
                               citiesState.cityItem[i].name,
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: citiesState.cityId == citiesState.cityItem[i].id.toString() ? ColorResources.lightBlue : Colors.black),
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  color: citiesState.cityId ==
+                                          citiesState.cityItem[i].id.toString()
+                                      ? ColorResources.black
+                                      : Colors.black),
                             ),
-                            trailing: citiesState.cityId == citiesState.cityItem[i].id.toString()
+                            trailing: citiesState.cityId ==
+                                    citiesState.cityItem[i].id.toString()
                                 ? const Icon(
                                     Icons.check,
-                                    color: ColorResources.lightBlue,
+                                    color: ColorResources.black,
                                   )
                                 : const SizedBox(),
                           ),

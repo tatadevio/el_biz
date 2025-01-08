@@ -15,7 +15,8 @@ part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ProductRepo productRepo;
-  ProductBloc(this.productRepo) : super(const ProductState()) {
+  ProductBloc(this.productRepo)
+      : super(const ProductState(selectedProductId: [])) {
     on<UpdateGridView>((event, emit) {
       emit(state.copywith(isGridView: event.gridView));
     });
@@ -26,9 +27,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     on<UpdateKeywordSelected>((event, emit) {
       print('keyword selected button is pressed...${event.keyword}');
-      List<String> data =      List.from(state.selectedKeywords);
+      List<String> data = List.from(state.selectedKeywords);
       if (data.isEmpty) {
-
         emit(state.copywith(selectedKeywords: data..add(event.keyword)));
         // emit(state.copywith(selectedKeywords: state.selectedKeywords..add(event.keyword)));
       } else {
@@ -57,7 +57,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<ChangeCityId>((event, emit) {
-      emit(state.copywith(selectedCity: event.id, selectedCityName: event.name));
+      emit(
+          state.copywith(selectedCity: event.id, selectedCityName: event.name));
     });
 
     on<UpdateNameId>((event, emit) {
@@ -93,6 +94,24 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<RemoveGallery>(_onRemoveImage);
 
     on<GetProductWithCat>(_onGetProductWithCat);
+
+    on<ChangeCurrency>((event, emit) {
+      emit(state.copywith(selectedCurrency: event.currency));
+    });
+
+    on<ChangeSlectedProduct>((event, emit) {
+      List<int> selectedProductList =
+          List<int>.from(state.selectedProductId ?? []);
+      if (selectedProductList.contains(event.productId)) {
+        selectedProductList.remove(event.productId);
+      } else {
+        selectedProductList.add(event.productId);
+      }
+      emit(state.copywith(selectedProductId: selectedProductList));
+    });
+    on<ClearSelectedProduct>((event, emit) {
+      emit(state.copywith(selectedProductId: []));
+    });
   }
 
   Future<void> _onPickImageDocs(
@@ -117,7 +136,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     final picker = ImagePicker();
-    final XFile? value = await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
+    final XFile? value =
+        await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
 
     if (value != null) {
       final compressedImage = await _convertHEICtoJPG(File(value.path));
@@ -129,7 +149,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     RemoveGallery event,
     Emitter<ProductState> emit,
   ) {
-    final updatedImages = List<XFile>.from(state.pickedLogo)..remove(event.image);
+    final updatedImages = List<XFile>.from(state.pickedLogo)
+      ..remove(event.image);
     emit(ProductState(pickedLogo: updatedImages));
   }
 

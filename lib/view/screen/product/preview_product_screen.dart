@@ -15,7 +15,11 @@ class PreviewProductScreen extends StatefulWidget {
   final List<Map<String, dynamic>> selectedMaterial;
   final AddProductModel productData;
   final bool isEdit;
-  const PreviewProductScreen({super.key, required this.selectedMaterial, required this.productData, required this.isEdit});
+  const PreviewProductScreen(
+      {super.key,
+      required this.selectedMaterial,
+      required this.productData,
+      required this.isEdit});
 
   @override
   State<PreviewProductScreen> createState() => _PreviewProductScreenState();
@@ -31,9 +35,11 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(16),
-              child: AddProductImagesPreview(),
+              child: AddProductImagesPreview(
+                productData: widget.productData,
+              ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -67,7 +73,8 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(width: 1, color: ColorResources.lgColor),
+                          border: Border.all(
+                              width: 1, color: ColorResources.lgColor),
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: const [
                             BoxShadow(
@@ -109,7 +116,8 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                           children: [
                             Text(
                               '(0) ',
-                              style: body14.copyWith(color: ColorResources.gray),
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
                             ),
                             RatingBar.builder(
                               initialRating: 0,
@@ -119,7 +127,8 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                               itemCount: 5,
                               itemSize: 14,
                               ignoreGestures: true,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 0),
                               itemBuilder: (context, _) => const Icon(
                                 Icons.star,
                                 color: ColorResources.yellow,
@@ -135,8 +144,10 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Загружено: ',
-                            style: body14.copyWith(color: ColorResources.gray, fontWeight: FontWeight.w700),
+                            'uploaded'.tr,
+                            style: body14.copyWith(
+                                color: ColorResources.gray,
+                                fontWeight: FontWeight.w700),
                           ),
                           Text(
                             '12 окт. 2024',
@@ -154,7 +165,7 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                     child: Row(
                       children: [
                         Text(
-                          'Минимальный заказ: ',
+                          'minimum_order'.tr,
                           style: h16.copyWith(color: ColorResources.darkGray),
                         ),
                         Text(
@@ -169,7 +180,7 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                     child: Row(
                       children: [
                         Text(
-                          'Наличие: ',
+                          'availability'.tr,
                           style: h16.copyWith(color: ColorResources.darkGray),
                         ),
                         Text(
@@ -197,15 +208,21 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                         child: Container(
                           height: 40,
                           width: width * 0.43,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: !_isShowDescription ? null : ColorResources.primary,
+                            color: !_isShowDescription
+                                ? null
+                                : ColorResources.primary,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            'О товаре',
-                            style: button16.copyWith(color: !_isShowDescription ? ColorResources.gray : ColorResources.white),
+                            'about_the_product'.tr,
+                            style: button16.copyWith(
+                                color: !_isShowDescription
+                                    ? ColorResources.gray
+                                    : ColorResources.white),
                           ),
                         ),
                       ),
@@ -219,15 +236,21 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                         child: Container(
                           height: 40,
                           width: width * 0.45,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: _isShowDescription ? null : ColorResources.primary,
+                            color: _isShowDescription
+                                ? null
+                                : ColorResources.primary,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            'Отзывы',
-                            style: button16.copyWith(color: _isShowDescription ? ColorResources.gray : ColorResources.white),
+                            'reviews'.tr,
+                            style: button16.copyWith(
+                                color: _isShowDescription
+                                    ? ColorResources.gray
+                                    : ColorResources.white),
                           ),
                         ),
                       ),
@@ -243,14 +266,21 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                       height: 10,
                     ),
                     Text(
-                      'Характеристики',
+                      'characteristics'.tr,
                       style: h16.copyWith(color: ColorResources.darkGray),
                     ),
-                    characteristicsItem(title: 'Материал', value: materialItemsToString(widget.selectedMaterial)),
+                    characteristicsItem(
+                        title: 'Материал',
+                        value: materialItemsToString(widget.selectedMaterial)),
                     const Divider(),
-                    characteristicsItem(title: 'Средний вес', value: "${widget.productData.weight} ${widget.productData.weightUnit}"),
+                    characteristicsItem(
+                        title: 'Средний вес',
+                        value:
+                            "${widget.productData.weight} ${widget.productData.weightUnit}"),
                     const Divider(),
-                    characteristicsItem(title: 'Размеры', value: "${widget.productData.dimensions}"),
+                    characteristicsItem(
+                        title: 'Размеры',
+                        value: "${widget.productData.dimensions}"),
                   ],
                   // if (!_isShowDescription) ...[
                   //   ProductReviewsWidget(),
@@ -275,13 +305,13 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
             onTap: () {
               if (widget.isEdit) {
                 showCustomSnackBar('Product Updated....');
-                Get.offAll(const DashboardScreen());
+                Get.offAll(() => const DashboardScreen());
               } else {
                 showCustomSnackBar('Product Added');
                 Get.offAll(() => const DashboardScreen());
               }
             },
-            title: 'Сохранить'),
+            title: 'save'.tr),
       ),
     );
   }

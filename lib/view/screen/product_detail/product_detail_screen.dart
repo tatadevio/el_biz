@@ -17,7 +17,9 @@ import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({super.key});
+  final bool isProduct;
+
+  const ProductDetailScreen({super.key, this.isProduct = true});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,8 @@ class ProductDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<ProductDetailBloc, ProductDetailState>(builder: (context, productDetialController) {
+      body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+          builder: (context, productDetialController) {
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -61,7 +64,8 @@ class ProductDetailScreen extends StatelessWidget {
                 height: 20,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
@@ -91,7 +95,8 @@ class ProductDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(width: 1, color: ColorResources.lgColor),
+                            border: Border.all(
+                                width: 1, color: ColorResources.lgColor),
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: const [
                               BoxShadow(
@@ -107,156 +112,221 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Раскладной садовый стул из шпона дерева.',
-                      style: body16.copyWith(color: ColorResources.gray),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '2 500 сом',
-                      style: h24.copyWith(color: ColorResources.blue),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Row(
+                    if (isProduct) ...[
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Раскладной садовый стул из шпона дерева.',
+                        style: body16.copyWith(color: ColorResources.gray),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '2 500 сом',
+                        style: h24.copyWith(color: ColorResources.blue),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  '(4.0) ',
+                                  style: body14.copyWith(
+                                      color: ColorResources.gray),
+                                ),
+                                RatingBar.builder(
+                                  initialRating: 4,
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 14,
+                                  ignoreGestures: true,
+                                  itemPadding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: ColorResources.yellow,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                '(4.0) ',
-                                style: body14.copyWith(color: ColorResources.gray),
+                                'Загружено: ',
+                                style: body14.copyWith(
+                                    color: ColorResources.gray,
+                                    fontWeight: FontWeight.w700),
                               ),
-                              RatingBar.builder(
-                                initialRating: 4,
-                                minRating: 0,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemSize: 14,
-                                ignoreGestures: true,
-                                itemPadding: const EdgeInsets.symmetric(horizontal: 0),
-                                itemBuilder: (context, _) => const Icon(
-                                  Icons.star,
-                                  color: ColorResources.yellow,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
+                              Text(
+                                '12 окт. 2024',
+                                style:
+                                    body14.copyWith(color: ColorResources.gray),
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
                           children: [
                             Text(
-                              'Загружено: ',
-                              style: body14.copyWith(color: ColorResources.gray, fontWeight: FontWeight.w700),
+                              'Минимальный заказ: ',
+                              style:
+                                  h16.copyWith(color: ColorResources.darkGray),
                             ),
                             Text(
-                              '12 окт. 2024',
-                              style: body14.copyWith(color: ColorResources.gray),
+                              '5 шт',
+                              style:
+                                  body16.copyWith(color: ColorResources.gray),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Наличие: ',
+                              style:
+                                  h16.copyWith(color: ColorResources.darkGray),
+                            ),
+                            Text(
+                              'Уточнять наличие',
+                              style:
+                                  body16.copyWith(color: ColorResources.gray),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Минимальный заказ: ',
-                            style: h16.copyWith(color: ColorResources.darkGray),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(6),
+                            onTap: () {
+                              // productDetialController.toggleShowProductReview(false);
+                              context
+                                  .read<ProductDetailBloc>()
+                                  .add(const ToggleShowProductReview(false));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: width * 0.43,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color:
+                                    productDetialController.showProductReviews
+                                        ? null
+                                        : ColorResources.primary,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'О товаре',
+                                style: button16.copyWith(
+                                    color: productDetialController
+                                            .showProductReviews
+                                        ? ColorResources.gray
+                                        : ColorResources.white),
+                              ),
+                            ),
                           ),
-                          Text(
-                            '5 шт',
-                            style: body16.copyWith(color: ColorResources.gray),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(6),
+                            onTap: () {
+                              // productDetialController.toggleShowProductReview(true);
+                              context
+                                  .read<ProductDetailBloc>()
+                                  .add(const ToggleShowProductReview(true));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: width * 0.45,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color:
+                                    !productDetialController.showProductReviews
+                                        ? null
+                                        : ColorResources.primary,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Отзывы',
+                                style: button16.copyWith(
+                                    color: !productDetialController
+                                            .showProductReviews
+                                        ? ColorResources.gray
+                                        : ColorResources.white),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Наличие: ',
-                            style: h16.copyWith(color: ColorResources.darkGray),
-                          ),
-                          Text(
-                            'Уточнять наличие',
-                            style: body16.copyWith(color: ColorResources.gray),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(6),
-                          onTap: () {
-                            // productDetialController.toggleShowProductReview(false);
-                            context.read<ProductDetailBloc>().add(const ToggleShowProductReview(false));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: width * 0.43,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: productDetialController.showProductReviews ? null : ColorResources.primary,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'О товаре',
-                              style: button16.copyWith(color: productDetialController.showProductReviews ? ColorResources.gray : ColorResources.white),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(6),
-                          onTap: () {
-                            // productDetialController.toggleShowProductReview(true);
-                            context.read<ProductDetailBloc>().add(const ToggleShowProductReview(true));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: width * 0.45,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: !productDetialController.showProductReviews ? null : ColorResources.primary,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Отзывы',
-                              style: button16.copyWith(color: !productDetialController.showProductReviews ? ColorResources.gray : ColorResources.white),
-                            ),
-                          ),
-                        ),
+                      const Divider(),
+                      if (productDetialController.showProductReviews) ...[
+                        const ProductReviewsWidget(),
+                      ] else ...[
+                        const AboutProductWidget(),
                       ],
-                    ),
-                    const Divider(),
-                    if (productDetialController.showProductReviews) ...[
-                      const ProductReviewsWidget(),
                     ] else ...[
-                      const AboutProductWidget(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'Описание',
+                        style: h16.copyWith(color: ColorResources.darkGray),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Ищу поставщиков садовой мебели, конкретно раскладных стульев хорошего качества, из натуральных материалов, с интересным дизайном, 20 штук желательно похожих или в двух расцветках.',
+                        style: body14.copyWith(color: ColorResources.darkGray),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      productInfoWidget(title: 'Товар: ', value: 'Количество', titleBold: true, valueBold: true),
+                      productInfoWidget(title: 'Раскладные стулья', value: '20шт'),
+                      productInfoWidget(title: 'Диваны', value: '20шт'),
+                      productInfoWidget(title: 'Шкафы', value: '20шт'),
+                      productInfoWidget(title: 'Бюджет: ', value: '50 000 сом', valueBold: true
+                      ),
+                      const SizedBox(height: 10,),
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+
+                        Text('Опубликовано: ',style: body14.copyWith(fontWeight: FontWeight.w700),),
+
+                        Text('24.10.2024, 18:10',style: body14.copyWith(fontWeight: FontWeight.w400),),
+
+                      ],),
+
+
                     ],
                   ],
                 ),
@@ -265,7 +335,8 @@ class ProductDetailScreen extends StatelessWidget {
                 height: 20,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
@@ -286,19 +357,22 @@ class ProductDetailScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: ColorResources.lightBlue,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(width: 1, color: ColorResources.lgColor),
+                        border:
+                            Border.all(width: 1, color: ColorResources.lgColor),
                       ),
                       child: ListTile(
                         dense: true,
                         contentPadding: const EdgeInsets.all(0),
-                        leading: CustomImage(image: '', height: 40, width: 40, radius: 40),
+                        leading: CustomImage(
+                            image: '', height: 40, width: 40, radius: 40),
                         title: Text(
                           'Садовая мебель Loft',
                           style: h16.copyWith(color: ColorResources.darkGray),
                         ),
                         subtitle: Text(
                           'ОсОО...',
-                          style: body14.copyWith(color: ColorResources.darkGray),
+                          style:
+                              body14.copyWith(color: ColorResources.darkGray),
                         ),
                       ),
                     ),
@@ -378,6 +452,36 @@ class ProductDetailScreen extends StatelessWidget {
               ),
             )
           : null,
+    );
+  }
+
+  Widget productInfoWidget(
+      {String? title,
+      String? value,
+      bool titleBold = false,
+      bool valueBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+      child: Row(
+        children: [
+          Text(
+            title ?? '',
+            style: body14.copyWith(
+                color:
+                    titleBold ? ColorResources.darkGray : ColorResources.gray, fontWeight: titleBold ? FontWeight.w700 : FontWeight.w400,),
+          ),
+          Expanded(
+            child: Text(
+              value ?? '',
+              style: body14.copyWith(
+                  color: titleBold
+                      ? ColorResources.darkGray
+                      : ColorResources.gray, fontWeight: valueBold ? FontWeight.w700 : FontWeight.w400,),
+              textAlign: TextAlign.end,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

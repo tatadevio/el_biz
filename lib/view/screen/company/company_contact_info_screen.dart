@@ -15,7 +15,8 @@ class CompanyContactInfoScreen extends StatefulWidget {
   const CompanyContactInfoScreen({super.key});
 
   @override
-  State<CompanyContactInfoScreen> createState() => _CompanyContactInfoScreenState();
+  State<CompanyContactInfoScreen> createState() =>
+      _CompanyContactInfoScreenState();
 }
 
 class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
@@ -45,7 +46,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                 height: 10,
               ),
               Text(
-                'Публичные номера ваших телефонов. По одному на поле.',
+                'public_phone_numbers_One_per_field'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(
@@ -92,7 +93,8 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                     ),
                     Expanded(
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center, // Aligns both text and input in the center
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center, // Aligns both text and input in the center
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(top: 0),
@@ -112,11 +114,25 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                                 isDense: true,
                                 isCollapsed: true,
 
-                                contentPadding: EdgeInsets.symmetric(vertical: 5), // Adjust vertical padding as needed
-                                border: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
-                                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.zero, borderSide: BorderSide(color: Colors.white)),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical:
+                                        5), // Adjust vertical padding as needed
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide:
+                                        BorderSide(color: Colors.white)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide:
+                                        BorderSide(color: Colors.white)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide:
+                                        BorderSide(color: Colors.white)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.zero,
+                                    borderSide:
+                                        BorderSide(color: Colors.white)),
                               ),
                               style: body16,
                             ),
@@ -130,8 +146,8 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
               const SizedBox(
                 height: 10,
               ),
-              const CustomButtonWithIcon(
-                title: 'Добавить номер',
+              CustomButtonWithIcon(
+                title: 'add_a_number'.tr,
                 svgIcon: Images.svgPlus,
                 isMaxSize: false,
                 textColor: ColorResources.gray,
@@ -143,20 +159,25 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                 height: 20,
               ),
               Text(
-                'Адрес электронной почты',
+                'email_address'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Официальный публичный E-mail компании. Если указан, будет показываться на вашей странице.',
+                'official_public_e_mail_of_the_company'.tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(
                 height: 10,
               ),
-              CustomTextField(controller: emailController, hintColor: '@gmail.com', inputType: TextInputType.emailAddress, leading: Images.svgMail, readOnly: false),
+              CustomTextField(
+                  controller: emailController,
+                  hintColor: '@gmail.com',
+                  inputType: TextInputType.emailAddress,
+                  leading: Images.svgMail,
+                  readOnly: false),
               const SizedBox(
                 height: 5,
               ),
@@ -168,7 +189,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                 height: 20,
               ),
               Text(
-                'Другие контакты',
+                'other_contacts'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
@@ -176,18 +197,32 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
               ),
               Row(
                 children: [
-                  Expanded(child: CustomTextField1(controller: textController, hintColor: 'Telegram', inputType: TextInputType.text, lableText: 'Название контакта', leading: '', readOnly: false)),
+                  Expanded(
+                      child: CustomTextField1(
+                          controller: textController,
+                          hintColor: 'Telegram',
+                          inputType: TextInputType.text,
+                          lableText: 'contact_name'.tr,
+                          leading: '',
+                          readOnly: false)),
                   const SizedBox(
                     width: 10,
                   ),
-                  Expanded(child: CustomTextField1(controller: textController, hintColor: '@Telegram', inputType: TextInputType.text, lableText: 'Контакты', leading: '', readOnly: false)),
+                  Expanded(
+                      child: CustomTextField1(
+                          controller: textController,
+                          hintColor: '@Telegram',
+                          inputType: TextInputType.text,
+                          lableText: 'contacts'.tr,
+                          leading: '',
+                          readOnly: false)),
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
-              const CustomButtonWithIcon(
-                title: 'Добавить контакты',
+              CustomButtonWithIcon(
+                title: 'add_contacts'.tr,
                 svgIcon: Images.svgPlus,
                 isMaxSize: false,
                 textColor: ColorResources.gray,

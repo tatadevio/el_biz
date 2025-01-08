@@ -4,7 +4,6 @@ import 'package:el_biz/view/screen/auth/password_changed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 
@@ -19,20 +18,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confPasswordController = TextEditingController();
   // bool terms = false;
-  final FocusNode _nodeText1 = FocusNode();
+  // final FocusNode _nodeText1 = FocusNode();
   bool rememberPassword = false;
 
-  KeyboardActionsConfig _buildConfig(BuildContext context) {
-    return KeyboardActionsConfig(
-      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-      keyboardBarColor: Colors.grey[200],
-      nextFocus: true,
-      defaultDoneWidget: Text("next".tr),
-      actions: [
-        if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
-      ],
-    );
-  }
+  // KeyboardActionsConfig _buildConfig(BuildContext context) {
+  //   return KeyboardActionsConfig(
+  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+  //     keyboardBarColor: Colors.grey[200],
+  //     nextFocus: true,
+  //     defaultDoneWidget: Text("next".tr),
+  //     actions: [
+  //       if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +118,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     child: Container(
                       width: Get.width * 0.9,
                       height: 48,
-                      decoration: BoxDecoration(color: ColorResources.blue, borderRadius: BorderRadius.circular(12.0), boxShadow: [
-                        const BoxShadow(color: Color.fromRGBO(16, 24, 40, 0.05), blurRadius: 2, spreadRadius: 0, offset: Offset(0, 1)),
-                      ]),
+                      decoration: BoxDecoration(
+                          color: ColorResources.blue,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: [
+                            const BoxShadow(
+                                color: Color.fromRGBO(16, 24, 40, 0.05),
+                                blurRadius: 2,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1)),
+                          ]),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(

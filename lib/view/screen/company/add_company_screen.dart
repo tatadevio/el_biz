@@ -33,14 +33,15 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 20,
               ),
               Text(
-                'Регистрация компании',
+                'company_registration'.tr,
                 style: h24.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Пожалуйста, потратьте несколько минут на правильное заполнение профиля компании.  Чем качественнее заполнена анкета, тем больше клиентов обратят на нее внимание.\nВсе анкеты после добавления проходят проверку модератором. Если анкета оформлена ненадлежащим образом или в тексте содержатся ошибки, анкета может быть заблокирована.',
+                'please_take_a_few_minutes_to_fill_out_your_company_profile_correctly'
+                    .tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(
@@ -62,13 +63,19 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 20,
               ),
               Text(
-                'Название компании/бренда',
+                'company_brand_name'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField1(controller: legalNameController, hintColor: 'Юр название: ОсОО исхаков', inputType: TextInputType.name, lableText: 'Юр название: ОсОО исхаков', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: legalNameController,
+                  hintColor: '${"legal_name".tr}: ОсОО исхаков',
+                  inputType: TextInputType.name,
+                  lableText: 'ОсОО исхаков',
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 5,
               ),
@@ -79,7 +86,13 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
               const SizedBox(
                 height: 20,
               ),
-              CustomTextField1(controller: okpoController, hintColor: 'ОКПО', inputType: TextInputType.name, lableText: 'ОКПО', leading: '', readOnly: false),
+              CustomTextField1(
+                  controller: okpoController,
+                  hintColor: 'ОКПО',
+                  inputType: TextInputType.name,
+                  lableText: 'ОКПО',
+                  leading: '',
+                  readOnly: false),
               const SizedBox(
                 height: 5,
               ),
@@ -91,7 +104,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 20,
               ),
               Text(
-                'Логотип компании/ организации',
+                'company_organization_logo'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(height: 10),
@@ -119,7 +132,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Загрузить',
+                        'download'.tr,
                         style: h16.copyWith(color: ColorResources.gray),
                       ),
                       Text(
@@ -134,7 +147,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                 height: 20,
               ),
               Text(
-                'Баннер компании/ организации',
+                'company_organization_banner'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
@@ -167,7 +180,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Загрузить баннер',
+                          'download_banner'.tr,
                           style: body14.copyWith(color: ColorResources.gray),
                         ),
                         Text(
