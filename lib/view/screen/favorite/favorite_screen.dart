@@ -13,8 +13,46 @@ import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/product_grid_item.dart';
 
-class FavoriteScreen extends StatelessWidget {
+class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
+
+  @override
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
+}
+
+class _FavoriteScreenState extends State<FavoriteScreen> {
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollToTopButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 300 && !_showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = true;
+        });
+      } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0, // Scroll to the top
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +73,16 @@ class FavoriteScreen extends StatelessWidget {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(100),
-          child: BlocBuilder<FavoriteBloc, FavoriteState>(builder: (context, favoriteState) {
+          child: BlocBuilder<FavoriteBloc, FavoriteState>(
+              builder: (context, favoriteState) {
             return Container(
               // decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(24.0), bottomRight: Radius.circular(24.0))),
               color: ColorResources.background,
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 5),
                     child: SizedBox(
                       height: height * 0.06,
                       child: Padding(
@@ -52,7 +92,9 @@ class FavoriteScreen extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  context.read<FavoriteBloc>().add(const UpdateShowCategories(true));
+                                  context
+                                      .read<FavoriteBloc>()
+                                      .add(const UpdateShowCategories(true));
                                 },
                                 child: Container(
                                   height: height * 0.06,
@@ -60,8 +102,12 @@ class FavoriteScreen extends StatelessWidget {
                                     // borderRadius: BorderRadius.circular(6),
                                     border: Border(
                                       bottom: BorderSide(
-                                        width: favoriteState.isShowCategories ? 2 : 1,
-                                        color: favoriteState.isShowCategories ? ColorResources.blue : ColorResources.lgColor,
+                                        width: favoriteState.isShowCategories
+                                            ? 2
+                                            : 1,
+                                        color: favoriteState.isShowCategories
+                                            ? ColorResources.blue
+                                            : ColorResources.lgColor,
                                       ),
                                     ),
                                   ),
@@ -69,7 +115,9 @@ class FavoriteScreen extends StatelessWidget {
                                       child: Text(
                                     "Закупки".tr,
                                     style: mediumTextStyle.copyWith(
-                                      color: favoriteState.isShowCategories ? ColorResources.primary : ColorResources.black,
+                                      color: favoriteState.isShowCategories
+                                          ? ColorResources.primary
+                                          : ColorResources.black,
                                     ),
                                   )),
                                 ),
@@ -81,22 +129,31 @@ class FavoriteScreen extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  context.read<FavoriteBloc>().add(const UpdateShowCategories(false));
+                                  context
+                                      .read<FavoriteBloc>()
+                                      .add(const UpdateShowCategories(false));
                                 },
                                 child: Container(
                                   height: height * 0.06,
                                   decoration: BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
-                                        width: !favoriteState.isShowCategories ? 2 : 1,
-                                        color: !favoriteState.isShowCategories ? ColorResources.blue : ColorResources.lgColor,
+                                        width: !favoriteState.isShowCategories
+                                            ? 2
+                                            : 1,
+                                        color: !favoriteState.isShowCategories
+                                            ? ColorResources.blue
+                                            : ColorResources.lgColor,
                                       ),
                                     ),
                                   ),
                                   child: Center(
                                       child: Text("goods".tr,
                                           style: mediumTextStyle.copyWith(
-                                            color: !favoriteState.isShowCategories ? ColorResources.primary : ColorResources.black,
+                                            color:
+                                                !favoriteState.isShowCategories
+                                                    ? ColorResources.primary
+                                                    : ColorResources.black,
                                           ))),
                                 ),
                               ),
@@ -114,23 +171,31 @@ class FavoriteScreen extends StatelessWidget {
                       InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: () {
-                          context.read<FavoriteBloc>().add(const UpdateShowGridView(true));
+                          context
+                              .read<FavoriteBloc>()
+                              .add(const UpdateShowGridView(true));
                         },
                         child: Container(
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: favoriteState.isShowGridView ? ColorResources.primary : null,
+                            color: favoriteState.isShowGridView
+                                ? ColorResources.primary
+                                : null,
                             border: Border.all(
                               width: 1,
-                              color: favoriteState.isShowGridView ? ColorResources.primary : ColorResources.lgColor,
+                              color: favoriteState.isShowGridView
+                                  ? ColorResources.primary
+                                  : ColorResources.lgColor,
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
                             Images.svgCategory,
-                            color: favoriteState.isShowGridView ? ColorResources.white : ColorResources.gray,
+                            color: favoriteState.isShowGridView
+                                ? ColorResources.white
+                                : ColorResources.gray,
                           ),
                         ),
                       ),
@@ -140,13 +205,17 @@ class FavoriteScreen extends StatelessWidget {
                       InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: () {
-                          context.read<FavoriteBloc>().add(const UpdateShowGridView(false));
+                          context
+                              .read<FavoriteBloc>()
+                              .add(const UpdateShowGridView(false));
                         },
                         child: Container(
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: favoriteState.isShowGridView ? null : ColorResources.primary,
+                            color: favoriteState.isShowGridView
+                                ? null
+                                : ColorResources.primary,
                             // border: Border.all(
                             //   width: 1,
                             //   color: !favoriteState.isShowGridView ? ColorResources.primary : ColorResources.lgColor,
@@ -156,7 +225,9 @@ class FavoriteScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
                             Images.svgList,
-                            color: !favoriteState.isShowGridView ? ColorResources.white : ColorResources.gray,
+                            color: !favoriteState.isShowGridView
+                                ? ColorResources.white
+                                : ColorResources.gray,
                           ),
                         ),
                       ),
@@ -175,50 +246,88 @@ class FavoriteScreen extends StatelessWidget {
           }),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<FavoriteBloc, FavoriteState>(
-          builder: (context, state) {
-            if (state.isShowCategories) {
-              return state.isShowGridView
-                  ? GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.7),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return const TenderGridItem(
-                          isFavorite: true,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: BlocBuilder<FavoriteBloc, FavoriteState>(
+              builder: (context, state) {
+                if (state.isShowCategories) {
+                  return state.isShowGridView
+                      ? GridView.builder(
+                          controller: _scrollController,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.7),
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            return const TenderGridItem(
+                              isFavorite: true,
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          controller: _scrollController,
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            return const TenderListItem(
+                              isFavorite: true,
+                            );
+                          },
                         );
-                      },
-                    )
-                  : ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return const TenderListItem(
-                          isFavorite: true,
-                        );
-                      },
-                    );
-            }
-            return state.isShowGridView
-                ? GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.7),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return const ProductGridItem(
-                        isFavorite: true,
+                }
+                return state.isShowGridView
+                    ? GridView.builder(
+                        controller: _scrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                childAspectRatio: 0.7),
+                        itemCount: 10,
+                        itemBuilder: (context, index) {
+                          return const ProductGridItem(
+                            isFavorite: true,
+                          );
+                        },
+                      )
+                    : ListView.builder(
+                        controller: _scrollController,
+                        itemCount: 10,
+                        itemBuilder: (context, index) {
+                          return const ProductListItem(
+                            isFavorite: true,
+                          );
+                        },
                       );
-                    },
-                  )
-                : ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return const ProductListItem(
-                        isFavorite: true,
-                      );
-                    },
-                  );
-          },
-        ),
+              },
+            ),
+          ),
+          if (_showScrollToTopButton)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: _scrollToTop,
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorResources.primary,
+                  ),
+                  child: const Icon(
+                    Icons.keyboard_arrow_up,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

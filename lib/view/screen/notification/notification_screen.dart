@@ -3,6 +3,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import 'widgets/notification_item.dart';
 
@@ -13,11 +14,12 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Уведомления'),
+        title: Text('notifications'.tr),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: BlocBuilder<NotificationBloc, NotificationState>(builder: (context, notificationState) {
+        child: BlocBuilder<NotificationBloc, NotificationState>(
+            builder: (context, notificationState) {
           if (notificationState.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -26,7 +28,7 @@ class NotificationScreen extends StatelessWidget {
           if (notificationState.notificationsList.isNotEmpty) {
             return Center(
               child: Text(
-                'Нет уведомлений',
+                'no_notifications'.tr,
                 style: body16.copyWith(color: ColorResources.gray),
               ),
             );

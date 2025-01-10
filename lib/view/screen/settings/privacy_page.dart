@@ -6,18 +6,22 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import '../../../utils/color_resources.dart';
 
 class Privacy extends StatelessWidget {
-  const Privacy({Key? key}) : super(key: key);
+  const Privacy({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorResources.background,
       appBar: AppBar(
-        title: BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configController) {
-          return !configController.isLoading && configController.privacy != null ? Text(configController.privacy!.data.title) : const Text("");
+        title: BlocBuilder<ConfigBloc, ConfigState>(
+            builder: (context, configController) {
+          return !configController.isLoading && configController.privacy != null
+              ? Text(configController.privacy!.data.title)
+              : const Text("");
         }),
       ),
-      body: BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configController) {
+      body: BlocBuilder<ConfigBloc, ConfigState>(
+          builder: (context, configController) {
         return !configController.isLoading && configController.privacy != null
             ? Padding(
                 padding: const EdgeInsets.only(top: 28.0),
@@ -29,7 +33,9 @@ class Privacy extends StatelessWidget {
                     padding: const EdgeInsets.all(18.0),
                     child: SingleChildScrollView(
                       child: Column(
-                        children: [HtmlWidget(configController.privacy!.data.description)],
+                        children: [
+                          HtmlWidget(configController.privacy!.data.description)
+                        ],
                       ),
                     ),
                   ),

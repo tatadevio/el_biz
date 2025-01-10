@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "869555382415",
+    "project_id": "b2bapp-8c342",
+    "storage_bucket": "b2bapp-8c342.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869555382415:android:69270af175a55b168ee8fa",
+        "android_client_info": {
+          "package_name": "com.tatadev.el_biz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjDCvOo9kYD74vr-v1KPi-6bCKUR-dpGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

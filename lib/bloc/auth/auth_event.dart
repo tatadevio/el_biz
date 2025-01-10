@@ -16,3 +16,20 @@ class UpdateCountryCode extends AuthEvent {
   @override
   List<Object> get props => [code];
 }
+
+class PhoneAuthentication extends AuthEvent {
+  final String phoneNumber;
+  const PhoneAuthentication(this.phoneNumber);
+
+  @override
+  List<Object> get props => [phoneNumber];
+}
+
+class VerifyOTP extends AuthEvent {
+  final String verificationId;
+  final String otp;
+  const VerifyOTP(this.verificationId, this.otp);
+
+  @override
+  List<Object> get props => [verificationId, otp];
+}

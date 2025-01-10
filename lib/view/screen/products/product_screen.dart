@@ -54,7 +54,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void _scrollToTop() {
     _scrollController.animateTo(
-      0, // Scroll to the top
+      0,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );

@@ -24,7 +24,8 @@ class _OtpScreenState extends State<OtpScreen> {
   late Timer timer;
   int seconds = 60;
 
-  StreamController<ErrorAnimationType> errorController = StreamController<ErrorAnimationType>();
+  StreamController<ErrorAnimationType> errorController =
+      StreamController<ErrorAnimationType>();
 
   bool hasError = false;
   String currentText = "";
@@ -72,7 +73,8 @@ class _OtpScreenState extends State<OtpScreen> {
                     SizedBox(
                       width: Get.width * 0.8,
                       child: Text(
-                        "an_authorization_code_has_been_sent_to_your_phone_number".tr,
+                        "an_authorization_code_has_been_sent_to_your_phone_number"
+                            .tr,
                         style: body14,
                         textAlign: TextAlign.center,
                       ).paddingOnly(
@@ -85,7 +87,8 @@ class _OtpScreenState extends State<OtpScreen> {
                     Form(
                       key: formKey,
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 5),
                           child: PinCodeTextField(
                             autoFocus: true,
                             appContext: context,
@@ -93,7 +96,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               color: Colors.green.shade600,
                               fontWeight: FontWeight.bold,
                             ),
-                            length: 4,
+                            length: 6,
                             obscureText: false,
                             obscuringCharacter: '*',
                             animationType: AnimationType.fade,
@@ -119,8 +122,10 @@ class _OtpScreenState extends State<OtpScreen> {
                             enableActiveFill: true,
                             cursorColor: Colors.black,
                             enablePinAutofill: true,
-                            animationDuration: const Duration(milliseconds: 300),
-                            textStyle: const TextStyle(fontSize: 20, height: 1.6),
+                            animationDuration:
+                                const Duration(milliseconds: 300),
+                            textStyle:
+                                const TextStyle(fontSize: 20, height: 1.6),
                             // backgroundColor: Colors.white,
                             errorAnimationController: errorController,
                             controller: textEditingController,
@@ -132,7 +137,10 @@ class _OtpScreenState extends State<OtpScreen> {
                                 currentText = value;
                               });
 
-                              Get.offAll(() => const ChangePasswordScreen());
+                              // Get.offAll(() => const ChangePasswordScreen());
+                              context
+                                  .read<AuthBloc>()
+                                  .add(VerifyOTP(widget.type, currentText));
                             },
                             // onTap: () {
                             //   print("Pressed");
@@ -158,7 +166,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       builder: (ctx, seconds, _) => Container(
                         height: 44,
                         decoration: BoxDecoration(
-                          color: (widget.secondsNotifier.value == 0) ? ColorResources.blue : ColorResources.lgColor,
+                          color: (widget.secondsNotifier.value == 0)
+                              ? ColorResources.blue
+                              : ColorResources.lgColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: (Row(
@@ -166,9 +176,13 @@ class _OtpScreenState extends State<OtpScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              (widget.secondsNotifier.value == 0) ? 'resend_code'.tr:
-                              '${"resend_code".tr} $seconds sec',
-                              style: button16.copyWith(color: (widget.secondsNotifier.value == 0) ? Colors.white : ColorResources.gray),
+                              (widget.secondsNotifier.value == 0)
+                                  ? 'resend_code'.tr
+                                  : '${"resend_code".tr} $seconds sec',
+                              style: button16.copyWith(
+                                  color: (widget.secondsNotifier.value == 0)
+                                      ? Colors.white
+                                      : ColorResources.gray),
                             ),
                           ],
                         )),

@@ -18,7 +18,7 @@ class NotificationItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               blurRadius: 3,
               spreadRadius: 0,
@@ -35,7 +35,8 @@ class NotificationItem extends StatelessWidget {
               width: 32,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: index % 2 == 0 ? ColorResources.blue : ColorResources.green,
+                color:
+                    index % 2 == 0 ? ColorResources.blue : ColorResources.green,
               ),
               alignment: Alignment.center,
               child: SvgPicture.asset(

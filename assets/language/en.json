@@ -256,5 +256,8 @@
   "view_banks": "View banks",
   "account_no_1": "Account No. 1",
   "reply": "Reply",
-  "working_hours": "Working hours"
+  "working_hours": "Working hours",
+  "chat": "Chat",
+  "notifications": "Notifications",
+  "no_notifications": "No notifications"
 }

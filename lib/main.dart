@@ -17,12 +17,14 @@ import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/review/review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'firebase_options.dart';
 import 'helper/route_helper.dart';
 import 'theme/light_theme.dart';
 import 'utils/appConstant.dart';
@@ -32,6 +34,9 @@ import 'utils/messages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // await Firebase.initializeApp();
   // HttpOverrides.global = MyHttpOverrides();
 
@@ -46,7 +51,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
   final SharedPreferences prefs;
-  MyApp({
+  const MyApp({
     super.key,
     required this.languages,
     required this.prefs,
@@ -73,7 +78,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ReviewBloc(Get.find())),
         BlocProvider(create: (_) => LocalizationBloc(Get.find(), Get.find())),
       ],
-      child: BlocBuilder<LocalizationBloc, LocalizationState>(builder: (context, localizationController) {
+      child: BlocBuilder<LocalizationBloc, LocalizationState>(
+          builder: (context, localizationController) {
         return GetMaterialApp(
           localizationsDelegates: const [
             FormBuilderLocalizations.delegate,
@@ -82,7 +88,8 @@ class MyApp extends StatelessWidget {
           ],
           locale: localizationController.locale,
           translations: Messages(languages: languages),
-          fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
+          fallbackLocale: Locale(AppConstants.languages[0].languageCode,
+              AppConstants.languages[0].countryCode),
           builder: BotToastInit(),
           title: AppConstants.appName,
           debugShowCheckedModeBanner: false,
@@ -120,6 +127,8 @@ class MyApp extends StatelessWidget {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

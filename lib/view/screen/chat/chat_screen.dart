@@ -5,7 +5,6 @@ import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/chat/widgets/chat_top_bar_widget.dart';
 import 'package:el_biz/view/screen/chat/widgets/contract_top_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
@@ -28,9 +27,11 @@ class ChatScreen extends StatelessWidget {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(140),
-          child: BlocBuilder<ChatBloc, ChatState>(builder: (context, chatState) {
+          child:
+              BlocBuilder<ChatBloc, ChatState>(builder: (context, chatState) {
             return Container(
-              decoration: const BoxDecoration(color: ColorResources.backgroundColor),
+              decoration:
+                  const BoxDecoration(color: ColorResources.backgroundColor),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
@@ -43,20 +44,35 @@ class ChatScreen extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {
-                            context.read<ChatBloc>().add(const UpdateShowChat(showChat: true));
+                            context
+                                .read<ChatBloc>()
+                                .add(const UpdateShowChat(showChat: true));
                             // chatState.updateShowChat(true);
                           },
                           child: Container(
                             width: width * 0.45,
                             height: 40,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(color: chatState.isShowChat ? Colors.white : null, borderRadius: BorderRadius.circular(6), boxShadow: chatState.isShowChat ? [ColorResources.shadow1, ColorResources.shadow2] : null),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                                color:
+                                    chatState.isShowChat ? Colors.white : null,
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: chatState.isShowChat
+                                    ? [
+                                        ColorResources.shadow1,
+                                        ColorResources.shadow2
+                                      ]
+                                    : null),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'messages'.tr,
-                                  style: button16.copyWith(color: chatState.isShowChat ? ColorResources.darkGray : ColorResources.gray),
+                                  style: button16.copyWith(
+                                      color: chatState.isShowChat
+                                          ? ColorResources.darkGray
+                                          : ColorResources.gray),
                                 ),
                                 //Unseen Count
                               ],
@@ -65,20 +81,35 @@ class ChatScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            context.read<ChatBloc>().add(const UpdateShowChat(showChat: false));
+                            context
+                                .read<ChatBloc>()
+                                .add(const UpdateShowChat(showChat: false));
                             // chatState.updateShowChat(false);
                           },
                           child: Container(
                             width: width * 0.45,
                             height: 40,
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(color: !chatState.isShowChat ? Colors.white : null, borderRadius: BorderRadius.circular(6), boxShadow: !chatState.isShowChat ? [ColorResources.shadow1, ColorResources.shadow2] : null),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                                color:
+                                    !chatState.isShowChat ? Colors.white : null,
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: !chatState.isShowChat
+                                    ? [
+                                        ColorResources.shadow1,
+                                        ColorResources.shadow2
+                                      ]
+                                    : null),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'treaty'.tr,
-                                  style: button16.copyWith(color: !chatState.isShowChat ? ColorResources.darkGray : ColorResources.gray),
+                                  style: button16.copyWith(
+                                      color: !chatState.isShowChat
+                                          ? ColorResources.darkGray
+                                          : ColorResources.gray),
                                 ),
                                 //Unseen Count
                               ],
