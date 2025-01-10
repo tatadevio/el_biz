@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class NewMessageWidget extends StatefulWidget {
-  const NewMessageWidget({super.key});
+  final String userId;
+  final String receiverId;
+  const NewMessageWidget(
+      {super.key, required this.userId, required this.receiverId});
 
   @override
   State<NewMessageWidget> createState() => _NewMessageWidgetState();
@@ -143,7 +146,6 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       {String? message, String? link, String? type = 'message'}) async {
     // UserModel userModel = Get.find<AuthController>().userData;
     // String userId = context.read<AuthBloc>().state.userData.
-    String userId = 'testingIOS';
 
     Map<String, dynamic> sendMessage = {
       "read": false,
@@ -155,6 +157,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       'last_fcm': '',
       // userModel.fcmToken ?? '',
       "sender": {
+        "id": widget.userId,
         // "name": userModel.name ?? '',
         // "image": userModel.image ?? '',
         // "phone": userModel.mobile ?? '',
@@ -171,16 +174,40 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         //         : 'unknown',
         // "ip": Get.find<AuthController>().ipAddress,
       },
+      "receiver": {
+        "id": widget.receiverId,
+      },
     };
 
+//updaet message on sender side
     await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
         .collection('chat')
-        .doc(userId)
+        .doc(widget.receiverId)
         .collection('messages')
         .add(sendMessage);
     await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
         .collection('chat')
-        .doc(userId)
+        .doc(widget.receiverId)
+        .set(sendMessage);
+
+    //updaet message on receiver side
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.receiverId)
+        .collection('chat')
+        .doc(widget.userId)
+        .collection('messages')
+        .add(sendMessage);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.receiverId)
+        .collection('chat')
+        .doc(widget.userId)
         .set(sendMessage);
     // }
     // _messageController.clear();

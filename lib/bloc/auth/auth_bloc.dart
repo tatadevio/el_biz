@@ -68,6 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _auth.signInWithCredential(credential);
         Get.offAll(() => DashboardScreen());
         // emit(AuthVerified());
+        add(UpdateUserFirebaseData());
         emit(state.copywith(isLoading: false));
       } catch (e) {
         showCustomSnackBar(e.toString());
@@ -102,6 +103,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Map<String, dynamic> userData = {
       "userId": userId,
       "fcmToken": fcmToken,
+      "time": DateTime.now(),
     };
     FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
   }

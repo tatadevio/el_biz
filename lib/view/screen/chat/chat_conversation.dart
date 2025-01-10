@@ -12,7 +12,13 @@ import 'package:get/get.dart';
 
 class ChatConversation extends StatelessWidget {
   final bool isSeller;
-  const ChatConversation({super.key, required this.isSeller});
+  final String userId;
+  final String receiverId;
+  const ChatConversation(
+      {super.key,
+      required this.isSeller,
+      this.userId = 'userId',
+      this.receiverId = 'tskJIEBnmogGnMFUreC8mdu9HFu2'});
 
   // List<ChatList> chatList = [
   //   ChatList(
@@ -155,7 +161,10 @@ class ChatConversation extends StatelessWidget {
               },
             ),
           ),
-          const NewMessageWidget(),
+          NewMessageWidget(
+            userId: userId,
+            receiverId: receiverId,
+          ),
         ],
       ),
     );
