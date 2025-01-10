@@ -185,9 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {
                           print(
                               'this is phone number : ${authState.countryCode + phoneController.text}');
-                          context.read<AuthBloc>().add(PhoneAuthentication(
-                                authState.countryCode + phoneController.text,
-                              ));
+                          // context.read<AuthBloc>().add(PhoneAuthentication(
+                          //       authState.countryCode + phoneController.text,
+                          //     ));
                           // PhoneAuthentication
                           // if (phoneController.text.isEmpty || phoneController.text.length < 9) {
                           //   showShortToast("Please enter correct phone number");
@@ -203,9 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           // } else {
                           //   showShortToast("invalid_phone_number".tr);
                           // }
-                          // Get.to(() => PasswordScreen(
-                          //       phoneNumber: phoneController.text,
-                          //     ));
+                          Get.to(() => PasswordScreen(
+                                phoneNumber: phoneController.text,
+                              ));
                           // Get.to(
                           //   () => OtpScreen(phone: phoneController.text, type: ''),
                           // );

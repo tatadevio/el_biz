@@ -1,10 +1,13 @@
 import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:el_biz/view/screen/tender/tender_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../../../helper/my_notification.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../chat/chat_screen.dart';
@@ -22,6 +25,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController = PageController(initialPage: 0);
   List<Widget> _screens = [];
   int _pageIndex = 0;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   // FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   // FirebaseDynamicLinkService firebaseDynamicLinkService = FirebaseDynamicLinkService();
@@ -37,6 +42,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       const ChatScreen(),
       const MenuScreen(),
     ];
+    initNotify();
+  }
+
+  initNotify() async {
+    await MyNotification.initialize(flutterLocalNotificationsPlugin, context);
+    FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
   }
 
   bool singleVendor = false;

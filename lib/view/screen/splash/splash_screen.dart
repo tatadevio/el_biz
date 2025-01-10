@@ -33,7 +33,6 @@ class _SplashScreenState extends State<SplashScreen> {
   call() async {
     // final SharedPreferences preferences = await SharedPreferences.getInstance();
     // bool isNew = preferences.getBool("new") ?? true;
-
     Future.delayed(const Duration(seconds: 2), () {
       // if (isNew) {
       //   Get.offAll(
@@ -48,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // Get.to(() => AddProduct());
         Get.offAllNamed(RouteHelper.getLoginRoute());
       }
+      context.read<AuthBloc>().add(UpdateUserFirebaseData());
     });
   }
 

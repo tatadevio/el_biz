@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/data/repo/auth_repo.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/auth/otp_screen.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -71,6 +73,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(state.copywith(isLoading: false));
       }
     });
+
+    on<UpdateUserFirebaseData>(_updateUserDataOnFirebase);
+  }
+
+  void _updateUserDataOnFirebase(
+      UpdateUserFirebaseData event, Emitter<AuthState> state) async {
+    String userId = 'userId';
+    if (_auth.currentUser != null) {
+      userId = FirebaseAuth.instance.currentUser!.uid;
+    }
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String fcmToken = '@';
+
+    try {
+      String? token = await messaging.getToken();
+      if (token != null) {
+        print('FCM Token: $token');
+        fcmToken = token;
+      }
+    } catch (e) {
+      print('Error getting FCM token: $e');
+    }
+
+    Map<String, dynamic> userData = {
+      "userId": userId,
+      "fcmToken": fcmToken,
+    };
+    FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
   }
 }
 

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,9 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                       suffixIcon: InkWell(
                         borderRadius: BorderRadius.circular(22),
                         onTap: () {
+                          _sendOrUpdateMessage(
+                            message: textController.text,
+                          );
                           textController.clear();
                           // focusNode.unfocus();
                           setState(() {});
@@ -131,5 +137,60 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         ],
       ),
     );
+  }
+
+  void _sendOrUpdateMessage(
+      {String? message, String? link, String? type = 'message'}) async {
+    // UserModel userModel = Get.find<AuthController>().userData;
+    // String userId = context.read<AuthBloc>().state.userData.
+    String userId = 'testingIOS';
+
+    Map<String, dynamic> sendMessage = {
+      "read": false,
+      "sender_type": 'user',
+      "text": message?.trim() ?? '',
+      "link": link ?? '',
+      "type": type ?? '',
+      'timestamp': FieldValue.serverTimestamp(),
+      'last_fcm': '',
+      // userModel.fcmToken ?? '',
+      "sender": {
+        // "name": userModel.name ?? '',
+        // "image": userModel.image ?? '',
+        // "phone": userModel.mobile ?? '',
+        // "email": userModel.email ?? "",
+        "device": Platform.isAndroid
+            ? "Android"
+            : Platform.isIOS
+                ? "IOS"
+                : "Unknown",
+        // "version": Platform.isIOS
+        //     ? AppConstants.iosVersion.toString()
+        //     : Platform.isAndroid
+        //         ? AppConstants.androidVersion.toString()
+        //         : 'unknown',
+        // "ip": Get.find<AuthController>().ipAddress,
+      },
+    };
+
+    await FirebaseFirestore.instance
+        .collection('chat')
+        .doc(userId)
+        .collection('messages')
+        .add(sendMessage);
+    await FirebaseFirestore.instance
+        .collection('chat')
+        .doc(userId)
+        .set(sendMessage);
+    // }
+    // _messageController.clear();
+
+    // sendNotificationToToken(
+    //   title: userModel.name,
+    //   message: message ?? '',
+    //   type: 'chat',
+    //   chatId: userModel.id.toString(),
+    //   fcmToken: await getAdminToken() ?? '',
+    // );
   }
 }
