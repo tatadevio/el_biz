@@ -231,61 +231,66 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                               height: 10,
                             ),
                             if (productController.filterCategories.isNotEmpty)
-                              Wrap(
-                                spacing: 8.0, // Horizontal spacing
-                                runSpacing: 8.0, // Vertical spacing
+                              SizedBox(
+                                width: Get.width,
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.start,
 
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                children:
-                                    productController.filterCategories.map(
-                                  (category) {
-                                    return Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 14, vertical: 8),
-                                          // margin: const EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1,
-                                                  color:
-                                                      ColorResources.lgColor),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: Colors.white,
-                                              boxShadow: const [
-                                                ColorResources.shadow1
-                                              ]),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                category.name,
-                                                style: body14,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  context
-                                                      .read<ProductBloc>()
-                                                      .add(RemoveFilterCategory(
-                                                          category));
-                                                },
-                                                child: const Icon(
-                                                  Icons.close,
-                                                  size: 16,
+                                  spacing: 8.0, // Horizontal spacing
+                                  runSpacing: 8.0, // Vertical spacing
+
+                                  children:
+                                      productController.filterCategories.map(
+                                    (category) {
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 14, vertical: 8),
+                                            // margin: const EdgeInsets.all(3),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 1,
+                                                    color:
+                                                        ColorResources.lgColor),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color: Colors.white,
+                                                boxShadow: const [
+                                                  ColorResources.shadow1
+                                                ]),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  category.name,
+                                                  style: body14,
                                                 ),
-                                              ),
-                                            ],
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    context
+                                                        .read<ProductBloc>()
+                                                        .add(
+                                                            RemoveFilterCategory(
+                                                                category));
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.close,
+                                                    size: 16,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ).toList(),
+                                        ],
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
                               ),
                             const SizedBox(
                               height: 10,

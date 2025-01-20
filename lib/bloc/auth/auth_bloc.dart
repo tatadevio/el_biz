@@ -22,6 +22,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copywith(isLoggedIn: loggedIn));
     });
 
+    // on<Login>(
+    //   (event, emit) {
+    //     final res = await authRepo.isLoggedIn();
+    //     res.fold(
+
+    //     );
+    //   }
+    // );
+
     on<UpdateCountryCode>((event, emit) {
       emit(state.copywith(countryCode: event.code));
     });

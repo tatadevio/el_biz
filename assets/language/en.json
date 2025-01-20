@@ -259,5 +259,18 @@
   "working_hours": "Working hours",
   "chat": "Chat",
   "notifications": "Notifications",
-  "no_notifications": "No notifications"
+  "no_notifications": "No notifications",
+  "start_chatting": "Start chatting",
+  "i_agree_to_the_terms_of_the_agreement...": "I agree to the terms of the agreement...",
+  "contract_for_the_supply_of_goods": "Contract for the supply of goods",
+  "subject_of_the_agreement": "Subject of the agreement",
+  "contract_amount_and_payment_procedure": "Contract amount and payment procedure",
+  "delivery_of_goods": "Delivery of goods",
+  "in_order_to_sign_the_contract_you_must_write_your_full_name": "In order to sign the contract, you must write your full name",
+  "clear": "Clear",
+  "to_image": "To Image",
+  "including_VAT": "Including VAT",
+  "total_excluding_taxes": "Total (excluding taxes)",
+  "including_NSP": "Including NSP",
+  "total_payment": "Total payment"
 }

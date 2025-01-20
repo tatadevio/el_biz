@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart' as intl;
 
 class Utilities {
   static bool isKeyboardShowing() {
@@ -18,4 +20,10 @@ Color hexToColor(String hexString) {
   if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
   buffer.write(hexString.replaceFirst('#', ''));
   return Color(int.parse(buffer.toString(), radix: 16));
+}
+
+bool isDirectionRTL() {
+  final local = Get.locale?.languageCode;
+  bool isDirectionRTL = intl.Bidi.isRtlLanguage(local);
+  return isDirectionRTL;
 }

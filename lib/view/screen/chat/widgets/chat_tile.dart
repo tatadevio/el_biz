@@ -3,6 +3,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/chat/chat_conversation.dart';
 import 'package:el_biz/view/screen/contracts/contracts_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,8 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        final _auth = FirebaseAuth.instance;
+        if (_auth.currentUser != null) {}
         if (isMessage) {
           // go to the message conversation screen
           Get.to(() => ChatConversation(isSeller: unSeen));

@@ -264,9 +264,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         title: InkWell(
                           onTap: () {
-                            context.read<ConfigBloc>().add(GetPrivacy());
+                            // context.read<ConfigBloc>().add(GetPrivacy());
                             // Get.find<ConfigController>().getPrivacy();
-                            Get.to(() => const Privacy());
+                            // Get.to(() => const Privacy());
                           },
                           child: Text(
                             'i_agree_to_the_terms_of_use_and_privacy_policy'.tr,

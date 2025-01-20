@@ -3,6 +3,7 @@ import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
+import 'package:el_biz/view/screen/contracts/contract_conditions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -302,6 +303,7 @@ class _NewContractPaymentScreenState extends State<NewContractPaymentScreen> {
                               height: 44,
                               onTap: () {
                                 Get.back();
+                                Get.to(() => ContractConditionsScreen());
                               },
                               title: 'look'.tr,
                             ),

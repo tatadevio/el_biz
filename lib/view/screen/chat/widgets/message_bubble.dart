@@ -34,32 +34,47 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     bool isMe = widget.chat.senderId.id == Get.find<UserController>().userInfoModel!.data.id;
-//     String dateTime = DateConverter.isoStringToLocalTimeOnly(widget.chat.createdAt.toString());
-//     String _date = DateConverter.isoStringToLocalDateOnly(widget.chat.createdAt.toString()) == DateConverter.estimatedDate(DateTime.now())
+//     bool isMe = widget.chat.senderId.id ==
+//         Get.find<UserController>().userInfoModel!.data.id;
+//     String dateTime = DateConverter.isoStringToLocalTimeOnly(
+//         widget.chat.createdAt.toString());
+//     String _date = DateConverter.isoStringToLocalDateOnly(
+//                 widget.chat.createdAt.toString()) ==
+//             DateConverter.estimatedDate(DateTime.now())
 //         ? 'Today'
-//         : DateConverter.isoStringToLocalDateOnly(widget.chat.createdAt.toString()) == DateConverter.estimatedDate(DateTime.now().subtract(const Duration(days: 1)))
+//         : DateConverter.isoStringToLocalDateOnly(
+//                     widget.chat.createdAt.toString()) ==
+//                 DateConverter.estimatedDate(
+//                     DateTime.now().subtract(const Duration(days: 1)))
 //             ? 'Yesterday'
-//             : DateConverter.isoStringToLocalDateOnly(widget.chat.createdAt.toString());
+//             : DateConverter.isoStringToLocalDateOnly(
+//                 widget.chat.createdAt.toString());
 
 //     return GetBuilder<ChatController>(builder: (chatController) {
 //       return Column(
-//         crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//         crossAxisAlignment:
+//             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
 //         children: [
 //           widget.addDate
 //               ? Padding(
 //                   padding: const EdgeInsets.all(12.0),
-//                   child: Align(alignment: Alignment.center, child: Text(_date, textAlign: TextAlign.center)),
+//                   child: Align(
+//                       alignment: Alignment.center,
+//                       child: Text(_date, textAlign: TextAlign.center)),
 //                 )
 //               : const SizedBox(),
 //           Padding(
-//             padding: isMe ? const EdgeInsets.fromLTRB(50, 5, 10, 5) : const EdgeInsets.fromLTRB(10, 5, 50, 5),
+//             padding: isMe
+//                 ? const EdgeInsets.fromLTRB(50, 5, 10, 5)
+//                 : const EdgeInsets.fromLTRB(10, 5, 50, 5),
 //             child: Column(
-//               crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//               crossAxisAlignment:
+//                   isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
 //               children: [
 //                 Row(
 //                   mainAxisSize: MainAxisSize.min,
-//                   mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+//                   mainAxisAlignment:
+//                       isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
 //                   children: [
 //                     Flexible(
 //                       child: InkWell(
@@ -79,7 +94,10 @@
 //                               MaterialButton(
 //                                 onPressed: () {
 //                                   Get.back();
-//                                   Get.find<ChatController>().deleteMessage(widget.chat.id.toString(), widget.chat).then((value) {});
+//                                   Get.find<ChatController>()
+//                                       .deleteMessage(widget.chat.id.toString(),
+//                                           widget.chat)
+//                                       .then((value) {});
 //                                 },
 //                                 child: Text(
 //                                   "yes".tr,
@@ -91,7 +109,11 @@
 //                         },
 //                         child: Container(
 //                           decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16), bottomLeft: Radius.circular(isMe ? 16 : 0), bottomRight: Radius.circular(isMe ? 0 : 16)),
+//                             borderRadius: BorderRadius.only(
+//                                 topLeft: Radius.circular(16),
+//                                 topRight: Radius.circular(16),
+//                                 bottomLeft: Radius.circular(isMe ? 16 : 0),
+//                                 bottomRight: Radius.circular(isMe ? 0 : 16)),
 //                             boxShadow: const [
 //                               BoxShadow(
 //                                 blurRadius: 40,
@@ -109,13 +131,18 @@
 //                                 : Colors.white,
 //                           ),
 //                           child: Column(
-//                             crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//                             crossAxisAlignment: isMe
+//                                 ? CrossAxisAlignment.end
+//                                 : CrossAxisAlignment.start,
 //                             children: [
 //                               if (widget.chat.type == 'text')
 //                                 Padding(
-//                                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+//                                   padding: const EdgeInsets.symmetric(
+//                                       horizontal: 20.0, vertical: 8.0),
 //                                   child: Text(
-//                                     isMe ? widget.chat.message : widget.chat.message,
+//                                     isMe
+//                                         ? widget.chat.message
+//                                         : widget.chat.message,
 //                                     style: body14,
 //                                   ),
 //                                 )
@@ -123,21 +150,30 @@
 //                                 widget.chat.image != ""
 //                                     ? GestureDetector(
 //                                         onTap: () {
-//                                           Get.to(() => (ImageView(image: widget.chat.image)));
+//                                           Get.to(() => (ImageView(
+//                                               image: widget.chat.image)));
 //                                         },
 //                                         child: ClipRRect(
 //                                           borderRadius: BorderRadius.only(
-//                                             bottomLeft: Radius.circular(isMe ? 10 : 0),
-//                                             bottomRight: Radius.circular(isMe ? 0 : 10),
+//                                             bottomLeft:
+//                                                 Radius.circular(isMe ? 10 : 0),
+//                                             bottomRight:
+//                                                 Radius.circular(isMe ? 0 : 10),
 //                                             topLeft: const Radius.circular(10),
 //                                             topRight: const Radius.circular(10),
 //                                           ),
 //                                           child: FadeInImage.assetNetwork(
 //                                             placeholder: Images.placeholder,
 //                                             image: widget.chat.image,
-//                                             width: MediaQuery.of(context).size.width * 0.7,
+//                                             width: MediaQuery.of(context)
+//                                                     .size
+//                                                     .width *
+//                                                 0.7,
 //                                             fit: BoxFit.fitWidth,
-//                                             height: MediaQuery.of(context).size.height * 0.28,
+//                                             height: MediaQuery.of(context)
+//                                                     .size
+//                                                     .height *
+//                                                 0.28,
 //                                           ),
 //                                         ),
 //                                       )
@@ -149,8 +185,14 @@
 //                                 crossAxisAlignment: CrossAxisAlignment.end,
 //                                 children: [
 //                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 8.0, right: 8),
-//                                     child: Text(DateFormat('dd MMM hh:mm').format(widget.chat.createdAt), style: TextStyle(fontSize: 13, color: Colors.grey.shade500)),
+//                                     padding: const EdgeInsets.only(
+//                                         left: 8.0, right: 8),
+//                                     child: Text(
+//                                         DateFormat('dd MMM hh:mm')
+//                                             .format(widget.chat.createdAt),
+//                                         style: TextStyle(
+//                                             fontSize: 13,
+//                                             color: Colors.grey.shade500)),
 //                                   ),
 //                                 ],
 //                               ),

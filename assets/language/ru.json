@@ -259,5 +259,18 @@
   "working_hours": "Время работы",
   "chat": "Чат",
   "notifications": "Уведомления",
-  "no_notifications": "Нет уведомлений"
+  "no_notifications": "Нет уведомлений",
+  "start_chatting": "Начать общение",
+  "i_agree_to_the_terms_of_the_agreement...": "Я соглашаюсь с условиями договора ...",
+  "contract_for_the_supply_of_goods": "Договор поставки  товара",
+  "subject_of_the_agreement": "Предмет договора",
+  "contract_amount_and_payment_procedure": "Сумма договора  и порядок оплаты",
+  "delivery_of_goods": "Поставка товара",
+  "in_order_to_sign_the_contract_you_must_write_your_full_name": "Для того чтобы подписать договор, необходимо написать полное ФИО",
+  "clear": "Прозрачный",
+  "to_image": "В изображение",
+  "including_VAT": "В том числе НДС",
+  "total_excluding_taxes": "Итого (без учёта налогов)",
+  "including_NSP": "В том числе НСП",
+  "total_payment": "Всего в оплате"
 }

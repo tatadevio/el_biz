@@ -3,6 +3,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/screen/signature/signature_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -208,7 +209,12 @@ class _SignContractScreenState extends State<SignContractScreen> {
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         child: CustomButton(
-            width: Get.width, height: 44, onTap: () {}, title: 'subscribe'.tr),
+            width: Get.width,
+            height: 44,
+            onTap: () {
+              Get.to(() => SignatureScreen());
+            },
+            title: 'subscribe'.tr),
       ),
     );
   }

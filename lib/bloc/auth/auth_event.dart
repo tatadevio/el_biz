@@ -34,4 +34,6 @@ class VerifyOTP extends AuthEvent {
   List<Object> get props => [verificationId, otp];
 }
 
+class Login extends AuthEvent {}
+
 class UpdateUserFirebaseData extends AuthEvent {}

@@ -137,8 +137,16 @@ class AppConstants {
   // static const String fullPhotoTitle = "Full Photo";
 
   static List<LanguageModel> languages = [
-    LanguageModel(imageUrl: Images.svgLock, languageName: 'English', countryCode: 'US', languageCode: 'en'),
-    LanguageModel(imageUrl: Images.svgLock, languageName: 'Русский', countryCode: 'RU', languageCode: 'ru'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'Русский',
+        countryCode: 'RU',
+        languageCode: 'ru'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'English',
+        countryCode: 'US',
+        languageCode: 'en'),
     // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
   ];
 }

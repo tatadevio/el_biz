@@ -4,7 +4,10 @@ class AuthState extends Equatable {
   final bool isLoading;
   final bool isLoggedIn;
   final String countryCode;
-  const AuthState({this.isLoading = false, this.isLoggedIn = false, this.countryCode = '+996'});
+  const AuthState(
+      {this.isLoading = false,
+      this.isLoggedIn = false,
+      this.countryCode = '+996'});
 
   AuthState copywith({bool? isLoading, bool? isLoggedIn, String? countryCode}) {
     return AuthState(
@@ -18,4 +21,16 @@ class AuthState extends Equatable {
   List<Object> get props => [isLoading, isLoggedIn, countryCode];
 }
 
-// final class AuthInitial extends AuthState {}
+final class AuthInitial extends AuthState {}
+
+final class AuthLoading extends AuthState {}
+
+final class AuthSuccess extends AuthState {
+  final String uid;
+  const AuthSuccess(this.uid);
+}
+
+final class AuthFailure extends AuthState {
+  final String message;
+  const AuthFailure(this.message);
+}
