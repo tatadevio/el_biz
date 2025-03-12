@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:el_biz/data/model/base/add_company_model.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../data/model/base/compnay_document_model.dart';
 import '../../data/model/base/timing_date_model.dart';
@@ -39,7 +45,8 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
               documentType: 'image',
             ),
           ],
-        )) {
+        addCompanyModel: AddCompanyModel()
+        ),) {
     on<UpdateShowGood>((event, emit) {
       emit(state.copywith(isShowActiveGoods: event.showActive));
     });
@@ -57,6 +64,8 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     });
 
     on<UpdateDay>(_onUpdateDay);
+
+    on<SelectCompanyLogo>(_selectCompanyLogo);
   }
   void _onUpdateDay(UpdateDay event, Emitter<CompanyState> emit) {
     final updatedSchedule = List<DaySchedule>.from(state.scheduleTiming);
@@ -68,5 +77,46 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     for (int i = 0; i < updatedSchedule.length; i++) {
       print("schedule value ${updatedSchedule[i].toJson()}");
     }
+  }
+
+  Future<void> _selectCompanyLogo(
+    SelectCompanyLogo event,
+    Emitter<CompanyState> emit,
+  ) async {
+    final picker = ImagePicker();
+    final XFile? value = await picker.pickImage(source: ImageSource.gallery);
+    if (value != null) {
+      final compressedImage = await _convertHEICtoJPG(File(value.path));
+      emit(CompanyState(
+          addCompanyModel:
+              state.addCompanyModel.copyWith(companyLogo: compressedImage)));
+    }
+  }
+
+  // Future<void> _onPickImageDocsCamera(
+  //   PickImageDocsCamera event,
+  //   Emitter<ReviewState> emit,
+  // ) async {
+  //   final picker = ImagePicker();
+  //   final XFile? value =
+  //       await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
+
+  //   if (value != null) {
+  //     final compressedImage = await _convertHEICtoJPG(File(value.path));
+  //     emit(ReviewState(pickedLogo: [...state.pickedLogo, compressedImage]));
+  //   }
+  // }
+
+  Future<XFile> _convertHEICtoJPG(File heicFile) async {
+    final tempDir = await getTemporaryDirectory();
+    final tempPath = tempDir.path;
+
+    final result = await FlutterImageCompress.compressAndGetFile(
+      heicFile.path,
+      '$tempPath/${DateTime.now().millisecondsSinceEpoch}.jpg',
+      quality: 100,
+      format: CompressFormat.jpeg,
+    );
+    return XFile(result!.path);
   }
 }

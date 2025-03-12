@@ -3,7 +3,8 @@ import 'package:el_biz/utils/Images.dart';
 import '../data/model/base/language_model.dart';
 
 class AppConstants {
-  static const String baseUrl = "https://isooq.kg/";
+  static const String baseUrl = "";
+  // "https://isooq.kg/";
   static const String appName = "El Biz";
   static const String countryCode = "+996";
   // static const String currencyCode = "cом";

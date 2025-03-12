@@ -1,5 +1,14 @@
 part of 'auth_bloc.dart';
 
+// abstract class AuthState1{}
+
+// class LoadingSucessState extends AuthState1{}
+
+// class LoadingErrorState extends AuthState1{
+//   final String error;
+//   LoadingErrorState(this.error);
+// }
+
 class AuthState extends Equatable {
   final bool isLoading;
   final bool isLoggedIn;

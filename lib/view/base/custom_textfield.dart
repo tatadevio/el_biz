@@ -108,6 +108,7 @@ class CustomTextField1 extends StatefulWidget {
   final bool isObsureText;
   final TextStyle? lableStyle;
   final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator;
   const CustomTextField1({
     super.key,
     required this.controller,
@@ -122,6 +123,7 @@ class CustomTextField1 extends StatefulWidget {
     this.isObsureText = false,
     this.lableStyle,
     this.inputFormatters,
+    this.validator,
   });
 
   @override
@@ -160,19 +162,20 @@ class _CustomTextField1State extends State<CustomTextField1> {
               controller: widget.controller,
               keyboardType: widget.inputType,
               maxLength: widget.maxLength,
-              validator: (v) {
-                if (widget.validate) {
-                  if (widget.maxLength == 9) {
-                    if (v!.length < 8) {
-                      return "phone_number_valid_toast".tr;
+              validator: widget.validator ??
+                  (v) {
+                    if (widget.validate) {
+                      if (widget.maxLength == 9) {
+                        if (v!.length < 8) {
+                          return "phone_number_valid_toast".tr;
+                        }
+                      }
+                      if (v!.isEmpty) {
+                        return "";
+                      }
                     }
-                  }
-                  if (v!.isEmpty) {
-                    return "";
-                  }
-                }
-                return null;
-              },
+                    return null;
+                  },
               inputFormatters: widget.maxLength == 9
                   ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
                   : widget.inputFormatters,

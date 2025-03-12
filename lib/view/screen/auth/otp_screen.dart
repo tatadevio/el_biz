@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../utils/color_resources.dart';
+import 'change_password_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phone;
@@ -95,7 +96,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               color: Colors.green.shade600,
                               fontWeight: FontWeight.bold,
                             ),
-                            length: 6,
+                            length: 4,
                             obscureText: false,
                             obscuringCharacter: '*',
                             animationType: AnimationType.fade,
@@ -136,10 +137,10 @@ class _OtpScreenState extends State<OtpScreen> {
                                 currentText = value;
                               });
 
-                              // Get.offAll(() => const ChangePasswordScreen());
-                              context
-                                  .read<AuthBloc>()
-                                  .add(VerifyOTP(widget.type, currentText));
+                              Get.offAll(() => const ChangePasswordScreen());
+                              // context
+                              //     .read<AuthBloc>()
+                              //     .add(VerifyOTP(widget.type, currentText));
                             },
                             // onTap: () {
                             //   print("Pressed");

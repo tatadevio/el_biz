@@ -47,3 +47,7 @@ class UpdateDay extends CompanyEvent {
   @override
   List<Object> get props => [index, value];
 }
+
+class SelectCompanyLogo extends CompanyEvent {}
+
+class SelectCompanyBanner extends CompanyEvent {}

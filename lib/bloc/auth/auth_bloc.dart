@@ -5,6 +5,7 @@ import 'package:el_biz/view/screen/auth/otp_screen.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
