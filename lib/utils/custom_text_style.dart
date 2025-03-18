@@ -117,3 +117,10 @@ TextStyle boldTextStyle = const TextStyle(
   fontWeight: FontWeight.w700,
   color: Color(0xff212020),
 );
+
+TextStyle textStyle14Inter = const TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: Color(0xff212020),
+);

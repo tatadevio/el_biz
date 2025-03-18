@@ -17,7 +17,7 @@ class CompanyState extends Equatable {
     this.isShowGoodsGridView = true,
     this.isShowTendersGridView = true,
     this.scheduleTiming = const [],
-    required this.addCompanyModel ,
+    required this.addCompanyModel,
   });
 
   CompanyState copywith(
@@ -51,7 +51,7 @@ class CompanyState extends Equatable {
         isShowGoodsGridView,
         isShowTendersGridView,
         scheduleTiming,
-        addCompanyModel as AddCompanyModel
+        addCompanyModel,
       ];
 }
 

@@ -6,8 +6,8 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/tender_grid_item.dart';
 import 'package:el_biz/view/base/tender_list_item.dart';
-import 'package:el_biz/view/screen/category/main_categories.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
+import 'package:el_biz/view/screen/tender/new_tende2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -85,8 +85,9 @@ class _TenderScreenState extends State<TenderScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => const MainCategories(
-                      type: true, fromHome: true, screenName: '/AddNewTender'));
+                  Get.to(() => NewTende2Screen());
+                  // Get.to(() => const MainCategories(
+                  //     type: true, fromHome: true, screenName: '/AddNewTender'));
                   // Get.to(() => const AddProductScreen());
                 },
                 child: Container(

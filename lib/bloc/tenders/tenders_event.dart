@@ -30,3 +30,6 @@ class RemoveGallery extends TendersEvent {
   @override
   List<Object> get props => [image];
 }
+
+class ResetNewTenderModel extends TendersEvent {}
+

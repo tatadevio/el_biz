@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:el_biz/bloc/tenders/tenders_event.dart';
+import 'package:el_biz/data/model/base/add_tender_model.dart';
 import 'package:el_biz/data/repo/tenders_repo.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,15 +13,24 @@ import 'tenders_state.dart';
 
 class TendersBloc extends Bloc<TendersEvent, TendersState> {
   final TendersRepo tendersRepo;
-  TendersBloc(this.tendersRepo) : super(const TendersState()) {
+  TendersBloc(this.tendersRepo)
+      : super(TendersState(
+          newTenderModel: AddTenderModel(),
+        )) {
     on<UpdateGridView>(_updateToggleShowGridView);
     on<FetchAllTenders>(_fetchAllTenders);
     on<PickImageDocs>(_onPickImageDocs);
     on<PickImageDocsCamera>(_onPickImageDocsCamera);
     on<RemoveGallery>(_onRemoveImage);
+    on<ResetNewTenderModel>((event, emit) {
+      emit(state.copywith(
+        newTenderModel: AddTenderModel(),
+      ));
+    });
   }
 
-  void _updateToggleShowGridView(UpdateGridView event, Emitter<TendersState> emit) {
+  void _updateToggleShowGridView(
+      UpdateGridView event, Emitter<TendersState> emit) {
     emit(state.copywith(isGridView: event.isGridView));
   }
 
@@ -39,6 +49,47 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
     emit(state.copywith(isLoading: false));
   }
 
+  // Future<void> _onPickImageDocs(
+  //   PickImageDocs event,
+  //   Emitter<TendersState> emit,
+  // ) async {
+  //   final picker = ImagePicker();
+  //   final List<XFile>? value = await picker.pickMultiImage(maxWidth: 1024);
+
+  //   if (value != null) {
+  //     final List<XFile> newImages = [];
+  //     for (var file in value) {
+  //       final compressedImage = await _convertHEICtoJPG(File(file.path));
+  //       newImages.add(compressedImage);
+  //     }
+  //     emit(TendersState(pickedLogo: [...state.pickedLogo, ...newImages]));
+  //   }
+  // }
+  // Future<void> _onPickImageDocs(
+  //   PickImageDocs event,
+  //   Emitter<TendersState> emit,
+  // ) async {
+  //   final picker = ImagePicker();
+  //   final List<XFile>? value = await picker.pickMultiImage(maxWidth: 1024);
+
+  //   if (value != null) {
+  //     final List<XFile> newImages = [];
+  //     for (var file in value) {
+  //       final compressedImage = await _convertHEICtoJPG(File(file.path));
+  //       newImages.add(compressedImage);
+  //     }
+  //     // state.newTenderModel.images(newImages);
+  //  emit(
+  //   TendersState(newTenderModel: state.newTenderModel!.copyWith())
+  //  );
+  //       emit(CompanyState(
+  //         addCompanyModel:
+  //             state.addCompanyModel.copyWith(certificateDocument: xFile),
+  //       ));
+
+  //     // emit(TendersState(pickedLogo: state.newTenderModel.images ));
+  //   }
+  // }
   Future<void> _onPickImageDocs(
     PickImageDocs event,
     Emitter<TendersState> emit,
@@ -52,7 +103,18 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
         final compressedImage = await _convertHEICtoJPG(File(file.path));
         newImages.add(compressedImage);
       }
-      emit(TendersState(pickedLogo: [...state.pickedLogo, ...newImages]));
+
+      // Get existing images or initialize a new list
+      final updatedImages = [
+        ...?state.newTenderModel.images,
+        ...newImages,
+      ];
+
+      final updatedModel = state.newTenderModel.copyWith(images: updatedImages);
+      //  ??
+      //     AddTenderModel(images: updatedImages);
+
+      emit(state.copywith(newTenderModel: updatedModel));
     }
   }
 
@@ -61,20 +123,43 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
     Emitter<TendersState> emit,
   ) async {
     final picker = ImagePicker();
-    final XFile? value = await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
+    final XFile? value =
+        await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
 
     if (value != null) {
       final compressedImage = await _convertHEICtoJPG(File(value.path));
-      emit(TendersState(pickedLogo: [...state.pickedLogo, compressedImage]));
+
+      List<XFile> updatedImages = [
+        ...?state.newTenderModel.images,
+        ...[compressedImage],
+      ];
+
+      final updatedModel = state.newTenderModel.copyWith(images: updatedImages);
+
+      emit(state.copywith(newTenderModel: updatedModel));
     }
   }
 
-  void _onRemoveImage(
+  // void _onRemoveImage(
+  //   RemoveGallery event,
+  //   Emitter<TendersState> emit,
+  // ) {
+  //   final updatedImages = List<XFile>.from(state.pickedLogo)
+  //     ..remove(event.image);
+  //   emit(TendersState(pickedLogo: updatedImages));
+  // }
+  Future<void> _onRemoveImage(
     RemoveGallery event,
     Emitter<TendersState> emit,
-  ) {
-    final updatedImages = List<XFile>.from(state.pickedLogo)..remove(event.image);
-    emit(TendersState(pickedLogo: updatedImages));
+  ) async {
+    final updatedImages = List<XFile>.from(state.newTenderModel.images ?? []);
+    updatedImages.removeWhere((image) => image.path == event.image.path);
+
+    final updatedModel = state.newTenderModel.copyWith(images: updatedImages);
+    //  ??
+    //     AddTenderModel(images: updatedImages);
+
+    emit(state.copywith(newTenderModel: updatedModel));
   }
 
   Future<XFile> _convertHEICtoJPG(File heicFile) async {

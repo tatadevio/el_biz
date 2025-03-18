@@ -60,6 +60,13 @@ class ColorResources {
     spreadRadius: 0,
   );
 
+  static const BoxShadow shadowXS = BoxShadow(
+    color: Color.fromRGBO(16, 24, 40, 0.05),
+    offset: Offset(0, 1),
+    blurRadius: 2,
+    spreadRadius: 0,
+  );
+
   static const Map<int, Color> colorMap = {
     50: Color(0x10192D6B),
     100: Color(0x20192D6B),
@@ -73,7 +80,11 @@ class ColorResources {
     900: Color(0xff192D6B),
   };
 
-  static const MaterialColor primaryMaterial = MaterialColor(0xff76C09D, colorMap);
+  static const MaterialColor primaryMaterial =
+      MaterialColor(0xff76C09D, colorMap);
 
-  static BoxShadow shadow = BoxShadow(color: Color(0xFFb8c2d6).withOpacity(0.4), offset: const Offset(0, 4), blurRadius: 12);
+  static BoxShadow shadow = BoxShadow(
+      color: Color(0xFFb8c2d6).withOpacity(0.4),
+      offset: const Offset(0, 4),
+      blurRadius: 12);
 }

@@ -254,7 +254,7 @@
   "add_contacts": "Add contacts",
   "details": "Details",
   "view_banks": "View banks",
-  "account_no_1": "Account No. 1",
+  "account_no": "Account No.",
   "reply": "Reply",
   "working_hours": "Working hours",
   "chat": "Chat",
@@ -272,5 +272,13 @@
   "including_VAT": "Including VAT",
   "total_excluding_taxes": "Total (excluding taxes)",
   "including_NSP": "Including NSP",
-  "total_payment": "Total payment"
+  "total_payment": "Total payment",
+  "budget" : "Budget",
+  "specify_what_you_want_to_order_the_volume_of_supplies_deadlines_and_delivery_conditions": "Specify what you want to order, the volume of supplies, deadlines, and delivery conditions. Do not publish contact information in the description",
+  "short_description" : "Short description",
+  "create_a_new_tender" : "Create a new tender",
+  "what_do_you_want_to_buy": "What do you want to buy?",
+  "without_quotes_for_example_B2B": "Without quotes, for example: B2B",
+  "add_a_photo_of_the_product_you_are_looking_for": "Add a photo of the product you are looking for"
+
 }

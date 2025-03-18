@@ -30,7 +30,7 @@ class AddProduct3Screen extends StatefulWidget {
 class _AddProduct3ScreenState extends State<AddProduct3Screen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController keywordsController = TextEditingController();
-  final TextEditingController sizeController = TextEditingController();
+  List<TextEditingController> sizeController = [TextEditingController()];
 
   @override
   void initState() {
@@ -40,10 +40,24 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
     }
   }
 
+  addNewSize() {
+    setState(() {
+      sizeController.add(TextEditingController());
+    });
+  }
+
+  removeSize(int index) {
+    setState(() {
+      sizeController[index].dispose();
+      sizeController.removeAt(index);
+    });
+  }
+
   updateProductData() {
     descriptionController.text = 'updated description here';
     keywordsController.text = 'keyword keyword2';
-    sizeController.text = '12/32';
+    for (int i = 0; i < sizeController.length; i++) {}
+    // sizeController.text = '12/32';
   }
 
   @override
@@ -240,19 +254,47 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                 const SizedBox(
                   height: 10,
                 ),
-                CustomTextField1(
-                  controller: sizeController,
-                  hintColor: 'Например: 80/90/67',
-                  inputType: TextInputType.text,
-                  lableText: '00/00/00',
-                  leading: '',
-                  readOnly: false,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^\d*\/?\d*\/?\d*'),
-                    ),
-                  ],
-                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: sizeController.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Column(
+                          children: [
+                            if (index != 0)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      removeSize(index);
+                                    },
+                                    icon: Icon(
+                                      Icons.remove_circle,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            CustomTextField1(
+                              controller: sizeController[index],
+                              hintColor: 'Например: 80/90/67',
+                              inputType: TextInputType.text,
+                              lableText: '00/00/00',
+                              leading: '',
+                              readOnly: false,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d*\/?\d*\/?\d*'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                 const SizedBox(
                   height: 20,
                 ),
@@ -264,7 +306,9 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                   buttonColor: ColorResources.lgColor,
                   borderColor: ColorResources.lgColor,
                   isMaxSize: false,
-                  onTap: () {},
+                  onTap: () {
+                    addNewSize();
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -281,10 +325,14 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
             width: Get.width,
             height: Get.height,
             onTap: () {
+              List<String> allSize = [];
+              for (int i = 0; i < sizeController.length; i++) {
+                allSize.add(sizeController[i].text);
+              }
               AddProductModel productData = widget.addProductData.copyWith(
                 description: descriptionController.text,
                 keywords: keywordsController.text,
-                size: sizeController.text,
+                size: allSize,
               );
               Get.to(() => AddProduct4Screen(
                     productData: productData,

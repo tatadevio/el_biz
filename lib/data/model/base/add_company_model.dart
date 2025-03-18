@@ -1,6 +1,8 @@
 import 'package:el_biz/data/model/response/bank_model.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'timing_date_model.dart';
+
 class AddCompanyModel {
   String? companyName;
   String? companyNumber;
@@ -18,9 +20,11 @@ class AddCompanyModel {
   List<String>? phoneNumbers;
   String? email;
   List<OtherContacts>? otherContacts;
-  BankItem? bankData;
+  List<BankItem>? bankData;
   XFile? certificateDocument;
   List<XFile>? otherDocuments;
+  List<DaySchedule>? schedule;
+  DaySchedule? lunchBreak;
 
   AddCompanyModel({
     this.companyName,
@@ -41,6 +45,8 @@ class AddCompanyModel {
     this.bankData,
     this.certificateDocument,
     this.otherDocuments,
+    this.schedule,
+    this.lunchBreak,
   });
 
   // Factory method for JSON deserialization
@@ -70,14 +76,18 @@ class AddCompanyModel {
               .map((e) => OtherContacts.fromJson(e))
               .toList()
           : null,
-      bankData:
-          json['bankData'] != null ? BankItem.fromJson(json['bankData']) : null,
+      bankData: json['bankData'] != null
+          ? (json['bankData'] as List).map((e) => BankItem.fromJson(e)).toList()
+          : null,
       certificateDocument: json['certificateDocument'] != null
           ? XFile(json['certificateDocument'])
           : null,
       otherDocuments: json['otherDocuments'] != null
           ? (json['otherDocuments'] as List).map((e) => XFile(e)).toList()
           : null,
+      // schedule: json['bankData'] != null
+      // ? (json['bankData'] as List).map((e) => DaySchedule.toma(e)).toList()
+      // : null,
     );
   }
 
@@ -99,7 +109,8 @@ class AddCompanyModel {
       'phoneNumbers': phoneNumbers,
       'email': email,
       'otherContacts': otherContacts?.map((e) => e.toJson()).toList(),
-      'bankData': bankData?.toJson(),
+      'bankData': bankData?.map((e) => e.toJson()).toList(),
+      // bankData?.toJson(),
       'certificateDocument': certificateDocument?.path,
       'otherDocuments': otherDocuments?.map((e) => e.path).toList(),
     };
@@ -122,7 +133,7 @@ class AddCompanyModel {
     List<String>? phoneNumbers,
     String? email,
     List<OtherContacts>? otherContacts,
-    BankItem? bankData,
+    List<BankItem>? bankData,
     XFile? certificateDocument,
     List<XFile>? otherDocuments,
   }) {

@@ -254,7 +254,7 @@
   "add_contacts": "Добавить контакты",
   "details": "Реквизиты",
   "view_banks": "Посмотреть банки",
-  "account_no_1": "Счёт №1",
+  "account_no": "Счёт №",
   "reply": "Ответить",
   "working_hours": "Время работы",
   "chat": "Чат",
@@ -272,5 +272,12 @@
   "including_VAT": "В том числе НДС",
   "total_excluding_taxes": "Итого (без учёта налогов)",
   "including_NSP": "В том числе НСП",
-  "total_payment": "Всего в оплате"
+  "total_payment": "Всего в оплате",
+  "budget" : "Бюджет",
+  "specify_what_you_want_to_order_the_volume_of_supplies_deadlines_and_delivery_conditions": "Укажите, что хотите заказать, объем поставок, сроки, условия доставки. Не публикуйте контактные данные в описании.",
+  "short_description" :"Краткое описание",
+  "create_a_new_tender" : "Создать новый тендер",
+  "what_do_you_want_to_buy" : "Что вы хотите купить?",
+  "without_quotes_for_example_B2B" : "Без кавычек, например: B2B",
+  "add_a_photo_of_the_product_you_are_looking_for" : "Добавьте фото товара, которое вы ищете"
 }

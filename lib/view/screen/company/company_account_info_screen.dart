@@ -1,11 +1,13 @@
-import 'dart:convert';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
+import '../../../bloc/company/company_bloc.dart';
+import '../../../data/model/response/bank_model.dart';
 import '../../../utils/color_resources.dart';
 import 'widgets/custom_add_company_appbar.dart';
 import 'widgets/select_currency_widget.dart';
@@ -19,10 +21,58 @@ class CompanyAccountInfoScreen extends StatefulWidget {
 }
 
 class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
-  final TextEditingController accountName = TextEditingController();
-  final TextEditingController bikController = TextEditingController();
-  final TextEditingController accountNumberController = TextEditingController();
-  final TextEditingController textController1 = TextEditingController();
+  List<TextEditingController> accountNameControllers = [
+    TextEditingController()
+  ];
+  List<TextEditingController> bikControllers = [TextEditingController()];
+  List<TextEditingController> accountNumberControllers = [
+    TextEditingController()
+  ];
+
+  void addNewAccount() {
+    accountNameControllers.add(TextEditingController());
+    bikControllers.add(TextEditingController());
+    accountNumberControllers.add(TextEditingController());
+    updateUI(); // Call setState or update method here
+  }
+
+  void removeAccount(int index) {
+    accountNameControllers.removeAt(index);
+    bikControllers.removeAt(index);
+    accountNumberControllers.removeAt(index);
+    updateUI(); // Call setState or update method here
+  }
+
+  updateUI() {
+    setState(() {});
+  }
+
+  void _submitForm() {
+    List<BankItem> allBanks = [];
+    for (int i = 0; i < accountNameControllers.length; i++) {
+      String accountName = accountNameControllers[i].text;
+      String accountNumber = accountNumberControllers[i].text;
+      String bik = bikControllers[i].text;
+      allBanks.add(
+        BankItem(
+          id: DateTime.now().millisecondsSinceEpoch + i,
+          bankName: bik,
+          accountName: accountName,
+          accountNumber: accountNumber,
+          image: '',
+        ),
+      );
+    }
+    final companyModel = context.read<CompanyBloc>().state.addCompanyModel;
+
+    companyModel.bankData = allBanks;
+
+    Get.bottomSheet(
+      backgroundColor: Colors.white,
+      const SelectCurrencyWidget(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // var size = MediaQuery.sizeOf(context);
@@ -56,47 +106,79 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                   ),
                 ],
               ),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: accountNameControllers.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "${'account_no'.tr} ${index + 1}",
+                                style: h16.copyWith(
+                                    color: ColorResources.darkGray),
+                              ),
+                            ),
+                            if (index > 0)
+                              IconButton(
+                                onPressed: () {
+                                  removeAccount(index);
+                                },
+                                icon: Icon(
+                                  Icons.remove_circle,
+                                  color: Colors.red,
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        CustomTextField1(
+                            controller: accountNameControllers[index],
+                            hintColor: '',
+                            inputType: TextInputType.name,
+                            lableText: 'give_a_name_for_your_account'.tr,
+                            leading: '',
+                            readOnly: false),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        CustomTextField1(
+                            controller: bikControllers[index],
+                            hintColor: '',
+                            inputType: TextInputType.text,
+                            lableText: 'БИК',
+                            leading: '',
+                            readOnly: false),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        CustomTextField1(
+                            controller: accountNumberControllers[index],
+                            hintColor: '',
+                            inputType: TextInputType.number,
+                            lableText: 'account_number'.tr,
+                            leading: '',
+                            readOnly: false),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Divider(),
+                      ],
+                    );
+                  }),
               const SizedBox(
-                height: 10,
-              ),
-              Text(
-                'account_no_1'.tr,
-                style: h16.copyWith(color: ColorResources.darkGray),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomTextField1(
-                  controller: accountName,
-                  hintColor: '',
-                  inputType: TextInputType.name,
-                  lableText: 'give_a_name_for_your_account'.tr,
-                  leading: '',
-                  readOnly: false),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomTextField1(
-                  controller: bikController,
-                  hintColor: '',
-                  inputType: TextInputType.text,
-                  lableText: 'БИК',
-                  leading: '',
-                  readOnly: false),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomTextField1(
-                  controller: accountNumberController,
-                  hintColor: '',
-                  inputType: TextInputType.number,
-                  lableText: 'account_number'.tr,
-                  leading: '',
-                  readOnly: false),
-              const SizedBox(
-                height: 15,
+                height: 5,
               ),
               CustomButtonWithIcon(
+                onTap: addNewAccount,
                 title: 'add_props'.tr,
                 svgIcon: Images.svgPlus,
                 isMaxSize: false,
@@ -150,10 +232,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Get.bottomSheet(
-                      backgroundColor: Colors.white,
-                      const SelectCurrencyWidget(),
-                    );
+                    _submitForm();
                   },
                   child: Container(
                     // height: 48,
@@ -188,39 +267,39 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
   }
 }
 
-Map<String, List<String>> convertContactsToMap(List<List<String>> contacts) {
-  Map<String, List<String>> contactMap = {};
+// Map<String, List<String>> convertContactsToMap(List<List<String>> contacts) {
+//   Map<String, List<String>> contactMap = {};
 
-  // Populate the contactMap with the contact details
-  if (contacts.isNotEmpty) {
-    contactMap['whatsapp'] = contacts[0]; // Assuming first list is WhatsApp
-    contactMap['telegram'] = contacts[1]; // Assuming second list is Telegram
-    contactMap['instagram'] = contacts[2]; // Assuming third list is Instagram
-    contactMap['vk'] = contacts[3]; // Assuming fourth list is VK
-    contactMap['email'] = contacts[4]; // Assuming fifth list is Email
-    contactMap['website'] = contacts[5]; // Assuming sixth list is Website
-  }
+//   // Populate the contactMap with the contact details
+//   if (contacts.isNotEmpty) {
+//     contactMap['whatsapp'] = contacts[0]; // Assuming first list is WhatsApp
+//     contactMap['telegram'] = contacts[1]; // Assuming second list is Telegram
+//     contactMap['instagram'] = contacts[2]; // Assuming third list is Instagram
+//     contactMap['vk'] = contacts[3]; // Assuming fourth list is VK
+//     contactMap['email'] = contacts[4]; // Assuming fifth list is Email
+//     contactMap['website'] = contacts[5]; // Assuming sixth list is Website
+//   }
 
-  return contactMap;
-}
+//   return contactMap;
+// }
 
-Map<String, String> convertContactsToMapString(
-    Map<String, List<String>> contactMap) {
-  Map<String, String> mapString = {};
+// Map<String, String> convertContactsToMapString(
+//     Map<String, List<String>> contactMap) {
+//   Map<String, String> mapString = {};
 
-  contactMap.forEach((key, value) {
-    // Join the list items into a single string with comma separator
-    mapString[key] = value.join(', ');
-  });
+//   contactMap.forEach((key, value) {
+//     // Join the list items into a single string with comma separator
+//     mapString[key] = value.join(', ');
+//   });
 
-  return mapString;
-}
+//   return mapString;
+// }
 
-String convertScheduleToString(List<dynamic> scheduleTiming) {
-  // Convert each schedule to JSON format
-  List<String> schedules =
-      scheduleTiming.map((schedule) => jsonEncode(schedule.toJson())).toList();
+// String convertScheduleToString(List<dynamic> scheduleTiming) {
+//   // Convert each schedule to JSON format
+//   List<String> schedules =
+//       scheduleTiming.map((schedule) => jsonEncode(schedule.toJson())).toList();
 
-  // Join JSON strings with a delimiter (e.g., newline or comma)
-  return schedules.join(', ');
-}
+//   // Join JSON strings with a delimiter (e.g., newline or comma)
+//   return schedules.join(', ');
+// }

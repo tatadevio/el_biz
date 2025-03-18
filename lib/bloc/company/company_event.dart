@@ -48,6 +48,24 @@ class UpdateDay extends CompanyEvent {
   List<Object> get props => [index, value];
 }
 
-class SelectCompanyLogo extends CompanyEvent {}
+class SelectCompanyLogo extends CompanyEvent {
+  final ImageSource imageSource;
+  const SelectCompanyLogo({required this.imageSource});
+}
 
 class SelectCompanyBanner extends CompanyEvent {}
+
+class SelectCompanyDocument extends CompanyEvent {
+  final ImageSource? imageSource;
+  const SelectCompanyDocument({required  this.imageSource});
+}
+
+class SelectCompanyOtherDocuments extends CompanyEvent{
+  final ImageSource? imageSource;
+  const SelectCompanyOtherDocuments({required this.imageSource});
+}
+
+class RemoveCompanyOtherDocument extends CompanyEvent {
+  final int index;
+  const RemoveCompanyOtherDocument(this.index);
+}

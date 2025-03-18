@@ -4,8 +4,10 @@ import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/company/company_info_screen.dart';
 import 'package:el_biz/view/screen/company/widgets/custom_add_company_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/company/company_bloc.dart';
 import '../../base/custom_button.dart';
 
 class KeywordsTagsScreen extends StatefulWidget {
@@ -17,6 +19,23 @@ class KeywordsTagsScreen extends StatefulWidget {
 
 class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
   final TextEditingController keywordsController = TextEditingController();
+
+  void _submitForm() {
+    // if (_formKey.currentState!.validate()) {
+
+    List<String> keywordsList = keywordsController.text
+        .toString()
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
+    context.read<CompanyBloc>().state.addCompanyModel.keywords = keywordsList;
+
+    Get.to(() => CompanyInfoScreen());
+    // } else {
+    // validation issue...
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +56,8 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
               height: 10,
             ),
             Text(
-              'enter_the_keywords_and_synonyms_for_which_your_company_will_be_searched'.tr,
+              'enter_the_keywords_and_synonyms_for_which_your_company_will_be_searched'
+                  .tr,
               style: body14.copyWith(color: ColorResources.gray),
             ),
             const SizedBox(
@@ -70,7 +90,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
             width: Get.width,
             height: 44,
             onTap: () {
-              Get.to(() => CompanyInfoScreen());
+              _submitForm();
             },
             title: 'continue'.tr),
       ),

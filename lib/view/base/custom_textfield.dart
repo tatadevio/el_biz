@@ -17,18 +17,21 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final int? maxLines;
   final Widget? suffix;
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      required this.hintColor,
-      required this.inputType,
-      required this.leading,
-      // required this.color,
-      required this.readOnly,
-      this.maxLength,
-      this.validate = false,
-      this.maxLines,
-      this.suffix});
+  final String? Function(String?)? validator;
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.hintColor,
+    required this.inputType,
+    required this.leading,
+    // required this.color,
+    required this.readOnly,
+    this.maxLength,
+    this.validate = false,
+    this.maxLines,
+    this.suffix,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +45,20 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           keyboardType: inputType,
           maxLength: maxLength,
-          validator: (v) {
-            if (validate) {
-              if (maxLength == 9) {
-                if (v!.length < 8) {
-                  return "phone_number_valid_toast".tr;
+          validator: validator ??
+              (v) {
+                if (validate) {
+                  if (maxLength == 9) {
+                    if (v!.length < 8) {
+                      return "phone_number_valid_toast".tr;
+                    }
+                  }
+                  if (v!.isEmpty) {
+                    return "";
+                  }
                 }
-              }
-              if (v!.isEmpty) {
-                return "";
-              }
-            }
-            return null;
-          },
+                return null;
+              },
           inputFormatters: maxLength == 9
               ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
               : null,

@@ -13,7 +13,7 @@ class AddProductModel {
   final String? region;
   final String? description;
   final String? keywords;
-  final String? size;
+  final List<String>? size;
   final String? availability;
 
   // Constructor
@@ -53,7 +53,7 @@ class AddProductModel {
       region: json['region'],
       description: json['description'],
       keywords: json['keywords'],
-      size: json['size'],
+      size: (json['size'] as List<dynamic>?)?.cast<String>(),
       availability: json['availability'],
     );
   }
@@ -96,7 +96,7 @@ class AddProductModel {
     String? region,
     String? description,
     String? keywords,
-    String? size,
+    List<String>? size,
     String? availability,
   }) {
     return AddProductModel(
