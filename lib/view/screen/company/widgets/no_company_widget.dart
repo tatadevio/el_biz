@@ -12,6 +12,7 @@ class NoCompanyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,12 +43,17 @@ class NoCompanyWidget extends StatelessWidget {
             style: body16.copyWith(color: ColorResources.gray, height: 1.6),
             children: [
               TextSpan(text: 'after_registering_your_company_you_can'.tr),
-              const TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextSpan(
+                  text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: 'create_a_tender'.tr),
-              const TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextSpan(
+                  text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: 'conclude_contracts_with_buyers'.tr),
-              const TextSpan(text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: 'upload_your_products_and_sell_them_on_our_platform'.tr),
+              const TextSpan(
+                  text: '• ', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      'upload_your_products_and_sell_them_on_our_platform'.tr),
             ],
           ),
         ),

@@ -7,11 +7,12 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../data/model/base/compnay_document_model.dart';
 import '../../data/model/base/timing_date_model.dart';
+import '../../data/model/response/company/my_companies_model.dart';
 
 part 'company_event.dart';
 part 'company_state.dart';
@@ -20,33 +21,18 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   final CompnayRepo compnayRepo;
   CompanyBloc(this.compnayRepo)
       : super(
-          CompanyState(companyDocuments: [
-            ComapnyDocumentModel(
-              id: '1',
-              title: 'Договор на реализацию садовой мебели для кофейни.pdf',
-              size: '1.2 MB',
-              date: '5 ноября 2024г.',
-              urlLink: '',
-              documentType: 'file',
-            ),
-            ComapnyDocumentModel(
-              id: '2',
-              title: 'Каталог садовых стульев.pdf',
-              size: '1.2 MB',
-              date: '5 ноября 2024г.',
-              urlLink: '',
-              documentType: 'file',
-            ),
-            ComapnyDocumentModel(
-              id: '3',
-              title: 'Каталог садовых стульев.jpg',
-              size: '1.2 MB',
-              date: '5 ноября 2024г.',
-              urlLink: '',
-              documentType: 'image',
-            ),
-          ], addCompanyModel: AddCompanyModel()),
+          CompanyState(addCompanyModel: AddCompanyModel()),
         ) {
+    on<GetMyCompanies>((event, emit) async {
+      // emit(state.copywith(isLoading: true)); // emits loading state
+      final res = await compnayRepo.getMyCompanies();
+      MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
+      List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
+      emit(state.copywith(myCompanies: myCompaniesList)); // emits updated state
+    });
+
+    on<DeleteCompany>(_onDeleteCompany);
+
     on<UpdateShowGood>((event, emit) {
       emit(state.copywith(isShowActiveGoods: event.showActive));
     });
@@ -74,7 +60,24 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     on<SelectCompanyOtherDocuments>(_selectCompanyOtherDocuments);
 
     on<RemoveCompanyOtherDocument>(_removeCompanyOtherDocument);
+
+    on<AddNewCompany>(_onAddNewCompany);
   }
+
+  // void _onGetMyCompanies(GetMyCompanies event, Emitter<CompanyState> emit) {}
+  Future<void> _onDeleteCompany(
+      DeleteCompany event, Emitter<CompanyState> emit) async {
+    emit(state.copywith(isLoading: true));
+    final res = await compnayRepo.deleteCompany(event.id);
+    if (res.statusCode == 200) {
+      emit(state.copywith(isLoading: false));
+      Get.back();
+      add(GetMyCompanies());
+    } else {
+      emit(state.copywith(isLoading: false));
+    }
+  }
+
   void _onUpdateDay(UpdateDay event, Emitter<CompanyState> emit) {
     final updatedSchedule = List<DaySchedule>.from(state.scheduleTiming);
     // updatedSchedule[event.index] = updatedSchedule[event.index].copyWith(isOpen: event.value);
@@ -241,4 +244,24 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     );
     return XFile(result!.path);
   }
+
+  Future<void> _onAddNewCompany(
+      AddNewCompany event, Emitter<CompanyState> emit) async {
+    emit(state.copywith(isLoading: true));
+    final res = await compnayRepo.addNewCompany(event.addCompanyModel);
+    if (res.statusCode == 200) {
+      emit(state.copywith(isLoading: false));
+
+      add(GetMyCompanies());
+    } else {
+      emit(state.copywith(isLoading: false));
+      // Get.snackbar(
+      //   'Error',
+      //   'Failed to add company',
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
+    }
+  }
+
+ 
 }

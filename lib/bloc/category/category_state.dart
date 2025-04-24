@@ -2,10 +2,10 @@ part of 'category_bloc.dart';
 
 class CategoryState extends Equatable {
   final bool isLoading;
-  final List<CategoriesItem> categoryItem;
-  final List<CategoriesItem> categoryItemFilter;
-  final List<CategoriesItem> singleCategoryItem;
-  final List<CategoriesItem> filterCategories;
+  final List<CategoryItem> categoryItem;
+  final List<CategoryItem> categoryItemFilter;
+  final List<CategoryItem> singleCategoryItem;
+  final List<CategoryItem> filterCategories;
   const CategoryState({
     this.isLoading = false,
     this.categoryItem = const [],
@@ -16,10 +16,10 @@ class CategoryState extends Equatable {
 
   CategoryState copyWith({
     bool? isLoading,
-    List<CategoriesItem>? categoryItem,
-    List<CategoriesItem>? categoryItemFilter,
-    List<CategoriesItem>? singleCategoryItem,
-    List<CategoriesItem>? filterCategories,
+    List<CategoryItem>? categoryItem,
+    List<CategoryItem>? categoryItemFilter,
+    List<CategoryItem>? singleCategoryItem,
+    List<CategoryItem>? filterCategories,
   }) {
     return CategoryState(
       isLoading: isLoading ?? this.isLoading,
@@ -30,7 +30,7 @@ class CategoryState extends Equatable {
     );
   }
 
-  bool isFilterSelectedCategory(CategoriesItem category) {
+  bool isFilterSelectedCategory(CategoryItem category) {
     return filterCategories.contains(category);
   }
 

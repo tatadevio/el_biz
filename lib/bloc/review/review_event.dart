@@ -18,3 +18,20 @@ class RemoveGallery extends ReviewEvent {
   @override
   List<Object> get props => [image];
 }
+
+class AddReview extends ReviewEvent {
+  final String companyId;
+  final int rating;
+  final String review;
+  final List<XFile> images;
+
+  const AddReview({
+    required this.companyId,
+    required this.rating,
+    required this.review,
+    required this.images,
+  });
+
+  @override
+  List<Object> get props => [companyId, rating, review, images];
+}

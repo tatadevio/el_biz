@@ -47,7 +47,8 @@ class _MainCategoriesState extends State<MainCategories> {
         elevation: 0,
         title: Text("category".tr),
       ),
-      body: BlocBuilder<CategoryBloc, CategoryState>(builder: (context, categoryState) {
+      body: BlocBuilder<CategoryBloc, CategoryState>(
+          builder: (context, categoryState) {
         if (categoryState.isLoading) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -57,7 +58,11 @@ class _MainCategoriesState extends State<MainCategories> {
             ? Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Container(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: const BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0))),
                   child: Column(
                     children: [
                       // Padding(
@@ -128,43 +133,41 @@ class _MainCategoriesState extends State<MainCategories> {
                             itemBuilder: (context, i) {
                               return InkWell(
                                 onTap: () {
-                                  if (categoryState.categoryItem[i].childs.isNotEmpty) {
-                                    // Get.to(() => SubCategories(title: categoryState.categoryItem[i].name,
-                                    //   categoryItem: categoryState.categoryItem[i].childs,type: type,));
+                                  // if (categoryState.categoryItem[i].childs.isNotEmpty) {
 
-                                    Get.to(() => CategoryScreens(
-                                          category: categoryState.categoryItem[i],
-                                          fromHome: widget.fromHome,
-                                          screenName: widget.screenName,
-                                        ));
-                                  } else {
-                                    // Get.find<ProductController>().getProductWithCat();
-                                    context.read<ProductBloc>().add(GetProductWithCat(categoryState.categoryItem[i].id.toString(), categoryState.categoryItem[i].name));
+                                  //   Get.to(() => CategoryScreens(
+                                  //         category: categoryState.categoryItem[i],
+                                  //         fromHome: widget.fromHome,
+                                  //         screenName: widget.screenName,
+                                  //       ));
+                                  // } else {
+                                  //   context.read<ProductBloc>().add(GetProductWithCat(categoryState.categoryItem[i].id.toString(), categoryState.categoryItem[i].name));
 
-                                    Get.to(() => Categories(
-                                          title: categoryState.categoryItem[i].name,
-                                          categoryItem: categoryState.categoryItem[i].childs,
-                                          id: categoryState.categoryItem[i].id.toString(),
-                                        ));
-                                  }
+                                  //   Get.to(() => Categories(
+                                  //         title: categoryState.categoryItem[i].name,
+                                  //         categoryItem: categoryState.categoryItem[i].childs,
+                                  //         id: categoryState.categoryItem[i].id.toString(),
+                                  //       ));
+                                  // }
                                 },
                                 child: Column(
                                   children: [
                                     ListTile(
                                       dense: true,
                                       leading: CustomImage(
-                                        image: categoryState.categoryItem[i].image,
+                                        image:
+                                            categoryState.categoryItem[i].image ?? '',
                                         height: 24,
                                         width: 24,
                                         radius: 0.0,
                                       ),
                                       title: Text(
-                                        categoryState.categoryItem[i].name,
-                                        style: body16.copyWith(color: ColorResources.darkGray),
-
-                                        //  const TextStyle(color: ColorResources.textBlack, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Inter'),
+                                        categoryState.categoryItem[i].name ?? '',
+                                        style: body16.copyWith(
+                                            color: ColorResources.darkGray),
                                       ),
-                                      trailing: SvgPicture.asset(Images.svgArrowRight),
+                                      trailing: SvgPicture.asset(
+                                          Images.svgArrowRight),
                                     ),
                                     const Divider(
                                       thickness: 2,

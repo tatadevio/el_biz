@@ -30,7 +30,8 @@ class LanguageWidget extends StatelessWidget {
           children: [
             ListTile(
               onTap: () async {
-                final SharedPreferences preferences = await SharedPreferences.getInstance();
+                final SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
                 preferences.setBool("new", false);
 
                 if (state.selectedIndex != index) {
@@ -44,7 +45,7 @@ class LanguageWidget extends StatelessWidget {
                   //   );
                   if (fromMenu) {
                     context.read<CategoryBloc>().add(GetCategory());
-                    context.read<CategoryBloc>().add(GetCategoryFilter());
+                    // context.read<CategoryBloc>().add(GetCategoryFilter());
                   }
                   // state.setSelectIndex(index);
                   context.read<LocalizationBloc>().add(SetSelectIndex(index));
@@ -54,7 +55,13 @@ class LanguageWidget extends StatelessWidget {
                 }
               },
               title: Center(
-                child: Text(languageModel.languageName, style: TextStyle(fontSize: 18, color: state.selectedIndex == index ? ColorResources.primary : Colors.black, fontWeight: FontWeight.w500)),
+                child: Text(languageModel.languageName,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: state.selectedIndex == index
+                            ? ColorResources.primary
+                            : Colors.black,
+                        fontWeight: FontWeight.w500)),
               ),
               dense: true,
             ),

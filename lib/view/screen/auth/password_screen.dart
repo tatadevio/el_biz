@@ -22,31 +22,9 @@ class PasswordScreen extends StatefulWidget {
 
 class _PasswordScreenState extends State<PasswordScreen> {
   TextEditingController passwordController = TextEditingController();
-  // bool terms = false;
-  // final FocusNode _nodeText1 = FocusNode();
-  // String phoneNumber = "";
-
-  // KeyboardActionsConfig _buildConfig(BuildContext context) {
-  //   return KeyboardActionsConfig(
-  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-  //     keyboardBarColor: Colors.grey[200],
-  //     nextFocus: true,
-  //     defaultDoneWidget: Text("next".tr),
-  //     actions: [
-  //       if (GetPlatform.isIOS)
-  //         KeyboardActionsItem(
-  //             displayArrows: false,
-  //             displayDoneButton: true,
-  //             focusNode: _nodeText1),
-  //     ],
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // var height = MediaQuery.sizeOf(context).height;
-    // var width = MediaQuery.sizeOf(context).width;
-
     return Scaffold(
       body: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return Padding(

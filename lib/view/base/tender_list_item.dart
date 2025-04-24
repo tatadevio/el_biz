@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../data/model/response/tender/tender_item_model.dart';
+import '../../helper/date_helper.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
 
 class TenderListItem extends StatelessWidget {
   final bool isFavorite;
+  final TenderItem tender;
 
-  const TenderListItem({super.key, this.isFavorite = false});
+  const TenderListItem(
+      {super.key, this.isFavorite = false, required this.tender});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +34,6 @@ class TenderListItem extends StatelessWidget {
               Stack(
                 children: [
                   CustomImage(image: '', height: 120, width: 100, radius: 16),
-                  // Image.asset(
-                  //   Images.splashLogo,
-                  //   height: 120,
-                  //   width: 100,
-                  // ),
                   Positioned(
                     right: 10,
                     top: 5,
@@ -75,13 +74,14 @@ class TenderListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Садовая мебель, раскладные стулья',
+                          tender.title ?? '',
+                          // 'Садовая мебель, раскладные стулья',
                           style: h16.copyWith(color: ColorResources.darkGray),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          'Раскладной садовый стул из дерева',
+                          tender.description ?? '',
                           style: body14.copyWith(color: ColorResources.gray),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -90,7 +90,7 @@ class TenderListItem extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'Количество: 20шт',
+                          'Количество:${tender.quantity} шт',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: body14.copyWith(
@@ -100,7 +100,7 @@ class TenderListItem extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'Бюджет: 50 000 сом',
+                          'Бюджет: ${tender.budgetFrom} - ${tender.budgetTo} сом',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: body14.copyWith(
@@ -119,7 +119,7 @@ class TenderListItem extends StatelessWidget {
                           style: body14.copyWith(color: ColorResources.gray),
                         ),
                         Text(
-                          '12 окт. 2024',
+                          formatDateInRu(tender.createdAt.toString()),
                           style: body14.copyWith(color: ColorResources.gray),
                         )
                       ],

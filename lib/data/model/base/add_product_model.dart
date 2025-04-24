@@ -1,23 +1,26 @@
+import 'package:image_picker/image_picker.dart';
+
 class AddProductModel {
-  final String? brandName;
-  final String? productName;
-  final String? productCode;
-  final String? price;
-  final String? currency;
-  final String? quantity;
-  final String? quantityUnit;
-  final String? dimensions;
-  final String? dimensionsUnit;
-  final String? weight;
-  final String? weightUnit;
-  final String? region;
-  final String? description;
-  final String? keywords;
-  final List<String>? size;
-  final String? availability;
+  String? brandName;
+  String? productName;
+  String? productCode;
+  String? price;
+  String? currency;
+  String? quantity;
+  String? quantityUnit;
+  String? dimensions;
+  String? dimensionsUnit;
+  String? weight;
+  String? weightUnit;
+  String? region;
+  String? description;
+  String? keywords;
+  List<String>? size;
+  String? availability;
+  List<XFile>? productImages;
 
   // Constructor
-  const AddProductModel({
+  AddProductModel({
     this.brandName,
     this.productName,
     this.productCode,
@@ -34,6 +37,7 @@ class AddProductModel {
     this.keywords,
     this.size,
     this.availability,
+    this.productImages,
   });
 
   // Factory method for JSON deserialization
@@ -55,6 +59,7 @@ class AddProductModel {
       keywords: json['keywords'],
       size: (json['size'] as List<dynamic>?)?.cast<String>(),
       availability: json['availability'],
+      productImages: (json['productImages'] as List<dynamic>?)?.cast<XFile>(),
     );
   }
 
@@ -77,6 +82,7 @@ class AddProductModel {
       'keywords': keywords,
       'size': size,
       'availability': availability,
+      'productImages': productImages,
     };
   }
 
@@ -98,6 +104,7 @@ class AddProductModel {
     String? keywords,
     List<String>? size,
     String? availability,
+    List<XFile>? productImages,
   }) {
     return AddProductModel(
       brandName: brandName ?? this.brandName,
@@ -116,12 +123,13 @@ class AddProductModel {
       keywords: keywords ?? this.keywords,
       size: size ?? this.size,
       availability: availability ?? this.availability,
+      productImages: productImages ?? this.productImages,
     );
   }
 
   // Override toString for debugging
   @override
   String toString() {
-    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability)';
+    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability, productImages: $productImages)';
   }
 }

@@ -9,7 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../bloc/company/company_bloc.dart';
-import '../../../../data/model/base/compnay_document_model.dart';
+// import '../../../../data/model/base/compnay_document_model.dart';
 
 class ShowContractFiles extends StatelessWidget {
   const ShowContractFiles({super.key});
@@ -73,15 +73,15 @@ class ShowContractFiles extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Expanded(
-                    child: ListView.builder(
-                  // shrinkWrap: true,
-                  // physics: const NeverScrollableScrollPhysics(),
-                  itemCount: state.companyDocuments.length,
-                  itemBuilder: (context, index) {
-                    return contractDocument(state.companyDocuments[index]);
-                  },
-                )),
+                // Expanded(
+                //     child: ListView.builder(
+                //   // shrinkWrap: true,
+                //   // physics: const NeverScrollableScrollPhysics(),
+                //   itemCount: state..length,
+                //   itemBuilder: (context, index) {
+                //     return contractDocument(state.companyDocuments[index]);
+                //   },
+                // )),
                 CustomButton(
                   width: Get.width,
                   height: 48,
@@ -101,58 +101,58 @@ class ShowContractFiles extends StatelessWidget {
     );
   }
 
-  Widget contractDocument(ComapnyDocumentModel document) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            document.documentType == 'image'
-                ? CustomImage(
-                    image: document.urlLink, height: 40, width: 40, radius: 0)
-                : SvgPicture.asset(
-                    Images.svgFile,
-                    height: 40,
-                    width: 40,
-                  ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    document.title,
-                    style: h16.copyWith(color: ColorResources.darkGray),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        document.size,
-                        style: body14.copyWith(color: ColorResources.gray),
-                      ),
-                      Text(
-                        document.date,
-                        style: body14.copyWith(color: ColorResources.gray),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SvgPicture.asset(
-              Images.svgDownload,
-              color: ColorResources.blue,
-            ),
-          ],
-        ),
-        const Divider(),
-      ],
-    );
-  }
+  // Widget contractDocument(ComapnyDocumentModel document) {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           document.documentType == 'image'
+  //               ? CustomImage(
+  //                   image: document.urlLink, height: 40, width: 40, radius: 0)
+  //               : SvgPicture.asset(
+  //                   Images.svgFile,
+  //                   height: 40,
+  //                   width: 40,
+  //                 ),
+  //           const SizedBox(
+  //             width: 10,
+  //           ),
+  //           Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   document.title,
+  //                   style: h16.copyWith(color: ColorResources.darkGray),
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 5,
+  //                 ),
+  //                 Row(
+  //                   children: [
+  //                     Text(
+  //                       document.size,
+  //                       style: body14.copyWith(color: ColorResources.gray),
+  //                     ),
+  //                     Text(
+  //                       document.date,
+  //                       style: body14.copyWith(color: ColorResources.gray),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           SvgPicture.asset(
+  //             Images.svgDownload,
+  //             color: ColorResources.blue,
+  //           ),
+  //         ],
+  //       ),
+  //       const Divider(),
+  //     ],
+  //   );
+  // }
 }

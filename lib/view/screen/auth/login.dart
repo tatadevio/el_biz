@@ -1,15 +1,14 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
-import 'package:el_biz/view/screen/auth/password_screen.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../bloc/config/config_bloc.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
-import '../settings/privacy_page.dart';
+import '../../base/custom_textfield.dart';
+import '../../base/custom_toast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,8 +20,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // TextEditingController _controller = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool terms = false;
   final FocusNode phoneFocus = FocusNode();
+  final FocusNode passwordFocus = FocusNode();
   String phoneNumber = "";
 
   // KeyboardActionsConfig _buildConfig(BuildContext context) {
@@ -86,7 +87,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 10,
                       ),
                       Container(
-                        // height: 64,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 3, vertical: 6),
                         decoration: BoxDecoration(
@@ -117,10 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(
                               width: 5,
                             ),
-                            Image.asset(
-                              Images.arrowForward,
-                              height: 20,
-                              width: 20,
+                            SizedBox(
+                              height: 15,
+                              child: SvgPicture.asset(Images.svgArrowRight),
                             ),
                             const SizedBox(
                               width: 10,
@@ -179,36 +178,46 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextField1(
+                        controller: passwordController,
+                        lableText: 'password'.tr,
+                        hintColor: '',
+                        inputType: TextInputType.visiblePassword,
+                        leading: '',
+                        readOnly: false,
+                        isObsureText: true,
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       InkWell(
                         onTap: () {
                           print(
                               'this is phone number : ${authState.countryCode + phoneController.text}');
-                          // context.read<AuthBloc>().add(PhoneAuthentication(
-                          //       authState.countryCode + phoneController.text,
-                          //     ));
-                          // PhoneAuthentication
-                          // if (phoneController.text.isEmpty || phoneController.text.length < 9) {
-                          //   showShortToast("Please enter correct phone number");
+                          if (phoneController.text.isEmpty &&
+                              passwordController.text.isEmpty) {
+                            showCustomSnackBar("Please enter phone number");
+                            return;
+                          }
+                          // if (passwordController.text.isEmpty) {
+                          //   showCustomSnackBar("Please enter password");
                           //   return;
                           // }
-                          // if (!terms) {
-                          //   showShortToast("Accept terms and condition".tr);
-                          //   return;
-                          // }
-
-                          // if (!authState.isLoading) {
-                          //   authState.phoneAuthentication(authState.countryCode + phoneController.text, "1");
-                          // } else {
-                          //   showShortToast("invalid_phone_number".tr);
-                          // }
-                          Get.to(() => PasswordScreen(
-                                phoneNumber: phoneController.text,
-                              ));
-                          // Get.to(
-                          //   () => OtpScreen(phone: phoneController.text, type: ''),
-                          // );
+                          if (phoneController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty) {
+                            context.read<AuthBloc>().add(Login(
+                                  authState.countryCode + phoneController.text,
+                                  passwordController.text,
+                                ));
+                          } else {
+                            context.read<AuthBloc>().add(SendOtp(
+                                  authState.countryCode + phoneController.text,
+                                ));
+                            // showCustomSnackBar(
+                            //     "Please enter phone number and password");
+                          }
                         },
                         child: Container(
                           width: Get.width * 0.9,
@@ -240,18 +249,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 25,
                       ),
-                      !authState.isLoading
-                          ? const SizedBox()
-                          : const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(),
-                              ],
-                            ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      // !authState.isLoading
+                      //     ? const SizedBox()
+                      //     : const Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           CircularProgressIndicator(),
+                      //         ],
+                      //       ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       CheckboxListTile(
+                        dense: false,
+                        contentPadding: const EdgeInsets.all(0),
                         value: terms,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
@@ -263,11 +274,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         },
                         title: InkWell(
-                          onTap: () {
-                            // context.read<ConfigBloc>().add(GetPrivacy());
-                            // Get.find<ConfigController>().getPrivacy();
-                            // Get.to(() => const Privacy());
-                          },
+                          // onTap: () {
+                          //   // context.read<ConfigBloc>().add(GetPrivacy());
+                          //   // Get.find<ConfigController>().getPrivacy();
+                          //   // Get.to(() => const Privacy());
+                          // },
                           child: Text(
                             'i_agree_to_the_terms_of_use_and_privacy_policy'.tr,
                             style:

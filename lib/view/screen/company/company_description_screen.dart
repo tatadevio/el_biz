@@ -1,14 +1,16 @@
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
-import 'package:el_biz/view/screen/company/keywords_tags_screen.dart';
 import 'package:el_biz/view/screen/company/widgets/custom_add_company_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../base/custom_button.dart';
+import '../category/select_category_screen.dart';
+import 'keywords_tags_screen.dart';
 
 class CompanyDescriptionScreen extends StatefulWidget {
   const CompanyDescriptionScreen({super.key});
@@ -26,8 +28,17 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
     if (_formKey.currentState!.validate()) {
       context.read<CompanyBloc>().state.addCompanyModel.description =
           descriptionController.text;
+      context.read<CategoryBloc>().add(GetCategory());
 
-      Get.to(() => KeywordsTagsScreen());
+      // Get.to(() => SelectCategoryScreen());
+      Get.to(() => SelectCategoryScreen(
+        isCompanyCategory: true,
+            onSelect: (selectedCategories) {
+              context.read<CompanyBloc>().state.addCompanyModel.categories =
+                  selectedCategories;
+              Get.to(() => KeywordsTagsScreen());
+            },
+          ));
     } else {
       // validation issue...
     }

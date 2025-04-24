@@ -1,5 +1,7 @@
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
 
 class UserRepo {
@@ -8,9 +10,9 @@ class UserRepo {
 
   UserRepo(this.apiClient, this.sharedPreferences);
 
-  // Future<Response> getUserInfo() async {
-  //   return await apiClient.getData(AppConstants.userInfoUrl);
-  // }
+  Future<Response> getUserInfo() async {
+    return await apiClient.getData(AppConstants.userInfoUrl);
+  }
 
   // Future<Response> deleteAccount() async {
   //   return await apiClient.deleteData(AppConstants.deleteAccountUrl);

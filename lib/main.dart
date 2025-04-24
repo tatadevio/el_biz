@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:el_biz/bloc/add_tender/add_tender_bloc.dart';
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
@@ -22,9 +23,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bloc/account/account_bloc.dart';
+import 'bloc/add_product/add_product_bloc.dart';
+import 'bloc/company_detail/company_detail_bloc.dart';
+import 'bloc/tin_number/tin_bloc.dart';
+import 'bloc/user/user_bloc.dart';
 import 'firebase_options.dart';
 import 'helper/route_helper.dart';
 import 'theme/light_theme.dart';
@@ -38,6 +45,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await initializeDateFormatting('ru_RU', null);
   // await Firebase.initializeApp();
   // HttpOverrides.global = MyHttpOverrides();
 
@@ -85,6 +93,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ProductDetailBloc(Get.find())),
         BlocProvider(create: (_) => ReviewBloc(Get.find())),
         BlocProvider(create: (_) => LocalizationBloc(Get.find(), Get.find())),
+        BlocProvider(create: (_) => UserBloc(Get.find())),
+        BlocProvider(create: (_) => CompanyDetailBloc(Get.find())),
+        BlocProvider(create: (_) => AccountBloc(Get.find())),
+        BlocProvider(create: (_) => TinBloc(Get.find())),
+        BlocProvider(create: (_) => AddProductBloc(Get.find())),
+        BlocProvider(create: (_) => AddTenderBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {
@@ -123,6 +137,11 @@ class MyApp extends StatelessWidget {
                 // fillColor: WidgetStateProperty.all(ColorResources.primary),
                 // checkColor: WidgetStateProperty.all(ColorResources.blue),
                 ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              scrolledUnderElevation: 0,
+            ),
           ),
           initialRoute: RouteHelper.getSplashRoute(),
           getPages: RouteHelper.routes,

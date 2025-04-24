@@ -17,6 +17,7 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
       : super(TendersState(
           newTenderModel: AddTenderModel(),
         )) {
+    // add(GetTendersList());
     on<UpdateGridView>(_updateToggleShowGridView);
     on<FetchAllTenders>(_fetchAllTenders);
     on<PickImageDocs>(_onPickImageDocs);

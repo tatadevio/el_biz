@@ -137,7 +137,14 @@ class _OtpScreenState extends State<OtpScreen> {
                                 currentText = value;
                               });
 
-                              Get.offAll(() => const ChangePasswordScreen());
+                              context.read<AuthBloc>().add(VerifyOtp(
+                                    widget.type,
+                                    widget.phone,
+                                        
+                                    currentText,
+                                  ));
+
+                              // Get.offAll(() => const ChangePasswordScreen());
                               // context
                               //     .read<AuthBloc>()
                               //     .add(VerifyOTP(widget.type, currentText));

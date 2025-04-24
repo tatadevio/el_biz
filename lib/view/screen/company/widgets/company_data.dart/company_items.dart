@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../../base/product_grid_item.dart';
 import '../../../../base/product_list_item.dart';
 
@@ -15,106 +16,136 @@ class CompanyItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CompanyBloc, CompanyState>(builder: (context, compnayState) {
-      return Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    context.read<CompanyBloc>().add(const UpdateShowGood(true));
-                    // compnayState.updateShowGood(true);
-                  },
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: compnayState.isShowActiveGoods ? 2 : 1, color: compnayState.isShowActiveGoods ? ColorResources.blue : ColorResources.lgColor),
-                      ),
-                    ),
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'actively'.tr,
-                      style: textSm.copyWith(color: compnayState.isShowActiveGoods ? ColorResources.blue : ColorResources.lgColor),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    context.read<CompanyBloc>().add(const UpdateShowGood(false));
-                    // compnayState.updateShowGood(false);
-                  },
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: !compnayState.isShowActiveGoods ? 2 : 1, color: !compnayState.isShowActiveGoods ? ColorResources.blue : ColorResources.lgColor),
-                      ),
-                    ),
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'inactive'.tr,
-                      style: textSm.copyWith(color: !compnayState.isShowActiveGoods ? ColorResources.blue : ColorResources.lgColor),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+    return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
+        builder: (context, companyDetailState) {
+      return BlocBuilder<CompanyBloc, CompanyState>(
+          builder: (context, compnayState) {
+        return Column(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
               children: [
-                CustomGridviewWidget(
-                  isSelected: compnayState.isShowGoodsGridView,
-                  onTap: () {
-                    context.read<CompanyBloc>().add(const UpdateShowGoodsGridView(true));
-                    // compnayState.updateShowGoodsGridView(true);
-                  },
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<CompanyBloc>()
+                          .add(const UpdateShowGood(true));
+                      // compnayState.updateShowGood(true);
+                    },
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                              width: compnayState.isShowActiveGoods ? 2 : 1,
+                              color: compnayState.isShowActiveGoods
+                                  ? ColorResources.blue
+                                  : ColorResources.lgColor),
+                        ),
+                      ),
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        'actively'.tr,
+                        style: textSm.copyWith(
+                            color: compnayState.isShowActiveGoods
+                                ? ColorResources.blue
+                                : ColorResources.lgColor),
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
-                CustomListviewWidget(
-                  isSelected: !compnayState.isShowGoodsGridView,
-                  onTap: () {
-                    context.read<CompanyBloc>().add(const UpdateShowGoodsGridView(false));
-
-                    // compnayState.updateShowGoodsGridView(false);
-                  },
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<CompanyBloc>()
+                          .add(const UpdateShowGood(false));
+                      // compnayState.updateShowGood(false);
+                    },
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                              width: !compnayState.isShowActiveGoods ? 2 : 1,
+                              color: !compnayState.isShowActiveGoods
+                                  ? ColorResources.blue
+                                  : ColorResources.lgColor),
+                        ),
+                      ),
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        'inactive'.tr,
+                        style: textSm.copyWith(
+                            color: !compnayState.isShowActiveGoods
+                                ? ColorResources.blue
+                                : ColorResources.lgColor),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-          if (compnayState.isShowGoodsGridView) ...[
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.7),
-              itemCount: 8,
-              itemBuilder: (context, index) {
-                return const ProductGridItem();
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomGridviewWidget(
+                    isSelected: compnayState.isShowGoodsGridView,
+                    onTap: () {
+                      context
+                          .read<CompanyBloc>()
+                          .add(const UpdateShowGoodsGridView(true));
+                      // compnayState.updateShowGoodsGridView(true);
+                    },
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  CustomListviewWidget(
+                    isSelected: !compnayState.isShowGoodsGridView,
+                    onTap: () {
+                      context
+                          .read<CompanyBloc>()
+                          .add(const UpdateShowGoodsGridView(false));
+
+                      // compnayState.updateShowGoodsGridView(false);
+                    },
+                  ),
+                ],
+              ),
             ),
-          ] else ...[
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 8,
-              itemBuilder: (context, index) {
-                return const ProductListItem();
-              },
-            ),
+            if (compnayState.isShowGoodsGridView) ...[
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.7),
+                itemCount: companyDetailState.companyProducts?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return const ProductGridItem();
+                },
+              ),
+            ] else ...[
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: companyDetailState.companyProducts?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return const ProductListItem();
+                },
+              ),
+            ],
           ],
-        ],
-      );
+        );
+      });
     });
   }
 }

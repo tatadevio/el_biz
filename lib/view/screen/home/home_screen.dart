@@ -10,15 +10,28 @@ import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
 import 'package:el_biz/view/screen/home/widgets/new_companies_widget.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:el_biz/view/screen/search/search_screen.dart';
+import 'package:el_biz/view/screen/tender/tender_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/account/account_bloc.dart';
+import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/tin_number/tin_bloc.dart';
+import '../../../bloc/user/user_bloc.dart';
 import '../company/widgets/fill_company_data_box.dart';
+import '../company/widgets/show_company_detail_box.dart';
+import '../company/widgets/show_llc_issue_box.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  loadData(BuildContext context) {
+    context.read<UserBloc>().add(const GetUserInfo());
+    context.read<CompanyBloc>().add(GetMyCompanies());
+    context.read<AccountBloc>().add(GetMyAccounts());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +39,9 @@ class HomeScreen extends StatelessWidget {
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
-        // leading: Image.asset(
-        //   Images.splashLogo,
-        //   height: 40,
-        // ),
+        backgroundColor: Colors.white,
+        elevation: 0,
         title: SvgPicture.asset(Images.svgsplashLogo, height: 40, width: 40),
-        // Image.asset(
-        //   Images.splashLogo,
-        //   height: 40,
-        //   width: 40,
-        // ),
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(12),
@@ -45,7 +51,10 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               height: 40,
               width: 40,
-              decoration: BoxDecoration(border: Border.all(width: 1, color: ColorResources.lgColor), borderRadius: BorderRadius.circular(12), color: Colors.white),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: ColorResources.lgColor),
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white),
               alignment: Alignment.center,
               child: SvgPicture.asset(Images.svgSearch),
             ),
@@ -59,199 +68,275 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 20),
-                // .symmetric(horizontal: 20, vertical: 24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
+      body: BlocListener<TinBloc, TinState>(
+        listener: (context, state) {
+          if (state is TinSuccess) {
+            Get.dialog(
+              CustomDialog(
+                widget: AlertDialog(
+                  backgroundColor: Colors.white,
+                  titlePadding: EdgeInsets.all(0),
+                  contentPadding: EdgeInsets.all(5),
+                  content: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: ShowCompanyDetailBox(tinNumber: state.tinNumber),
+                  ),
                 ),
-                child: Stack(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 10,
-                          child: SizedBox(
-                            // padding: const EdgeInsets.only(top: 24, bottom: 24, left: 20),
-
-                            // .symmetric(horizontal: 20, vertical: 24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+            );
+          }
+          if (state is TinError) {
+            Get.dialog(
+              const CustomDialog(
+                widget: AlertDialog(
+                  backgroundColor: Colors.white,
+                  titlePadding: EdgeInsets.all(0),
+                  contentPadding: EdgeInsets.all(5),
+                  content: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: ShowLlcIssueBox(),
+                  ),
+                ),
+              ),
+            );
+          }
+          // if (state is TinLoading) {
+          //   Get.dialog(
+          //     const CustomDialog(
+          //       widget: CircularProgressIndicator(),
+          //     ),
+          //   );
+          // }
+        },
+        child: BlocBuilder<TinBloc, TinState>(builder: (context, tinState) {
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      BlocBuilder<UserBloc, UserState>(
+                          builder: (context, state) {
+                        return Text('${state.userInfo?.data?.username ?? ""}');
+                      }),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        // .symmetric(horizontal: 20, vertical: 24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Stack(
+                          children: [
+                            Row(
                               children: [
-                                const SizedBox(
-                                  height: 24,
+                                Expanded(
+                                  flex: 10,
+                                  child: SizedBox(
+                                    // padding: const EdgeInsets.only(top: 24, bottom: 24, left: 20),
+
+                                    // .symmetric(horizontal: 20, vertical: 24),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 24,
+                                        ),
+                                        Text(
+                                          'verified_companies'.tr,
+                                          style: h24.copyWith(
+                                              color: ColorResources.darkGray),
+                                        ),
+                                        Text(
+                                          'your_platform_for_partnership_and_cooperation'
+                                              .tr,
+                                          style: body16.copyWith(
+                                              color: ColorResources.gray),
+                                        ),
+                                        const SizedBox(
+                                          height: 24,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  'verified_companies'.tr,
-                                  style: h24.copyWith(color: ColorResources.darkGray),
-                                ),
-                                Text(
-                                  'your_platform_for_partnership_and_cooperation'.tr,
-                                  style: body16.copyWith(color: ColorResources.gray),
-                                ),
-                                const SizedBox(
-                                  height: 24,
+                                const Expanded(
+                                  flex: 8,
+                                  child: SizedBox(),
+                                  // Image.asset(
+                                  //   Images.companiesIcon,
+                                  //   fit: BoxFit.cover,
+                                  // ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        const Expanded(
-                          flex: 8,
-                          child: SizedBox(),
-                          // Image.asset(
-                          //   Images.companiesIcon,
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Image.asset(
-                        Images.companiesIcon,
-                        fit: BoxFit.cover,
-                        width: width * 0.45,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: height * 0.04,
-              ),
-              homeOptions(
-                  title: 'companies'.tr,
-                  titleImage: Images.svgBriefcase,
-                  detail: 'base_of_wholesale_suppliers_manufacturers_of_goods_or_logistics_services'.tr,
-                  backgroundColor: ColorResources.blue,
-                  onTap: () {
-                    Get.to(() => const MyCompaniesScreen());
-                  }),
-              SizedBox(
-                height: height * 0.025,
-              ),
-              homeOptions(
-                  title: 'goods'.tr,
-                  titleImage: Images.svgShoppingBag,
-                  detail: 'find_products_from_manufacturers_and_suppliers'.tr,
-                  backgroundColor: ColorResources.green,
-                  onTap: () {
-                    // Get.find<ProductController>().updateShowCategories(false);
-
-                    context.read<ProductBloc>().add(const UpdateShowCategories(false));
-                    Get.to(() => const ProductScreen());
-                  }),
-              SizedBox(
-                height: height * 0.025,
-              ),
-              homeOptions(
-                title: 'tenders'.tr,
-                titleImage: Images.svgTenders,
-                detail: 'view_advertisements_for_purchasing_goods_or_add_your_own'.tr,
-                backgroundColor: ColorResources.orange,
-                onTap: () {
-                  // Get.find<ProductController>().updateShowCategories(true);
-                  context.read<ProductBloc>().add(const UpdateShowCategories(true));
-                  Get.to(() => const ProductScreen());
-                },
-              ),
-              SizedBox(
-                height: height * 0.025,
-              ),
-              homeOptions(
-                  title: 'favorites'.tr,
-                  titleImage: Images.svgHeart,
-                  detail: 'saved_goods_companies_and_tenders'.tr,
-                  backgroundColor: ColorResources.red,
-                  onTap: () {
-                    Get.to(() => const FavoriteScreen());
-                  }),
-              SizedBox(
-                height: height * 0.025,
-              ),
-              const NewCompaniesWidget(),
-              SizedBox(
-                height: height * 0.03,
-              ),
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromRGBO(22, 77, 160, 1),
-                  gradient: const LinearGradient(
-                    colors: [
-                      // Color.fromRGBO(255, 255, 255, 1),
-                      Color.fromRGBO(22, 77, 160, 0.35),
-                      Color.fromRGBO(22, 77, 160, 1),
-                    ],
-                    begin: Alignment.bottomRight,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'add_your_company'.tr,
-                      style: h24.copyWith(color: Colors.white),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'to_find_suppliers_or_buyers_you_need_to_add_a_company'.tr,
-                      style: body16.copyWith(color: Colors.white),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    CustomButton(
-                      width: width,
-                      height: 44,
-                      onTap: () {
-                        Get.dialog(
-                          const CustomDialog(
-                            widget: AlertDialog(
-                              backgroundColor: Colors.white,
-                              titlePadding: EdgeInsets.all(0),
-                              contentPadding: EdgeInsets.all(5),
-                              content: Padding(
-                                padding: EdgeInsets.all(0),
-                                child: FillCompanyDataBox(),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Image.asset(
+                                Images.companiesIcon,
+                                fit: BoxFit.cover,
+                                width: width * 0.45,
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.04,
+                      ),
+                      homeOptions(
+                          title: 'companies'.tr,
+                          titleImage: Images.svgBriefcase,
+                          detail:
+                              'base_of_wholesale_suppliers_manufacturers_of_goods_or_logistics_services'
+                                  .tr,
+                          backgroundColor: ColorResources.blue,
+                          onTap: () {
+                            Get.to(() => const MyCompaniesScreen());
+                          }),
+                      SizedBox(
+                        height: height * 0.025,
+                      ),
+                      homeOptions(
+                          title: 'goods'.tr,
+                          titleImage: Images.svgShoppingBag,
+                          detail:
+                              'find_products_from_manufacturers_and_suppliers'
+                                  .tr,
+                          backgroundColor: ColorResources.green,
+                          onTap: () {
+                            // Get.find<ProductController>().updateShowCategories(false);
+
+                            context
+                                .read<ProductBloc>()
+                                .add(const UpdateShowCategories(false));
+                            Get.to(() => const ProductScreen());
+                          }),
+                      SizedBox(
+                        height: height * 0.025,
+                      ),
+                      homeOptions(
+                        title: 'tenders'.tr,
+                        titleImage: Images.svgTenders,
+                        detail:
+                            'view_advertisements_for_purchasing_goods_or_add_your_own'
+                                .tr,
+                        backgroundColor: ColorResources.orange,
+                        onTap: () {
+                          // Get.find<ProductController>().updateShowCategories(true);
+                          context
+                              .read<ProductBloc>()
+                              .add(const UpdateShowCategories(true));
+                          // Get.to(() => const ProductScreen());
+                          Get.to(() => TenderScreen());
+                        },
+                      ),
+                      SizedBox(
+                        height: height * 0.025,
+                      ),
+                      homeOptions(
+                          title: 'favorites'.tr,
+                          titleImage: Images.svgHeart,
+                          detail: 'saved_goods_companies_and_tenders'.tr,
+                          backgroundColor: ColorResources.red,
+                          onTap: () {
+                            Get.to(() => const FavoriteScreen());
+                          }),
+                      SizedBox(
+                        height: height * 0.025,
+                      ),
+                      const NewCompaniesWidget(),
+                      SizedBox(
+                        height: height * 0.03,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: const Color.fromRGBO(22, 77, 160, 1),
+                          gradient: const LinearGradient(
+                            colors: [
+                              // Color.fromRGBO(255, 255, 255, 1),
+                              Color.fromRGBO(22, 77, 160, 0.35),
+                              Color.fromRGBO(22, 77, 160, 1),
+                            ],
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topCenter,
                           ),
-                        );
-                      },
-                      title: 'add'.tr,
-                      color: ColorResources.orange,
-                    ),
-                  ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'add_your_company'.tr,
+                              style: h24.copyWith(color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'to_find_suppliers_or_buyers_you_need_to_add_a_company'
+                                  .tr,
+                              style: body16.copyWith(color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            CustomButton(
+                              width: width,
+                              height: 44,
+                              onTap: () {
+                                Get.dialog(
+                                  const CustomDialog(
+                                    widget: AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      titlePadding: EdgeInsets.all(0),
+                                      contentPadding: EdgeInsets.all(5),
+                                      content: Padding(
+                                        padding: EdgeInsets.all(0),
+                                        child: FillCompanyDataBox(),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              title: 'add'.tr,
+                              color: ColorResources.orange,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.03,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(
-                height: height * 0.03,
-              ),
+              if (tinState is TinLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                )
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
-  Widget homeOptions({String? title, String? detail, String? titleImage, Color? backgroundColor, Function()? onTap}) {
+  Widget homeOptions(
+      {String? title,
+      String? detail,
+      String? titleImage,
+      Color? backgroundColor,
+      Function()? onTap}) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,

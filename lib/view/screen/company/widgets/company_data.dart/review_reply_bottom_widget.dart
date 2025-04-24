@@ -1,11 +1,18 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../../../data/model/response/company/company_reviews_model.dart';
+
 class ReviewReplyBottomWidget extends StatefulWidget {
-  const ReviewReplyBottomWidget({super.key});
+  final ReviewItem review;
+  final int reviewIndex;
+  const ReviewReplyBottomWidget(
+      {super.key, required this.review, required this.reviewIndex});
 
   @override
   State<ReviewReplyBottomWidget> createState() =>
@@ -57,6 +64,12 @@ class _ReviewReplyBottomWidgetState extends State<ReviewReplyBottomWidget> {
                   border: const OutlineInputBorder(),
                   suffixIcon: InkWell(
                     onTap: () {
+                      if (isActiveSendButton) {
+                       
+                        context.read<CompanyDetailBloc>().add(
+                            AddCompanyReviewReply(widget.review.id.toString(),
+                                replyController.text, widget.reviewIndex));
+                      }
                       replyController.clear();
                       focusNode.unfocus();
                       Get.back();

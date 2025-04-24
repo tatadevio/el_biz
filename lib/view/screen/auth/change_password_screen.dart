@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
+import '../../base/custom_toast.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -17,27 +18,11 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confPasswordController = TextEditingController();
-  // bool terms = false;
-  // final FocusNode _nodeText1 = FocusNode();
-  bool rememberPassword = false;
 
-  // KeyboardActionsConfig _buildConfig(BuildContext context) {
-  //   return KeyboardActionsConfig(
-  //     keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-  //     keyboardBarColor: Colors.grey[200],
-  //     nextFocus: true,
-  //     defaultDoneWidget: Text("next".tr),
-  //     actions: [
-  //       if (GetPlatform.isIOS) KeyboardActionsItem(displayArrows: false, displayDoneButton: true, focusNode: _nodeText1),
-  //     ],
-  //   );
-  // }
+  bool rememberPassword = false;
 
   @override
   Widget build(BuildContext context) {
-    // var height = MediaQuery.sizeOf(context).height;
-    // var width = MediaQuery.sizeOf(context).width;
-
     return Scaffold(
       body: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return Padding(
@@ -98,22 +83,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      // if (passwordController.text.isEmpty || passwordController.text.length < 9) {
-                      //   showShortToast("Please enter correct phone number");
-                      //   return;
-                      // }
-                      // if (!terms) {
-                      //   showShortToast("Accept terms and condition".tr);
-                      //   return;
-                      // }
-
-                      // if (!authState.isLoading) {
-                      //   authState.phoneAuthentication(authState.countryCode + passwordController.text, "1");
-                      // } else {
-                      //   showShortToast("invalid_phone_number".tr);
-                      // }
-                      // Get.to(() => p);
-                      Get.to(() => PasswordChangedScreen());
+                      if (passwordController.text.isEmpty ||
+                          confPasswordController.text.isEmpty) {
+                        showCustomSnackBar("Please enter password");
+                        return;
+                      }
+                      context.read<AuthBloc>().add(ChangePassword(
+                          passwordController.text,
+                          confPasswordController.text));
+                      // Get.to(() => PasswordChangedScreen());
                     },
                     child: Container(
                       width: Get.width * 0.9,

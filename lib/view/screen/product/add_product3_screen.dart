@@ -13,15 +13,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/add_product/add_product_bloc.dart';
 import '../../../utils/Images.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
 
 class AddProduct3Screen extends StatefulWidget {
-  final AddProductModel addProductData;
+  // final AddProductModel addProductData;
   final bool isEdit;
-  const AddProduct3Screen(
-      {super.key, required this.addProductData, required this.isEdit});
+  const AddProduct3Screen({super.key, required this.isEdit});
 
   @override
   State<AddProduct3Screen> createState() => _AddProduct3ScreenState();
@@ -329,13 +329,18 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
               for (int i = 0; i < sizeController.length; i++) {
                 allSize.add(sizeController[i].text);
               }
-              AddProductModel productData = widget.addProductData.copyWith(
-                description: descriptionController.text,
-                keywords: keywordsController.text,
-                size: allSize,
-              );
+
+              final productData = context.read<AddProductBloc>().state.productData;
+              productData?.description = descriptionController.text;
+              productData?.keywords = keywordsController.text;
+              productData?.size = allSize;
+              // AddProductModel productData = widget.addProductData.copyWith(
+              //   description: descriptionController.text,
+              //   keywords: keywordsController.text,
+              //   size: allSize,
+              // );
               Get.to(() => AddProduct4Screen(
-                    productData: productData,
+                    // productData: productData,
                     isEdit: widget.isEdit,
                   ));
             },

@@ -1,9 +1,11 @@
 import 'package:el_biz/data/model/response/bank_model.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../response/category/categories_list_model.dart';
 import 'timing_date_model.dart';
 
 class AddCompanyModel {
+  String? tinNumber;
   String? companyName;
   String? companyNumber;
   XFile? companyLogo;
@@ -25,8 +27,10 @@ class AddCompanyModel {
   List<XFile>? otherDocuments;
   List<DaySchedule>? schedule;
   DaySchedule? lunchBreak;
+  List<CategoryItem>? categories;
 
   AddCompanyModel({
+    this.tinNumber,
     this.companyName,
     this.companyNumber,
     this.companyLogo,
@@ -47,11 +51,13 @@ class AddCompanyModel {
     this.otherDocuments,
     this.schedule,
     this.lunchBreak,
+    this.categories,
   });
 
   // Factory method for JSON deserialization
   factory AddCompanyModel.fromJson(Map<String, dynamic> json) {
     return AddCompanyModel(
+      tinNumber: json['tinNumber'],
       companyName: json['companyName'],
       companyNumber: json['companyNumber'],
       companyLogo:
@@ -88,12 +94,18 @@ class AddCompanyModel {
       // schedule: json['bankData'] != null
       // ? (json['bankData'] as List).map((e) => DaySchedule.toma(e)).toList()
       // : null,
+      categories: json['categories'] != null
+          ? (json['categories'] as List)
+              .map((e) => CategoryItem.fromJson(e))
+              .toList()
+          : null,
     );
   }
 
   // Method for JSON serialization
   Map<String, dynamic> toJson() {
     return {
+      'tinNumber': tinNumber,
       'companyName': companyName,
       'companyNumber': companyNumber,
       'companyLogo': companyLogo?.path,
@@ -113,11 +125,13 @@ class AddCompanyModel {
       // bankData?.toJson(),
       'certificateDocument': certificateDocument?.path,
       'otherDocuments': otherDocuments?.map((e) => e.path).toList(),
+      'categories': categories?.map((e) => e.toJson()).toList(),
     };
   }
 
   // Copy with method
   AddCompanyModel copyWith({
+    String? tinNumber,
     String? companyName,
     String? companyNumber,
     XFile? companyLogo,
@@ -136,8 +150,10 @@ class AddCompanyModel {
     List<BankItem>? bankData,
     XFile? certificateDocument,
     List<XFile>? otherDocuments,
+    List<CategoryItem>? categories,
   }) {
     return AddCompanyModel(
+      tinNumber: tinNumber ?? this.tinNumber,
       companyName: companyName ?? this.companyName,
       companyNumber: companyNumber ?? this.companyNumber,
       companyLogo: companyLogo ?? this.companyLogo,
@@ -156,12 +172,13 @@ class AddCompanyModel {
       bankData: bankData ?? this.bankData,
       certificateDocument: certificateDocument ?? this.certificateDocument,
       otherDocuments: otherDocuments ?? this.otherDocuments,
+      categories: categories ?? this.categories,
     );
   }
 
   @override
   String toString() {
-    return 'AddCompanyModel(companyName: $companyName, companyNumber: $companyNumber, email: $email)';
+    return 'AddCompanyModel(companyName: $companyName, companyNumber: $companyNumber, email: $email, categories: $categories, tinNumber: $tinNumber)';
   }
 }
 

@@ -5,8 +5,10 @@ import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/add_product/add_product_bloc.dart';
 import 'add_product3_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -307,23 +309,37 @@ class _AddProductScreenState extends State<AddProductScreen> {
             width: Get.width,
             height: Get.height,
             onTap: () {
-              AddProductModel addProduct = AddProductModel(
-                  brandName: brandController.text,
-                  productName: productNameController.text,
-                  productCode: productCodeController.text,
-                  price: priceController.text,
-                  currency: currencyController.text,
-                  quantity: quantityController.text,
-                  quantityUnit: unitController.text,
-                  dimensions: dimensionsController.text,
-                  dimensionsUnit: dimensionsUnitController.text,
-                  weight: weightController.text,
-                  weightUnit: weightUnitController.text,
-                  region: regionController.text,
-                  availability: checkAvailibity);
+           final productData =   context.read<AddProductBloc>().state.productData;
+              productData?.brandName = brandController.text.toString();
+              productData?.productName = productNameController.text.toString();
+              productData?.productCode = productCodeController.text.toString();
+              productData?.price = priceController.text.toString();
+              productData?.currency = currencyController.text.toString();
+              productData?.quantity = quantityController.text.toString();
+              productData?.quantityUnit = unitController.text.toString();
+              productData?.dimensions = dimensionsController.text.toString();
+              productData?.dimensionsUnit = dimensionsUnitController.text.toString();
+              productData?.weight = weightController.text.toString();
+              productData?.weightUnit = weightUnitController.text.toString();
+              productData?.region = regionController.text.toString();
+              productData?.availability = checkAvailibity;
+              // AddProductModel addProduct = AddProductModel(
+              //     brandName: brandController.text,
+              //     productName: productNameController.text,
+              //     productCode: productCodeController.text,
+              //     price: priceController.text,
+              //     currency: currencyController.text,
+              //     quantity: quantityController.text,
+              //     quantityUnit: unitController.text,
+              //     dimensions: dimensionsController.text,
+              //     dimensionsUnit: dimensionsUnitController.text,
+              //     weight: weightController.text,
+              //     weightUnit: weightUnitController.text,
+              //     region: regionController.text,
+              //     availability: checkAvailibity);
 
               Get.to(() => AddProduct3Screen(
-                    addProductData: addProduct,
+                    // addProductData: addProduct,
                     isEdit: widget.isEdit,
                   ));
             },

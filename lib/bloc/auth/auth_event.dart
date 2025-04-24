@@ -34,6 +34,40 @@ class VerifyOTP extends AuthEvent {
   List<Object> get props => [verificationId, otp];
 }
 
-class Login extends AuthEvent {}
+class Login extends AuthEvent {
+  final String phoneNumber;
+  final String password;
+  const Login(this.phoneNumber, this.password);
+
+  @override
+  List<Object> get props => [phoneNumber, password];
+}
 
 class UpdateUserFirebaseData extends AuthEvent {}
+
+class SendOtp extends AuthEvent {
+  final String phoneNumber;
+  const SendOtp(this.phoneNumber);
+
+  @override
+  List<Object> get props => [phoneNumber];
+}
+
+class VerifyOtp extends AuthEvent {
+  final String otpToken;
+  final String phone;
+  final String otpCode;
+  const VerifyOtp(this.otpToken, this.phone, this.otpCode);
+
+  @override
+  List<Object> get props => [otpToken, phone, otpCode];
+}
+
+class ChangePassword extends AuthEvent {
+  final String password;
+  final String confirmPassword;
+  const ChangePassword(this.password, this.confirmPassword);
+
+  @override
+  List<Object> get props => [password, confirmPassword];
+}

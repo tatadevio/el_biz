@@ -7,6 +7,24 @@ sealed class CompanyEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetMyCompanies extends CompanyEvent {}
+
+// class CompanyDetailById extends CompanyEvent {
+//   final String id;
+//   const CompanyDetailById(this.id);
+
+//   @override
+//   List<Object> get props => [id];
+// }
+
+class DeleteCompany extends CompanyEvent {
+  final String id;
+  const DeleteCompany(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 class UpdateShowGood extends CompanyEvent {
   final bool showActive;
   const UpdateShowGood(this.showActive);
@@ -57,10 +75,10 @@ class SelectCompanyBanner extends CompanyEvent {}
 
 class SelectCompanyDocument extends CompanyEvent {
   final ImageSource? imageSource;
-  const SelectCompanyDocument({required  this.imageSource});
+  const SelectCompanyDocument({required this.imageSource});
 }
 
-class SelectCompanyOtherDocuments extends CompanyEvent{
+class SelectCompanyOtherDocuments extends CompanyEvent {
   final ImageSource? imageSource;
   const SelectCompanyOtherDocuments({required this.imageSource});
 }
@@ -68,4 +86,22 @@ class SelectCompanyOtherDocuments extends CompanyEvent{
 class RemoveCompanyOtherDocument extends CompanyEvent {
   final int index;
   const RemoveCompanyOtherDocument(this.index);
+}
+
+/// add new company
+
+class AddNewCompany extends CompanyEvent {
+  final AddCompanyModel addCompanyModel;
+  const AddNewCompany(this.addCompanyModel);
+
+  @override
+  List<Object> get props => [addCompanyModel];
+}
+
+class VerifyTinNumber extends CompanyEvent {
+  final String tinNumber;
+  const VerifyTinNumber(this.tinNumber);
+
+  @override
+  List<Object> get props => [tinNumber];
 }

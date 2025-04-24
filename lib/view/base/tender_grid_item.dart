@@ -1,3 +1,4 @@
+import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -6,15 +7,21 @@ import 'package:el_biz/view/screen/product_detail/product_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../data/model/response/tender/tender_item_model.dart';
+
 class TenderGridItem extends StatelessWidget {
   final bool isFavorite;
-  const TenderGridItem({super.key, this.isFavorite = false});
+  final TenderItem tender;
+  const TenderGridItem(
+      {super.key, this.isFavorite = false, required this.tender});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const ProductDetailScreen(isProduct: false,));
+        Get.to(() => const ProductDetailScreen(
+              isProduct: false,
+            ));
       },
       child: Container(
         decoration: const BoxDecoration(
@@ -28,7 +35,11 @@ class TenderGridItem extends StatelessWidget {
             Expanded(
               child: Stack(
                 children: [
-                  CustomImage(image: '', height: Get.height, width: Get.width, radius: 16),
+                  CustomImage(
+                      image: '',
+                      height: Get.height,
+                      width: Get.width,
+                      radius: 16),
                   // Image.asset(Images.splashLogo),
                   Positioned(
                     right: 5,
@@ -45,13 +56,15 @@ class TenderGridItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Садовая мебель, раскладные стулья',
+                  tender.title ?? '',
+                  // 'Садовая мебель, раскладные стулья',
                   style: h16.copyWith(color: ColorResources.darkGray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  'Раскладной садовый стул из дерева',
+                  tender.description ?? '',
+                  // 'Раскладной садовый стул из дерева',
                   style: body14.copyWith(color: ColorResources.gray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -60,19 +73,21 @@ class TenderGridItem extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  'Количество: 20шт',
+                  'Количество:  ${tender.quantity} шт', // quantity
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: body14.copyWith(color: const Color.fromRGBO(71, 84, 103, 1)),
+                  style: body14.copyWith(
+                      color: const Color.fromRGBO(71, 84, 103, 1)),
                 ),
                 const SizedBox(
                   height: 5,
                 ),
                 Text(
-                  'Бюджет: 50 000 сом',
+                  'Бюджет: ${tender.budgetFrom} - ${tender.budgetTo}сом',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: body14.copyWith(color: const Color.fromRGBO(71, 84, 103, 1)),
+                  style: body14.copyWith(
+                      color: const Color.fromRGBO(71, 84, 103, 1)),
                 ),
                 const SizedBox(
                   height: 5,
@@ -85,7 +100,7 @@ class TenderGridItem extends StatelessWidget {
                       style: body14.copyWith(color: ColorResources.gray),
                     ),
                     Text(
-                      '12 окт. 2024',
+                      formatDateInRu(tender.createdAt.toString()),
                       style: body14.copyWith(color: ColorResources.gray),
                     )
                   ],

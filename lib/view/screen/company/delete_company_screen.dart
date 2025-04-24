@@ -3,12 +3,15 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/company/company_bloc.dart';
 import '../../../utils/Images.dart';
 
 class DeleteCompanyScreen extends StatefulWidget {
-  const DeleteCompanyScreen({super.key});
+  final String id;
+  const DeleteCompanyScreen({super.key, required this.id});
 
   @override
   State<DeleteCompanyScreen> createState() => _DeleteCompanyScreenState();
@@ -44,7 +47,8 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
                 height: 10,
               ),
               Text(
-                'we_are_very_sorry_that_you_are_deleting_your_profile_from_the_application'.tr,
+                'we_are_very_sorry_that_you_are_deleting_your_profile_from_the_application'
+                    .tr,
                 style: body14.copyWith(color: ColorResources.gray),
               ),
               const SizedBox(
@@ -103,7 +107,10 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: CustomButtonWithIcon(
-          onTap: () {},
+          onTap: () {
+            context.read<CompanyBloc>().add(DeleteCompany(widget.id));
+            Get.back();
+          },
           title: 'continue'.tr,
           svgIcon: Images.svgTrash,
           textColor: Colors.white,

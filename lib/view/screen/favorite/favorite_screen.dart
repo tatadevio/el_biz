@@ -253,31 +253,32 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             child: BlocBuilder<FavoriteBloc, FavoriteState>(
               builder: (context, state) {
                 if (state.isShowCategories) {
-                  return state.isShowGridView
-                      ? GridView.builder(
-                          controller: _scrollController,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 0.7),
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return const TenderGridItem(
-                              isFavorite: true,
-                            );
-                          },
-                        )
-                      : ListView.builder(
-                          controller: _scrollController,
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return const TenderListItem(
-                              isFavorite: true,
-                            );
-                          },
-                        );
+                  return SizedBox();
+                  // return state.isShowGridView 
+                      // ? GridView.builder(
+                      //     controller: _scrollController,
+                      //     gridDelegate:
+                      //         const SliverGridDelegateWithFixedCrossAxisCount(
+                      //             crossAxisCount: 2,
+                      //             mainAxisSpacing: 10,
+                      //             crossAxisSpacing: 10,
+                      //             childAspectRatio: 0.7),
+                      //     itemCount: 10,
+                      //     itemBuilder: (context, index) {
+                      //       return const TenderGridItem(
+                      //         isFavorite: true,
+                      //       );
+                      //     },
+                      //   )
+                      // : ListView.builder(
+                      //     controller: _scrollController,
+                      //     itemCount: 10,
+                      //     itemBuilder: (context, index) {
+                      //       return const TenderListItem(
+                      //         isFavorite: true,
+                      //       );
+                      //     },
+                      //   );
                 }
                 return state.isShowGridView
                     ? GridView.builder(

@@ -1,11 +1,11 @@
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_event.dart';
 import 'package:el_biz/bloc/tenders/tenders_state.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/tender_grid_item.dart';
-import 'package:el_biz/view/base/tender_list_item.dart';
+import 'package:el_biz/view/screen/category/select_category_screen.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:el_biz/view/screen/tender/new_tende2_screen.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +85,21 @@ class _TenderScreenState extends State<TenderScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => NewTende2Screen());
+                  context.read<CategoryBloc>().add(GetCategory());
+                  Get.to(() => SelectCategoryScreen(
+                        onSelect: (selectedCategories) {
+                          for (var category in selectedCategories) {
+                            print(
+                                'these are the selected categoris : ${category.toJson()}');
+                          }
+                          context
+                              .read<TendersBloc>()
+                              .state
+                              .newTenderModel
+                              .categories = selectedCategories;
+                          Get.to(() => NewTende2Screen());
+                        },
+                      ));
                   // Get.to(() => const MainCategories(
                   //     type: true, fromHome: true, screenName: '/AddNewTender'));
                   // Get.to(() => const AddProductScreen());
@@ -301,27 +315,29 @@ class _TenderScreenState extends State<TenderScreen> {
               builder: (context, tendersController) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: tendersController.isGridView
-                  ? GridView.builder(
-                      controller: _scrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 0.65),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return const TenderGridItem();
-                      },
-                    )
-                  : ListView.builder(
-                      controller: _scrollController,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return const TenderListItem();
-                      },
-                    ),
+              child: SizedBox(),
+              // there tender list and tender grid have to update
+              // tendersController.isGridView
+              //     ? GridView.builder(
+              //         controller: _scrollController,
+              //         gridDelegate:
+              //             const SliverGridDelegateWithFixedCrossAxisCount(
+              //                 crossAxisCount: 2,
+              //                 mainAxisSpacing: 10,
+              //                 crossAxisSpacing: 10,
+              //                 childAspectRatio: 0.65),
+              //         itemCount: 10,
+              //         itemBuilder: (context, index) {
+              //           return const TenderGridItem();
+              //         },
+              //       )
+              //     : ListView.builder(
+              //         controller: _scrollController,
+              //         itemCount: 10,
+              //         itemBuilder: (context, index) {
+              //           return const TenderListItem();
+              //         },
+              //       ),
             );
           }),
           if (_showScrollToTopButton)

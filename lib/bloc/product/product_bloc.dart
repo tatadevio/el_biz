@@ -177,26 +177,26 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       isLoading: true,
     ));
 
-    try {
-      final response = await productRepo.getProductWithCatId(event.id);
+    // try {
+    //   final response = await productRepo.getProductWithCatId(event.id);
 
-      if (response.statusCode == 200) {
-        emit(state.copywith(
-          currentQuery: "?category_id=${event.id}",
-          catProductItem: [],
-        ));
-        final productList = ProductListModel.fromJson(response.body).data.items;
+    //   if (response.statusCode == 200) {
+    //     emit(state.copywith(
+    //       currentQuery: "?category_id=${event.id}",
+    //       catProductItem: [],
+    //     ));
+    //     final productList = ProductListModel.fromJson(response.body).data.items;
 
-        emit(state.copywith(
-          catProductItem: state.catProductItem..addAll(productList),
-          isLoading: false,
-        ));
-      } else {
-        emit(state.copywith(isLoading: false));
-      }
-    } catch (e) {
-      emit(state.copywith(isLoading: false));
-      // Handle error appropriately (e.g., logging or adding an error state)
-    }
+    //     emit(state.copywith(
+    //       catProductItem: state.catProductItem..addAll(productList),
+    //       isLoading: false,
+    //     ));
+    //   } else {
+    //     emit(state.copywith(isLoading: false));
+    //   }
+    // } catch (e) {
+    //   emit(state.copywith(isLoading: false));
+    //   // Handle error appropriately (e.g., logging or adding an error state)
+    // }
   }
 }

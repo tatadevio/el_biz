@@ -1,6 +1,7 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/my_companies_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -61,10 +62,11 @@ class NewCompaniesWidget extends StatelessWidget {
     );
   }
 
-  Widget companiesItem() {
+  Widget companiesItem({bool isVerifiedSupplier = false}) {
     double width = Get.width;
     return Container(
       width: width * 0.8,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -85,17 +87,19 @@ class NewCompaniesWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 5),
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 0.56,
-                  color: ColorResources.lgColor,
-                )),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(top: 10, left: 5),
+          //   height: 40,
+          //   width: 40,
+          //   decoration: BoxDecoration(
+          //       shape: BoxShape.circle,
+          //       border: Border.all(
+          //         width: 0.56,
+          //         color: ColorResources.lgColor,
+          //       )),
+          //       chi
+          // ),
+          CustomImage(image: '', height: 40, width: 40, radius: 40),
           const SizedBox(
             width: 5,
           ),
@@ -131,6 +135,18 @@ class NewCompaniesWidget extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    SvgPicture.asset(Images.svgVerified),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Проверенный поставщик',
+                      style: body14.copyWith(color: ColorResources.gray),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
                     SvgPicture.asset(
                       Images.svgMap,
                     ),
@@ -159,9 +175,9 @@ class NewCompaniesWidget extends StatelessWidget {
                             allowHalfRating: true,
                             itemCount: 5,
                             itemSize: 14,
-                            ignoreGestures: true
-                            ,
-                            itemPadding: const EdgeInsets.symmetric(horizontal: 0),
+                            ignoreGestures: true,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
                               color: ColorResources.yellow,

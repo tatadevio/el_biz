@@ -5,14 +5,13 @@ import 'package:el_biz/view/screen/product/preview_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../data/model/base/add_product_model.dart';
 import '../../base/custom_button.dart';
 
 class AddProduct4Screen extends StatefulWidget {
-  final AddProductModel productData;
+  // final AddProductModel productData;
   final bool isEdit;
   const AddProduct4Screen(
-      {super.key, required this.productData, required this.isEdit});
+      {super.key,  required this.isEdit});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -138,7 +137,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                         .toList();
                     Get.to(() => PreviewProductScreen(
                           selectedMaterial: selectedMaterials,
-                          productData: widget.productData,
+                          // productData: widget.productData,
                           isEdit: widget.isEdit,
                         ));
                   },

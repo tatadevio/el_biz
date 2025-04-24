@@ -245,8 +245,8 @@ class _CategoriesState extends State<Categories> {
                           top: 40,
                           child: InkWell(
                             onTap: () {
-                              print(
-                                  "${AppConstants.productWithCatId}${widget.id}");
+                              // print(
+                              //     "${AppConstants.productWithCatId}${widget.id}");
 
                               setState(() {
                                 isFollow = !isFollow;

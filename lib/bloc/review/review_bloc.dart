@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+
 part 'review_event.dart';
 part 'review_state.dart';
 
@@ -16,6 +17,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     on<PickImageDocs>(_onPickImageDocs);
     on<PickImageDocsCamera>(_onPickImageDocsCamera);
     on<RemoveGallery>(_onRemoveImage);
+    on<AddReview>(_onAddReview);
   }
 
   Future<void> _onPickImageDocs(
@@ -40,7 +42,8 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     Emitter<ReviewState> emit,
   ) async {
     final picker = ImagePicker();
-    final XFile? value = await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
+    final XFile? value =
+        await picker.pickImage(source: ImageSource.camera, maxWidth: 1024);
 
     if (value != null) {
       final compressedImage = await _convertHEICtoJPG(File(value.path));
@@ -52,7 +55,8 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     RemoveGallery event,
     Emitter<ReviewState> emit,
   ) {
-    final updatedImages = List<XFile>.from(state.pickedLogo)..remove(event.image);
+    final updatedImages = List<XFile>.from(state.pickedLogo)
+      ..remove(event.image);
     emit(ReviewState(pickedLogo: updatedImages));
   }
 
@@ -67,5 +71,52 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       format: CompressFormat.jpeg,
     );
     return XFile(result!.path);
+  }
+
+  // Future<void> _onAddReview(
+  //   AddReview event,
+  //   Emitter<ReviewState> emit,
+  // ) async {
+  //   emit(state.copywith(isLoading: true));
+
+  //   try {
+  //     final response = await reviewRepo.submitReview(
+  //       companyId: event.companyId,
+  //       rating: event.rating,
+  //       review: event.review,
+  //       images: event.images,
+  //     );
+  //     if (response.statusCode == 200) {
+  //       emit(state.copywith(isLoading: false));
+  //     } else {
+  //       emit(state.copywith(isLoading: false));
+  //     }
+  //   } catch (e) {
+  //     emit(state.copywith(isLoading: false));
+  //   }
+  // }
+
+  Future<void> _onAddReview(
+    AddReview event,
+    Emitter<ReviewState> emit,
+  ) async {
+    emit(ReviewLoading());
+    emit(ReviewState(isLoading: true));
+    try {
+      final response = await reviewRepo.submitReview(
+        companyId: event.companyId,
+        rating: event.rating,
+        review: event.review,
+        images: event.images,
+      );
+      if (response.statusCode == 200) {
+        emit(ReviewSuccess());
+      } else {
+        emit(ReviewError("Something went wrong: ${response.statusText}"));
+      }
+    } catch (e) {
+      emit(ReviewError("Failed to submit review: $e"));
+    }
+    emit(ReviewState(isLoading: false));
   }
 }

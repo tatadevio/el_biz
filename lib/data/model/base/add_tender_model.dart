@@ -1,15 +1,17 @@
+import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddTenderModel {
-   String? id;
-   String? whatToBuy;
-   List<XFile>? images;
-   String? shortDescription;
-   List<TenderProduct>? product;
-   String? budgetStart;
-   String? budgetEnd;
-   String? phone;
-   String? email;
+  String? id;
+  String? whatToBuy;
+  List<XFile>? images;
+  String? shortDescription;
+  List<TenderProduct>? product;
+  String? budgetStart;
+  String? budgetEnd;
+  String? phone;
+  String? email;
+  List<CategoryItem>? categories;
 
   AddTenderModel({
     this.id,
@@ -21,6 +23,7 @@ class AddTenderModel {
     this.budgetEnd,
     this.phone,
     this.email,
+    this.categories,
   });
 
   factory AddTenderModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +39,7 @@ class AddTenderModel {
       budgetEnd: json['budgetEnd'],
       phone: json['phone'],
       email: json['email'],
+      categories: json['categories'],
     );
   }
 
@@ -50,8 +54,10 @@ class AddTenderModel {
       'budgetEnd': budgetEnd,
       'phone': phone,
       'email': email,
+      "categories": categories,
     };
   }
+
   AddTenderModel copyWith({
     String? id,
     String? whatToBuy,
@@ -62,6 +68,7 @@ class AddTenderModel {
     String? budgetEnd,
     String? phone,
     String? email,
+    List<CategoryItem>? categories,
   }) {
     return AddTenderModel(
       id: id ?? this.id,
@@ -73,9 +80,9 @@ class AddTenderModel {
       budgetEnd: budgetEnd ?? this.budgetEnd,
       phone: phone ?? this.phone,
       email: email ?? this.email,
+      categories: categories ?? this.categories,
     );
   }
-
 }
 
 class TenderProduct {

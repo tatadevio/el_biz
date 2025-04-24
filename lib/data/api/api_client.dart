@@ -24,7 +24,6 @@ class ApiClient extends GetxService {
   ApiClient({required this.appBaseUrl, required this.sharedPreferences}) {
     token = sharedPreferences.getString(AppConstants.token) ?? "";
     debugPrint('Token: $token');
-    log('log-token : $token');
     String lang =
         sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "ru";
     updateHeader(token, lang);
@@ -59,10 +58,10 @@ class ApiClient extends GetxService {
       }
 
       if (_response.statusCode != 200) {
-        if (response.body["message"] == "Unauthenticated.") {
-          prefer.clear();
-          Get.offAllNamed(RouteHelper.getLoginRoute());
-        }
+        // if (response.body["message"] == "Unauthenticated.") {
+        //   prefer.clear();
+        //   Get.offAllNamed(RouteHelper.getLoginRoute());
+        // }
       }
 
       return response;
@@ -172,4 +171,63 @@ class ApiClient extends GetxService {
 
     return _response;
   }
+
+
+  Future<Response> postMultipartData(
+    String uri, {
+    required Map<String, String> fields,
+    required List<http.MultipartFile> files,
+    Map<String, String>? headers,
+  }) async {
+    SharedPreferences prefer = await SharedPreferences.getInstance();
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(AppConstants.baseUrl + uri),
+      );
+
+      request.fields.addAll(fields);
+      request.files.addAll(files);
+      request.headers.addAll(headers ?? _mainHeaders);
+
+      if (foundation.kDebugMode) {
+        print('====> Multipart API Call: $uri');
+        print('====> Fields: $fields');
+        print('====> Files: ${files.map((e) => e.filename)}');
+      }
+
+      http.StreamedResponse streamedResponse =
+          await request.send().timeout(Duration(seconds: timeoutInSeconds));
+
+      final responseString = await streamedResponse.stream.bytesToString();
+      final statusCode = streamedResponse.statusCode;
+
+      if (foundation.kDebugMode) {
+        print('====> Multipart Response: [$statusCode] $uri');
+        print('====> Response Body: $responseString');
+      }
+
+      dynamic body;
+      try {
+        body = jsonDecode(responseString);
+      } catch (e) {
+        body = responseString;
+      }
+
+      if (statusCode == 401 ||
+          (body is Map && body["message"] == "Unauthenticated.")) {
+        prefer.clear();
+        Get.offAllNamed(RouteHelper.getLoginRoute());
+      }
+
+      return Response(
+        statusCode: statusCode,
+        body: body,
+        statusText: streamedResponse.reasonPhrase,
+      );
+    } catch (e) {
+      return const Response(statusCode: 1, statusText: noInternetMessage);
+    }
+  }
+
 }

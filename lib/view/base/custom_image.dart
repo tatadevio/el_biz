@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:el_biz/utils/appConstant.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,7 +13,12 @@ class CustomImage extends StatelessWidget {
   final double width;
   final BoxFit fit;
   final double radius;
-  CustomImage({required this.image, required this.height, required this.width, this.fit = BoxFit.cover, required this.radius});
+  CustomImage(
+      {required this.image,
+      required this.height,
+      required this.width,
+      this.fit = BoxFit.cover,
+      required this.radius});
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +32,19 @@ class CustomImage extends StatelessWidget {
               fit: fit,
             )
           : CachedNetworkImage(
-              imageUrl: image,
+              imageUrl: image.contains('http')
+                  ? image
+                  : "${AppConstants.baseUrl}$image",
               height: height == 0 ? null : height,
               width: width,
               fit: fit,
-              placeholder: (context, url) => Image.asset(Images.placeholder, height: height, width: width, fit: fit),
-              errorWidget: (context, url, error) => Image.asset(Images.placeholder, height: height, width: width, fit: fit),
+              placeholder: (context, url) => Image.asset(Images.placeholder,
+                  height: height, width: width, fit: fit),
+              errorWidget: (context, url, error) => Image.asset(
+                  Images.placeholder,
+                  height: height,
+                  width: width,
+                  fit: fit),
             ),
     );
   }
@@ -56,7 +69,9 @@ class ViewPhoto extends StatelessWidget {
             width: 20.0,
             height: 20.0,
             child: CircularProgressIndicator(
-              value: event == null ? 0 : event.cumulativeBytesLoaded / event.expectedTotalBytes!,
+              value: event == null
+                  ? 0
+                  : event.cumulativeBytesLoaded / event.expectedTotalBytes!,
             ),
           ),
         ),

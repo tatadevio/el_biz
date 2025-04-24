@@ -3,9 +3,11 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/company/widgets/show_company_detail_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/tin_number/tin_bloc.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_dialog.dart';
 
@@ -22,7 +24,8 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(16)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,7 +86,8 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: const BorderSide(color: ColorResources.lgColor, width: 1),
+                    side: const BorderSide(
+                        color: ColorResources.lgColor, width: 1),
                   ),
 
                   onPressed: () {
@@ -92,7 +96,10 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   color: ColorResources.white,
                   child: Text(
                     "cancel".tr,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: ColorResources.gray),
                   ),
                   //  Colors.grey[300],
                 ),
@@ -105,27 +112,40 @@ class _ShowLlcIssueBoxState extends State<ShowLlcIssueBox> {
                   elevation: 0,
                   height: 44,
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   onPressed: () async {
-                    Get.back();
-                    Get.dialog(
-                      const CustomDialog(
-                        widget: AlertDialog(
-                          backgroundColor: Colors.white,
-                          titlePadding: EdgeInsets.all(0),
-                          contentPadding: EdgeInsets.all(5),
-                          content: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: ShowCompanyDetailBox(),
-                          ),
-                        ),
-                      ),
-                    );
+                    if (llcNumberController.text.isEmpty) {
+                      Get.snackbar(
+                        'Error',
+                        'Please enter a valid TIN number',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } else {
+                      Get.back();
+                      context.read<TinBloc>().add(
+                          VerifyTinNumber(tinNumber: llcNumberController.text));
+                    }
+                    // Get.back();
+                    // Get.dialog(
+                    //   const CustomDialog(
+                    //     widget: AlertDialog(
+                    //       backgroundColor: Colors.white,
+                    //       titlePadding: EdgeInsets.all(0),
+                    //       contentPadding: EdgeInsets.all(5),
+                    //       content: Padding(
+                    //         padding: EdgeInsets.all(0),
+                    //         child: ShowCompanyDetailBox(),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // );
                   },
                   color: ColorResources.primary,
                   child: Text(
                     "submit".tr,
-                    style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                    style: const TextStyle(
+                        letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

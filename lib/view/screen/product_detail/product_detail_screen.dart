@@ -311,22 +311,35 @@ class ProductDetailScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      productInfoWidget(title: 'Товар: ', value: 'Количество', titleBold: true, valueBold: true),
-                      productInfoWidget(title: 'Раскладные стулья', value: '20шт'),
+                      productInfoWidget(
+                          title: 'Товар: ',
+                          value: 'Количество',
+                          titleBold: true,
+                          valueBold: true),
+                      productInfoWidget(
+                          title: 'Раскладные стулья', value: '20шт'),
                       productInfoWidget(title: 'Диваны', value: '20шт'),
                       productInfoWidget(title: 'Шкафы', value: '20шт'),
-                      productInfoWidget(title: 'Бюджет: ', value: '50 000 сом', valueBold: true
+                      productInfoWidget(
+                          title: 'Бюджет: ',
+                          value: '50 000 сом',
+                          valueBold: true),
+                      const SizedBox(
+                        height: 10,
                       ),
-                      const SizedBox(height: 10,),
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-
-                        Text('Опубликовано: ',style: body14.copyWith(fontWeight: FontWeight.w700),),
-
-                        Text('24.10.2024, 18:10',style: body14.copyWith(fontWeight: FontWeight.w400),),
-
-                      ],),
-
-
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Опубликовано: ',
+                            style: body14.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            '24.10.2024, 18:10',
+                            style: body14.copyWith(fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
                     ],
                   ],
                 ),
@@ -467,16 +480,18 @@ class ProductDetailScreen extends StatelessWidget {
           Text(
             title ?? '',
             style: body14.copyWith(
-                color:
-                    titleBold ? ColorResources.darkGray : ColorResources.gray, fontWeight: titleBold ? FontWeight.w700 : FontWeight.w400,),
+              color: titleBold ? ColorResources.darkGray : ColorResources.gray,
+              fontWeight: titleBold ? FontWeight.w700 : FontWeight.w400,
+            ),
           ),
           Expanded(
             child: Text(
               value ?? '',
               style: body14.copyWith(
-                  color: titleBold
-                      ? ColorResources.darkGray
-                      : ColorResources.gray, fontWeight: valueBold ? FontWeight.w700 : FontWeight.w400,),
+                color:
+                    titleBold ? ColorResources.darkGray : ColorResources.gray,
+                fontWeight: valueBold ? FontWeight.w700 : FontWeight.w400,
+              ),
               textAlign: TextAlign.end,
             ),
           ),

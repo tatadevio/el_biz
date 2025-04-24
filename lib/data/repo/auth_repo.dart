@@ -1,3 +1,4 @@
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
@@ -97,8 +98,39 @@ class AuthRepo {
   //   return sharedPreferences.getString(AppConstants.token) ?? "";
   // }
 
-  bool isLoggedIn() {
+  Future<bool> isLoggedIn() async {
     return sharedPreferences.containsKey(AppConstants.token);
+  }
+
+  Future<Response> sendOtp(String phoneNumber) async {
+    print("this is phone number: $phoneNumber");
+    return await apiClient
+        .postData(AppConstants.sendOtpUrl, {"phone": phoneNumber});
+  }
+
+  Future<Response> verifyOtp(
+      String otpToken, String phone, String otpCode) async {
+    return await apiClient.postData(AppConstants.verifyOtpUrl,
+        {"otp_token": otpToken, "phone": phone, "otp_code": otpCode});
+  }
+
+  Future<void> saveToken(String token) async {
+    await sharedPreferences.setString(AppConstants.token, token);
+  }
+
+  Future<Response> changePassword(
+      String password, String confirmPassword) async {
+    return await apiClient.postData(AppConstants.changePasswordUrl, {
+      "password": password,
+      "password_confirmation": confirmPassword,
+    });
+  }
+
+  Future<Response> login(String phoneNumber, String password) async {
+    return await apiClient.postData(AppConstants.loginUrl, {
+      "phone": phoneNumber,
+      "password": password,
+    });
   }
 
   // Future register(String fName, String email, String countryCode) async {

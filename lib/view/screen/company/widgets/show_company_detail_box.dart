@@ -1,18 +1,22 @@
 import 'package:el_biz/view/screen/company/add_company_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/company/company_bloc.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 
 class ShowCompanyDetailBox extends StatelessWidget {
-  const ShowCompanyDetailBox({super.key});
+  final String tinNumber;
+  const ShowCompanyDetailBox({super.key, required this.tinNumber});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(16)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +46,8 @@ class ShowCompanyDetailBox extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    '03010201310131',
+                    tinNumber,
+                    // '03010201310131',
                     style: body14.copyWith(color: ColorResources.gray),
                     textAlign: TextAlign.end,
                   ),
@@ -106,7 +111,8 @@ class ShowCompanyDetailBox extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: const BorderSide(color: ColorResources.lgColor, width: 1),
+                    side: const BorderSide(
+                        color: ColorResources.lgColor, width: 1),
                   ),
 
                   onPressed: () {
@@ -115,7 +121,10 @@ class ShowCompanyDetailBox extends StatelessWidget {
                   color: ColorResources.white,
                   child: Text(
                     "cancel".tr,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: ColorResources.gray),
                   ),
                   //  Colors.grey[300],
                 ),
@@ -128,15 +137,24 @@ class ShowCompanyDetailBox extends StatelessWidget {
                   elevation: 0,
                   height: 44,
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   onPressed: () async {
+                    // have to update this value to the real value
+                    context
+                        .read<CompanyBloc>()
+                        .state
+                        .addCompanyModel
+                        .tinNumber = tinNumber;
+
                     Get.back();
                     Get.to(() => const AddCompanyScreen());
                   },
                   color: ColorResources.primary,
                   child: Text(
                     "continue".tr,
-                    style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                    style: const TextStyle(
+                        letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

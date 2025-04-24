@@ -1,13 +1,17 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/config/config_bloc.dart';
+import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helper/route_helper.dart';
 import '../../../utils/Images.dart';
+import '../../../utils/appConstant.dart';
+import '../dashboard/dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,17 +26,20 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     call();
     Future.delayed(Duration.zero, () {
-      context.read<CitiesBloc>().add(const GetCitites(50, true));
-      context.read<ConfigBloc>().add(GetPrivacy());
-      context.read<ConfigBloc>().add(GetTerms());
-      context.read<ConfigBloc>().add(GetAbout());
-      context.read<ConfigBloc>().add(GetConfig());
+      // context.read<CitiesBloc>().add(const GetCitites(50, true));
+      // context.read<ConfigBloc>().add(GetPrivacy());
+      // context.read<ConfigBloc>().add(GetTerms());
+      // context.read<ConfigBloc>().add(GetAbout());
+      // context.read<ConfigBloc>().add(GetConfig());
     });
   }
 
   call() async {
+    context.read<AuthBloc>().add(CheckLoginStatus());
     // final SharedPreferences preferences = await SharedPreferences.getInstance();
     // bool isNew = preferences.getBool("new") ?? true;
+    // String token = preferences.getString(AppConstants.token) ?? "";
+    // print("this is token: $token");
     Future.delayed(const Duration(seconds: 2), () {
       // if (isNew) {
       //   Get.offAll(
@@ -42,9 +49,9 @@ class _SplashScreenState extends State<SplashScreen> {
       // }
 
       if (context.read<AuthBloc>().state.isLoggedIn) {
-        Get.offAllNamed(RouteHelper.getDashboardRoute());
+        HomeScreen().loadData(context);
+        Get.offAll(() => const DashboardScreen());
       } else {
-        // Get.to(() => AddProduct());
         Get.offAllNamed(RouteHelper.getLoginRoute());
       }
       context.read<AuthBloc>().add(UpdateUserFirebaseData());

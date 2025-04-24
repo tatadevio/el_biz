@@ -2,8 +2,10 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/company/widgets/show_llc_issue_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/tin_number/tin_bloc.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_dialog.dart';
 
@@ -20,7 +22,8 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(16)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +42,12 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
           const SizedBox(
             height: 20,
           ),
-          CustomTextField(controller: llcNumberController, hintColor: '', inputType: TextInputType.name, leading: '', readOnly: false),
+          CustomTextField(
+              controller: llcNumberController,
+              hintColor: '',
+              inputType: TextInputType.name,
+              leading: '',
+              readOnly: false),
           const SizedBox(
             height: 20,
           ),
@@ -52,7 +60,8 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: const BorderSide(color: ColorResources.lgColor, width: 1),
+                    side: const BorderSide(
+                        color: ColorResources.lgColor, width: 1),
                   ),
 
                   onPressed: () {
@@ -61,7 +70,10 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   color: ColorResources.white,
                   child: Text(
                     "cancel".tr,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ColorResources.gray),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: ColorResources.gray),
                   ),
                   //  Colors.grey[300],
                 ),
@@ -74,27 +86,40 @@ class _FillCompanyDataBoxState extends State<FillCompanyDataBox> {
                   elevation: 0,
                   height: 44,
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   onPressed: () async {
-                    Get.back();
-                    Get.dialog(
-                      const CustomDialog(
-                        widget: AlertDialog(
-                          backgroundColor: Colors.white,
-                          titlePadding: EdgeInsets.all(0),
-                          contentPadding: EdgeInsets.all(5),
-                          content: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: ShowLlcIssueBox(),
-                          ),
-                        ),
-                      ),
-                    );
+                    if (llcNumberController.text.isEmpty) {
+                      Get.snackbar(
+                        'Error',
+                        'Please enter a valid TIN number',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } else {
+                      Get.back();
+                      context.read<TinBloc>().add(
+                          VerifyTinNumber(tinNumber: llcNumberController.text));
+                    }
+                    // Get.back();
+                    // Get.dialog(
+                    //   const CustomDialog(
+                    //     widget: AlertDialog(
+                    //       backgroundColor: Colors.white,
+                    //       titlePadding: EdgeInsets.all(0),
+                    //       contentPadding: EdgeInsets.all(5),
+                    //       content: Padding(
+                    //         padding: EdgeInsets.all(0),
+                    //         child: ShowLlcIssueBox(),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // );
                   },
                   color: ColorResources.primary,
                   child: Text(
                     "send".tr,
-                    style: const TextStyle(letterSpacing: 0.5, fontSize: 16, color: Colors.white),
+                    style: const TextStyle(
+                        letterSpacing: 0.5, fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),

@@ -3,8 +3,8 @@ import 'package:el_biz/utils/Images.dart';
 import '../data/model/base/language_model.dart';
 
 class AppConstants {
-  static const String baseUrl = "";
-  // "https://isooq.kg/";
+  static const String baseUrl = "https://admin.elbiz.kg/";
+
   static const String appName = "El Biz";
   static const String countryCode = "+996";
   // static const String currencyCode = "cом";
@@ -16,11 +16,45 @@ class AppConstants {
   // static const String googleMapApiKey = "AIzaSyDzA_aNns0_2hD7DgwxvxqlUwuxtwsZEYs";
 
   /// Auth
-  // static const String registerUrl = "api/v1/register";
-  // static const String loginUrl = "api/v1/login";
-  // static const String googleLoginUrl = "api/v1/google-login";
-  // static const String appleLoginUrl = "api/v1/apple-login";
-  // static const String checkPhoneUrl = "api/v1/check-phone-number-exists-or-create";
+  static const String sendOtpUrl = "api/auth/send-otp";
+  static const String verifyOtpUrl = "api/auth/verify-otp";
+  static const String changePasswordUrl = "api/users/change-password";
+  static const String loginUrl = "api/auth/login";
+
+  /// User
+  static const String userInfoUrl = "api/users/info";
+
+  /// Tenders
+  static const String tendersUrl = "api/tenders";
+  static const String addTenderUrl = "api/tenders/store";
+
+  /// Company
+  static const String addCompanyUrl = "api/companies/store";
+  static const String myCompaniesUrl = "api/companies/my";
+  static const String companyDetailUrl = "api/companies";
+  static const String companyDeleteUrl = "api/companies/delete";
+  static const String deleteCompanyDocumentUrl =
+      "api/companies/documents-delete";
+  static const String companyProductsUrl = "api/products";
+  static const String companyDocumentsUrl = "api/companies/documents";
+  static const String addCompanyReviewUrl = "api/companies/store-review";
+  static const String companyReviewsReplyUrl = "api/companies/review"; //2/reply
+  static const String companyReviewsDeleteUrl = "api/companies/review/delete";
+  static const String verifyTinNumberUrl = "api/companies/verify";
+  static const String addCompanyDocumentUrl = "api/companies/documents-upload";
+
+  /// Categories
+  static const String categoriesUrl = "api/categories";
+  static const String categoryDetailUrl = "api/category"; // /api/category/1
+
+  /// Account
+  static const String myAccountsUrl = "api/accounts/my";
+  static const String addAccountUrl = "api/accounts/store";
+  static const String updateAccountUrl = "api/accounts/update";
+  static const String deleteAccountUrl = "api/accounts/delete";
+
+  /// Add Product
+  static const String addProductUrl = "api/products/store";
 
   /// Auth
   // static const String registration = "api/v1/users/update";
@@ -56,8 +90,8 @@ class AppConstants {
   /// Products
   // static const String productUrl = "api/v1/products";
   // static const String favoritesProductUrl = "api/v1/products/fevourites";
-  static const String categoryProductUrl = "api/v1/products/categories";
-  static const String productWithCatId = "api/v1/products?category_id=";
+  // static const String categoryProductUrl = "api/v1/products/categories";
+  // static const String productWithCatId = "api/v1/products?category_id=";
   // static const String addToFavoriteUrl = "api/v1/favourites/store";
   // static const String removeFavoriteUrl = "api/v1/favourites/remove";
   // static const String followSellerUri = "api/v1/follows/store";

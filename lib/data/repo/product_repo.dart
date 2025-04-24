@@ -1,8 +1,5 @@
-import 'package:get/get.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
 
 class ProductRepo {
@@ -15,9 +12,9 @@ class ProductRepo {
   //   return await apiClient.getData("${AppConstants.productUrl}$type&page=$pageSize");
   // }
 
-  Future<Response> getProductWithCatId(String id) async {
-    return await apiClient.getData("${AppConstants.productWithCatId}$id");
-  }
+  // Future<Response> getProductWithCatId(String id) async {
+  //   return await apiClient.getData("${AppConstants.productWithCatId}$id");
+  // }
 
   // Future<Response> getFilterProduct(String id, String sortBy, String minPrice, String maxPrice, List<AddAttribute> addAttribute, List<AddAttributeMulti> addAttributeMulti, List<AddAttributeInt> addAttributeInt) async {
   //   List<String> value = [];

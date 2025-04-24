@@ -53,13 +53,13 @@ class ProductReviewsWidget extends StatelessWidget {
           separatorBuilder: (context, index) => const Divider(),
           itemCount: 2,
           itemBuilder: (context, index) {
-            return const ReviewItem();
+            return const ReviewItemWidget();
           },
         ),
         const Divider(),
         InkWell(
           onTap: () {
-            Get.to(() => CompanyReviewsScreen());
+            // Get.to(() => CompanyReviewsScreen());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,

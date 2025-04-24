@@ -13,6 +13,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../data/model/response/company/my_companies_model.dart';
 import '../../base/custom_image.dart';
 import '../company/company_page_screen.dart';
 import '../product/add_product_screen.dart';
@@ -316,186 +319,195 @@ class _ProductScreenState extends State<ProductScreen> {
           )),
       body: Stack(
         children: [
-          BlocBuilder<ProductBloc, ProductState>(
-              builder: (context, productController) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  if (!widget.isSelectProduct)
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              // productController.updateShowCategories(true);
-                              context
-                                  .read<ProductBloc>()
-                                  .add(const UpdateShowCategories(true));
-                            },
-                            child: Container(
-                              height: 40,
-                              width: width * 0.42,
-                              decoration: BoxDecoration(
-                                  color: !productController.isShowCategories
-                                      ? null
-                                      : ColorResources.primary,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: productController.isGridView
-                                        ? ColorResources.primary
-                                        : ColorResources.lgColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(6),
-                                  boxShadow: !productController.isShowCategories
-                                      ? []
-                                      : [
-                                          const BoxShadow(
-                                            blurRadius: 3,
-                                            spreadRadius: 0,
-                                            offset: Offset(0, 1),
-                                            color:
-                                                Color.fromRGBO(16, 24, 40, 0.1),
-                                          ),
-                                          const BoxShadow(
-                                            blurRadius: 2,
-                                            spreadRadius: 0,
-                                            offset: Offset(0, 1),
-                                            color: Color.fromRGBO(
-                                                16, 24, 40, 0.06),
-                                          ),
-                                        ]),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'companies'.tr,
-                                style: button16.copyWith(
+          BlocBuilder<CompanyBloc, CompanyState>(
+              builder: (context, companyController) {
+            return BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, productController) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    if (!widget.isSelectProduct)
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                // productController.updateShowCategories(true);
+                                context
+                                    .read<ProductBloc>()
+                                    .add(const UpdateShowCategories(true));
+                              },
+                              child: Container(
+                                height: 40,
+                                width: width * 0.42,
+                                decoration: BoxDecoration(
                                     color: !productController.isShowCategories
-                                        ? ColorResources.gray
-                                        : Colors.white),
+                                        ? null
+                                        : ColorResources.primary,
+                                    border: Border.all(
+                                      width: 1,
+                                      color: productController.isGridView
+                                          ? ColorResources.primary
+                                          : ColorResources.lgColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6),
+                                    boxShadow:
+                                        !productController.isShowCategories
+                                            ? []
+                                            : [
+                                                const BoxShadow(
+                                                  blurRadius: 3,
+                                                  spreadRadius: 0,
+                                                  offset: Offset(0, 1),
+                                                  color: Color.fromRGBO(
+                                                      16, 24, 40, 0.1),
+                                                ),
+                                                const BoxShadow(
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0,
+                                                  offset: Offset(0, 1),
+                                                  color: Color.fromRGBO(
+                                                      16, 24, 40, 0.06),
+                                                ),
+                                              ]),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'companies'.tr,
+                                  style: button16.copyWith(
+                                      color: !productController.isShowCategories
+                                          ? ColorResources.gray
+                                          : Colors.white),
+                                ),
                               ),
                             ),
-                          ),
-                          InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              // productController.updateShowCategories(false);
-                              context
-                                  .read<ProductBloc>()
-                                  .add(const UpdateShowCategories(false));
-                            },
-                            child: Container(
-                              height: 40,
-                              width: width * 0.42,
-                              decoration: BoxDecoration(
-                                  color: productController.isShowCategories
-                                      ? null
-                                      : ColorResources.primary,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: !productController.isGridView
-                                        ? ColorResources.primary
-                                        : ColorResources.lgColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(6),
-                                  boxShadow: productController.isShowCategories
-                                      ? []
-                                      : [
-                                          const BoxShadow(
-                                            blurRadius: 3,
-                                            spreadRadius: 0,
-                                            offset: Offset(0, 1),
-                                            color:
-                                                Color.fromRGBO(16, 24, 40, 0.1),
-                                          ),
-                                          const BoxShadow(
-                                            blurRadius: 2,
-                                            spreadRadius: 0,
-                                            offset: Offset(0, 1),
-                                            color: Color.fromRGBO(
-                                                16, 24, 40, 0.06),
-                                          ),
-                                        ]),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'goods'.tr,
-                                style: button16.copyWith(
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                // productController.updateShowCategories(false);
+                                context
+                                    .read<ProductBloc>()
+                                    .add(const UpdateShowCategories(false));
+                              },
+                              child: Container(
+                                height: 40,
+                                width: width * 0.42,
+                                decoration: BoxDecoration(
                                     color: productController.isShowCategories
-                                        ? ColorResources.gray
-                                        : Colors.white),
+                                        ? null
+                                        : ColorResources.primary,
+                                    border: Border.all(
+                                      width: 1,
+                                      color: !productController.isGridView
+                                          ? ColorResources.primary
+                                          : ColorResources.lgColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6),
+                                    boxShadow:
+                                        productController.isShowCategories
+                                            ? []
+                                            : [
+                                                const BoxShadow(
+                                                  blurRadius: 3,
+                                                  spreadRadius: 0,
+                                                  offset: Offset(0, 1),
+                                                  color: Color.fromRGBO(
+                                                      16, 24, 40, 0.1),
+                                                ),
+                                                const BoxShadow(
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0,
+                                                  offset: Offset(0, 1),
+                                                  color: Color.fromRGBO(
+                                                      16, 24, 40, 0.06),
+                                                ),
+                                              ]),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'goods'.tr,
+                                  style: button16.copyWith(
+                                      color: productController.isShowCategories
+                                          ? ColorResources.gray
+                                          : Colors.white),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  if (widget.isSelectProduct)
-                    Expanded(
-                      child: productController.isGridView
-                          ? GridView.builder(
-                              controller: _scrollController,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10,
-                                      childAspectRatio: 0.7),
-                              itemCount: 10,
-                              itemBuilder: (context, index) {
-                                return ProductGridItem(
-                                  isSelectProduct: widget.isSelectProduct,
-                                  productId: index,
-                                );
-                              },
-                            )
-                          : ListView.builder(
-                              controller: _scrollController,
-                              itemCount: 10,
-                              itemBuilder: (context, index) {
-                                return ProductListItem(
-                                  isSelectProduct: widget.isSelectProduct,
-                                  productId: index,
-                                );
-                              },
-                            ),
-                    )
-                  else
-                    Expanded(
-                      child: !productController.isShowCategories
-                          ? productController.isGridView
-                              ? GridView.builder(
-                                  controller: _scrollController,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 10,
-                                          crossAxisSpacing: 10,
-                                          childAspectRatio: 0.7),
-                                  itemCount: 10,
-                                  itemBuilder: (context, index) {
-                                    return const ProductGridItem();
-                                  },
-                                )
-                              : ListView.builder(
-                                  controller: _scrollController,
-                                  itemCount: 10,
-                                  itemBuilder: (context, index) {
-                                    return const ProductListItem();
-                                  },
-                                )
-                          : ListView.builder(
-                              controller: _scrollController,
-                              itemCount: 5,
-                              itemBuilder: (context, index) {
-                                return myCompanyWidget();
-                              },
-                            ),
-                    ),
-                ],
-              ),
-            );
+                    if (widget.isSelectProduct)
+                      Expanded(
+                        child: productController.isGridView
+                            ? GridView.builder(
+                                controller: _scrollController,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10,
+                                        childAspectRatio: 0.7),
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return ProductGridItem(
+                                    isSelectProduct: widget.isSelectProduct,
+                                    productId: index,
+                                  );
+                                },
+                              )
+                            : ListView.builder(
+                                controller: _scrollController,
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return ProductListItem(
+                                    isSelectProduct: widget.isSelectProduct,
+                                    productId: index,
+                                  );
+                                },
+                              ),
+                      )
+                    else
+                      Expanded(
+                        child: !productController.isShowCategories
+                            ? productController.isGridView
+                                ? GridView.builder(
+                                    controller: _scrollController,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing: 10,
+                                            childAspectRatio: 0.7),
+                                    itemCount: 10,
+                                    itemBuilder: (context, index) {
+                                      return const ProductGridItem();
+                                    },
+                                  )
+                                : ListView.builder(
+                                    controller: _scrollController,
+                                    itemCount: 10,
+                                    itemBuilder: (context, index) {
+                                      return const ProductListItem();
+                                    },
+                                  )
+                            : ListView.builder(
+                                controller: _scrollController,
+                                itemCount: companyController.myCompanies.length,
+                                itemBuilder: (context, index) {
+                                  print(
+                                      'there i have call the company bloc in compnay list : ${companyController.myCompanies.length}');
+                                  return myCompanyWidget(
+                                      companyController.myCompanies[index]);
+                                },
+                              ),
+                        // const SizedBox(),
+                      ),
+                  ],
+                ),
+              );
+            });
           }),
           if (_showScrollToTopButton)
             Positioned(
@@ -535,11 +547,17 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget myCompanyWidget() {
+  Widget myCompanyWidget(CompanyItem company) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
         onTap: () {
+          // context
+          //     .read<CompanyBloc>()
+          //     .add(CompanyDetailById(company.id.toString()));
+          context
+              .read<CompanyDetailBloc>()
+              .add(GetCompanyDetail(company.id.toString()));
           Get.to(() => const CompanyPageScreen(
                 isCompany: true,
               ));
@@ -559,7 +577,11 @@ class _ProductScreenState extends State<ProductScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomImage(image: '', height: 40, width: 40, radius: 40),
+                      CustomImage(
+                          image: company.logo ?? '',
+                          height: 40,
+                          width: 40,
+                          radius: 40),
                       const SizedBox(
                         width: 5,
                       ),
@@ -568,7 +590,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Садовая мебель Loft',
+                              company.name ?? '',
                               style: h16.copyWith(
                                 color: ColorResources.darkGray,
                               ),
@@ -577,7 +599,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               height: 5,
                             ),
                             Text(
-                              'ОсОО Исхаков',
+                              company.email ?? '',
                               style: body14.copyWith(
                                   color: ColorResources.darkGray),
                             ),
@@ -592,7 +614,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    'Кыргызстан, Бишкек',
+                                    company.address ?? '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: body14.copyWith(
                                         color: ColorResources.gray),
                                   ),

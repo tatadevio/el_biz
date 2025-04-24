@@ -8,7 +8,7 @@ sealed class CategoryEvent extends Equatable {
 }
 
 class UpdateFilterSelectedCategory extends CategoryEvent {
-  final CategoriesItem category;
+  final CategoryItem category;
   const UpdateFilterSelectedCategory(this.category);
 
   @override
@@ -20,9 +20,11 @@ class GetCategory extends CategoryEvent {}
 class GetCategoryFilter extends CategoryEvent {}
 
 class AddSingleCat extends CategoryEvent {
-  final CategoriesItem singleCategory;
+  final CategoryItem singleCategory;
   const AddSingleCat(this.singleCategory);
 
   @override
   List<Object> get props => [singleCategory];
 }
+
+

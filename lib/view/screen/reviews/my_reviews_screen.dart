@@ -109,7 +109,7 @@ class MyReviewsScreen extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          const ReviewItem(),
+          const ReviewItemWidget(),
           const SizedBox(
             height: 10,
           ),

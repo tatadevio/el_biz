@@ -1,137 +1,106 @@
+// To parse this JSON data, do
+//
+//     final userInfoModel = userInfoModelFromJson(jsonString);
+
 import 'dart:convert';
 
-UserInfoModel userInfoModelFromJson(String str) => UserInfoModel.fromJson(json.decode(str));
+UserInfoModel userInfoModelFromJson(String str) =>
+    UserInfoModel.fromJson(json.decode(str));
 
 String userInfoModelToJson(UserInfoModel data) => json.encode(data.toJson());
 
 class UserInfoModel {
+  final String? message;
+  final Data? data;
+  final int? statusCode;
+  final String? status;
+
   UserInfoModel({
-    required this.message,
-    required this.data,
-    required this.statusCode,
-    required this.status,
+    this.message,
+    this.data,
+    this.statusCode,
+    this.status,
   });
 
-  String message;
-  Data data;
-  int statusCode;
-  String status;
-
   factory UserInfoModel.fromJson(Map<String, dynamic> json) => UserInfoModel(
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-    statusCode: json["status_code"],
-    status: json["status"],
-  );
+        message: json["message"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        statusCode: json["status_code"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": data.toJson(),
-    "status_code": statusCode,
-    "status": status,
-  };
+        "message": message,
+        "data": data?.toJson(),
+        "status_code": statusCode,
+        "status": status,
+      };
 }
 
 class Data {
+  final int? id;
+  final String? name;
+  final String? firstName;
+  final String? lastName;
+  final String? username;
+  final String? email;
+  final String? phone;
+  final String? userRole;
+  final String? status;
+  final String? image;
+  final String? fcmToken;
+  final String? firebaseId;
+  final String? googleId;
+  final String? appleId;
+
   Data({
-    required this.id,
-    required this.customerId,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.image,
-    required this.bannerImg,
-    required this.country,
-    required this.city,
-    required this.state,
-    required this.address,
-    required this.status,
-    required this.about,
-    required this.registered,
-    required this.promoLink,
-    required this.promoQr,
-    required this.screenshot,
-    required this.showTheme,
-    required this.androidVersion,
-    required this.iosVersion,
-    required this.countryCode,
-    required this.userType,
-    required this.disablePackage,
+    this.id,
+    this.name,
+    this.firstName,
+    this.lastName,
+    this.username,
+    this.email,
+    this.phone,
+    this.userRole,
+    this.status,
+    this.image,
+    this.fcmToken,
+    this.firebaseId,
+    this.googleId,
+    this.appleId,
   });
 
-  int id;
-  String customerId;
-  String name;
-  String email;
-  String phone;
-  String image;
-  String bannerImg;
-  String country;
-  String city;
-  String state;
-  String address;
-  int status;
-  String about;
-  int registered;
-  String promoLink;
-  String promoQr;
-  int screenshot;
-  int showTheme;
-  String androidVersion;
-  String iosVersion;
-  String countryCode;
-  String userType;
-  int disablePackage;
-
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    customerId: json["customer_id"],
-    name: json["name"],
-    email: json["email"],
-    phone: json["phone"],
-    image: json["image"],
-    bannerImg: json["banner_img"],
-    country: json["country"],
-    city: json["city"],
-    state: json["state"],
-    address: json["address"],
-    status: json["status"],
-    about: json["about"],
-    registered: json["registered"],
-    promoLink: json["promo_link"],
-    promoQr: json["promo_qr"],
-    screenshot: json["screenshot"],
-    showTheme: json["show_theme"],
-    androidVersion: json["android_app_version"]??"",
-    iosVersion: json["ios_app_version"]??"",
-    countryCode: json["country_code"]??"",
-    userType: json["user_type"]??"",
-    disablePackage: json["disable_subscription"]??1,
-  );
+        id: json["id"],
+        name: json["name"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        username: json["username"],
+        email: json["email"],
+        phone: json["phone"],
+        userRole: json["user_role"],
+        status: json["status"],
+        image: json["image"],
+        fcmToken: json["fcm_token"],
+        firebaseId: json["firebase_id"],
+        googleId: json["google_id"],
+        appleId: json["apple_id"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "customer_id": customerId,
-    "name": name,
-    "email": email,
-    "phone": phone,
-    "image": image,
-    "banner_img": bannerImg,
-    "country": country,
-    "city": city,
-    "state": state,
-    "address": address,
-    "status": status,
-    "about": about,
-    "registered": registered,
-    "promo_link": promoLink,
-    "promo_qr": promoQr,
-    "screenshot": screenshot,
-    "show_theme": showTheme,
-    "android_app_version": androidVersion,
-    "ios_app_version": iosVersion,
-    "country_code": countryCode,
-    "user_type": userType,
-    "disable_subscription": disablePackage,
-  };
+        "id": id,
+        "name": name,
+        "first_name": firstName,
+        "last_name": lastName,
+        "username": username,
+        "email": email,
+        "phone": phone,
+        "user_role": userRole,
+        "status": status,
+        "image": image,
+        "fcm_token": fcmToken,
+        "firebase_id": firebaseId,
+        "google_id": googleId,
+        "apple_id": appleId,
+      };
 }
