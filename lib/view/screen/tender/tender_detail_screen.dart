@@ -1,4 +1,6 @@
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/data/model/response/tender/tender_detail_model.dart';
+import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 
@@ -51,14 +54,31 @@ class TenderDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+      body: BlocBuilder<TenderDetailBloc, TenderDetailState>(
           builder: (context, productDetialController) {
+        if (productDetialController is TenderDetailLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (productDetialController is TenderDetailError) {
+          return Center(
+            child: Text('error'),
+          );
+        }
+        var tenderDetail = TenderDetailModel();
+        if (productDetialController is TenderDetailSuccess) {
+          tenderDetail = productDetialController.tenderDetailModel;
+        }
+        // tenderDetail = productDetialController.tenderDetailModel;
         return SingleChildScrollView(
           child: Column(
             children: [
-              const Padding(
+               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: ProductImages(),
+                child: ProductImages(
+                  image: tenderDetail.data?.media ?? [],
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -85,7 +105,8 @@ class TenderDetailScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            'Стул раскладной',
+                            tenderDetail.data?.title ?? '',
+                            // 'Стул раскладной hrer update',
                             style: h24.copyWith(color: ColorResources.darkGray),
                           ),
                         ),
@@ -117,14 +138,15 @@ class TenderDetailScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        'Раскладной садовый стул из шпона дерева.',
+                        tenderDetail.data?.description ?? '',
+                        // 'Раскладной садовый стул из шпона дерева.',
                         style: body16.copyWith(color: ColorResources.gray),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       Text(
-                        '2 500 сом',
+                        '${tenderDetail.data?.budgetFrom} - ${tenderDetail.data?.budgetTo} ${AppConstants.currencyCode}',
                         style: h24.copyWith(color: ColorResources.blue),
                       ),
                       const SizedBox(
@@ -236,21 +258,21 @@ class TenderDetailScreen extends StatelessWidget {
                               width: width * 0.43,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                color:
-                                    productDetialController.showProductReviews
-                                        ? null
-                                        : ColorResources.primary,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                              // decoration: BoxDecoration(
+                              //   color:
+                              //       productDetialController.showProductReviews
+                              //           ? null
+                              //           : ColorResources.primary,
+                              //   borderRadius: BorderRadius.circular(6),
+                              // ),
                               alignment: Alignment.center,
                               child: Text(
                                 'О товаре',
-                                style: button16.copyWith(
-                                    color: productDetialController
-                                            .showProductReviews
-                                        ? ColorResources.gray
-                                        : ColorResources.white),
+                                // style: button16.copyWith(
+                                //     color: productDetialController
+                                //             .showProductReviews
+                                //         ? ColorResources.gray
+                                //         : ColorResources.white),
                               ),
                             ),
                           ),
@@ -267,32 +289,32 @@ class TenderDetailScreen extends StatelessWidget {
                               width: width * 0.45,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                color:
-                                    !productDetialController.showProductReviews
-                                        ? null
-                                        : ColorResources.primary,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                              // decoration: BoxDecoration(
+                              //   color:
+                              //       !productDetialController.showProductReviews
+                              //           ? null
+                              //           : ColorResources.primary,
+                              //   borderRadius: BorderRadius.circular(6),
+                              // ),
                               alignment: Alignment.center,
                               child: Text(
                                 'Отзывы',
-                                style: button16.copyWith(
-                                    color: !productDetialController
-                                            .showProductReviews
-                                        ? ColorResources.gray
-                                        : ColorResources.white),
+                                // style: button16.copyWith(
+                                //     color: !productDetialController
+                                //             .showProductReviews
+                                //         ? ColorResources.gray
+                                //         : ColorResources.white),
                               ),
                             ),
                           ),
                         ],
                       ),
                       const Divider(),
-                      if (productDetialController.showProductReviews) ...[
-                        const ProductReviewsWidget(),
-                      ] else ...[
-                        const AboutProductWidget(),
-                      ],
+                      // if (productDetialController.showProductReviews) ...[
+                      //   const ProductReviewsWidget(),
+                      // ] else ...[
+                      //   const AboutProductWidget(),
+                      // ],
                     ] else ...[
                       const SizedBox(
                         height: 15,

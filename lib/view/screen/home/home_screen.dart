@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -31,6 +32,7 @@ class HomeScreen extends StatelessWidget {
     context.read<UserBloc>().add(const GetUserInfo());
     context.read<CompanyBloc>().add(GetMyCompanies());
     context.read<AccountBloc>().add(GetMyAccounts());
+    context.read<CitiesBloc>().add(GetCitites(1, true));
   }
 
   @override
@@ -116,10 +118,6 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      BlocBuilder<UserBloc, UserState>(
-                          builder: (context, state) {
-                        return Text('${state.userInfo?.data?.username ?? ""}');
-                      }),
                       SizedBox(
                         height: height * 0.02,
                       ),

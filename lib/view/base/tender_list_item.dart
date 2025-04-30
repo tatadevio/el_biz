@@ -1,14 +1,16 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
 import '../../helper/date_helper.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
-import '../screen/product_detail/product_detail_screen.dart';
+import '../screen/tender/tender_detail_screen.dart';
 
 class TenderListItem extends StatelessWidget {
   final bool isFavorite;
@@ -23,8 +25,11 @@ class TenderListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
-          Get.to(() => ProductDetailScreen(
-                isProduct: false,
+          context
+              .read<TenderDetailBloc>()
+              .add(GetTenderDetail(tenderId: tender.id.toString()));
+          Get.to(() => TenderDetailScreen(
+              // isProduct: false,
               ));
         },
         child: Container(

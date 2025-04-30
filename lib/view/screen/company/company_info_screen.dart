@@ -1,5 +1,7 @@
+import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/data/model/response/cities_model.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/cities/cities_page.dart';
@@ -83,17 +85,17 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
   }
 
   // for now without using api
-  List<String> kyrgyzstanCities = [
-    'Bishkek',
-    'Osh',
-    'Jalal-Abad',
-    'Karakol',
-    'Naryn',
-    'Talas',
-    'Batken',
-  ];
+  // List<String> kyrgyzstanCities = [
+  //   'Bishkek',
+  //   'Osh',
+  //   'Jalal-Abad',
+  //   'Karakol',
+  //   'Naryn',
+  //   'Talas',
+  //   'Batken',
+  // ];
 
-  String? selectedCity;
+  CityItem? selectedCity;
 
   void _submitForm() {
     if (selectedCity == null) {
@@ -112,7 +114,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
     companyModel.house = houseController.text;
     companyModel.office = officeController.text;
     companyModel.postalCode = postalCodeController.text;
-    companyModel.city = selectedCity ?? '';
+    companyModel.city = selectedCity;
     companyModel.schedule =
         schedule; // schedule model is not completed to send value...
     companyModel.lunchBreak = lunchBreak;
@@ -183,47 +185,51 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                 //     ),
                 //   );
                 // }),
-                Container(
-                  height: 48,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                      color: ColorResources.lgColor,
+                BlocBuilder<CitiesBloc, CitiesState>(
+                    builder: (context, citiesState) {
+                  print('this is list of cities : ${citiesState.cityItem}');
+                  return Container(
+                    height: 48,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        width: 1,
+                        color: ColorResources.lgColor,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: DropdownButton<String>(
-                    value: selectedCity,
-                    isExpanded: true,
-                    hint: Text(
-                      selectedCity ?? 'select_city'.tr,
-                      style: body16.copyWith(color: ColorResources.gray),
+                    child: DropdownButton<CityItem>(
+                      value: selectedCity,
+                      isExpanded: true,
+                      hint: Text(
+                        selectedCity?.name ?? 'select_city'.tr,
+                        style: body16.copyWith(color: ColorResources.gray),
+                      ),
+                      underline: const SizedBox(), // Remove default underline
+                      onChanged: (CityItem? newValue) {
+                        setState(() {
+                          selectedCity = newValue;
+                        });
+                      },
+                      items: citiesState.cityItem.map((CityItem city) {
+                        return DropdownMenuItem<CityItem>(
+                          value: city,
+                          child: Text(city.name ?? '', style: body16),
+                        );
+                      }).toList(),
                     ),
-                    underline: const SizedBox(), // Remove default underline
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedCity = newValue;
-                      });
-                    },
-                    items: kyrgyzstanCities.map((String city) {
-                      return DropdownMenuItem<String>(
-                        value: city,
-                        child: Text(city, style: body16),
-                      );
-                    }).toList(),
-                  ),
 
-                  //  Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
+                    //  Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
 
-                  //     SvgPicture.asset(Images.svgArrowRight),
-                  //   ],
-                  // ),
-                ),
+                    //     SvgPicture.asset(Images.svgArrowRight),
+                    //   ],
+                    // ),
+                  );
+                }),
                 const SizedBox(
                   height: 5,
                 ),

@@ -78,7 +78,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                           style: h16.copyWith(color: ColorResources.darkGray),
                         ),
                         Text(
-                          '03010201310131',
+                          state.addCompanyModel.tinNumber ?? '',
                           style: body14,
                         ),
                       ],
@@ -203,7 +203,9 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                                     child: Image.file(
                                       File(state
                                           .addCompanyModel.companyLogo!.path),
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
+                                      height: 72,
+                                      width: 72,
                                     ),
                                   ),
                           ),

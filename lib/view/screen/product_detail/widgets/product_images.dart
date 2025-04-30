@@ -1,10 +1,12 @@
+import 'package:el_biz/data/model/response/tender/tender_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../base/custom_image.dart';
 
 class ProductImages extends StatefulWidget {
-  const ProductImages({super.key});
+  final List<Media> image;
+  const ProductImages({super.key, required this.image});
 
   @override
   State<ProductImages> createState() => _ProductImagesState();
@@ -35,7 +37,7 @@ class _ProductImagesState extends State<ProductImages> {
               child: PageView.builder(
                   controller: _pageController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: 6,
+                  itemCount: widget.image.length,
                   // productDetailController.productDetailModel!.galleries.length,
                   onPageChanged: (value) {
                     setState(() {
@@ -50,19 +52,21 @@ class _ProductImagesState extends State<ProductImages> {
                           height: height * 0.4,
                           width: Get.width,
                           fit: BoxFit.cover,
-                          image: '',
-                          // productDetailController.productDetailModel!.galleries[i].image,
+                          image: widget.image[i].url ?? '',
                           radius: 12.0,
                         ),
                         Positioned(
                           bottom: 10,
                           right: 10,
                           child: Container(
-                            decoration: BoxDecoration(color: Colors.white38, borderRadius: BorderRadius.circular(6.0)),
+                            decoration: BoxDecoration(
+                                color: Colors.white38,
+                                borderRadius: BorderRadius.circular(6.0)),
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 12.0, top: 5, bottom: 5, right: 12),
+                              padding: const EdgeInsets.only(
+                                  left: 12.0, top: 5, bottom: 5, right: 12),
                               child: Text(
-                                "${i + 1}/${'6'}",
+                                "${i + 1}/${widget.image.length}",
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -86,7 +90,7 @@ class _ProductImagesState extends State<ProductImages> {
             height: 82,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 6,
+              itemCount: widget.image.length,
               // productDetailController.productDetailModel!.galleries.length,
               itemBuilder: (context, index) {
                 return InkWell(
@@ -99,14 +103,16 @@ class _ProductImagesState extends State<ProductImages> {
                     width: 70,
                     margin: const EdgeInsets.symmetric(horizontal: 5),
                     decoration: BoxDecoration(
-                      border: index == _selectImageIndex ? Border.all(width: 2, color: Colors.white) : null,
+                      border: index == _selectImageIndex
+                          ? Border.all(width: 2, color: Colors.white)
+                          : null,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: CustomImage(
                       height: 78,
                       width: 78,
                       fit: BoxFit.cover,
-                      image: '',
+                      image: widget.image[index].url ?? '',
                       radius: 10.0,
                     ),
                   ),

@@ -28,7 +28,7 @@ class AddCompanyDocumentScreen extends StatelessWidget {
     // print('add company model = ${companyData.toJson()}');
 
     log('add company model = ${companyData.toJson()}');
-    // context.read<CompanyBloc>().add(AddNewCompany(companyData));
+    context.read<CompanyBloc>().add(AddNewCompany(companyData));
     // Get.offAll(() => const DashboardScreen());
   }
 
@@ -145,7 +145,9 @@ class AddCompanyDocumentScreen extends StatelessWidget {
                                   child: Image.file(
                                     File(state.addCompanyModel
                                         .certificateDocument!.path),
-                                    fit: BoxFit.fill,
+                                    height: 40,
+                                    width: 40,
+                                    fit: BoxFit.cover,
                                   ),
                                 )
                           : SvgPicture.asset(Images.svgDownload),
@@ -201,10 +203,14 @@ class AddCompanyDocumentScreen extends StatelessWidget {
                               width: 40,
                               child: isPdf
                                   ? Icon(Icons.picture_as_pdf)
-                                  : Image.file(
-                                      File(document.path),
-                                      height: 40,
-                                      width: 40,
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(40),
+                                      child: Image.file(
+                                        File(document.path),
+                                        height: 40,
+                                        width: 40,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                             ),
                             title: Text(

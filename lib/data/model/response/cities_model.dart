@@ -1,37 +1,54 @@
 // To parse this JSON data, do
 //
-//     final citesModel = citesModelFromJson(jsonString);
+//     final citiesModel = citiesModelFromJson(jsonString);
 
 import 'dart:convert';
 
-CitesModel citesModelFromJson(String str) =>
-    CitesModel.fromJson(json.decode(str));
+CitiesModel citiesModelFromJson(String str) =>
+    CitiesModel.fromJson(json.decode(str));
 
-String citesModelToJson(CitesModel data) => json.encode(data.toJson());
+String citiesModelToJson(CitiesModel data) => json.encode(data.toJson());
 
-class CitesModel {
-  CitesModel({
-    required this.title,
-    required this.message,
-    required this.status,
-    required this.localizedKey,
-    required this.data,
-    required this.statusCode,
+class CitiesModel {
+  final dynamic title;
+  final String? message;
+  final String? status;
+  final String? localizedKey;
+  final Data? data;
+  final int? statusCode;
+
+  CitiesModel({
+    this.title,
+    this.message,
+    this.status,
+    this.localizedKey,
+    this.data,
+    this.statusCode,
   });
 
-  String title;
-  String message;
-  String status;
-  String localizedKey;
-  Data data;
-  int statusCode;
+  CitiesModel copyWith({
+    dynamic title,
+    String? message,
+    String? status,
+    String? localizedKey,
+    Data? data,
+    int? statusCode,
+  }) =>
+      CitiesModel(
+        title: title ?? this.title,
+        message: message ?? this.message,
+        status: status ?? this.status,
+        localizedKey: localizedKey ?? this.localizedKey,
+        data: data ?? this.data,
+        statusCode: statusCode ?? this.statusCode,
+      );
 
-  factory CitesModel.fromJson(Map<String, dynamic> json) => CitesModel(
+  factory CitiesModel.fromJson(Map<String, dynamic> json) => CitiesModel(
         title: json["title"],
         message: json["message"],
         status: json["status"],
         localizedKey: json["localized_key"],
-        data: Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
         statusCode: json["status_code"],
       );
 
@@ -40,31 +57,49 @@ class CitesModel {
         "message": message,
         "status": status,
         "localized_key": localizedKey,
-        "data": data.toJson(),
+        "data": data?.toJson(),
         "status_code": statusCode,
       };
 }
 
 class Data {
+  final List<CityItem>? items;
+  final int? totalPages;
+  final int? currentPage;
+  final int? total;
+  final int? perPage;
+  final int? count;
+
   Data({
-    required this.items,
-    required this.totalPages,
-    required this.currentPage,
-    required this.total,
-    required this.perPage,
-    required this.count,
+    this.items,
+    this.totalPages,
+    this.currentPage,
+    this.total,
+    this.perPage,
+    this.count,
   });
 
-  List<CityItem> items;
-  int totalPages;
-  int currentPage;
-  int total;
-  int perPage;
-  int count;
+  Data copyWith({
+    List<CityItem>? items,
+    int? totalPages,
+    int? currentPage,
+    int? total,
+    int? perPage,
+    int? count,
+  }) =>
+      Data(
+        items: items ?? this.items,
+        totalPages: totalPages ?? this.totalPages,
+        currentPage: currentPage ?? this.currentPage,
+        total: total ?? this.total,
+        perPage: perPage ?? this.perPage,
+        count: count ?? this.count,
+      );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        items:
-            List<CityItem>.from(json["items"].map((x) => CityItem.fromJson(x))),
+        items: json["items"] == null
+            ? []
+            : List<CityItem>.from(json["items"]!.map((x) => CityItem.fromJson(x))),
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         total: json["total"],
@@ -73,7 +108,9 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "items": items == null
+            ? []
+            : List<dynamic>.from(items!.map((x) => x.toJson())),
         "totalPages": totalPages,
         "currentPage": currentPage,
         "total": total,
@@ -83,33 +120,30 @@ class Data {
 }
 
 class CityItem {
+  final int? id;
+  final String? name;
+
   CityItem({
-    required this.id,
-    required this.name,
-    required this.latitude,
-    required this.longitude,
-    required this.createdAt,
+    this.id,
+    this.name,
   });
 
-  int id;
-  String name;
-  String latitude;
-  String longitude;
-  DateTime createdAt;
+  CityItem copyWith({
+    int? id,
+    String? name,
+  }) =>
+      CityItem(
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
 
   factory CityItem.fromJson(Map<String, dynamic> json) => CityItem(
         id: json["id"],
         name: json["name"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-        createdAt: DateTime.parse(json["created_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "latitude": latitude,
-        "longitude": longitude,
-        "created_at": createdAt.toIso8601String(),
       };
 }

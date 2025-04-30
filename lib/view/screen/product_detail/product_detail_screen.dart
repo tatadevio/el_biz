@@ -56,9 +56,12 @@ class ProductDetailScreen extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
+              // have to update the media list
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: ProductImages(),
+                child: ProductImages(
+                  image: [],
+                ),
               ),
               const SizedBox(
                 height: 20,

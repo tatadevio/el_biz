@@ -14,9 +14,15 @@ class UserRepo {
     return await apiClient.getData(AppConstants.userInfoUrl);
   }
 
-  // Future<Response> deleteAccount() async {
-  //   return await apiClient.deleteData(AppConstants.deleteAccountUrl);
-  // }
+  Future<Response> updateUserData(String firstName, String lastname,
+      String email, String phoneNumber) async {
+    return await apiClient.postData(AppConstants.updateUserUrl, {
+      'first_name': firstName,
+      'last_name': lastname,
+      'phone': phoneNumber,
+      'email': email
+    });
+  }
 
   // Future<Response> changePassword(String password, String confirmPassword) async {
   //   return await apiClient.postData(AppConstants.changePasswordUrl, {"password": password, "password_confirmation": confirmPassword});

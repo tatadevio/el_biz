@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final userInfoModel = userInfoModelFromJson(jsonString);
-
 import 'dart:convert';
 
 UserInfoModel userInfoModelFromJson(String str) =>
@@ -11,7 +7,7 @@ String userInfoModelToJson(UserInfoModel data) => json.encode(data.toJson());
 
 class UserInfoModel {
   final String? message;
-  final Data? data;
+  final UserData? data;
   final int? statusCode;
   final String? status;
 
@@ -24,7 +20,7 @@ class UserInfoModel {
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) => UserInfoModel(
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : UserData.fromJson(json["data"]),
         statusCode: json["status_code"],
         status: json["status"],
       );
@@ -35,9 +31,23 @@ class UserInfoModel {
         "status_code": statusCode,
         "status": status,
       };
+
+  UserInfoModel copyWith({
+    String? message,
+    UserData? data,
+    int? statusCode,
+    String? status,
+  }) {
+    return UserInfoModel(
+      message: message ?? this.message,
+      data: data ?? this.data,
+      statusCode: statusCode ?? this.statusCode,
+      status: status ?? this.status,
+    );
+  }
 }
 
-class Data {
+class UserData {
   final int? id;
   final String? name;
   final String? firstName;
@@ -53,7 +63,7 @@ class Data {
   final String? googleId;
   final String? appleId;
 
-  Data({
+  UserData({
     this.id,
     this.name,
     this.firstName,
@@ -70,7 +80,7 @@ class Data {
     this.appleId,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["id"],
         name: json["name"],
         firstName: json["first_name"],
@@ -103,4 +113,46 @@ class Data {
         "google_id": googleId,
         "apple_id": appleId,
       };
+
+  UserData copyWith({
+    int? id,
+    String? name,
+    String? firstName,
+    String? lastName,
+    String? username,
+    String? email,
+    String? phone,
+    String? userRole,
+    String? status,
+    String? image,
+    String? fcmToken,
+    String? firebaseId,
+    String? googleId,
+    String? appleId,
+  }) {
+    return UserData(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      userRole: userRole ?? this.userRole,
+      status: status ?? this.status,
+      image: image ?? this.image,
+      fcmToken: fcmToken ?? this.fcmToken,
+      firebaseId: firebaseId ?? this.firebaseId,
+      googleId: googleId ?? this.googleId,
+      appleId: appleId ?? this.appleId,
+    );
+  }
+
+  /// Returns the phone number without the +996 country code, if present.
+  String get phoneWithoutCountryCode {
+    if (phone != null && phone!.startsWith('+996')) {
+      return phone!.substring(4); // Remove "+996"
+    }
+    return phone ?? '';
+  }
 }

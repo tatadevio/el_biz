@@ -279,5 +279,6 @@
   "create_a_new_tender" : "Создать новый тендер",
   "what_do_you_want_to_buy" : "Что вы хотите купить?",
   "without_quotes_for_example_B2B" : "Без кавычек, например: B2B",
-  "add_a_photo_of_the_product_you_are_looking_for" : "Добавьте фото товара, которое вы ищете"
+  "add_a_photo_of_the_product_you_are_looking_for" : "Добавьте фото товара, которое вы ищете",
+  "add_account" : "Добавить аккаунт"
 }

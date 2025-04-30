@@ -5,6 +5,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
+import 'package:el_biz/view/screen/company/add_company_screen.dart';
 import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:el_biz/view/screen/company/widgets/fill_company_data_box.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ class MyCompaniesScreen extends StatelessWidget {
                 ),
               ),
             );
-            // Get.to(() => MyCompaniesScreen());
+            // Get.to(() => AddCompanyScreen());
           },
         ),
       ),

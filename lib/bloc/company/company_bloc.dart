@@ -128,7 +128,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       if (value != null) {
         final compressedImage = await _convertHEICtoJPG(File(value.path));
         emit(CompanyState(
-            addCompanyModel: state.addCompanyModel
+            addCompanyModel: state.addCompanyModel!
                 .copyWith(certificateDocument: compressedImage)));
       }
     } else {
@@ -154,7 +154,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   ) async {
     final picker = ImagePicker();
 
-    List<XFile>? otherDocuments = state.addCompanyModel.otherDocuments ?? [];
+    List<XFile>? otherDocuments = state.addCompanyModel?.otherDocuments ?? [];
 
     if (otherDocuments.length >= 10) {
       print("Maximum of 10 documents allowed.");
@@ -222,7 +222,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     Emitter<CompanyState> emit,
   ) async {
     List<XFile> updatedDocuments =
-        List.from(state.addCompanyModel.otherDocuments!);
+        List.from(state.addCompanyModel!.otherDocuments!);
     updatedDocuments.removeAt(event.index);
 
     emit(CompanyState(
@@ -262,6 +262,4 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       // );
     }
   }
-
- 
 }

@@ -7,7 +7,7 @@ class AppConstants {
 
   static const String appName = "El Biz";
   static const String countryCode = "+996";
-  // static const String currencyCode = "cом";
+  static const String currencyCode = "cом";
   // static const String appStoreLink = "";
   // static const String playStoreLink = "https://play.google.com/store/apps/details?id=com.isooq.tatadev";
   // static const int androidVersion = 2;
@@ -23,6 +23,7 @@ class AppConstants {
 
   /// User
   static const String userInfoUrl = "api/users/info";
+  static const String updateUserUrl = "api/users/update";
 
   /// Tenders
   static const String tendersUrl = "api/tenders";
@@ -56,6 +57,9 @@ class AppConstants {
   /// Add Product
   static const String addProductUrl = "api/products/store";
 
+  // Common
+  static const String citiesUrl = "api/cities";
+
   /// Auth
   // static const String registration = "api/v1/users/update";
   // static const String loginViaOtp = "api/v1/login";
@@ -77,7 +81,7 @@ class AppConstants {
   static const String privacyUrl = "api/v1/privacy";
   // static const String homePageUrl = "api/v1/homepage";
   // static const String storiesDetailUrl = "api/v1/products/stories";
-  static const String citiesUrl = "api/v1/cities";
+  // static const String citiesUrl = "api/v1/cities";
   // static const String bankUrl = "api/v1/banks";
   // static const String adPromotionUrl = "api/v1/products/promotion";
   // static const String packagesUrl = "api/v1/packages";

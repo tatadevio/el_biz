@@ -31,10 +31,10 @@ class CitiesBloc extends Bloc<CitiesEvent, CitiesState> {
     try {
       final response = await citiesRepo.getCities(event.pageSize.toString());
       if (response.statusCode == 200) {
-        final model = CitesModel.fromJson(response.body);
+        final model = CitiesModel.fromJson(response.body);
 
         List<CityItem> updatedCities;
-        updatedCities = model.data.items;
+        updatedCities = model.data?.items ?? [];
 
         // event.reload
         //     ? model.data.items
@@ -45,8 +45,8 @@ class CitiesBloc extends Bloc<CitiesEvent, CitiesState> {
           isLoading: false,
           bottomLoading: false,
           cityItem: updatedCities,
-          pageSize: model.data.perPage,
-          currentPageSize: model.data.currentPage,
+          pageSize: model.data?.perPage ?? 1,
+          currentPageSize: model.data?.currentPage ?? 1,
         ));
       } else {
         // Handle error

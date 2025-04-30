@@ -1,23 +1,28 @@
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/account/account_bloc.dart';
+import '../../../bloc/company/company_bloc.dart';
 import '../../../data/model/response/account/my_accounts_model.dart';
+import '../../../data/model/response/bank_model.dart';
+import '../company/add_company_document_screen.dart';
 import 'widgets/edit_account_info_bottom_sheet.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+  final bool isAddNewCompany;
+  const AccountScreen({super.key, this.isAddNewCompany = false});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  String _selectedOption = 'Optima USD';
+  String _selectedOption = '';
 
   void _callScrolling(ScrollController scrollController) {
     final accountController = context.read<AccountBloc>();
@@ -136,12 +141,46 @@ class _AccountScreenState extends State<AccountScreen> {
             width: Get.width,
             height: Get.height,
             onTap: () {
-              Get.bottomSheet(
-                  const EditAccountInfoBottomSheet(
-                    isAddNew: true,
-                  ),
-                  backgroundColor: Colors.white,
-                  isScrollControlled: true);
+              if (widget.isAddNewCompany) {
+                if (_selectedOption == "") {
+                  showShortToast('select_account'.tr);
+                  return;
+                }
+                final accountState = context.read<AccountBloc>().state;
+                List<BankItem> allBanks = [];
+
+                for (int i = 0; i < accountState.accountItems.length; i++) {
+                  if (accountState.accountItems[i].accountNumber ==
+                      _selectedOption) {
+                    String accountName =
+                        accountState.accountItems[i].accountName ?? '';
+                    String accountNumber =
+                        accountState.accountItems[i].accountNumber ?? '';
+                    String bik = accountState.accountItems[i].bic ?? '';
+                    allBanks.add(
+                      BankItem(
+                        id: DateTime.now().millisecondsSinceEpoch + i,
+                        bankName: bik,
+                        accountName: accountName,
+                        accountNumber: accountNumber,
+                        image: '',
+                      ),
+                    );
+                  }
+                }
+                final companyModel =
+                    context.read<CompanyBloc>().state.addCompanyModel;
+
+                companyModel.bankData = allBanks;
+                Get.to(() => AddCompanyDocumentScreen());
+              } else {
+                Get.bottomSheet(
+                    const EditAccountInfoBottomSheet(
+                      isAddNew: true,
+                    ),
+                    backgroundColor: Colors.white,
+                    isScrollControlled: true);
+              }
             },
             title: 'add_account'.tr,
             color: ColorResources.primary,

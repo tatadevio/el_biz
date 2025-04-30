@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
+import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -290,6 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   InkWell(
                     onTap: () async {
+                      HomeScreen().loadData(context);
                       Get.offAll(() => const DashboardScreen());
                       // final SharedPreferences prefers = await SharedPreferences.getInstance();
                       // prefers.clear();

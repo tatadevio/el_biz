@@ -104,21 +104,21 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
                               context.read<ProductBloc>().add(ChangeCityId(
                                   citiesState.cityItem[i].id.toString(),
-                                  citiesState.cityItem[i].name));
+                                  citiesState.cityItem[i].name ?? ''));
 
                               context.read<CitiesBloc>().add(ChangeCity(
                                   citiesState.cityItem[i].id.toString(),
-                                  citiesState.cityItem[i].name));
+                                  citiesState.cityItem[i].name ?? ''));
 
                               // citiesState.changeCity(citiesState.cityItem[i].id.toString(), citiesState.cityItem[i].name);
 
                               context.read<PostAdBloc>().add(UpdateCityId(
                                   citiesState.cityItem[i].id.toString(),
-                                  citiesState.cityItem[i].name));
+                                  citiesState.cityItem[i].name ?? ''));
                               Get.back();
                             },
                             title: Text(
-                              citiesState.cityItem[i].name,
+                              citiesState.cityItem[i].name ?? '',
                               style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500,

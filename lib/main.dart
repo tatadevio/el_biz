@@ -17,6 +17,7 @@ import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/review/review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
+import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => TinBloc(Get.find())),
         BlocProvider(create: (_) => AddProductBloc(Get.find())),
         BlocProvider(create: (_) => AddTenderBloc(Get.find())),
+        BlocProvider(create: (_) => TenderDetailBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

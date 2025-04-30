@@ -57,7 +57,7 @@ class CompanyState extends Equatable {
         isShowGoodsGridView,
         isShowTendersGridView,
         scheduleTiming,
-        addCompanyModel,
+        addCompanyModel as AddCompanyModel,
       ];
 }
 

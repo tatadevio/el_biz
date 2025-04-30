@@ -9,6 +9,7 @@ import '../../../../utils/custom_text_style.dart';
 import '../../../bloc/company/company_bloc.dart';
 import '../../../data/model/response/bank_model.dart';
 import '../../../utils/color_resources.dart';
+import '../account/account_screen.dart';
 import 'widgets/custom_add_company_appbar.dart';
 import 'widgets/select_currency_widget.dart';
 
@@ -65,7 +66,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
     }
     final companyModel = context.read<CompanyBloc>().state.addCompanyModel;
 
-    companyModel.bankData = allBanks;
+    companyModel?.bankData = allBanks;
 
     Get.bottomSheet(
       backgroundColor: Colors.white,
@@ -94,15 +95,23 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                     "details".tr,
                     style: h16.copyWith(color: ColorResources.darkGray),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'view_banks'.tr,
-                        style: button16.copyWith(color: ColorResources.blue),
-                      ),
-                      SvgPicture.asset(Images.svgArrowForwardIcon),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => AccountScreen(
+                        isAddNewCompany: true,
+                      ));
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'view_banks'.tr,
+                          style: button16.copyWith(color: ColorResources.blue),
+                        ),
+                        const SizedBox(width: 5),
+                        SvgPicture.asset(Images.svgArrowForwardIcon),
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -2,6 +2,7 @@ import 'package:el_biz/data/model/response/bank_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../response/category/categories_list_model.dart';
+import '../response/cities_model.dart';
 import 'timing_date_model.dart';
 
 class AddCompanyModel {
@@ -12,7 +13,7 @@ class AddCompanyModel {
   XFile? companyBanner;
   String? description;
   List<String>? keywords;
-  String? city;
+  CityItem? city;
   // address
   String? street;
   String? house;
@@ -67,7 +68,9 @@ class AddCompanyModel {
       description: json['description'],
       keywords:
           json['keywords'] != null ? List<String>.from(json['keywords']) : null,
-      city: json['city'],
+      city: CityItem.fromJson(
+        json['city'],
+      ),
       street: json['street'],
       house: json['house'],
       office: json['office'],
@@ -112,7 +115,7 @@ class AddCompanyModel {
       'companyBanner': companyBanner?.path,
       'description': description,
       'keywords': keywords,
-      'city': city,
+      'city': city?.toJson(),
       'street': street,
       'house': house,
       'office': office,
@@ -138,7 +141,7 @@ class AddCompanyModel {
     XFile? companyBanner,
     String? description,
     List<String>? keywords,
-    String? city,
+    CityItem? city,
     String? street,
     String? house,
     String? office,

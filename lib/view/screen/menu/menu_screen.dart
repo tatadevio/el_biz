@@ -13,6 +13,7 @@ import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/custom_dialog.dart';
+import '../cities/cities_page.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -122,7 +123,9 @@ class MenuScreen extends StatelessWidget {
               },
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+            
+              },
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
@@ -206,7 +209,7 @@ class MenuScreen extends StatelessWidget {
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 prefs.clear();
-                          
+
                                 Get.back();
                                 Get.offAll(() => const LoginScreen());
                               },

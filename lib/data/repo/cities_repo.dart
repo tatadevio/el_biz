@@ -10,7 +10,7 @@ class CitiesRepo {
 
   Future<Response> getCities(String pageSize) async {
     return await apiClient.getData(
-      "${AppConstants.citiesUrl}?perPage=$pageSize",
+      "${AppConstants.citiesUrl}?page=$pageSize",
     );
   }
 }
