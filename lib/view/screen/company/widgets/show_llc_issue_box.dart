@@ -1,7 +1,6 @@
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
-import 'package:el_biz/view/screen/company/widgets/show_company_detail_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +8,6 @@ import 'package:get/get.dart';
 
 import '../../../../bloc/tin_number/tin_bloc.dart';
 import '../../../../utils/custom_text_style.dart';
-import '../../../base/custom_dialog.dart';
 
 class ShowLlcIssueBox extends StatefulWidget {
   const ShowLlcIssueBox({super.key});

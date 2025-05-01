@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
+import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -33,6 +34,7 @@ class HomeScreen extends StatelessWidget {
     context.read<CompanyBloc>().add(GetMyCompanies());
     context.read<AccountBloc>().add(GetMyAccounts());
     context.read<CitiesBloc>().add(GetCitites(1, true));
+    context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));
   }
 
   @override

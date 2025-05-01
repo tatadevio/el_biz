@@ -14,8 +14,12 @@ import '../../base/custom_image.dart';
 class SelectCategoryScreen extends StatefulWidget {
   final Function(List<CategoryItem>)? onSelect;
   final bool isCompanyCategory;
+  final bool isProductCategory;
   const SelectCategoryScreen(
-      {super.key, this.onSelect, this.isCompanyCategory = false});
+      {super.key,
+      this.onSelect,
+      this.isCompanyCategory = false,
+      this.isProductCategory = false});
 
   @override
   State<SelectCategoryScreen> createState() => _SelectCategoryScreenState();
@@ -24,11 +28,14 @@ class SelectCategoryScreen extends StatefulWidget {
 class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
   void _submitForm() {
     if (selectedCategories.isEmpty) {
-      showShortToast('select category');
+      showShortToast('select_category'.tr);
     } else {
       if (widget.onSelect != null) {
         widget.onSelect!(selectedCategories); // pass the list back
       }
+      // else if(widget.onSelect != null && widget.isProductCategory == true){
+      //   wid
+      // }
     }
   }
 
@@ -146,13 +153,25 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
       controlAffinity: ListTileControlAffinity.leading,
       value: selectedCategories.contains(categoryItem),
       onChanged: (bool? value) {
-        setState(() {
-          if (selectedCategories.contains(categoryItem)) {
-            selectedCategories.remove(categoryItem);
-          } else {
+        if (widget.isProductCategory) {
+          selectedCategories = [];
+          setState(() {
             selectedCategories.add(categoryItem);
-          }
-        });
+            // if (selectedCategories.contains(categoryItem)) {
+            //   selectedCategories.remove(categoryItem);
+            // } else {
+            //   selectedCategories.add(categoryItem);
+            // }
+          });
+        } else {
+          setState(() {
+            if (selectedCategories.contains(categoryItem)) {
+              selectedCategories.remove(categoryItem);
+            } else {
+              selectedCategories.add(categoryItem);
+            }
+          });
+        }
         // print(isSelected);
       },
     );

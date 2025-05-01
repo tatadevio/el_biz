@@ -182,6 +182,7 @@ class ApiClient extends GetxService {
     SharedPreferences prefer = await SharedPreferences.getInstance();
     try {
       var request = http.MultipartRequest(
+        
         'POST',
         Uri.parse(AppConstants.baseUrl + uri),
       );

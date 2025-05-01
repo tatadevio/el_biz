@@ -29,6 +29,7 @@ class AddCompanyModel {
   List<DaySchedule>? schedule;
   DaySchedule? lunchBreak;
   List<CategoryItem>? categories;
+  String? aboutCompany;
 
   AddCompanyModel({
     this.tinNumber,
@@ -53,6 +54,7 @@ class AddCompanyModel {
     this.schedule,
     this.lunchBreak,
     this.categories,
+    this.aboutCompany,
   });
 
   // Factory method for JSON deserialization
@@ -102,6 +104,7 @@ class AddCompanyModel {
               .map((e) => CategoryItem.fromJson(e))
               .toList()
           : null,
+      aboutCompany: json['aboutCompany'],
     );
   }
 
@@ -129,6 +132,7 @@ class AddCompanyModel {
       'certificateDocument': certificateDocument?.path,
       'otherDocuments': otherDocuments?.map((e) => e.path).toList(),
       'categories': categories?.map((e) => e.toJson()).toList(),
+      'aboutCompany': aboutCompany,
     };
   }
 
@@ -153,7 +157,10 @@ class AddCompanyModel {
     List<BankItem>? bankData,
     XFile? certificateDocument,
     List<XFile>? otherDocuments,
+    List<DaySchedule>? schedule,
+    DaySchedule? lunchBreak,
     List<CategoryItem>? categories,
+    String? aboutCompany,
   }) {
     return AddCompanyModel(
       tinNumber: tinNumber ?? this.tinNumber,
@@ -175,7 +182,10 @@ class AddCompanyModel {
       bankData: bankData ?? this.bankData,
       certificateDocument: certificateDocument ?? this.certificateDocument,
       otherDocuments: otherDocuments ?? this.otherDocuments,
+      schedule: schedule ?? this.schedule,
+      lunchBreak: lunchBreak ?? this.lunchBreak,
       categories: categories ?? this.categories,
+      aboutCompany: aboutCompany ?? this.aboutCompany,
     );
   }
 

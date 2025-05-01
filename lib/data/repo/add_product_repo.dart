@@ -18,18 +18,16 @@ class AddProductRepo {
       'name': addProductModel.productName ?? '',
       'brand': addProductModel.brandName ?? '',
       'description': addProductModel.description ?? '',
-      'company_id': ' 1  ',
-      'category_id': ' 2  ',
-      'status': 'active',
+      'company_id': addProductModel.company?.id.toString() ?? '',
+      'category_id': addProductModel.category?.id.toString() ?? '',
+      'status': 'published', //draft , published
       'quantity': addProductModel.quantity ?? '',
-      // 'is_available': addProductModel.availability == '1' ? true : false,
+      'is_available': addProductModel.availability ?? '0',
       'dimention': addProductModel.dimensions ?? '',
       'weight': addProductModel.weight ?? '',
       'country_of_origin': addProductModel.region ?? '',
       'search_keywords': addProductModel.keywords ?? '',
-      'material': ' Plastic',
-      // 'status': 'draft',
-      // 'is_available': '1',
+      'material': addProductModel.material?.name ?? '',
       'price': addProductModel.price ?? '',
     };
 

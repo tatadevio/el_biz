@@ -34,7 +34,7 @@ class CompnayRepo {
       'okpo': addCompanyModel.companyNumber ?? '',
       'search_tags': addCompanyModel.keywords?.join(',') ?? '',
       'description': addCompanyModel.description ?? '',
-      'about_company': 'our comapny is good',
+      'about_company': addCompanyModel.aboutCompany ?? '',
       'city_id': addCompanyModel.city?.id.toString() ?? '',
       'street': addCompanyModel.street ?? '',
       'house': addCompanyModel.house ?? '',
@@ -43,11 +43,9 @@ class CompnayRepo {
       'lunch_break[open]': addCompanyModel.lunchBreak?.isOpen == true
           ? addCompanyModel.lunchBreak?.openingTime ?? ''
           : '',
-      // '12:00',
       'lunch_break[close]': addCompanyModel.lunchBreak?.isOpen == true
-          ? addCompanyModel.lunchBreak?.openingTime ?? ''
+          ? addCompanyModel.lunchBreak?.closingTime ?? ''
           : '',
-      // '13:00',
     };
 
     // Add category_ids[] dynamically
@@ -84,23 +82,9 @@ class CompnayRepo {
     if (addCompanyModel.schedule != null &&
         addCompanyModel.schedule!.isNotEmpty) {
       for (var day in addCompanyModel.schedule!) {
-        //   'working_hours[monday][open]': '09:00',
-        // 'working_hours[monday][close]': '18:00',
-        // 'working_hours[tuesday][open]': '09:00',
-        // 'working_hours[tuesday][close]': '18:00',
-        // 'working_hours[wednesday][open]': '09:00',
-        // 'working_hours[wednesday][close]': '18:00',
-        // 'working_hours[thursday][open]': '09:00',
-        // 'working_hours[thursday][close]': '18:00',
-        // 'working_hours[friday][open]': '09:00',
-        // 'working_hours[friday][close]': '18:00',
-        // 'working_hours[saturday][open]': '10:00',
-        // 'working_hours[saturday][close]': '14:00',
-        // 'working_hours[sunday][open]': '',
-        // 'working_hours[sunday][close]': '',
-        fields['working_hours[${day.day}][open]'] =
+        fields['working_hours[${day.day.toLowerCase()}][open]'] =
             day.isOpen ? day.openingTime : '';
-        fields['working_hours[${day.day}][close]'] =
+        fields['working_hours[${day.day.toLowerCase()}][close]'] =
             day.isOpen ? day.closingTime : '';
       }
     }
@@ -129,12 +113,11 @@ class CompnayRepo {
       }
     }
 
-    return await apiClient.postMultipartData(
-      AppConstants.addCompanyUrl,
-      fields: fields,
-      files: files,
-    );
+    return await apiClient.postMultipartData(AppConstants.addCompanyUrl,
+        fields: fields, files: files);
   }
+
+  // var headers = {'Accept': 'application/json', 'Authorization': '••••••'};
 
   Future<Response> addNewCompanyDocument(
       AddCompanyModel addCompanyModel) async {

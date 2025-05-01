@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -74,7 +76,11 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
     if (_formKey.currentState!.validate()) {
       final tenderData = context.read<TendersBloc>().state.newTenderModel;
       if (tenderData.images == null || tenderData.images!.isEmpty) {
-        showShortToast('select image');
+        showShortToast('select_image'.tr);
+        return;
+      }
+      if (tenderData.selectedCompany == null) {
+        showShortToast('select_company'.tr);
         return;
       }
       List<TenderProduct> products = [];
@@ -582,6 +588,61 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
                             inputType: TextInputType.emailAddress,
                             leading: Images.svgMail,
                             readOnly: false),
+
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'select_company'.tr,
+                          style: h16.copyWith(color: ColorResources.darkGray),
+                        ),
+
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        BlocBuilder<CompanyBloc, CompanyState>(
+                          builder: (context, companyState) {
+                            return Container(
+                              height: 48,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  width: 1,
+                                  color: ColorResources.lgColor,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: DropdownButton<CompanyItem>(
+                                value: state.newTenderModel.selectedCompany,
+                                isExpanded: true,
+                                hint: Text(
+                                  state.newTenderModel.selectedCompany?.name ??
+                                      'select_company'.tr,
+                                  style: body16.copyWith(
+                                      color: ColorResources.gray),
+                                ),
+                                underline:
+                                    const SizedBox(), // Remove default underline
+                                onChanged: (CompanyItem? newValue) {
+                                  setState(() {
+                                    state.newTenderModel.selectedCompany =
+                                        newValue;
+                                  });
+                                },
+                                items: companyState.myCompanies
+                                    .map((CompanyItem city) {
+                                  return DropdownMenuItem<CompanyItem>(
+                                    value: city,
+                                    child: Text(city.name ?? '', style: body16),
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                          },
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -606,7 +667,9 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
                 boxShaow: const [ColorResources.shadowXS],
                 width: Get.width,
                 height: Get.height,
-                onTap: () {},
+                onTap: () {
+                  saveTender();
+                },
                 // Preview
                 child: Text(
                   'preview'.tr,

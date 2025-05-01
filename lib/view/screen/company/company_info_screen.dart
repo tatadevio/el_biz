@@ -1,21 +1,16 @@
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/company/company_bloc.dart';
-import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/data/model/response/cities_model.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
-import 'package:el_biz/view/screen/cities/cities_page.dart';
 import 'package:el_biz/view/screen/company/company_contact_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../data/model/base/timing_date_model.dart';
-import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/custom_button.dart';
-import './widgets/add_open_close_time.dart';
 import 'widgets/custom_add_company_appbar.dart';
 
 class CompanyInfoScreen extends StatefulWidget {
@@ -99,7 +94,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
 
   void _submitForm() {
     if (selectedCity == null) {
-      showShortToast('select city');
+      showShortToast('select_city'.tr);
       return;
     }
 
@@ -118,6 +113,14 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
     companyModel.schedule =
         schedule; // schedule model is not completed to send value...
     companyModel.lunchBreak = lunchBreak;
+
+    companyModel.schedule = [];
+
+    for (var sch in schedule) {
+      companyModel.schedule!.add(sch);
+      print('this is schedule of the compnay : ${sch.day}');
+    }
+
     Get.to(() => const CompanyContactInfoScreen());
   }
 
@@ -151,40 +154,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                // BlocBuilder<ProductBloc, ProductState>(
-                //     builder: (context, productController) {
-                //   return InkWell(
-                //     onTap: () {
-                //       Get.bottomSheet(const CitiesScreen(),
-                //           isScrollControlled: true);
-                //     },
-                //     child: Container(
-                //       height: 48,
-                //       padding: const EdgeInsets.symmetric(
-                //           horizontal: 14, vertical: 10),
-                //       decoration: BoxDecoration(
-                //         color: Colors.white,
-                //         border: Border.all(
-                //           width: 1,
-                //           color: ColorResources.lgColor,
-                //         ),
-                //         borderRadius: BorderRadius.circular(12),
-                //       ),
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Text(
-                //             productController.selectedCityName == ''
-                //                 ? 'select_city'.tr
-                //                 : productController.selectedCityName,
-                //             style: body16.copyWith(color: ColorResources.gray),
-                //           ),
-                //           SvgPicture.asset(Images.svgArrowRight),
-                //         ],
-                //       ),
-                //     ),
-                //   );
-                // }),
+
                 BlocBuilder<CitiesBloc, CitiesState>(
                     builder: (context, citiesState) {
                   print('this is list of cities : ${citiesState.cityItem}');
@@ -220,14 +190,6 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                         );
                       }).toList(),
                     ),
-
-                    //  Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-
-                    //     SvgPicture.asset(Images.svgArrowRight),
-                    //   ],
-                    // ),
                   );
                 }),
                 const SizedBox(
@@ -302,7 +264,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                   height: 5,
                 ),
                 Text(
-                  'required_field',
+                  'required_field'.tr,
                   style: body12.copyWith(color: ColorResources.gray),
                 ),
                 const SizedBox(

@@ -14,3 +14,19 @@ class AddProduct extends AddProductEvent {
   @override
   List<Object> get props => [addProductModel];
 }
+
+class SelectCategory extends AddProductEvent {
+  final CategoryItem category;
+  const SelectCategory({required this.category});
+
+  @override
+  List<Object> get props => [category];
+}
+
+class SelectMaterial extends AddProductEvent {
+  final MaterialItem materialItem;
+  const SelectMaterial(this.materialItem);
+
+  @override
+  List<Object> get props => [materialItem];
+}

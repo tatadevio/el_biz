@@ -4,7 +4,7 @@ class CompanyDetailState extends Equatable {
   final bool companyDetailLoading;
   final bool isLoading;
   final CompanyDetailModel? companyDetailModel;
-  final List<ProductItem>? companyProducts;
+  final List<CompanyProductItem>? companyProducts;
   final List<DocumentItem>? companyDocuments;
   final List<TenderItem>? companyTenders;
   final List<ReviewItem>? companyReviews;
@@ -12,6 +12,9 @@ class CompanyDetailState extends Equatable {
   final bool isMoreLoading;
   final int currentPage;
   final int pageSize;
+  final int productCurrentPage;
+  final int productPageSize;
+  final bool productShowMore;
 
   const CompanyDetailState({
     this.companyDetailLoading = false,
@@ -25,13 +28,16 @@ class CompanyDetailState extends Equatable {
     this.isMoreLoading = false,
     this.currentPage = 1,
     this.pageSize = 1,
+    this.productCurrentPage = 1,
+    this.productPageSize = 1,
+    this.productShowMore = false,
   });
 
   CompanyDetailState copyWith({
     bool? companyDetailLoading,
     bool? isLoading,
     CompanyDetailModel? companyDetailModel,
-    List<ProductItem>? companyProducts,
+    List<CompanyProductItem>? companyProducts,
     List<DocumentItem>? companyDocuments,
     List<TenderItem>? companyTenders,
     List<ReviewItem>? companyReviews,
@@ -39,6 +45,9 @@ class CompanyDetailState extends Equatable {
     bool? isMoreLoading,
     int? currentPage,
     int? pageSize,
+    int? productCurrentPage,
+    int? productPageSize,
+    bool? productShowMore,
   }) {
     return CompanyDetailState(
       companyDetailLoading: companyDetailLoading ?? this.companyDetailLoading,
@@ -52,6 +61,9 @@ class CompanyDetailState extends Equatable {
       isMoreLoading: isMoreLoading ?? this.isMoreLoading,
       currentPage: currentPage ?? this.currentPage,
       pageSize: pageSize ?? this.pageSize,
+      productCurrentPage: productCurrentPage ?? this.productCurrentPage,
+      productPageSize: productPageSize ?? this.productPageSize,
+      productShowMore: productShowMore ?? this.productShowMore,
     );
   }
 
@@ -68,5 +80,8 @@ class CompanyDetailState extends Equatable {
         isMoreLoading,
         currentPage,
         pageSize,
+        productCurrentPage,
+        productPageSize,
+        productShowMore,
       ];
 }

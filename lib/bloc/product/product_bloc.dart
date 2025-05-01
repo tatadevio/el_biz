@@ -112,6 +112,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<ClearSelectedProduct>((event, emit) {
       emit(state.copywith(selectedProductId: []));
     });
+
+    on<EmptyPickedLogo>(_onEmptyPickedLogo);
   }
 
   Future<void> _onPickImageDocs(
@@ -198,5 +200,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     //   emit(state.copywith(isLoading: false));
     //   // Handle error appropriately (e.g., logging or adding an error state)
     // }
+  }
+
+  Future<void> _onEmptyPickedLogo(
+      EmptyPickedLogo event, Emitter<ProductState> emit) async {
+    emit(state.copywith(pickedLogo: []));
   }
 }

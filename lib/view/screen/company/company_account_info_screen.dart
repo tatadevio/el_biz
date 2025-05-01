@@ -1,5 +1,6 @@
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/screen/company/add_company_document_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -66,7 +67,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
     }
     final companyModel = context.read<CompanyBloc>().state.addCompanyModel;
 
-    companyModel?.bankData = allBanks;
+    companyModel.bankData = allBanks;
 
     Get.bottomSheet(
       backgroundColor: Colors.white,
@@ -98,8 +99,8 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                   GestureDetector(
                     onTap: () {
                       Get.to(() => AccountScreen(
-                        isAddNewCompany: true,
-                      ));
+                            isAddNewCompany: true,
+                          ));
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -211,27 +212,32 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
           child: Row(
             children: [
               Expanded(
-                child: Container(
-                  // height: 48,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: ColorResources.primary,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 2,
-                        spreadRadius: 0,
-                        offset: Offset(0, 1),
-                        color: Color.fromRGBO(16, 24, 40, 0.05),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(() => AddCompanyDocumentScreen());
+                  },
+                  child: Container(
+                    // height: 48,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: ColorResources.primary,
                       ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'skip'.tr,
-                    style: textMd.copyWith(color: ColorResources.blue),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 0,
+                          offset: Offset(0, 1),
+                          color: Color.fromRGBO(16, 24, 40, 0.05),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'skip'.tr,
+                      style: textMd.copyWith(color: ColorResources.blue),
+                    ),
                   ),
                 ),
               ),

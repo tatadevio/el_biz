@@ -12,10 +12,32 @@ import '../../../../base/product_grid_item.dart';
 import '../../../../base/product_list_item.dart';
 
 class CompanyItems extends StatelessWidget {
+ 
   const CompanyItems({super.key});
+
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<CompanyDetailBloc>();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !accountController.state.isLoading &&
+          !accountController.state.productShowMore) {
+        int pageSize = accountController.state.productPageSize;
+        if (accountController.state.productCurrentPage < pageSize) {
+          int nextPage = accountController.state.currentPage;
+String companyId = context.read<CompanyDetailBloc>().state.companyDetailModel?.data?.id.toString() ?? '';
+          accountController
+              .add(GetCompanyProducts(companyId, currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController _controller = ScrollController();
+    _callScrolling(context, _controller);
     return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
         builder: (context, companyDetailState) {
       return BlocBuilder<CompanyBloc, CompanyState>(
@@ -130,7 +152,11 @@ class CompanyItems extends StatelessWidget {
                     childAspectRatio: 0.7),
                 itemCount: companyDetailState.companyProducts?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return const ProductGridItem();
+                  final productData =
+                      companyDetailState.companyProducts![index];
+                  return ProductGridItem(
+                    product: productData,
+                  );
                 },
               ),
             ] else ...[
@@ -139,7 +165,11 @@ class CompanyItems extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: companyDetailState.companyProducts?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return const ProductListItem();
+                  final productData =
+                      companyDetailState.companyProducts![index];
+                  return ProductListItem(
+                    product: productData,
+                  );
                 },
               ),
             ],

@@ -453,7 +453,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 itemBuilder: (context, index) {
                                   return ProductGridItem(
                                     isSelectProduct: widget.isSelectProduct,
-                                    productId: index,
+                                    // product: index,
                                   );
                                 },
                               )
@@ -463,7 +463,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 itemBuilder: (context, index) {
                                   return ProductListItem(
                                     isSelectProduct: widget.isSelectProduct,
-                                    productId: index,
+                                    // product: index,
                                   );
                                 },
                               ),

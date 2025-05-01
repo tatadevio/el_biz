@@ -280,6 +280,10 @@
   "what_do_you_want_to_buy": "What do you want to buy?",
   "without_quotes_for_example_B2B": "Without quotes, for example: B2B",
   "add_a_photo_of_the_product_you_are_looking_for": "Add a photo of the product you are looking for",
-  "add_account" : "Add Account"
+  "add_account" : "Add Account",
+  "lunch_break" : "Lunch Break",
+  "select_company" : "Select Company",
+  "select_category" : "Select Category",
+  "add_certificate" : "Add Certificate"
 
 }

@@ -17,10 +17,11 @@ class GetCompanyDetail extends CompanyDetailEvent {
 
 class GetCompanyProducts extends CompanyDetailEvent {
   final String companyId;
-  const GetCompanyProducts(this.companyId);
+  final int currentPage;
+  const GetCompanyProducts(this.companyId, {required this.currentPage});
 
   @override
-  List<Object> get props => [companyId];
+  List<Object> get props => [companyId, currentPage];
 }
 
 class GetCompanyTenders extends CompanyDetailEvent {

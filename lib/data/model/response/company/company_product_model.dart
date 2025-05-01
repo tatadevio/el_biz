@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import '../product/product_model.dart';
-
 CompanyProductModel companyProductModelFromJson(String str) =>
     CompanyProductModel.fromJson(json.decode(str));
 
@@ -13,44 +11,49 @@ String companyProductModelToJson(CompanyProductModel data) =>
     json.encode(data.toJson());
 
 class CompanyProductModel {
-  final dynamic title;
   final String? message;
-  final String? status;
-  final String? localizedKey;
   final Data? data;
   final int? statusCode;
+  final String? status;
 
   CompanyProductModel({
-    this.title,
     this.message,
-    this.status,
-    this.localizedKey,
     this.data,
     this.statusCode,
+    this.status,
   });
+
+  CompanyProductModel copyWith({
+    String? message,
+    Data? data,
+    int? statusCode,
+    String? status,
+  }) =>
+      CompanyProductModel(
+        message: message ?? this.message,
+        data: data ?? this.data,
+        statusCode: statusCode ?? this.statusCode,
+        status: status ?? this.status,
+      );
 
   factory CompanyProductModel.fromJson(Map<String, dynamic> json) =>
       CompanyProductModel(
-        title: json["title"],
         message: json["message"],
-        status: json["status"],
-        localizedKey: json["localized_key"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
         statusCode: json["status_code"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
-        "title": title,
         "message": message,
-        "status": status,
-        "localized_key": localizedKey,
         "data": data?.toJson(),
         "status_code": statusCode,
+        "status": status,
       };
 }
 
 class Data {
-  final List<ProductItem>? items;
+  final List<CompanyProductItem>? items;
   final int? totalPages;
   final int? currentPage;
   final int? total;
@@ -66,10 +69,27 @@ class Data {
     this.count,
   });
 
+  Data copyWith({
+    List<CompanyProductItem>? items,
+    int? totalPages,
+    int? currentPage,
+    int? total,
+    int? perPage,
+    int? count,
+  }) =>
+      Data(
+        items: items ?? this.items,
+        totalPages: totalPages ?? this.totalPages,
+        currentPage: currentPage ?? this.currentPage,
+        total: total ?? this.total,
+        perPage: perPage ?? this.perPage,
+        count: count ?? this.count,
+      );
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         items: json["items"] == null
             ? []
-            : List<ProductItem>.from(json["items"]!.map((x) => ProductItem.fromJson(x))),
+            : List<CompanyProductItem>.from(json["items"]!.map((x) => CompanyProductItem.fromJson(x))),
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         total: json["total"],
@@ -89,6 +109,114 @@ class Data {
       };
 }
 
+class CompanyProductItem {
+  final int? id;
+  final String? name;
+  final String? slug;
+  final int? price;
+  final String? quantity;
+  final String? image;
+  final User? user;
 
+  CompanyProductItem({
+    this.id,
+    this.name,
+    this.slug,
+    this.price,
+    this.quantity,
+    this.image,
+    this.user,
+  });
 
+  CompanyProductItem copyWith({
+    int? id,
+    String? name,
+    String? slug,
+    int? price,
+    String? quantity,
+    String? image,
+    User? user,
+  }) =>
+      CompanyProductItem(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        slug: slug ?? this.slug,
+        price: price ?? this.price,
+        quantity: quantity ?? this.quantity,
+        image: image ?? this.image,
+        user: user ?? this.user,
+      );
 
+  factory CompanyProductItem.fromJson(Map<String, dynamic> json) => CompanyProductItem(
+        id: json["id"],
+        name: json["name"],
+        slug: json["slug"],
+        price: json["price"],
+        quantity: json["quantity"],
+        image: json["image"],
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "slug": slug,
+        "price": price,
+        "quantity": quantity,
+        "image": image,
+        "user": user?.toJson(),
+      };
+}
+
+class User {
+  final int? id;
+  final String? name;
+  final String? email;
+  final String? phone;
+  final String? image;
+  final String? status;
+
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.image,
+    this.status,
+  });
+
+  User copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? phone,
+    String? image,
+    String? status,
+  }) =>
+      User(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        phone: phone ?? this.phone,
+        image: image ?? this.image,
+        status: status ?? this.status,
+      );
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["id"],
+        name: json["name"],
+        email: json["email"],
+        phone: json["phone"],
+        image: json["image"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "image": image,
+        "status": status,
+      };
+}

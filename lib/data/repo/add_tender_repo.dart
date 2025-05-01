@@ -25,7 +25,7 @@ class AddTenderRepo {
       'email': addTenderModel.email ?? '',
       'tender_category_id': addTenderModel.categories!.first.id.toString(),
       // "category_id": addTenderModel.categories!.first.id.toString(),
-      'company_id': '1',
+      'company_id': addTenderModel.selectedCompany?.id.toString() ?? '',
       // new fields added form the validation
       "quantity": '2'
     };

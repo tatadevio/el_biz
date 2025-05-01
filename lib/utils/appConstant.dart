@@ -36,7 +36,7 @@ class AppConstants {
   static const String companyDeleteUrl = "api/companies/delete";
   static const String deleteCompanyDocumentUrl =
       "api/companies/documents-delete";
-  static const String companyProductsUrl = "api/products";
+  static const String companyProductsUrl = "api/products/my-list";
   static const String companyDocumentsUrl = "api/companies/documents";
   static const String addCompanyReviewUrl = "api/companies/store-review";
   static const String companyReviewsReplyUrl = "api/companies/review"; //2/reply
@@ -59,6 +59,7 @@ class AppConstants {
 
   // Common
   static const String citiesUrl = "api/cities";
+  static const String materialsUrl = "api/materials";
 
   /// Auth
   // static const String registration = "api/v1/users/update";

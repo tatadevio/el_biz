@@ -8,7 +8,6 @@ import '../../data/model/response/company/company_document_model.dart';
 import '../../data/model/response/company/company_product_model.dart';
 import '../../data/model/response/company/company_reviews_model.dart';
 import '../../data/model/response/company/company_tenders_model.dart';
-import '../../data/model/response/product/product_model.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
 
 part 'company_detail_event.dart';
@@ -34,7 +33,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
   Future<void> _onGetCompanyDetail(
       GetCompanyDetail event, Emitter<CompanyDetailState> emit) async {
     emit(state.copyWith(companyDetailLoading: true, isLoading: true));
-    add(GetCompanyProducts(event.companyId));
+    add(GetCompanyProducts(event.companyId, currentPage: 1));
     add(GetCompanyDocuments(event.companyId));
     add(GetCompanyTenders(event.companyId));
     add(GetCompanyReviews(event.companyId, state.currentPage));
@@ -68,20 +67,40 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
 
   Future<void> _onGetCompanyProducts(
       GetCompanyProducts event, Emitter<CompanyDetailState> emit) async {
-    emit(state.copyWith(isLoading: true));
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(productShowMore: true));
+    }
     try {
-      final response = await compnayDetailRepo.companyProducts(event.companyId);
+      final response = await compnayDetailRepo.companyProducts(
+          event.companyId, event.currentPage);
+
       if (response.statusCode == 200) {
         final companyProducts = CompanyProductModel.fromJson(response.body);
-        print('this is company products : ${companyProducts.toJson()}');
+
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            companyProducts: companyProducts.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(companyProducts: [
+            ...state.companyProducts ?? [],
+            ...companyProducts.data?.items ?? []
+          ]));
+        }
+
         emit(state.copyWith(
-          companyProducts: companyProducts.data?.items,
-          isLoading: false,
-        ));
+            productCurrentPage: companyProducts.data?.currentPage ?? 1,
+            productPageSize: companyProducts.data?.totalPages ?? 1));
       } else {
         emit(state.copyWith(isLoading: false));
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
+    emit(state.copyWith(isLoading: false, productShowMore: false));
   }
 
   Future<void> _onGetCompanyTenders(

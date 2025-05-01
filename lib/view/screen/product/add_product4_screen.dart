@@ -1,33 +1,36 @@
+import 'package:el_biz/bloc/add_product/add_product_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/product/preview_product_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/material/material_bloc.dart' as material;
 import '../../base/custom_button.dart';
 
 class AddProduct4Screen extends StatefulWidget {
   // final AddProductModel productData;
   final bool isEdit;
-  const AddProduct4Screen(
-      {super.key,  required this.isEdit});
+  const AddProduct4Screen({super.key, required this.isEdit});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
 }
 
 class _AddProduct4ScreenState extends State<AddProduct4Screen> {
-  final List<Map<String, dynamic>> materialData = [
-    {"id": 1, "title": "Шпон дерева", "isChecked": false},
-    {"id": 2, "title": "Камень", "isChecked": false},
-    {"id": 3, "title": "Пластик", "isChecked": false},
-    {"id": 4, "title": "ЛДСП", "isChecked": false},
-    {"id": 5, "title": "МДФ", "isChecked": false},
-    {"id": 6, "title": "Эпоксидная смола", "isChecked": false},
-    {"id": 7, "title": "Гранит", "isChecked": false},
-    {"id": 8, "title": "Мрамор", "isChecked": false},
-  ];
+  // final List<Map<String, dynamic>> materialData = [
+  //   {"id": 1, "title": "Шпон дерева", "isChecked": false},
+  //   {"id": 2, "title": "Камень", "isChecked": false},
+  //   {"id": 3, "title": "Пластик", "isChecked": false},
+  //   {"id": 4, "title": "ЛДСП", "isChecked": false},
+  //   {"id": 5, "title": "МДФ", "isChecked": false},
+  //   {"id": 6, "title": "Эпоксидная смола", "isChecked": false},
+  //   {"id": 7, "title": "Гранит", "isChecked": false},
+  //   {"id": 8, "title": "Мрамор", "isChecked": false},
+  // ];
 
   List<Map<String, dynamic>> selectedMaterials = [];
 
@@ -47,56 +50,93 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
       appBar: AppBar(
         title: Text('new_product'.tr),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'select_material'.tr,
-                    style: h16.copyWith(color: ColorResources.darkGray),
+      body: BlocListener<material.MaterialBloc, material.MaterialState>(
+        listener: (context, stateListen) {
+          if (stateListen is material.MaterialError) {
+            showShortToast(stateListen.error);
+          }
+        },
+        child: BlocBuilder<AddProductBloc, AddProductState>(
+            builder: (context, addProductState) {
+          return BlocBuilder<material.MaterialBloc, material.MaterialState>(
+              builder: (context, materialState) {
+            if (materialState.isLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            final materialList = materialState.materialItems;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                Text(
-                  '${"selected".tr}: ${materialData.where((item) => item['isChecked'] == true).length} ${"from".tr} ${materialData.length}',
-                  style: body14,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-            Expanded(
-              child: ListView.separated(
-                itemCount: materialData.length,
-                separatorBuilder: (context, index) => const Divider(
-                  height: 0,
-                ),
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                      dense: false,
-                      contentPadding: const EdgeInsets.all(0),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      activeColor: ColorResources.primary,
-                      title: Text(
-                        materialData[index]['title'],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'select_material'.tr,
+                          style: h16.copyWith(color: ColorResources.darkGray),
+                        ),
                       ),
-                      value: materialData[index]['isChecked'],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          materialData[index]['isChecked'] = value ?? false;
-                        });
-                      });
-                },
+                      Text(
+                        materialList.length.toString(),
+                        // '${"selected".tr}: ${materialData.where((item) => item['isChecked'] == true).length} ${"from".tr} ${materialData.length}',
+                        style: body14,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: materialList.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        height: 0,
+                      ),
+                      itemBuilder: (context, index) {
+                        final materialItem = materialList[index];
+                        return CheckboxListTile(
+                          dense: false,
+                          contentPadding: const EdgeInsets.all(0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          activeColor: ColorResources.primary,
+                          title: Text(
+                              // materialList[index]['title'],
+                              materialItem.name ?? ''),
+                          value: materialItem ==
+                              addProductState.productData?.material,
+                          onChanged: (val) {
+                            context
+                                .read<AddProductBloc>()
+                                .add(SelectMaterial(materialItem));
+                          },
+                          // onChanged: (bool? value) {
+                          //   for (var item in materialData) {
+                          //     item['isChecked'] = false;
+                          //   }
+                          //   setState(() {
+                          //     materialData[index]['isChecked'] = true;
+                          //   });
+
+                          //   context
+                          //       .read<AddProductBloc>()
+                          //       .state
+                          //       .productData
+                          //       ?.material = materialData[index]['title'];
+                          // },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
+            );
+          });
+        }),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -117,9 +157,9 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                 ),
                 onTap: () {
                   selectedMaterials = [];
-                  selectedMaterials = materialData
-                      .where((item) => item['isChecked'] == false)
-                      .toList();
+                  // selectedMaterials = materialData
+                  //     .where((item) => item['isChecked'] == false)
+                  //     .toList();
                 },
               ),
             ),
@@ -132,9 +172,9 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                   height: Get.height,
                   onTap: () {
                     selectedMaterials = [];
-                    selectedMaterials = materialData
-                        .where((item) => item['isChecked'] == false)
-                        .toList();
+                    // selectedMaterials = materialData
+                    //     .where((item) => item['isChecked'] == false)
+                    //     .toList();
                     Get.to(() => PreviewProductScreen(
                           selectedMaterial: selectedMaterials,
                           // productData: widget.productData,

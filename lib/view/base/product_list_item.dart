@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,13 @@ import 'check_box_button.dart';
 class ProductListItem extends StatelessWidget {
   final bool isFavorite;
   final bool isSelectProduct;
-  final int? productId;
+  final CompanyProductItem? product;
 
   const ProductListItem(
       {super.key,
       this.isFavorite = false,
       this.isSelectProduct = false,
-      this.productId});
+       this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class ProductListItem extends StatelessWidget {
                       right: 0,
                       top: 0,
                       child: CheckBoxButton(
-                        productId: productId,
+                        productId: product!.id,
                       ),
                     ),
                 ],
@@ -85,12 +86,14 @@ class ProductListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Стул раскладной',
+                      product?.name ?? '',
+                      // 'Стул раскладной',
                       style: h16.copyWith(color: ColorResources.darkGray),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
+                      // product?.description ?? ''
                       'Раскладной садовый стул из дерева',
                       style: body14.copyWith(color: ColorResources.gray),
                       maxLines: 1,

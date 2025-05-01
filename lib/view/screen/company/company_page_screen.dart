@@ -1,4 +1,3 @@
-import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -6,7 +5,6 @@ import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/delete_company_screen.dart';
 import 'package:el_biz/view/screen/company/widgets/company_data_widget.dart';
-import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

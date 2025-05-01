@@ -1,4 +1,5 @@
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddTenderModel {
@@ -12,6 +13,7 @@ class AddTenderModel {
   String? phone;
   String? email;
   List<CategoryItem>? categories;
+  CompanyItem? selectedCompany;
 
   AddTenderModel({
     this.id,
@@ -24,6 +26,7 @@ class AddTenderModel {
     this.phone,
     this.email,
     this.categories,
+    this.selectedCompany,
   });
 
   factory AddTenderModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +43,7 @@ class AddTenderModel {
       phone: json['phone'],
       email: json['email'],
       categories: json['categories'],
+      selectedCompany: CompanyItem.fromJson(json['company'])
     );
   }
 
@@ -55,6 +59,7 @@ class AddTenderModel {
       'phone': phone,
       'email': email,
       "categories": categories,
+      "company" : selectedCompany,
     };
   }
 
@@ -69,6 +74,7 @@ class AddTenderModel {
     String? phone,
     String? email,
     List<CategoryItem>? categories,
+    CompanyItem? selectedCompany,
   }) {
     return AddTenderModel(
       id: id ?? this.id,
@@ -81,6 +87,7 @@ class AddTenderModel {
       phone: phone ?? this.phone,
       email: email ?? this.email,
       categories: categories ?? this.categories,
+      selectedCompany: selectedCompany ??  this.selectedCompany,
     );
   }
 }

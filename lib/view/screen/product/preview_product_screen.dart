@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/data/model/base/add_product_model.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
@@ -38,9 +39,9 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
       appBar: AppBar(),
       body: BlocListener<AddProductBloc, AddProductState>(
         listener: (context, state) {
-          // TODO: implement listener
           if (state is AddProductSuccess) {
             Get.offAll(() => const DashboardScreen());
+            context.read<ProductBloc>().add(EmptyPickedLogo());
           } else if (state is AddProductFailure) {
             showCustomSnackBar(state.message);
           }
@@ -329,24 +330,30 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomButton(
-            width: Get.width,
-            height: Get.height,
-            onTap: () {
-              if (widget.isEdit) {
-                showCustomSnackBar('Product Updated....');
-                Get.offAll(() => const DashboardScreen());
-              } else {
-                showCustomSnackBar('Product Added');
+        child: BlocBuilder<AddProductBloc, AddProductState>(
+            builder: (context, state) {
+          if (state is AddProductLoading) {
+            return CustomButtonLoader(width: Get.width, height: Get.height);
+          }
+          return CustomButton(
+              width: Get.width,
+              height: Get.height,
+              onTap: () {
+                if (widget.isEdit) {
+                  showCustomSnackBar('Product Updated....');
+                  Get.offAll(() => const DashboardScreen());
+                } else {
+                  showCustomSnackBar('Product Added');
 
-                log('this is product data ${context.read<AddProductBloc>().state.productData}');
-                context.read<AddProductBloc>().add(AddProduct(
-                    addProductModel:
-                        context.read<AddProductBloc>().state.productData!));
-                // Get.offAll(() => const DashboardScreen());
-              }
-            },
-            title: 'save'.tr),
+                  log('this is product data ${context.read<AddProductBloc>().state.productData}');
+                  context.read<AddProductBloc>().add(AddProduct(
+                      addProductModel:
+                          context.read<AddProductBloc>().state.productData!));
+                  // Get.offAll(() => const DashboardScreen());
+                }
+              },
+              title: 'save'.tr);
+        }),
       ),
     );
   }

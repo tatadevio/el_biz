@@ -11,49 +11,55 @@ PreferredSizeWidget customAddCompanyAppbar({
       ? 20
       : Get.currentRoute == "/CompanyDescriptionScreen"
           ? 60
-          : Get.currentRoute == "/AttributeScreen"
-              ? 90
-              : Get.currentRoute == "/SelectCategoryScreen"
-                  ? 120
-                  : Get.currentRoute == "/KeywordsTagsScreen"
-                      ? 150
-                      : Get.currentRoute == "/CompanyInfoScreen"
-                          ? 200
-                          : Get.currentRoute == "/CompanyContactInfoScreen"
-                              ? 250
-                              : Get.currentRoute == "/CompanyAccountInfoScreen"
+          : Get.currentRoute == "/AboutCompanyScreen"
+              ? 75
+              : Get.currentRoute == "/AttributeScreen"
+                  ? 90
+                  : Get.currentRoute == "/SelectCategoryScreen"
+                      ? 120
+                      : Get.currentRoute == "/KeywordsTagsScreen"
+                          ? 150
+                          : Get.currentRoute == "/CompanyInfoScreen"
+                              ? 200
+                              : Get.currentRoute == "/CompanyContactInfoScreen"
                                   ? 250
                                   : Get.currentRoute ==
-                                          "/AddCompanyDocumentScreen"
+                                          "/CompanyAccountInfoScreen"
                                       ? 250
                                       : Get.currentRoute ==
-                                              "/SelectCategoryAddProduct"
-                                          ? 20
-                                          : 20;
+                                              "/AddCompanyDocumentScreen"
+                                          ? 250
+                                          : Get.currentRoute ==
+                                                  "/SelectCategoryAddProduct"
+                                              ? 20
+                                              : 20;
 
   double percentage = Get.currentRoute == "/AddCompanyScreen"
       ? 0
       : Get.currentRoute == "/CompanyDescriptionScreen"
           ? 20
-          : Get.currentRoute == "/SelectCategoryScreen"
-              ? 40
-              : Get.currentRoute == "/AttributeScreen"
+          : Get.currentRoute == "/AboutCompanyScreen"
+              ? 30
+              : Get.currentRoute == "/SelectCategoryScreen"
                   ? 40
-                  : Get.currentRoute == "/KeywordsTagsScreen"
-                      ? 60
-                      : Get.currentRoute == "/CompanyInfoScreen"
-                          ? 80
-                          : Get.currentRoute == "/CompanyContactInfoScreen"
-                              ? 90
-                              : Get.currentRoute == "/CompanyAccountInfoScreen"
+                  : Get.currentRoute == "/AttributeScreen"
+                      ? 40
+                      : Get.currentRoute == "/KeywordsTagsScreen"
+                          ? 60
+                          : Get.currentRoute == "/CompanyInfoScreen"
+                              ? 80
+                              : Get.currentRoute == "/CompanyContactInfoScreen"
                                   ? 90
                                   : Get.currentRoute ==
-                                          "/AddCompanyDocumentScreen"
+                                          "/CompanyAccountInfoScreen"
                                       ? 90
                                       : Get.currentRoute ==
-                                              "/SelectCategoryAddProduct"
-                                          ? 10
-                                          : 10;
+                                              "/AddCompanyDocumentScreen"
+                                          ? 90
+                                          : Get.currentRoute ==
+                                                  "/SelectCategoryAddProduct"
+                                              ? 10
+                                              : 10;
 
   return AppBar(
     backgroundColor: Colors.white,

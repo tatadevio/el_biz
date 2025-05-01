@@ -120,3 +120,5 @@ class ChangeSlectedProduct extends ProductEvent {
 }
 
 class ClearSelectedProduct extends ProductEvent {}
+
+class EmptyPickedLogo extends ProductEvent{}

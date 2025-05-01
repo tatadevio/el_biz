@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/data/model/response/tender/tender_detail_model.dart';
+import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -74,7 +75,7 @@ class TenderDetailScreen extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
-               Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: ProductImages(
                   image: tenderDetail.data?.media ?? [],
@@ -194,7 +195,10 @@ class TenderDetailScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w700),
                               ),
                               Text(
-                                '12 окт. 2024',
+                                formatDateInRu(
+                                    tenderDetail.data?.createdAt.toString() ??
+                                        ''),
+                                // '12 окт. 2024',
                                 style:
                                     body14.copyWith(color: ColorResources.gray),
                               ),

@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/check_box_button.dart';
@@ -11,13 +12,13 @@ import 'package:get/get.dart';
 class ProductGridItem extends StatelessWidget {
   final bool isFavorite;
   final bool isSelectProduct;
-  final int? productId;
+  final CompanyProductItem? product;
 
   const ProductGridItem(
       {super.key,
       this.isFavorite = false,
       this.isSelectProduct = false,
-      this.productId});
+       this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class ProductGridItem extends StatelessWidget {
               child: Stack(
                 children: [
                   CustomImage(
-                      image: '',
+                      image: product?.image ?? '',
                       height: Get.height,
                       width: Get.width,
                       radius: 16),
@@ -53,7 +54,7 @@ class ProductGridItem extends StatelessWidget {
                       right: 0,
                       top: 0,
                       child: CheckBoxButton(
-                        productId: productId,
+                        productId: product!.id,
                       ),
                     ),
                 ],
@@ -66,7 +67,8 @@ class ProductGridItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Стул раскладной',
+                  product?.name ?? '',
+                  // 'Стул раскладной',
                   style: h16.copyWith(color: ColorResources.darkGray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -81,7 +83,7 @@ class ProductGridItem extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  '2 500 сом/шт',
+                  '${product?.price} сом/шт',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: h16.copyWith(color: ColorResources.blue),

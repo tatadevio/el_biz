@@ -8,9 +8,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
-import '../../../bloc/review/review_bloc.dart';
 import '../../base/custom_border_button.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CompanyReviewsScreen extends StatelessWidget {
   final String companyId;
@@ -33,6 +31,7 @@ class CompanyReviewsScreen extends StatelessWidget {
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

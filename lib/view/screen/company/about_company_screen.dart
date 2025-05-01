@@ -3,7 +3,6 @@ import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
-import 'package:el_biz/view/screen/company/about_company_screen.dart';
 import 'package:el_biz/view/screen/company/widgets/custom_add_company_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,25 +12,32 @@ import '../../base/custom_button.dart';
 import '../category/select_category_screen.dart';
 import 'keywords_tags_screen.dart';
 
-class CompanyDescriptionScreen extends StatefulWidget {
-  const CompanyDescriptionScreen({super.key});
+class AboutCompanyScreen extends StatefulWidget {
+  const AboutCompanyScreen({super.key});
 
   @override
-  State<CompanyDescriptionScreen> createState() =>
-      _CompanyDescriptionScreenState();
+  State<AboutCompanyScreen> createState() => _AboutCompanyScreenState();
 }
 
-class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
+class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController aboutController = TextEditingController();
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      context.read<CompanyBloc>().state.addCompanyModel.description =
-          descriptionController.text;
- 
-      Get.to(() => AboutCompanyScreen());
-     
+      context.read<CompanyBloc>().state.addCompanyModel.aboutCompany =
+          aboutController.text;
+      context.read<CategoryBloc>().add(GetCategory());
+
+      // Get.to(() => SelectCategoryScreen());
+      Get.to(() => SelectCategoryScreen(
+            isCompanyCategory: true,
+            onSelect: (selectedCategories) {
+              context.read<CompanyBloc>().state.addCompanyModel.categories =
+                  selectedCategories;
+              Get.to(() => KeywordsTagsScreen());
+            },
+          ));
     } else {
       // validation issue...
     }
@@ -52,22 +58,22 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
                 height: 20,
               ),
               Text(
-                'description'.tr,
+                'about_company'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                'describe_your_companys_activities_products_and_services'.tr,
-                style: body14.copyWith(color: ColorResources.gray),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              // Text(
+              //   'describe_your_companys_activities_products_and_services'.tr,
+              //   style: body14.copyWith(color: ColorResources.gray),
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
               CustomTextField(
-                controller: descriptionController,
-                hintColor: 'description'.tr,
+                controller: aboutController,
+                hintColor: 'about_company'.tr,
                 inputType: TextInputType.none,
                 leading: '',
                 readOnly: false,

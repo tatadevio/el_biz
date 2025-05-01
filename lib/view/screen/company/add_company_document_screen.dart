@@ -1,9 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/company/widgets/custom_add_company_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,22 +14,18 @@ import 'package:image_picker/image_picker.dart';
 import '../../../bloc/company/company_bloc.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
-import '../dashboard/dashboard.dart';
 
 class AddCompanyDocumentScreen extends StatelessWidget {
   const AddCompanyDocumentScreen({super.key});
 
   void _submitForm(BuildContext context) {
-    // Get.to(() => CompanyPageScreen(
-    //       // isAdding: true,
-    //     ));
-
     final companyData = context.read<CompanyBloc>().state.addCompanyModel;
-    // print('add company model = ${companyData.toJson()}');
 
-    log('add company model = ${companyData.toJson()}');
-    context.read<CompanyBloc>().add(AddNewCompany(companyData));
-    // Get.offAll(() => const DashboardScreen());
+    if (companyData.certificateDocument != null) {
+      context.read<CompanyBloc>().add(AddNewCompany(companyData));
+    } else {
+      showShortToast('add_certificate'.tr);
+    }
   }
 
   String getFileSize(File file) {
@@ -349,13 +345,19 @@ class AddCompanyDocumentScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
-        child: CustomButton(
-            width: Get.width,
-            height: 44,
-            onTap: () {
-              _submitForm(context);
-            },
-            title: 'continue'.tr),
+        child:
+            BlocBuilder<CompanyBloc, CompanyState>(builder: (context, state) {
+          if (state.isLoading) {
+            return CustomButtonLoader(width: Get.width, height: 44);
+          }
+          return CustomButton(
+              width: Get.width,
+              height: 44,
+              onTap: () {
+                _submitForm(context);
+              },
+              title: 'continue'.tr);
+        }),
       ),
     );
   }

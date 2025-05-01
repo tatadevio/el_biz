@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:el_biz/data/model/base/add_company_model.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
+import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
@@ -128,7 +129,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       if (value != null) {
         final compressedImage = await _convertHEICtoJPG(File(value.path));
         emit(CompanyState(
-            addCompanyModel: state.addCompanyModel!
+            addCompanyModel: state.addCompanyModel
                 .copyWith(certificateDocument: compressedImage)));
       }
     } else {
@@ -154,7 +155,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   ) async {
     final picker = ImagePicker();
 
-    List<XFile>? otherDocuments = state.addCompanyModel?.otherDocuments ?? [];
+    List<XFile>? otherDocuments = state.addCompanyModel.otherDocuments ?? [];
 
     if (otherDocuments.length >= 10) {
       print("Maximum of 10 documents allowed.");
@@ -222,7 +223,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     Emitter<CompanyState> emit,
   ) async {
     List<XFile> updatedDocuments =
-        List.from(state.addCompanyModel!.otherDocuments!);
+        List.from(state.addCompanyModel.otherDocuments!);
     updatedDocuments.removeAt(event.index);
 
     emit(CompanyState(
@@ -249,10 +250,12 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       AddNewCompany event, Emitter<CompanyState> emit) async {
     emit(state.copywith(isLoading: true));
     final res = await compnayRepo.addNewCompany(event.addCompanyModel);
-    if (res.statusCode == 200) {
-      emit(state.copywith(isLoading: false));
 
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      emit(state.copywith(isLoading: false));
       add(GetMyCompanies());
+      Get.offAll(() => DashboardScreen());
+      emit(state.copywith(addCompanyModel: AddCompanyModel()));
     } else {
       emit(state.copywith(isLoading: false));
       // Get.snackbar(

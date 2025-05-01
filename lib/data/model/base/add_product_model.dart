@@ -1,3 +1,6 @@
+import 'package:el_biz/data/model/response/category/categories_list_model.dart';
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
+import 'package:el_biz/data/model/response/materials_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProductModel {
@@ -18,6 +21,9 @@ class AddProductModel {
   List<String>? size;
   String? availability;
   List<XFile>? productImages;
+  MaterialItem? material;
+  CategoryItem? category;
+  CompanyItem? company;
 
   // Constructor
   AddProductModel({
@@ -38,6 +44,9 @@ class AddProductModel {
     this.size,
     this.availability,
     this.productImages,
+    this.material,
+    this.category,
+    this.company,
   });
 
   // Factory method for JSON deserialization
@@ -60,6 +69,11 @@ class AddProductModel {
       size: (json['size'] as List<dynamic>?)?.cast<String>(),
       availability: json['availability'],
       productImages: (json['productImages'] as List<dynamic>?)?.cast<XFile>(),
+      material: MaterialItem.fromJson(
+        json['material'],
+      ),
+      category: CategoryItem.fromJson(json['category']),
+      company: CompanyItem.fromJson(json['company']),
     );
   }
 
@@ -83,6 +97,9 @@ class AddProductModel {
       'size': size,
       'availability': availability,
       'productImages': productImages,
+      "material": material,
+      "category": category,
+      "company": company,
     };
   }
 
@@ -105,6 +122,9 @@ class AddProductModel {
     List<String>? size,
     String? availability,
     List<XFile>? productImages,
+    MaterialItem? material,
+    CategoryItem? category,
+    CompanyItem? company,
   }) {
     return AddProductModel(
       brandName: brandName ?? this.brandName,
@@ -124,12 +144,15 @@ class AddProductModel {
       size: size ?? this.size,
       availability: availability ?? this.availability,
       productImages: productImages ?? this.productImages,
+      material: material ?? this.material,
+      category: category ?? this.category,
+      company: company ?? this.company,
     );
   }
 
   // Override toString for debugging
   @override
   String toString() {
-    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability, productImages: $productImages)';
+    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability, productImages: $productImages, material: $material)';
   }
 }

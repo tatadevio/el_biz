@@ -11,6 +11,7 @@ import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/bloc/localization/localization_bloc.dart';
+import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
 import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
@@ -101,6 +102,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AddProductBloc(Get.find())),
         BlocProvider(create: (_) => AddTenderBloc(Get.find())),
         BlocProvider(create: (_) => TenderDetailBloc(Get.find())),
+        BlocProvider(create: (_) => MaterialBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {
