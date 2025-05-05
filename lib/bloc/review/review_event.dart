@@ -35,3 +35,21 @@ class AddReview extends ReviewEvent {
   @override
   List<Object> get props => [companyId, rating, review, images];
 }
+
+
+class AddProductReview extends ReviewEvent {
+  final String productId;
+  final int rating;
+  final String review;
+  final List<XFile> images;
+
+  const AddProductReview({
+    required this.productId,
+    required this.rating,
+    required this.review,
+    required this.images,
+  });
+
+  @override
+  List<Object> get props => [productId, rating, review, images];
+}

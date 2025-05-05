@@ -1,15 +1,19 @@
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
-import 'package:el_biz/utils/Images.dart';
+
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/company_detail/company_detail_bloc.dart';
+import '../../bloc/product_detail/product_detail_bloc.dart';
+import '../../bloc/product_review/product_review_bloc.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
 import 'check_box_button.dart';
+import 'custom_favorite_button.dart';
 
 class ProductListItem extends StatelessWidget {
   final bool isFavorite;
@@ -20,7 +24,7 @@ class ProductListItem extends StatelessWidget {
       {super.key,
       this.isFavorite = false,
       this.isSelectProduct = false,
-       this.product});
+      this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,12 @@ class ProductListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
+          context
+              .read<ProductDetailBloc>()
+              .add(GetProductDetail(product?.id.toString() ?? ''));
+          context
+              .read<ProductReviewBloc>()
+              .add(GetProductReviews(product?.id.toString() ?? '', 1));
           Get.to(() => const ProductDetailScreen());
         },
         child: Container(
@@ -46,26 +56,12 @@ class ProductListItem extends StatelessWidget {
                     Positioned(
                       right: 10,
                       top: 5,
-                      child: Container(
-                        height: 32,
-                        width: 32,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 0,
-                              offset: Offset(0, 1),
-                              color: Color.fromRGBO(16, 24, 40, 0.05),
-                            ),
-                          ],
-                        ),
-                        alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                          isFavorite ? Images.svgHeart : Images.svgHeartBorder,
-                          color: isFavorite ? ColorResources.primaryRed : null,
-                        ),
+                      child: CustomFavoriteButton(
+                        isFavorite: product!.isFavorite ?? false,
+                        onTap: () {
+                          context.read<CompanyDetailBloc>().add(
+                              ToggleFavoriteProduct(product!.id!, context));
+                        },
                       ),
                     ),
                   if (isSelectProduct)

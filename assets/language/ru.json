@@ -284,5 +284,8 @@
   "lunch_break" : "Обеденный перерыв",
   "select_company" : "Выберите компанию",
   "select_category" : "Выберите категорию",
-  "add_certificate" : "Добавить сертификат"
+  "add_certificate" : "Добавить сертификат",
+  "no_favorite_products": "Избранные товары не найдены",
+  "product_reviews" : "Отзывы о товаре"
+
 }

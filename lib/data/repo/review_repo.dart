@@ -34,4 +34,30 @@ class ReviewRepo {
       files: files,
     );
   }
+
+  Future<Response> submitProductReview({
+    required String productId,
+    required int rating,
+    required String review,
+    required List<XFile> images,
+  }) async {
+    print('this is rating value sending to api: $rating');
+    Map<String, String> fields = {
+      'product_id': productId,
+      'review': review,
+      'rating': rating.toString(),
+    };
+
+    List<http.MultipartFile> files = [];
+
+    for (var image in images) {
+      files.add(await http.MultipartFile.fromPath('images[]', image.path));
+    }
+
+    return await apiClient.postMultipartData(
+      AppConstants.addProductReviewUrl,
+      fields: fields,
+      files: files,
+    );
+  }
 }

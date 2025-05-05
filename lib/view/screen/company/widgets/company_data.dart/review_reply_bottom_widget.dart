@@ -1,3 +1,5 @@
+import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
+import 'package:el_biz/data/model/response/product/product_review_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +13,14 @@ import '../../../../../data/model/response/company/company_reviews_model.dart';
 class ReviewReplyBottomWidget extends StatefulWidget {
   final ReviewItem review;
   final int reviewIndex;
+  final ProductReviewItem? productReview;
+  final bool isProduct;
   const ReviewReplyBottomWidget(
-      {super.key, required this.review, required this.reviewIndex});
+      {super.key,
+      required this.review,
+      required this.reviewIndex,
+      this.productReview,
+      this.isProduct = false});
 
   @override
   State<ReviewReplyBottomWidget> createState() =>
@@ -65,10 +73,21 @@ class _ReviewReplyBottomWidgetState extends State<ReviewReplyBottomWidget> {
                   suffixIcon: InkWell(
                     onTap: () {
                       if (isActiveSendButton) {
-                       
-                        context.read<CompanyDetailBloc>().add(
-                            AddCompanyReviewReply(widget.review.id.toString(),
-                                replyController.text, widget.reviewIndex));
+                        if (widget.isProduct) {
+                          print(
+                              'this is data sending ${widget.productReview!.id} ');
+                          context.read<ProductReviewBloc>().add(
+                              AddProductReviewReply(
+                                  widget.productReview!.id.toString(),
+                                  replyController.text.trim(),
+                                  widget.reviewIndex));
+                        } else {
+                          context.read<CompanyDetailBloc>().add(
+                              AddCompanyReviewReply(
+                                  widget.review.id.toString(),
+                                  replyController.text.trim(),
+                                  widget.reviewIndex));
+                        }
                       }
                       replyController.clear();
                       focusNode.unfocus();

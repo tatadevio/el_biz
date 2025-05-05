@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_detail_model.dart';
 import 'package:el_biz/data/repo/company_detail_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -22,12 +23,14 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     on<GetCompanyProducts>(_onGetCompanyProducts);
     on<GetCompanyTenders>(_onGetCompanyTenders);
     on<GetCompanyReviews>(_onGetCompanyReviews);
+    on<DeleteCompanyReview>(_onDeleteCompanyReview);
     on<DeleteCompanyDocument>(_onDeleteCompanyDocument);
     on<AddCompanyReviewReply>(_onAddCompanyReviewReply);
-    on<DeleteCompanyReview>(_onDeleteCompanyReview);
     // on<CompanyDetailEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
+    on<ToggleFavoriteProduct>(_onToggleFavoriteProduct);
+    on<ToggleFavoriteProductInList>(_onToggleFavoriteProductInList);
   }
 
   Future<void> _onGetCompanyDetail(
@@ -298,5 +301,63 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
       print('Error: $e');
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  Future<void> _onToggleFavoriteProduct(
+      ToggleFavoriteProduct event, Emitter<CompanyDetailState> emit) async {
+    final updatedProducts = state.companyProducts!.map((product) {
+      if (product.id == event.productId) {
+        return product.copyWith(
+          isFavorite: !(product.isFavorite ?? false),
+        );
+      }
+      return product;
+    }).toList();
+
+    emit(state.copyWith(companyProducts: updatedProducts));
+    try {
+      final response =
+          await compnayDetailRepo.toggleFavorite(event.productId.toString());
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        event.context
+            .read<FavoriteBloc>()
+            .add(RemoveProductFromFavoriteList(event.productId));
+      } else {
+        final updatedProducts = state.companyProducts!.map((product) {
+          if (product.id == event.productId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+        emit(state.copyWith(companyProducts: updatedProducts));
+      }
+    } catch (e) {
+      final updatedProducts = state.companyProducts!.map((product) {
+        if (product.id == event.productId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(companyProducts: updatedProducts));
+    }
+  }
+
+  Future<void> _onToggleFavoriteProductInList(ToggleFavoriteProductInList event,
+      Emitter<CompanyDetailState> emit) async {
+    final updatedProducts = state.companyProducts!.map((product) {
+      if (product.id == event.productId) {
+        return product.copyWith(
+          isFavorite: !(product.isFavorite ?? false),
+        );
+      }
+      return product;
+    }).toList();
+
+    emit(state.copyWith(companyProducts: updatedProducts));
   }
 }

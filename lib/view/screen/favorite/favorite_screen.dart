@@ -1,8 +1,6 @@
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
-import 'package:el_biz/view/base/product_list_item.dart';
-import 'package:el_biz/view/base/tender_grid_item.dart';
-import 'package:el_biz/view/base/tender_list_item.dart';
+import 'package:el_biz/view/screen/favorite/widgets/favorite_products_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +9,6 @@ import 'package:get/get.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
-import '../../base/product_grid_item.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -254,57 +251,58 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               builder: (context, state) {
                 if (state.isShowCategories) {
                   return SizedBox();
-                  // return state.isShowGridView 
-                      // ? GridView.builder(
-                      //     controller: _scrollController,
-                      //     gridDelegate:
-                      //         const SliverGridDelegateWithFixedCrossAxisCount(
-                      //             crossAxisCount: 2,
-                      //             mainAxisSpacing: 10,
-                      //             crossAxisSpacing: 10,
-                      //             childAspectRatio: 0.7),
-                      //     itemCount: 10,
-                      //     itemBuilder: (context, index) {
-                      //       return const TenderGridItem(
-                      //         isFavorite: true,
-                      //       );
-                      //     },
-                      //   )
-                      // : ListView.builder(
-                      //     controller: _scrollController,
-                      //     itemCount: 10,
-                      //     itemBuilder: (context, index) {
-                      //       return const TenderListItem(
-                      //         isFavorite: true,
-                      //       );
-                      //     },
-                      //   );
+                  // return state.isShowGridView
+                  // ? GridView.builder(
+                  //     controller: _scrollController,
+                  //     gridDelegate:
+                  //         const SliverGridDelegateWithFixedCrossAxisCount(
+                  //             crossAxisCount: 2,
+                  //             mainAxisSpacing: 10,
+                  //             crossAxisSpacing: 10,
+                  //             childAspectRatio: 0.7),
+                  //     itemCount: 10,
+                  //     itemBuilder: (context, index) {
+                  //       return const TenderGridItem(
+                  //         isFavorite: true,
+                  //       );
+                  //     },
+                  //   )
+                  // : ListView.builder(
+                  //     controller: _scrollController,
+                  //     itemCount: 10,
+                  //     itemBuilder: (context, index) {
+                  //       return const TenderListItem(
+                  //         isFavorite: true,
+                  //       );
+                  //     },
+                  //   );
                 }
-                return state.isShowGridView
-                    ? GridView.builder(
-                        controller: _scrollController,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                                childAspectRatio: 0.7),
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return const ProductGridItem(
-                            isFavorite: true,
-                          );
-                        },
-                      )
-                    : ListView.builder(
-                        controller: _scrollController,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return const ProductListItem(
-                            isFavorite: true,
-                          );
-                        },
-                      );
+                return FavoriteProductsWidget();
+                // state.isShowGridView
+                //     ? GridView.builder(
+                //         controller: _scrollController,
+                //         gridDelegate:
+                //             const SliverGridDelegateWithFixedCrossAxisCount(
+                //                 crossAxisCount: 2,
+                //                 mainAxisSpacing: 10,
+                //                 crossAxisSpacing: 10,
+                //                 childAspectRatio: 0.7),
+                //         itemCount: 10,
+                //         itemBuilder: (context, index) {
+                //           return const ProductGridItem(
+                //             isFavorite: true,
+                //           );
+                //         },
+                //       )
+                //     : ListView.builder(
+                //         controller: _scrollController,
+                //         itemCount: 10,
+                //         itemBuilder: (context, index) {
+                //           return const ProductListItem(
+                //             isFavorite: true,
+                //           );
+                //         },
+                //       );
               },
             ),
           ),

@@ -42,6 +42,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
         : rawPhone;
 
     phoneController.text = cleanedPhone;
+    print('account id = ${userData?.id}');
   }
 
   @override

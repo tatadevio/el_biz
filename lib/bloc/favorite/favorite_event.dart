@@ -22,3 +22,19 @@ class UpdateShowGridView extends FavoriteEvent {
   @override
   List<Object> get props => [showGridView];
 }
+
+class GetFavoriteProducts extends FavoriteEvent {
+  final int currentPage;
+  const GetFavoriteProducts(this.currentPage);
+
+  @override
+  List<Object> get props => [currentPage];
+}
+
+class RemoveProductFromFavoriteList extends FavoriteEvent {
+  final int productId;
+  const RemoveProductFromFavoriteList(this.productId);
+
+  @override
+  List<Object> get props => [productId];
+}

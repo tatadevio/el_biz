@@ -93,21 +93,23 @@ class CompanyPageScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(Images.svgVerified),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      'verified_user'.tr,
-                                      style: body14.copyWith(
-                                          color: ColorResources.gray),
+                              if (companyDetail?.data?.owner?.status ==
+                                  'verify')
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(Images.svgVerified),
+                                    const SizedBox(
+                                      width: 5,
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    Expanded(
+                                      child: Text(
+                                        'verified_user'.tr,
+                                        style: body14.copyWith(
+                                            color: ColorResources.gray),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               const SizedBox(
                                 height: 5,
                               ),

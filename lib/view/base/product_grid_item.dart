@@ -1,11 +1,15 @@
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/check_box_button.dart';
+import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
-import 'package:el_biz/view/base/custom_like_button.dart';
 import 'package:el_biz/view/screen/product_detail/product_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
@@ -18,12 +22,18 @@ class ProductGridItem extends StatelessWidget {
       {super.key,
       this.isFavorite = false,
       this.isSelectProduct = false,
-       this.product});
+      this.product});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        context
+            .read<ProductDetailBloc>()
+            .add(GetProductDetail(product?.id.toString() ?? ''));
+              context
+            .read<ProductReviewBloc>()
+            .add(GetProductReviews(product?.id.toString() ?? '', 1));
         Get.to(() => const ProductDetailScreen());
       },
       child: Container(
@@ -47,7 +57,15 @@ class ProductGridItem extends StatelessWidget {
                     Positioned(
                       right: 5,
                       top: 5,
-                      child: CustomLikeButton(isFavorite: isFavorite),
+                      child: CustomFavoriteButton(
+                        isFavorite: product!.isFavorite ?? false,
+                        onTap: () {
+                          context.read<CompanyDetailBloc>().add(
+                              ToggleFavoriteProduct(product!.id!, context));
+                        },
+                      ),
+                      // CustomLikeButton(
+                      //     isFavorite: product!.isFavorite ?? false),
                     ),
                   if (isSelectProduct)
                     Positioned(

@@ -57,6 +57,21 @@ class AppConstants {
   /// Add Product
   static const String addProductUrl = "api/products/store";
 
+  // product
+  static const String productDetailUrl = "api/products";
+
+  // product review
+  static const String productReviewsUrl = "api/reviews";
+  static const String addProductReviewUrl = "api/reviews/store";
+  static const String approvieProductReviewUrl = "api/reviews/1/approve";
+  static const String productReviewDeleteUrl = "api/reviews/delete";
+
+  // Favorite
+  static const String favoriteToggleUrl = "api/favorites/toggle";
+  static const String favoriteProductsUrl = "api/favorites/products";
+  static const String favoriteCompaniesUrl = "api/favorites/companies";
+  static const String favoriteTendersUrl = "api/favorites/tenders";
+
   // Common
   static const String citiesUrl = "api/cities";
   static const String materialsUrl = "api/materials";
@@ -179,14 +194,14 @@ class AppConstants {
   static List<LanguageModel> languages = [
     LanguageModel(
         imageUrl: Images.svgLock,
-        languageName: 'Русский',
-        countryCode: 'RU',
-        languageCode: 'ru'),
-    LanguageModel(
-        imageUrl: Images.svgLock,
         languageName: 'English',
         countryCode: 'US',
         languageCode: 'en'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'Русский',
+        countryCode: 'RU',
+        languageCode: 'ru'),
     // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
   ];
 }

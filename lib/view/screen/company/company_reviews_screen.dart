@@ -12,7 +12,11 @@ import '../../base/custom_border_button.dart';
 
 class CompanyReviewsScreen extends StatelessWidget {
   final String companyId;
-  const CompanyReviewsScreen({super.key, required this.companyId});
+
+  const CompanyReviewsScreen({
+    super.key,
+    required this.companyId,
+  });
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
     final accountController = context.read<CompanyDetailBloc>();
@@ -31,7 +35,6 @@ class CompanyReviewsScreen extends StatelessWidget {
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

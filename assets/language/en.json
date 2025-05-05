@@ -284,6 +284,9 @@
   "lunch_break" : "Lunch Break",
   "select_company" : "Select Company",
   "select_category" : "Select Category",
-  "add_certificate" : "Add Certificate"
+  "add_certificate" : "Add Certificate",
+  "no_favorite_products": "No favorite products found",
+  "product_reviews" : "Product Reviews"
+
 
 }

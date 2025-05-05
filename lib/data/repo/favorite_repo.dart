@@ -1,3 +1,6 @@
+import 'package:get/get_connect/http/src/response/response.dart';
+
+import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
 
 class FavoriteRepo {
@@ -5,9 +8,10 @@ class FavoriteRepo {
 
   FavoriteRepo(this.apiClient);
 
-  // Future<Response> getSearchFavorite() async {
-  //   return await apiClient.getData(AppConstants.searchFavoriteUrl);
-  // }
+  Future<Response> getFavoriteProducts(int page) async {
+    return await apiClient
+        .getData("${AppConstants.favoriteProductsUrl}?page=$page");
+  }
 
   // Future<Response> saveSearch(String title, String path, String type) async {
   //   return await apiClient.postData(AppConstants.saveSearchUrl,

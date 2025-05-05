@@ -117,6 +117,7 @@ class CompanyProductItem {
   final String? quantity;
   final String? image;
   final User? user;
+  final bool? isFavorite;
 
   CompanyProductItem({
     this.id,
@@ -126,6 +127,7 @@ class CompanyProductItem {
     this.quantity,
     this.image,
     this.user,
+    this.isFavorite,
   });
 
   CompanyProductItem copyWith({
@@ -136,6 +138,7 @@ class CompanyProductItem {
     String? quantity,
     String? image,
     User? user,
+    bool? isFavorite,
   }) =>
       CompanyProductItem(
         id: id ?? this.id,
@@ -145,6 +148,7 @@ class CompanyProductItem {
         quantity: quantity ?? this.quantity,
         image: image ?? this.image,
         user: user ?? this.user,
+        isFavorite: isFavorite?? this.isFavorite,
       );
 
   factory CompanyProductItem.fromJson(Map<String, dynamic> json) => CompanyProductItem(
@@ -155,6 +159,7 @@ class CompanyProductItem {
         quantity: json["quantity"],
         image: json["image"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
+        isFavorite: json["is_favorite"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -165,6 +170,7 @@ class CompanyProductItem {
         "quantity": quantity,
         "image": image,
         "user": user?.toJson(),
+        "is_favorite": isFavorite,
       };
 }
 

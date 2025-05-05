@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/account/account_screen.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
@@ -6,6 +7,7 @@ import 'package:el_biz/view/screen/language/language_screen.dart';
 import 'package:el_biz/view/screen/menu/profile_information_screen.dart';
 import 'package:el_biz/view/screen/menu/widgets/add_company_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -107,6 +109,7 @@ class MenuScreen extends StatelessWidget {
               'favorites'.tr,
               isSelected: false,
               onTap: () {
+                context.read<FavoriteBloc>().add(GetFavoriteProducts(1));
                 Get.to(() => const FavoriteScreen());
               },
             ),

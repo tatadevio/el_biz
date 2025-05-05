@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -8,7 +10,6 @@ import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
-import 'package:el_biz/view/screen/reviews/my_reviews_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -19,7 +20,9 @@ import '../../bloc/review/review_bloc.dart';
 
 class CustomAddReviewWidget extends StatefulWidget {
   final String companyId;
-  const CustomAddReviewWidget({super.key, required this.companyId});
+  final bool isProduct;
+  const CustomAddReviewWidget(
+      {super.key, required this.companyId, this.isProduct = false});
 
   @override
   State<CustomAddReviewWidget> createState() => _CustomAddReviewWidgetState();
@@ -36,9 +39,22 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
     return BlocListener<ReviewBloc, ReviewState>(
       listener: (context, state) {
         if (state is ReviewSuccess) {
-          context
-              .read<CompanyDetailBloc>()
-              .add(GetCompanyReviews(widget.companyId, 1));
+          if (widget.isProduct) {
+            context.read<ProductReviewBloc>().add(GetProductReviews(
+                context
+                        .read<ProductDetailBloc>()
+                        .state
+                        .productDetailModel
+                        ?.data
+                        ?.id
+                        .toString() ??
+                    '',
+                1));
+          } else {
+            context
+                .read<CompanyDetailBloc>()
+                .add(GetCompanyReviews(widget.companyId, 1));
+          }
 
           Get.back();
           Get.dialog(CustomDialog(
@@ -305,12 +321,30 @@ class _CustomAddReviewWidgetState extends State<CustomAddReviewWidget> {
                                 width: Get.width,
                                 height: 48,
                                 onTap: () async {
-                                  context.read<ReviewBloc>().add(AddReview(
-                                        companyId: widget.companyId,
-                                        rating: selectedRating,
-                                        review: detailController.text,
-                                        images: reviewController.pickedLogo,
-                                      ));
+                                  if (widget.isProduct) {
+                                    context
+                                        .read<ReviewBloc>()
+                                        .add(AddProductReview(
+                                          productId: context
+                                                  .read<ProductDetailBloc>()
+                                                  .state
+                                                  .productDetailModel
+                                                  ?.data
+                                                  ?.id
+                                                  .toString() ??
+                                              '',
+                                          rating: selectedRating,
+                                          review: detailController.text,
+                                          images: reviewController.pickedLogo,
+                                        ));
+                                  } else {
+                                    context.read<ReviewBloc>().add(AddReview(
+                                          companyId: widget.companyId,
+                                          rating: selectedRating,
+                                          review: detailController.text,
+                                          images: reviewController.pickedLogo,
+                                        ));
+                                  }
                                 },
                                 title: 'send'.tr),
                       ),

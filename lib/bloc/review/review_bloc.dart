@@ -18,6 +18,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     on<PickImageDocsCamera>(_onPickImageDocsCamera);
     on<RemoveGallery>(_onRemoveImage);
     on<AddReview>(_onAddReview);
+    on<AddProductReview>(_onAddProductReview);
   }
 
   Future<void> _onPickImageDocs(
@@ -105,6 +106,30 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     try {
       final response = await reviewRepo.submitReview(
         companyId: event.companyId,
+        rating: event.rating,
+        review: event.review,
+        images: event.images,
+      );
+      if (response.statusCode == 200) {
+        emit(ReviewSuccess());
+      } else {
+        emit(ReviewError("Something went wrong: ${response.statusText}"));
+      }
+    } catch (e) {
+      emit(ReviewError("Failed to submit review: $e"));
+    }
+    emit(ReviewState(isLoading: false));
+  }
+
+   Future<void> _onAddProductReview(
+    AddProductReview event,
+    Emitter<ReviewState> emit,
+  ) async {
+    emit(ReviewLoading());
+    emit(ReviewState(isLoading: true));
+    try {
+      final response = await reviewRepo.submitProductReview(
+        productId: event.productId,
         rating: event.rating,
         review: event.review,
         images: event.images,

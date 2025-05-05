@@ -74,3 +74,20 @@ class DeleteCompanyDocument extends CompanyDetailEvent {
   @override
   List<Object> get props => [documentId];
 }
+
+class ToggleFavoriteProduct extends CompanyDetailEvent {
+  final int productId;
+  final BuildContext context;
+  const ToggleFavoriteProduct(this.productId, this.context);
+
+  @override
+  List<Object> get props => [productId];
+}
+
+class ToggleFavoriteProductInList extends CompanyDetailEvent {
+  final int productId;
+  const ToggleFavoriteProductInList(this.productId);
+
+  @override
+  List<Object> get props => [productId];
+}

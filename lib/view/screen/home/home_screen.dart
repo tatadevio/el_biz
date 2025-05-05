@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 
 import '../../../bloc/account/account_bloc.dart';
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/favorite/favorite_bloc.dart' as favorite;
 import '../../../bloc/tin_number/tin_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../company/widgets/fill_company_data_box.dart';
@@ -247,6 +248,9 @@ class HomeScreen extends StatelessWidget {
                           detail: 'saved_goods_companies_and_tenders'.tr,
                           backgroundColor: ColorResources.red,
                           onTap: () {
+                            context
+                                .read<favorite.FavoriteBloc>()
+                                .add(favorite.GetFavoriteProducts(1));
                             Get.to(() => const FavoriteScreen());
                           }),
                       SizedBox(
