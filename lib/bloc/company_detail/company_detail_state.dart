@@ -4,7 +4,7 @@ class CompanyDetailState extends Equatable {
   final bool companyDetailLoading;
   final bool isLoading;
   final CompanyDetailModel? companyDetailModel;
-  final List<CompanyProductItem>? companyProducts;
+  final List<ProductListItem>? companyProducts;
   final List<DocumentItem>? companyDocuments;
   final List<TenderItem>? companyTenders;
   final List<ReviewItem>? companyReviews;
@@ -37,7 +37,7 @@ class CompanyDetailState extends Equatable {
     bool? companyDetailLoading,
     bool? isLoading,
     CompanyDetailModel? companyDetailModel,
-    List<CompanyProductItem>? companyProducts,
+    List<ProductListItem>? companyProducts,
     List<DocumentItem>? companyDocuments,
     List<TenderItem>? companyTenders,
     List<ReviewItem>? companyReviews,

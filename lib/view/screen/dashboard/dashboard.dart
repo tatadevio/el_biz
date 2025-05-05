@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../bloc/user/user_bloc.dart';
 import '../../../helper/my_notification.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';

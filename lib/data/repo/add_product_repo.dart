@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:el_biz/data/api/api_client.dart';
 import 'package:el_biz/data/model/base/add_product_model.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
@@ -13,7 +15,8 @@ class AddProductRepo {
 
   AddProductRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> addNewProduct(AddProductModel addProductModel) async {
+  Future<Response> addNewProduct(AddProductModel addProductModel,
+      {bool? isUpdate = false, String? productId}) async {
     Map<String, String> fields = {
       'name': addProductModel.productName ?? '',
       'brand': addProductModel.brandName ?? '',
@@ -31,6 +34,8 @@ class AddProductRepo {
       'price': addProductModel.price ?? '',
     };
 
+    log('this is new product price = ${addProductModel.price ?? ''}');
+
     // Add category_ids[] dynamically
     // for (CategoryItem category in addCompanyModel.categories!) {
     //   fields['category_ids[]'] = category.id.toString();
@@ -45,9 +50,27 @@ class AddProductRepo {
     }
 
     return await apiClient.postMultipartData(
-      AppConstants.addProductUrl,
+      isUpdate == true
+          ? "${AppConstants.productUpdateUrl}/$productId"
+          : AppConstants.addProductUrl,
       fields: fields,
       files: files,
     );
+  }
+
+  Future<Response> deleteProductImage(
+    String productId,
+    String imageId,
+  ) async {
+    return await apiClient.postData(
+        "${AppConstants.deleteProductImageUrl}/$productId",
+        {"image_id": imageId});
+  }
+
+  Future<Response> getCategoryById(
+    String categoryId,
+  ) async {
+    return await apiClient
+        .getData("${AppConstants.categoryDetailUrl}/$categoryId");
   }
 }

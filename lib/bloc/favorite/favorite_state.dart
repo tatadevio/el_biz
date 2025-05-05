@@ -4,7 +4,7 @@ class FavoriteState extends Equatable {
   final bool isLoading;
   final bool isShowCategories;
   final bool isShowGridView;
-  final List<CompanyProductItem> favoriteProducts;
+  final List<ProductListItem> favoriteProducts;
   final bool isProductsLoadingMore;
   final int productsCurrentPage;
   final int productsPageSize;
@@ -21,7 +21,7 @@ class FavoriteState extends Equatable {
     bool? isLoading,
     bool? isShowCategories,
     bool? isShowGridView,
-    List<CompanyProductItem>? favoriteProducts,
+    List<ProductListItem>? favoriteProducts,
     bool? isProductsLoadingMore,
     int? productsCurrentPage,
     int? productsPageSize,

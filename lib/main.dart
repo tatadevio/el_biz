@@ -17,6 +17,9 @@ import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
+import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
+import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/review/review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
@@ -105,6 +108,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => TenderDetailBloc(Get.find())),
         BlocProvider(create: (_) => MaterialBloc(Get.find())),
         BlocProvider(create: (_) => ProductReviewBloc(Get.find())),
+        BlocProvider(create: (_) => PublicCompanyBloc(Get.find())),
+        BlocProvider(create: (_) => PublicProductBloc(Get.find())),
+        BlocProvider(create: (_) => PublicTenderBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

@@ -12,7 +12,6 @@ import '../../../../base/product_grid_item.dart';
 import '../../../../base/product_list_item.dart';
 
 class CompanyItems extends StatelessWidget {
- 
   const CompanyItems({super.key});
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
@@ -26,7 +25,14 @@ class CompanyItems extends StatelessWidget {
         int pageSize = accountController.state.productPageSize;
         if (accountController.state.productCurrentPage < pageSize) {
           int nextPage = accountController.state.currentPage;
-String companyId = context.read<CompanyDetailBloc>().state.companyDetailModel?.data?.id.toString() ?? '';
+          String companyId = context
+                  .read<CompanyDetailBloc>()
+                  .state
+                  .companyDetailModel
+                  ?.data
+                  ?.id
+                  .toString() ??
+              '';
           accountController
               .add(GetCompanyProducts(companyId, currentPage: nextPage + 1));
         }
@@ -42,6 +48,14 @@ String companyId = context.read<CompanyDetailBloc>().state.companyDetailModel?.d
         builder: (context, companyDetailState) {
       return BlocBuilder<CompanyBloc, CompanyState>(
           builder: (context, compnayState) {
+        if (companyDetailState.companyProducts!.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text('no_product_found'.tr),
+            ),
+          );
+        }
         return Column(
           children: [
             const SizedBox(
@@ -167,7 +181,7 @@ String companyId = context.read<CompanyDetailBloc>().state.companyDetailModel?.d
                 itemBuilder: (context, index) {
                   final productData =
                       companyDetailState.companyProducts![index];
-                  return ProductListItem(
+                  return ProductListItemWidget(
                     product: productData,
                   );
                 },

@@ -21,9 +21,12 @@ class TenderGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<TenderDetailBloc>().add(GetTenderDetail(tenderId: tender.id.toString()));
-        Get.to(() =>  TenderDetailScreen(
+        context
+            .read<TenderDetailBloc>()
+            .add(GetTenderDetail(tenderId: tender.id.toString()));
+        Get.to(() => TenderDetailScreen(
               // isProduct: false,
+              tenderName: tender.title ?? '',
             ));
       },
       child: Container(

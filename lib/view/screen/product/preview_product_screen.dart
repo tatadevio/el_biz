@@ -1,9 +1,10 @@
 import 'dart:developer';
 
 import 'package:el_biz/bloc/product/product_bloc.dart';
-import 'package:el_biz/data/model/base/add_product_model.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
+import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -40,6 +41,7 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
       body: BlocListener<AddProductBloc, AddProductState>(
         listener: (context, state) {
           if (state is AddProductSuccess) {
+            HomeScreen().loadData(context);
             Get.offAll(() => const DashboardScreen());
             context.read<ProductBloc>().add(EmptyPickedLogo());
           } else if (state is AddProductFailure) {
@@ -50,6 +52,10 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
           builder: (context, state) {
             if (state is AddProductLoading) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (state.productData == null) {
+              return SizedBox();
+              // Get.offAll(() => DashboardScreen());
             }
             final productData = state.productData!;
             return SingleChildScrollView(
@@ -341,7 +347,17 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
               onTap: () {
                 if (widget.isEdit) {
                   showCustomSnackBar('Product Updated....');
-                  Get.offAll(() => const DashboardScreen());
+                  // Get.offAll(() => const DashboardScreen());
+                  log('this is product data ${context.read<AddProductBloc>().state.productData}');
+                  context.read<AddProductBloc>().add(UpdateProduct(
+                      context.read<AddProductBloc>().state.productData!,
+                      context
+                          .read<ProductDetailBloc>()
+                          .state
+                          .productDetailModel!
+                          .data!
+                          .id
+                          .toString()));
                 } else {
                   showCustomSnackBar('Product Added');
 

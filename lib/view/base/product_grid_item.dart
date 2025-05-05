@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 class ProductGridItem extends StatelessWidget {
   final bool isFavorite;
   final bool isSelectProduct;
-  final CompanyProductItem? product;
+  final ProductListItem? product;
 
   const ProductGridItem(
       {super.key,
@@ -31,7 +31,7 @@ class ProductGridItem extends StatelessWidget {
         context
             .read<ProductDetailBloc>()
             .add(GetProductDetail(product?.id.toString() ?? ''));
-              context
+        context
             .read<ProductReviewBloc>()
             .add(GetProductReviews(product?.id.toString() ?? '', 1));
         Get.to(() => const ProductDetailScreen());

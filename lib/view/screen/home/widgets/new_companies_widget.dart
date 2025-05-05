@@ -1,9 +1,12 @@
+import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/my_companies_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -15,54 +18,62 @@ class NewCompaniesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'new_companies'.tr,
-          style: h16.copyWith(color: ColorResources.darkGray),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: width * 0.4,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return companiesItem();
-            },
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+    return BlocBuilder<PublicCompanyBloc, PublicCompanyState>(
+      builder: (context, state) {
+        if (state.isLoading || state.publicCompanies.isEmpty) {
+          return SizedBox();
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () {
-                Get.to(() => const MyCompaniesScreen());
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'all_companies'.tr,
-                    style: button16.copyWith(color: ColorResources.blue),
-                  ),
-                  SvgPicture.asset(Images.svgArrowForwardIcon),
-                ],
+            Text(
+              'new_companies'.tr,
+              style: h16.copyWith(color: ColorResources.darkGray),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: width * 0.4,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: state.publicCompanies.length,
+                itemBuilder: (context, index) {
+                  return companiesItem(state.publicCompanies[index]);
+                },
               ),
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() =>
+                        const MyCompaniesScreen()); // replace to the all companies
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'all_companies'.tr,
+                        style: button16.copyWith(color: ColorResources.blue),
+                      ),
+                      SvgPicture.asset(Images.svgArrowForwardIcon),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget companiesItem({bool isVerifiedSupplier = false}) {
+  Widget companiesItem(CompanyItem company, {bool isVerifiedSupplier = false}) {
     double width = Get.width;
     return Container(
       width: width * 0.8,
@@ -99,7 +110,8 @@ class NewCompaniesWidget extends StatelessWidget {
           //       )),
           //       chi
           // ),
-          CustomImage(image: '', height: 40, width: 40, radius: 40),
+          CustomImage(
+              image: company.logo ?? '', height: 40, width: 40, radius: 40),
           const SizedBox(
             width: 5,
           ),
@@ -111,7 +123,8 @@ class NewCompaniesWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Садовая мебель Loft',
+                      company.name ?? '',
+                      // 'Садовая мебель Loft',
                       style: h16.copyWith(color: ColorResources.darkGray),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -125,7 +138,8 @@ class NewCompaniesWidget extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  'ОсОО...',
+                  company.owner?.name ?? '',
+                  // 'ОсОО...',
                   style: body14.copyWith(color: ColorResources.darkGray),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -133,18 +147,19 @@ class NewCompaniesWidget extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                Row(
-                  children: [
-                    SvgPicture.asset(Images.svgVerified),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'Проверенный поставщик',
-                      style: body14.copyWith(color: ColorResources.gray),
-                    ),
-                  ],
-                ),
+                if (company.verificationStatus == 'verified')
+                  Row(
+                    children: [
+                      SvgPicture.asset(Images.svgVerified),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Проверенный поставщик',
+                        style: body14.copyWith(color: ColorResources.gray),
+                      ),
+                    ],
+                  ),
                 Row(
                   children: [
                     SvgPicture.asset(
@@ -154,7 +169,8 @@ class NewCompaniesWidget extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      'Кыргызстан, Бишкек',
+                      company.address ?? '',
+                      // 'Кыргызстан, Бишкек',
                       style: body14.copyWith(color: ColorResources.gray),
                     ),
                   ],

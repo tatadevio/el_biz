@@ -1,4 +1,4 @@
-import 'package:el_biz/data/model/base/add_product_model.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
@@ -49,15 +49,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   loadProductData() {
-    brandController.text = 'Loft';
-    productNameController.text = 'product';
+    final productDetail =
+        context.read<ProductDetailBloc>().state.productDetailModel!.data!;
+    brandController.text = productDetail.brand ?? '';
+    productNameController.text = productDetail.name ?? '';
     productCodeController.text = '123456';
-    priceController.text = '2350';
-    quantityController.text = '2';
-    dimensionsController.text = '22/32/25';
-    weightController.text = '12';
-    regionController.text = 'qwertyui';
-    checkAvailibity = 'Уточнять наличие';
+    priceController.text = productDetail.price.toString();
+    quantityController.text = productDetail.quantity.toString();
+    dimensionsController.text = productDetail.dimention.toString();
+    weightController.text = productDetail.weight.toString();
+    regionController.text = productDetail.countryOfOrigin.toString();
+    final productData = context.read<AddProductBloc>().state.productData;
+    productData?.productUploadedImages = productDetail.images;
+    setState(() {
+      checkAvailibity = productDetail.isAvailable == 1 ? '1' : '0';
+
+      // 'Уточнять наличие';
+    });
   }
 
   @override

@@ -14,7 +14,10 @@ import '../../base/custom_button.dart';
 class AddProduct4Screen extends StatefulWidget {
   // final AddProductModel productData;
   final bool isEdit;
-  const AddProduct4Screen({super.key, required this.isEdit});
+  final Function()? onSelect;
+  final bool? isAddProduct;
+  const AddProduct4Screen(
+      {super.key, required this.isEdit, this.onSelect, this.isAddProduct});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -32,7 +35,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
   //   {"id": 8, "title": "Мрамор", "isChecked": false},
   // ];
 
-  List<Map<String, dynamic>> selectedMaterials = [];
+  // List<Map<String, dynamic>> selectedMaterials = [];
 
   @override
   void initState() {
@@ -104,15 +107,15 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                           contentPadding: const EdgeInsets.all(0),
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: ColorResources.primary,
-                          title: Text(
-                              // materialList[index]['title'],
-                              materialItem.name ?? ''),
+                          title: Text(materialItem.name ?? ''),
                           value: materialItem ==
                               addProductState.productData?.material,
                           onChanged: (val) {
-                            context
-                                .read<AddProductBloc>()
-                                .add(SelectMaterial(materialItem));
+                            if (widget.isAddProduct!) {
+                              context
+                                  .read<AddProductBloc>()
+                                  .add(SelectMaterial(materialItem));
+                            }
                           },
                           // onChanged: (bool? value) {
                           //   for (var item in materialData) {
@@ -156,7 +159,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                   style: textMd.copyWith(color: ColorResources.blue),
                 ),
                 onTap: () {
-                  selectedMaterials = [];
+                  // selectedMaterials = [];
                   // selectedMaterials = materialData
                   //     .where((item) => item['isChecked'] == false)
                   //     .toList();
@@ -171,15 +174,11 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                   width: Get.width,
                   height: Get.height,
                   onTap: () {
-                    selectedMaterials = [];
+                    widget.onSelect!();
+                    // selectedMaterials = [];
                     // selectedMaterials = materialData
                     //     .where((item) => item['isChecked'] == false)
                     //     .toList();
-                    Get.to(() => PreviewProductScreen(
-                          selectedMaterial: selectedMaterials,
-                          // productData: widget.productData,
-                          isEdit: widget.isEdit,
-                        ));
                   },
                   title: 'save'.tr),
             ),

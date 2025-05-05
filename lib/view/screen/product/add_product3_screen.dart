@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/data/model/base/add_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
+import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/category/select_category_screen.dart';
@@ -22,6 +25,7 @@ import '../../../data/model/response/company/my_companies_model.dart';
 import '../../../utils/Images.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
+import 'preview_product_screen.dart';
 
 class AddProduct3Screen extends StatefulWidget {
   // final AddProductModel addProductData;
@@ -60,10 +64,17 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
   }
 
   updateProductData() {
-    descriptionController.text = 'updated description here';
-    keywordsController.text = 'keyword keyword2';
+    final productDetail =
+        context.read<ProductDetailBloc>().state.productDetailModel!.data!;
+    descriptionController.text = productDetail.description ?? '';
+    keywordsController.text = productDetail.searchKeywords ?? '';
+
     for (int i = 0; i < sizeController.length; i++) {}
     // sizeController.text = '12/32';
+    context
+        .read<AddProductBloc>()
+        .add(GetCategoryById(productDetail.categoryId.toString()));
+    // selectCompany();
   }
 
   @override
@@ -101,6 +112,60 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                     const SizedBox(
                       height: 10,
                     ),
+                    // previous images
+                    // ProductDetail
+                    if (widget.isEdit) ...[
+                      if (addProductState.productData?.productUploadedImages !=
+                          null)
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: addProductState
+                              .productData!.productUploadedImages!
+                              .map(
+                                (image) => Stack(
+                                  children: [
+                                    ClipRRect(
+                                      // height: 80,
+                                      // width: 80,
+                                      borderRadius: BorderRadius.circular(12),
+
+                                      child: CustomImage(
+                                          image: image.small ?? '',
+                                          height: 80,
+                                          width: 80,
+                                          radius: 0),
+                                      // Image.file(
+                                      //   File(image.path),
+                                      //   height: 80,
+                                      //   width: 80,
+                                      //   fit: BoxFit.cover,
+                                      // ),
+                                    ),
+                                    SizedBox(
+                                      height: 80,
+                                      width: 80,
+                                      child: Center(
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              context
+                                                  .read<AddProductBloc>()
+                                                  .add(RemoveProductImage(
+                                                      image));
+                                            },
+                                            child: SvgPicture.asset(
+                                                Images.svgTrash)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
                     //selected image
                     if (productController.pickedLogo.isNotEmpty) ...[
                       Wrap(
@@ -353,14 +418,15 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                         Get.to(() => SelectCategoryScreen(
                               isProductCategory: true,
                               onSelect: (selectedCategories) {
-                               
                                 context.read<AddProductBloc>().add(
                                     SelectCategory(
                                         category: selectedCategories.first));
                                 Get.back();
                                 print(
                                     'this is selected category = ${addProductState.productData?.category}');
-                             context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));
+                                context
+                                    .read<MaterialBloc>()
+                                    .add(GetMaterials(currentPage: 1));
                               },
                             ));
                       },
@@ -471,7 +537,16 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
               if (_formKey.currentState!.validate()) {
                 final productData =
                     context.read<AddProductBloc>().state.productData;
-                if (context.read<ProductBloc>().state.pickedLogo.isEmpty) {
+                if (context.read<ProductBloc>().state.pickedLogo.isEmpty &&
+                    !widget.isEdit) {
+                  showShortToast('select_image'.tr);
+                  return;
+                }
+
+                if (context.read<ProductBloc>().state.pickedLogo.isEmpty &&
+                    widget.isEdit &&
+                    (productData?.productUploadedImages == null ||
+                        productData!.productUploadedImages!.isEmpty)) {
                   showShortToast('select_image'.tr);
                   return;
                 }
@@ -492,11 +567,21 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                 productData?.description = descriptionController.text;
                 productData?.keywords = keywordsController.text;
                 productData?.size = allSize;
-                productData?.productImages = context.read<ProductBloc>().state.pickedLogo;
-      
+                productData?.productImages =
+                    context.read<ProductBloc>().state.pickedLogo;
+
                 Get.to(() => AddProduct4Screen(
                       // productData: productData,
                       isEdit: widget.isEdit,
+                      isAddProduct: true,
+                      onSelect: () {
+                        Get.to(() => PreviewProductScreen(
+                              selectedMaterial: [],
+                              // selectedMaterial: selectedMaterials,
+                              // productData: widget.productData,
+                              isEdit: widget.isEdit,
+                            ));
+                      },
                     ));
               }
             },

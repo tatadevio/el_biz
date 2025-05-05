@@ -37,7 +37,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
           'this is favorite products api response = ${response.statusCode} and ${response.body}');
       if (response.statusCode == 200) {
         final favoriteProducts = FavoriteProductsModel.fromJson(response.body);
-        // List<CompanyProductItem> products = [];
+        // List<ProductListItem> products = [];
         emit(state.copyWith(favoriteProducts: favoriteProducts.items));
       } else {
         emit(FavoriteProductsError(response.body['message']));
@@ -52,7 +52,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     RemoveProductFromFavoriteList event,
     Emitter<FavoriteState> emit,
   ) async {
-    List<CompanyProductItem> allFavorites = List.from(state.favoriteProducts);
+    List<ProductListItem> allFavorites = List.from(state.favoriteProducts);
 
     // Check if product exists
     final index =

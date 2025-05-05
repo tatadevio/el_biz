@@ -1,17 +1,20 @@
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/utils/utilities.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/screen/category/select_category_screen.dart';
+import 'package:el_biz/view/screen/product/add_product4_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import '../../../../bloc/post_ad/post_ad_bloc.dart';
+import '../../../../bloc/material/material_bloc.dart' as material;
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_button.dart';
-import '../../category/main_categories.dart';
 
 class ProductsFilterScreen extends StatefulWidget {
   const ProductsFilterScreen({super.key});
@@ -21,11 +24,13 @@ class ProductsFilterScreen extends StatefulWidget {
 }
 
 class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
-  int value = 0;
+  // int value = 0;
   int price = 100;
   final TextEditingController _minController = TextEditingController();
   final TextEditingController _maxController = TextEditingController();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  CategoryItem? selectedCategoryId;
+  RangeValues _priceRange = const RangeValues(1, 20000);
 
   List<Map> sort = [
     {
@@ -55,18 +60,18 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
     'Светильник',
     'Светильник',
   ];
-  List<String> materialList = [
-    'Дерево',
-    'Пластик',
-    'Железо',
-    'Камень',
-    'Текстиль',
-    'ЛДСП',
-    'МДФ',
-    'Стекло',
-    'Эпоксидная смола',
-    'Плитка',
-  ];
+  // List<String> materialList = [
+  //   'Дерево',
+  //   'Пластик',
+  //   'Железо',
+  //   'Камень',
+  //   'Текстиль',
+  //   'ЛДСП',
+  //   'МДФ',
+  //   'Стекло',
+  //   'Эпоксидная смола',
+  //   'Плитка',
+  // ];
 
   List<String> ratingList = [
     'companies_rated_4_and_5',
@@ -103,7 +108,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
     'all_sizes'
   ];
   Map<String, bool> selectedDimensions = {};
-  double priceSlider = 0.5;
+  double priceSlider = 500;
 
   @override
   void initState() {
@@ -111,6 +116,13 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
     for (var dimension in dimensions) {
       selectedDimensions[dimension] = false;
     }
+  }
+
+  void reset() {
+    setState(() {
+      _priceRange = const RangeValues(1, 20000);
+      selectedCategoryId = null;
+    });
   }
 
   @override
@@ -134,17 +146,18 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                   // Get.find<PostAdController>().addCategoryName("", false);
                   // Get.find<PostAdController>().updateCategoryId("", "");
                   // Get.find<PostAdController>().attributeItem.clear();
-                  context
-                      .read<PostAdBloc>()
-                      .add(const AddCategoryName("", false));
-                  context
-                      .read<PostAdBloc>()
-                      .add(const UpdateCategoryId("", ""));
+                  // context
+                  //     .read<PostAdBloc>()
+                  //     .add(const AddCategoryName("", false));
+                  // context
+                  //     .read<PostAdBloc>()
+                  //     .add(const UpdateCategoryId("", ""));
                   // productController.selectCurrency("");
                   // productController.changeCityId("", "");
-                  value = 0;
+                  // value = 0;
                   _minController.clear();
                   _maxController.clear();
+                  reset();
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
@@ -215,16 +228,26 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                 const SizedBox(
                                   width: 8,
                                 ),
-                                productController.selectedSubCatName == ""
+                                selectedCategoryId == null
                                     ? Text(
                                         "category".tr,
                                         style: h16.copyWith(
                                             color: ColorResources.darkGray),
                                       )
                                     : Text(
-                                        productController.selectedSubCatName,
+                                        selectedCategoryId!.name ?? '',
                                         style: normalTextStyle,
                                       ),
+                                // productController.selectedSubCatName == ""
+                                //     ? Text(
+                                //         "category".tr,
+                                //         style: h16.copyWith(
+                                //             color: ColorResources.darkGray),
+                                //       )
+                                //     : Text(
+                                //         productController.selectedSubCatName,
+                                //         style: normalTextStyle,
+                                //       ),
                               ],
                             ),
                             const SizedBox(
@@ -300,11 +323,24 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    Get.to(() => const MainCategories(
-                                          type: true,
-                                          fromHome: false,
-                                          screenName: '/ProductsFilterScreen',
+                                    context
+                                        .read<CategoryBloc>()
+                                        .add(GetCategory());
+                                    Get.to(() => SelectCategoryScreen(
+                                          onSelect: (val) {
+                                            setState(() {
+                                              selectedCategoryId = val.first;
+                                            });
+                                            Get.back();
+                                          },
+                                          isProductCategory: true,
+                                          isCompanyCategory: false,
                                         ));
+                                    // Get.to(() => const MainCategories(
+                                    //       type: true,
+                                    //       fromHome: false,
+                                    //       screenName: '/ProductsFilterScreen',
+                                    //     ));
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -340,19 +376,28 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                             'keywords'.tr,
                             style: h16.copyWith(color: ColorResources.darkGray),
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'all'.tr,
-                                style: button16.copyWith(
-                                    color: ColorResources.blue),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SvgPicture.asset(Images.svgArrowForwardIcon),
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => AddProduct4Screen(
+                                  isEdit: false,
+                                ),
+                              );
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'all'.tr,
+                                  style: button16.copyWith(
+                                      color: ColorResources.blue),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SvgPicture.asset(Images.svgArrowForwardIcon),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -441,78 +486,98 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                     // const SizedBox(
                     //   height: 15,
                     // ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'material'.tr,
-                            style: h16.copyWith(color: ColorResources.darkGray),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'all'.tr,
-                                style: button16.copyWith(
-                                    color: ColorResources.blue),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SvgPicture.asset(Images.svgArrowForwardIcon),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.start,
-
-                      spacing: 8.0, // Horizontal spacing
-                      runSpacing: 8.0, // Vertical spacing
-                      children: materialList
-                          .map((material) => Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  InkWell(
-                                    borderRadius: BorderRadius.circular(30),
-                                    onTap: () {
-                                      // productController.updateMaterialSelected(material);
-
-                                      context.read<ProductBloc>().add(
-                                          UpdateMaterialSelected(material));
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 15),
-                                      decoration: BoxDecoration(
-                                        color: productController
-                                                .materialSelected(material)
-                                            ? ColorResources.green
-                                            : null,
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(
-                                            width: 1,
-                                            color: ColorResources.lgColor),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        material,
-                                        style: body14.copyWith(
-                                            color: productController
-                                                    .materialSelected(material)
-                                                ? ColorResources.white
-                                                : ColorResources.gray),
-                                      ),
+                    BlocBuilder<material.MaterialBloc, material.MaterialState>(
+                      builder: (context, materialState) {
+                        if (materialState.materialItems.isEmpty) {
+                          return SizedBox();
+                        }
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'material'.tr,
+                                  style: h16.copyWith(
+                                      color: ColorResources.darkGray),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'all'.tr,
+                                      style: button16.copyWith(
+                                          color: ColorResources.blue),
                                     ),
-                                  ),
-                                ],
-                              ))
-                          .toList(),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                        Images.svgArrowForwardIcon),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.start,
+
+                              spacing: 8.0, // Horizontal spacing
+                              runSpacing: 8.0, // Vertical spacing
+                              children: materialState.materialItems
+                                  .map((material) => Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            onTap: () {
+                                              // productController.updateMaterialSelected(material);
+
+                                              context.read<ProductBloc>().add(
+                                                  UpdateMaterialSelected(
+                                                      material.name ?? ''));
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 15),
+                                              decoration: BoxDecoration(
+                                                color: productController
+                                                        .materialSelected(
+                                                            material.name ?? '')
+                                                    ? ColorResources.green
+                                                    : null,
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                border: Border.all(
+                                                    width: 1,
+                                                    color:
+                                                        ColorResources.lgColor),
+                                              ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                material.name ?? '',
+                                                style: body14.copyWith(
+                                                    color: productController
+                                                            .materialSelected(
+                                                                material.name ??
+                                                                    '')
+                                                        ? ColorResources.white
+                                                        : ColorResources.gray),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ))
+                                  .toList(),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     const Divider(),
                     // select color
@@ -648,6 +713,55 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
 
                     const Divider(),
                     // select price
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 5),
+                    //   child: Text(
+                    //     'price'.tr,
+                    //     style: h16.copyWith(color: ColorResources.darkGray),
+                    //   ),
+                    // ),
+                    // Slider(
+                    //   activeColor: ColorResources.green,
+                    //   value: priceSlider,
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       priceSlider = value;
+                    //     });
+                    //   },
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: CustomTextField(
+                    //         controller: _minController,
+                    //         hintColor: 'от 500 сом',
+                    //         inputType: TextInputType.number,
+                    //         leading: '',
+                    //         readOnly: false,
+                    //         maxLines: 1,
+                    //       ),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Expanded(
+                    //       child: CustomTextField(
+                    //         controller: _maxController,
+                    //         hintColor: 'до 20 000 сом',
+                    //         inputType: TextInputType.number,
+                    //         leading: '',
+                    //         readOnly: false,
+                    //         maxLines: 1,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
+                    // price session
+
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
@@ -655,18 +769,25 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
-                    Slider(
+                    RangeSlider(
+                      values: _priceRange,
+                      min: 1,
+                      max: 20000,
                       activeColor: ColorResources.green,
-                      value: priceSlider,
-                      onChanged: (value) {
+                      divisions: 195, // Optional for step control
+                      labels: RangeLabels(
+                        _priceRange.start.toInt().toString(),
+                        _priceRange.end.toInt().toString(),
+                      ),
+                      onChanged: (RangeValues values) {
                         setState(() {
-                          priceSlider = value;
+                          _priceRange = values;
+                          _minController.text = values.start.toInt().toString();
+                          _maxController.text = values.end.toInt().toString();
                         });
                       },
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
@@ -677,11 +798,20 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                             leading: '',
                             readOnly: false,
                             maxLines: 1,
+                            onChanged: (val) {
+                              final parsed = double.tryParse(val);
+                              if (parsed != null &&
+                                  parsed >= 500 &&
+                                  parsed <= _priceRange.end) {
+                                setState(() {
+                                  _priceRange =
+                                      RangeValues(parsed, _priceRange.end);
+                                });
+                              }
+                            },
                           ),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: CustomTextField(
                             controller: _maxController,
@@ -690,10 +820,23 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                             leading: '',
                             readOnly: false,
                             maxLines: 1,
+                            onChanged: (val) {
+                              final parsed = double.tryParse(val);
+                              if (parsed != null &&
+                                  parsed >= _priceRange.start &&
+                                  parsed <= 20000) {
+                                setState(() {
+                                  _priceRange =
+                                      RangeValues(_priceRange.start, parsed);
+                                });
+                              }
+                            },
                           ),
                         ),
                       ],
                     ),
+
+                    // end price session
 
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),

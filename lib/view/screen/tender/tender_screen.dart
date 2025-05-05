@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
+import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_event.dart';
 import 'package:el_biz/bloc/tenders/tenders_state.dart';
@@ -12,6 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../../base/tender_grid_item.dart';
+import '../../base/tender_list_item.dart';
 
 class TenderScreen extends StatefulWidget {
   const TenderScreen({super.key});
@@ -312,34 +316,50 @@ class _TenderScreenState extends State<TenderScreen> {
       body: Stack(
         children: [
           BlocBuilder<TendersBloc, TendersState>(
-              builder: (context, tendersController) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(),
-              // there tender list and tender grid have to update
-              // tendersController.isGridView
-              //     ? GridView.builder(
-              //         controller: _scrollController,
-              //         gridDelegate:
-              //             const SliverGridDelegateWithFixedCrossAxisCount(
-              //                 crossAxisCount: 2,
-              //                 mainAxisSpacing: 10,
-              //                 crossAxisSpacing: 10,
-              //                 childAspectRatio: 0.65),
-              //         itemCount: 10,
-              //         itemBuilder: (context, index) {
-              //           return const TenderGridItem();
-              //         },
-              //       )
-              //     : ListView.builder(
-              //         controller: _scrollController,
-              //         itemCount: 10,
-              //         itemBuilder: (context, index) {
-              //           return const TenderListItem();
-              //         },
-              //       ),
-            );
-          }),
+            builder: (context, tendersController) {
+              return BlocBuilder<PublicTenderBloc, PublicTenderState>(
+                  builder: (context, publicTenderState) {
+                if (publicTenderState.isLoading) {
+                  return Center(
+                    child: Text('no_tender_found'.tr),
+                  );
+                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child:
+                      // SizedBox(),
+                      // there tender list and tender grid have to update
+                      tendersController.isGridView
+                          ? GridView.builder(
+                              controller: _scrollController,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 0.65),
+                              itemCount: publicTenderState.publicTenders.length,
+                              itemBuilder: (context, index) {
+                                return TenderGridItem(
+                                  tender:
+                                      publicTenderState.publicTenders[index],
+                                );
+                              },
+                            )
+                          : ListView.builder(
+                              controller: _scrollController,
+                              itemCount: publicTenderState.publicTenders.length,
+                              itemBuilder: (context, index) {
+                                return TenderListItem(
+                                  tender:
+                                      publicTenderState.publicTenders[index],
+                                );
+                              },
+                            ),
+                );
+              });
+            },
+          ),
           if (_showScrollToTopButton)
             Positioned(
               bottom: 20,

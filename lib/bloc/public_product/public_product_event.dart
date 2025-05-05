@@ -9,7 +9,6 @@ sealed class PublicProductEvent extends Equatable {
 
 class GetPublicProduct extends PublicProductEvent {
   final int currentPage;
-
   const GetPublicProduct(this.currentPage);
 
   @override

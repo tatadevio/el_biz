@@ -14,6 +14,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc(this.categoryRepo) : super(const CategoryState()) {
     on<UpdateFilterSelectedCategory>(_updateFilterSelectedCategory);
     on<GetCategory>(_fetchCategory);
+
+    // on<GetCategoryById>(_onGetCategoryById);
     // on<GetCategoryFilter>(_getCategoryFilter);
     // on<AddSingleCat>(
     //   (event, emit) {
@@ -65,28 +67,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  // void _getCategoryFilter(CategoryEvent event, Emitter<CategoryState> emit) async {
-  //   emit(state.copyWith(isLoading: true));
+  // Future<void> _onGetCategoryById(GetCategoryById event, Emitter<CategoryState> emit)  async { 
+  //   try{
 
-  //   try {
-  //     final response = await categoryRepo.getCategoryFilter();
-  //     if (response.statusCode == 200) {
-  //       final categoryItemFilter = CategoryListModel.fromJson(response.body).data.items;
-  //       emit(state.copyWith(
-  //         categoryItemFilter: categoryItemFilter,
-  //         isLoading: false,
-  //       ));
-  //     } else {
-  //       emit(state.copyWith(isLoading: false));
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching category filter: $e');
-  //     emit(state.copyWith(isLoading: false));
+  //   }catch(e){
+
   //   }
   // }
 
-  // void _addSingleCategory(CategoryEvent event, Emitter<CategoryState> emit) {
-  //   final updatedList = List<CategoriesItem>.from(state.singleCategoryItem)..add(event.singleCategory);
-  //   emit(state.copyWith(singleCategoryItem: updatedList));
-  // }
+
 }

@@ -20,6 +20,14 @@ class CompanyTenders extends StatelessWidget {
         builder: (context, companyDetailState) {
       return BlocBuilder<CompanyBloc, CompanyState>(
           builder: (context, companyState) {
+        if (companyDetailState.companyTenders!.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text('no_tender_found'.tr),
+            ),
+          );
+        }
         return Column(
           children: [
             const SizedBox(
@@ -130,7 +138,7 @@ class CompanyTenders extends StatelessWidget {
                     childAspectRatio: 0.65),
                 itemCount: companyDetailState.companyTenders?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return  TenderGridItem(
+                  return TenderGridItem(
                     tender: companyDetailState.companyTenders![index],
                   );
                 },

@@ -53,7 +53,7 @@ class CompanyProductModel {
 }
 
 class Data {
-  final List<CompanyProductItem>? items;
+  final List<ProductListItem>? items;
   final int? totalPages;
   final int? currentPage;
   final int? total;
@@ -70,7 +70,7 @@ class Data {
   });
 
   Data copyWith({
-    List<CompanyProductItem>? items,
+    List<ProductListItem>? items,
     int? totalPages,
     int? currentPage,
     int? total,
@@ -89,7 +89,8 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         items: json["items"] == null
             ? []
-            : List<CompanyProductItem>.from(json["items"]!.map((x) => CompanyProductItem.fromJson(x))),
+            : List<ProductListItem>.from(
+                json["items"]!.map((x) => ProductListItem.fromJson(x))),
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         total: json["total"],
@@ -109,9 +110,10 @@ class Data {
       };
 }
 
-class CompanyProductItem {
+class ProductListItem {
   final int? id;
   final String? name;
+  final String? description;
   final String? slug;
   final int? price;
   final String? quantity;
@@ -119,9 +121,10 @@ class CompanyProductItem {
   final User? user;
   final bool? isFavorite;
 
-  CompanyProductItem({
+  ProductListItem({
     this.id,
     this.name,
+    this.description,
     this.slug,
     this.price,
     this.quantity,
@@ -130,9 +133,10 @@ class CompanyProductItem {
     this.isFavorite,
   });
 
-  CompanyProductItem copyWith({
+  ProductListItem copyWith({
     int? id,
     String? name,
+    String? description,
     String? slug,
     int? price,
     String? quantity,
@@ -140,20 +144,23 @@ class CompanyProductItem {
     User? user,
     bool? isFavorite,
   }) =>
-      CompanyProductItem(
+      ProductListItem(
         id: id ?? this.id,
         name: name ?? this.name,
+        description: description ?? this.description,
         slug: slug ?? this.slug,
         price: price ?? this.price,
         quantity: quantity ?? this.quantity,
         image: image ?? this.image,
         user: user ?? this.user,
-        isFavorite: isFavorite?? this.isFavorite,
+        isFavorite: isFavorite ?? this.isFavorite,
       );
 
-  factory CompanyProductItem.fromJson(Map<String, dynamic> json) => CompanyProductItem(
+  factory ProductListItem.fromJson(Map<String, dynamic> json) =>
+      ProductListItem(
         id: json["id"],
         name: json["name"],
+        description: json['description'],
         slug: json["slug"],
         price: json["price"],
         quantity: json["quantity"],
@@ -165,6 +172,7 @@ class CompanyProductItem {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "description": description,
         "slug": slug,
         "price": price,
         "quantity": quantity,

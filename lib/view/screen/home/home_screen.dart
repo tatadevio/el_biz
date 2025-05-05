@@ -1,6 +1,9 @@
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
+import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -33,6 +36,9 @@ class HomeScreen extends StatelessWidget {
   loadData(BuildContext context) {
     context.read<UserBloc>().add(const GetUserInfo());
     context.read<CompanyBloc>().add(GetMyCompanies());
+    context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
+    context.read<PublicProductBloc>().add(GetPublicProduct(1));
+    context.read<PublicTenderBloc>().add(GetPublicTender(1));
     context.read<AccountBloc>().add(GetMyAccounts());
     context.read<CitiesBloc>().add(GetCitites(1, true));
     context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));

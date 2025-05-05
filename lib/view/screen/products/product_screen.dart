@@ -7,17 +7,14 @@ import 'package:el_biz/view/base/product_grid_item.dart';
 import 'package:el_biz/view/base/product_list_item.dart';
 import 'package:el_biz/view/screen/filter/company_filter/company_filter_screen.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
+import 'package:el_biz/view/screen/products/widgets/public_companies_widget.dart';
+import 'package:el_biz/view/screen/products/widgets/public_products_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company/company_bloc.dart';
-import '../../../bloc/company_detail/company_detail_bloc.dart';
-import '../../../data/model/response/company/my_companies_model.dart';
-import '../../base/custom_image.dart';
-import '../company/company_page_screen.dart';
 import '../product/add_product_screen.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -461,7 +458,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 controller: _scrollController,
                                 itemCount: 10,
                                 itemBuilder: (context, index) {
-                                  return ProductListItem(
+                                  return ProductListItemWidget(
                                     isSelectProduct: widget.isSelectProduct,
                                     // product: index,
                                   );
@@ -471,37 +468,8 @@ class _ProductScreenState extends State<ProductScreen> {
                     else
                       Expanded(
                         child: !productController.isShowCategories
-                            ? productController.isGridView
-                                ? GridView.builder(
-                                    controller: _scrollController,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            mainAxisSpacing: 10,
-                                            crossAxisSpacing: 10,
-                                            childAspectRatio: 0.7),
-                                    itemCount: 10,
-                                    itemBuilder: (context, index) {
-                                      return const ProductGridItem();
-                                    },
-                                  )
-                                : ListView.builder(
-                                    controller: _scrollController,
-                                    itemCount: 10,
-                                    itemBuilder: (context, index) {
-                                      return const ProductListItem();
-                                    },
-                                  )
-                            : ListView.builder(
-                                controller: _scrollController,
-                                itemCount: companyController.myCompanies.length,
-                                itemBuilder: (context, index) {
-                                  print(
-                                      'there i have call the company bloc in compnay list : ${companyController.myCompanies.length}');
-                                  return myCompanyWidget(
-                                      companyController.myCompanies[index]);
-                                },
-                              ),
+                            ? PublicProductsWidget()
+                            : PublicCompaniesWidget(),
                         // const SizedBox(),
                       ),
                   ],
@@ -544,170 +512,6 @@ class _ProductScreenState extends State<ProductScreen> {
                   },
                   title: 'send'.tr))
           : null,
-    );
-  }
-
-  Widget myCompanyWidget(CompanyItem company) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: InkWell(
-        onTap: () {
-          // context
-          //     .read<CompanyBloc>()
-          //     .add(CompanyDetailById(company.id.toString()));
-          context
-              .read<CompanyDetailBloc>()
-              .add(GetCompanyDetail(company.id.toString()));
-          Get.to(() => const CompanyPageScreen(
-                isCompany: true,
-              ));
-        },
-        child: Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(
-                color: ColorResources.lightBlue,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(width: 1, color: ColorResources.lgColor),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomImage(
-                          image: company.logo ?? '',
-                          height: 40,
-                          width: 40,
-                          radius: 40),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              company.name ?? '',
-                              style: h16.copyWith(
-                                color: ColorResources.darkGray,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              company.email ?? '',
-                              style: body14.copyWith(
-                                  color: ColorResources.darkGray),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                SvgPicture.asset(Images.svgMap),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    company.address ?? '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: body14.copyWith(
-                                        color: ColorResources.gray),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '(4.8)',
-                                        style: body14.copyWith(
-                                            color: ColorResources.gray),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: 4.8,
-                                        minRating: 0,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: true,
-                                        itemCount: 5,
-                                        itemSize: 14,
-                                        ignoreGestures: true,
-                                        itemPadding: const EdgeInsets.symmetric(
-                                            horizontal: 0),
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: ColorResources.yellow,
-                                        ),
-                                        onRatingUpdate: (rating) {
-                                          print(rating);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'more_details'.tr,
-                                      style: button16.copyWith(
-                                          color: ColorResources.blue),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    SvgPicture.asset(Images.svgArrowForward),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              right: 10,
-              top: 10,
-              child: Container(
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  backgroundBlendMode: BlendMode.colorDodge,
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 1.6,
-                      spreadRadius: 0,
-                      offset: Offset(0, 0.8),
-                      color: Color.fromRGBO(16, 24, 40, 0.05),
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: SvgPicture.asset(Images.svgHeartBorder),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

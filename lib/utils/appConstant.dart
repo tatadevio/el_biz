@@ -28,6 +28,7 @@ class AppConstants {
   /// Tenders
   static const String tendersUrl = "api/tenders";
   static const String addTenderUrl = "api/tenders/store";
+  static const String publicTendersUrl = "api/tender-list";
 
   /// Company
   static const String addCompanyUrl = "api/companies/store";
@@ -43,6 +44,7 @@ class AppConstants {
   static const String companyReviewsDeleteUrl = "api/companies/review/delete";
   static const String verifyTinNumberUrl = "api/companies/verify";
   static const String addCompanyDocumentUrl = "api/companies/documents-upload";
+  static const String publicCompaniesUrl = "api/company-list";
 
   /// Categories
   static const String categoriesUrl = "api/categories";
@@ -59,6 +61,10 @@ class AppConstants {
 
   // product
   static const String productDetailUrl = "api/products";
+  static const String publicProductUrl = "api/product-list";
+  static const String productUpdateUrl = "api/products/update";
+  static const String productStatusChangeUrl = "api/products/change-status";
+  static const String deleteProductImageUrl = "api/products/delete-images";
 
   // product review
   static const String productReviewsUrl = "api/reviews";

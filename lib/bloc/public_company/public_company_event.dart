@@ -6,3 +6,11 @@ sealed class PublicCompanyEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetPublicCompany extends PublicCompanyEvent {
+  final int currentPage;
+  const GetPublicCompany(this.currentPage);
+
+  @override
+  List<Object> get props => [currentPage];
+}

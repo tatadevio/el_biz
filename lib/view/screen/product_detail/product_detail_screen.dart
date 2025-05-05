@@ -1,9 +1,11 @@
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
+import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:el_biz/view/screen/product/add_product_screen.dart';
@@ -31,7 +33,7 @@ class ProductDetailScreen extends StatelessWidget {
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('product detail'),
+        title: const Text(''),
         actions: [
           Container(
             height: 40,
@@ -71,6 +73,9 @@ class ProductDetailScreen extends StatelessWidget {
         // ProductDetailModel productDetail = ProductDetailModel();
         if (productDetialController is! ProductDetailLoader &&
             productDetialController is! ProductDetailError) {
+          if (productDetialController.productDetailModel?.data == null) {
+            return SizedBox.shrink();
+          }
           final productDetail = productDetialController.productDetailModel!;
           return SingleChildScrollView(
             child: Column(
@@ -130,246 +135,246 @@ class ProductDetailScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      if (isProduct) ...[
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          productDetail.data?.description ?? '',
-                          // 'Раскладной садовый стул из шпона дерева.',
-                          style: body16.copyWith(color: ColorResources.gray),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '${productDetail.data?.price} ${AppConstants.currencyCode}',
-                          style: h24.copyWith(color: ColorResources.blue),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '(4.0) ',
-                                    style: body14.copyWith(
-                                        color: ColorResources.gray),
-                                  ),
-                                  RatingBar.builder(
-                                    initialRating: 4,
-                                    minRating: 0,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemSize: 14,
-                                    ignoreGestures: true,
-                                    itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 0),
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: ColorResources.yellow,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
+                      // if (isProduct) ...[
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        productDetail.data?.description ?? '',
+                        // 'Раскладной садовый стул из шпона дерева.',
+                        style: body16.copyWith(color: ColorResources.gray),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '${productDetail.data?.price} ${AppConstants.currencyCode}',
+                        style: h24.copyWith(color: ColorResources.blue),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
                               children: [
                                 Text(
-                                  'Загружено: ',
-                                  style: body14.copyWith(
-                                      color: ColorResources.gray,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                Text(
-                                  formatDateInRu(productDetail.data?.createdAt
-                                          .toString() ??
-                                      ''),
-                                  // '12 окт. 2024',
+                                  '(4.0) ',
                                   style: body14.copyWith(
                                       color: ColorResources.gray),
                                 ),
+                                RatingBar.builder(
+                                  initialRating: 4,
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 14,
+                                  ignoreGestures: true,
+                                  itemPadding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: ColorResources.yellow,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Минимальный заказ: ',
-                                style: h16.copyWith(
-                                    color: ColorResources.darkGray),
+                                'Загружено: ',
+                                style: body14.copyWith(
+                                    color: ColorResources.gray,
+                                    fontWeight: FontWeight.w700),
                               ),
                               Text(
-                                '',
-                                // '5 шт',
+                                formatDateInRu(
+                                    productDetail.data?.createdAt.toString() ??
+                                        ''),
+                                // '12 окт. 2024',
                                 style:
-                                    body16.copyWith(color: ColorResources.gray),
+                                    body14.copyWith(color: ColorResources.gray),
                               ),
                             ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Наличие: ',
-                                style: h16.copyWith(
-                                    color: ColorResources.darkGray),
-                              ),
-                              Text(
-                                productDetail.data?.isAvailable == 1
-                                    ? 'yes'.tr
-                                    : 'no'.tr,
-                                // 'Уточнять наличие',
-                                style:
-                                    body16.copyWith(color: ColorResources.gray),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(6),
-                              onTap: () {
-                                // productDetialController.toggleShowProductReview(false);
-                                context
-                                    .read<ProductDetailBloc>()
-                                    .add(const ToggleShowProductReview(false));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: width * 0.43,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color:
-                                      productDetialController.showProductReviews
-                                          ? null
-                                          : ColorResources.primary,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'О товаре',
-                                  style: button16.copyWith(
-                                      color: productDetialController
-                                              .showProductReviews
-                                          ? ColorResources.gray
-                                          : ColorResources.white),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(6),
-                              onTap: () {
-                                // productDetialController.toggleShowProductReview(true);
-                                context
-                                    .read<ProductDetailBloc>()
-                                    .add(const ToggleShowProductReview(true));
-                              },
-                              child: Container(
-                                height: 40,
-                                width: width * 0.45,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: !productDetialController
-                                          .showProductReviews
-                                      ? null
-                                      : ColorResources.primary,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'reviews'.tr,
-                                  style: button16.copyWith(
-                                      color: !productDetialController
-                                              .showProductReviews
-                                          ? ColorResources.gray
-                                          : ColorResources.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(),
-                        if (productDetialController.showProductReviews) ...[
-                          const ProductReviewsWidget(),
-                        ] else ...[
-                          const AboutProductWidget(),
                         ],
-                      ] else ...[
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Описание',
-                          style: h16.copyWith(color: ColorResources.darkGray),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Ищу поставщиков садовой мебели, конкретно раскладных стульев хорошего качества, из натуральных материалов, с интересным дизайном, 20 штук желательно похожих или в двух расцветках.',
-                          style:
-                              body14.copyWith(color: ColorResources.darkGray),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        productInfoWidget(
-                            title: 'Товар: ',
-                            value: 'Количество',
-                            titleBold: true,
-                            valueBold: true),
-                        productInfoWidget(
-                            title: 'Раскладные стулья', value: '20шт'),
-                        productInfoWidget(title: 'Диваны', value: '20шт'),
-                        productInfoWidget(title: 'Шкафы', value: '20шт'),
-                        productInfoWidget(
-                            title: 'Бюджет: ',
-                            value: '50 000 сом',
-                            valueBold: true),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
                           children: [
                             Text(
-                              'Опубликовано: ',
+                              'Минимальный заказ: ',
                               style:
-                                  body14.copyWith(fontWeight: FontWeight.w700),
+                                  h16.copyWith(color: ColorResources.darkGray),
                             ),
                             Text(
-                              '24.10.2024, 18:10',
+                              '',
+                              // '5 шт',
                               style:
-                                  body14.copyWith(fontWeight: FontWeight.w400),
+                                  body16.copyWith(color: ColorResources.gray),
                             ),
                           ],
                         ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Наличие: ',
+                              style:
+                                  h16.copyWith(color: ColorResources.darkGray),
+                            ),
+                            Text(
+                              productDetail.data?.isAvailable == 1
+                                  ? 'yes'.tr
+                                  : 'no'.tr,
+                              // 'Уточнять наличие',
+                              style:
+                                  body16.copyWith(color: ColorResources.gray),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(6),
+                            onTap: () {
+                              // productDetialController.toggleShowProductReview(false);
+                              context
+                                  .read<ProductDetailBloc>()
+                                  .add(const ToggleShowProductReview(false));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: width * 0.43,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color:
+                                    productDetialController.showProductReviews
+                                        ? null
+                                        : ColorResources.primary,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'О товаре',
+                                style: button16.copyWith(
+                                    color: productDetialController
+                                            .showProductReviews
+                                        ? ColorResources.gray
+                                        : ColorResources.white),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(6),
+                            onTap: () {
+                              // productDetialController.toggleShowProductReview(true);
+                              context
+                                  .read<ProductDetailBloc>()
+                                  .add(const ToggleShowProductReview(true));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: width * 0.45,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color:
+                                    !productDetialController.showProductReviews
+                                        ? null
+                                        : ColorResources.primary,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'reviews'.tr,
+                                style: button16.copyWith(
+                                    color: !productDetialController
+                                            .showProductReviews
+                                        ? ColorResources.gray
+                                        : ColorResources.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                      if (productDetialController.showProductReviews) ...[
+                        const ProductReviewsWidget(),
+                      ] else ...[
+                        const AboutProductWidget(),
                       ],
+                      // ] else ...[
+                      //   const SizedBox(
+                      //     height: 15,
+                      //   ),
+                      //   Text(
+                      //     'Описание',
+                      //     style: h16.copyWith(color: ColorResources.darkGray),
+                      //   ),
+                      //   const SizedBox(
+                      //     height: 10,
+                      //   ),
+                      //   Text(
+                      //     'Ищу поставщиков садовой мебели, конкретно раскладных стульев хорошего качества, из натуральных материалов, с интересным дизайном, 20 штук желательно похожих или в двух расцветках.',
+                      //     style:
+                      //         body14.copyWith(color: ColorResources.darkGray),
+                      //   ),
+                      //   const SizedBox(
+                      //     height: 20,
+                      //   ),
+                      //   productInfoWidget(
+                      //       title: 'Товар: ',
+                      //       value: 'Количество',
+                      //       titleBold: true,
+                      //       valueBold: true),
+                      //   productInfoWidget(
+                      //       title: 'Раскладные стулья', value: '20шт'),
+                      //   productInfoWidget(title: 'Диваны', value: '20шт'),
+                      //   productInfoWidget(title: 'Шкафы', value: '20шт'),
+                      //   productInfoWidget(
+                      //       title: 'Бюджет: ',
+                      //       value: '50 000 сом',
+                      //       valueBold: true),
+                      //   const SizedBox(
+                      //     height: 10,
+                      //   ),
+                      //   Row(
+                      //     mainAxisAlignment: MainAxisAlignment.end,
+                      //     children: [
+                      //       Text(
+                      //         'Опубликовано: ',
+                      //         style:
+                      //             body14.copyWith(fontWeight: FontWeight.w700),
+                      //       ),
+                      //       Text(
+                      //         '24.10.2024, 18:10',
+                      //         style:
+                      //             body14.copyWith(fontWeight: FontWeight.w400),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ],
                     ],
                   ),
                 ),
@@ -469,51 +474,80 @@ class ProductDetailScreen extends StatelessWidget {
         }
         return const SizedBox.shrink();
       }),
-      bottomNavigationBar: "user" == "user"
-          ? BottomAppBar(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomBorderButton(
-                      height: Get.height,
-                      width: Get.width,
-                      padding: const EdgeInsets.all(0),
-                      border: Border.all(width: 1, color: ColorResources.blue),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShaow: const [ColorResources.shadow1],
-                      child: Text(
-                        "edit".tr,
-                        style: button16.copyWith(color: ColorResources.blue),
-                      ),
-                      onTap: () {
-                        Get.to(() => AddProductScreen(isEdit: true));
-                      },
+      bottomNavigationBar: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+        builder: (context, state) {
+          if (state.productDetailModel?.data == null) {
+            return SizedBox.shrink();
+          }
+          if (context.read<UserBloc>().state.userInfo?.data?.id !=
+              state.productDetailModel?.data?.user?.id) {
+            return SizedBox.shrink();
+          }
+          return BottomAppBar(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomBorderButton(
+                    height: Get.height,
+                    width: Get.width,
+                    padding: const EdgeInsets.all(0),
+                    border: Border.all(width: 1, color: ColorResources.blue),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShaow: const [ColorResources.shadow1],
+                    child: Text(
+                      "edit".tr,
+                      style: button16.copyWith(color: ColorResources.blue),
                     ),
+                    onTap: () {
+                      Get.to(() => AddProductScreen(isEdit: true));
+                    },
                   ),
-                  const SizedBox(
-                    width: 10,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: CustomBorderButton(
+                    height: Get.height,
+                    width: Get.width,
+                    padding: const EdgeInsets.all(0),
+                    border: Border.all(width: 1, color: ColorResources.red),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShaow: const [ColorResources.shadow1],
+                    onTap: state.statusUpdating
+                        ? () {}
+                        : () {
+                            context
+                                .read<ProductDetailBloc>()
+                                .add(ChangeProductStatus(
+                                  state.productDetailModel!.data!.id.toString(),
+                                  state.productDetailModel!.data!.status ==
+                                          'published'
+                                      ? 'draft'
+                                      : 'published',
+                                ));
+                          },
+                    child: state.statusUpdating
+                        ? SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: CircularProgressIndicator())
+                        : Text(
+                            state.productDetailModel!.data!.status ==
+                                    'published'
+                                ? "not_active".tr
+                                : 'active'.tr,
+                            style: button16.copyWith(color: ColorResources.red),
+                          ),
                   ),
-                  Expanded(
-                    child: CustomBorderButton(
-                      height: Get.height,
-                      width: Get.width,
-                      padding: const EdgeInsets.all(0),
-                      border: Border.all(width: 1, color: ColorResources.red),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShaow: const [ColorResources.shadow1],
-                      child: Text(
-                        "not_active".tr,
-                        style: button16.copyWith(color: ColorResources.red),
-                      ),
-                      onTap: () {},
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : null,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

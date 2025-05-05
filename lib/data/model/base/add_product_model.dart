@@ -1,6 +1,7 @@
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:el_biz/data/model/response/materials_model.dart';
+import 'package:el_biz/data/model/response/product/product_detail_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProductModel {
@@ -24,6 +25,8 @@ class AddProductModel {
   MaterialItem? material;
   CategoryItem? category;
   CompanyItem? company;
+  List<ProductDetailImages>? productUploadedImages;
+  List<ProductDetailImages>? deleteProductImages;
 
   // Constructor
   AddProductModel({
@@ -47,6 +50,8 @@ class AddProductModel {
     this.material,
     this.category,
     this.company,
+    this.productUploadedImages,
+    this.deleteProductImages,
   });
 
   // Factory method for JSON deserialization
@@ -74,6 +79,10 @@ class AddProductModel {
       ),
       category: CategoryItem.fromJson(json['category']),
       company: CompanyItem.fromJson(json['company']),
+      productUploadedImages: (json['productUploadedImages'] as List<dynamic>?)
+          ?.cast<ProductDetailImages>(),
+      deleteProductImages: (json['deleteProductImages'] as List<dynamic>?)
+          ?.cast<ProductDetailImages>(),
     );
   }
 
@@ -100,6 +109,8 @@ class AddProductModel {
       "material": material,
       "category": category,
       "company": company,
+      "productUploadedImages": productUploadedImages,
+      "deleteProductImages": deleteProductImages,
     };
   }
 
@@ -125,6 +136,8 @@ class AddProductModel {
     MaterialItem? material,
     CategoryItem? category,
     CompanyItem? company,
+    List<ProductDetailImages>? productUploadedImages,
+    List<ProductDetailImages>? deleteProductImages,
   }) {
     return AddProductModel(
       brandName: brandName ?? this.brandName,
@@ -147,12 +160,15 @@ class AddProductModel {
       material: material ?? this.material,
       category: category ?? this.category,
       company: company ?? this.company,
+      productUploadedImages:
+          productUploadedImages ?? this.productUploadedImages,
+      deleteProductImages: deleteProductImages ?? this.deleteProductImages,
     );
   }
 
   // Override toString for debugging
   @override
   String toString() {
-    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability, productImages: $productImages, material: $material)';
+    return 'AddProductModel(brandName: $brandName, productName: $productName, productCode: $productCode, price: $price, currency: $currency, quantity: $quantity, quantityUnit: $quantityUnit, dimensions: $dimensions, dimensionsUnit: $dimensionsUnit, weight: $weight, weightUnit: $weightUnit, region: $region, description: $description, keywords: $keywords, size: $size, availability: $availability, productImages: $productImages, material: $material, productUploadedImages: $productUploadedImages, deleteProductImages: $deleteProductImages)';
   }
 }

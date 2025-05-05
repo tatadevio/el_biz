@@ -94,7 +94,7 @@ class CompanyPageScreen extends StatelessWidget {
                                 height: 5,
                               ),
                               if (companyDetail?.data?.owner?.status ==
-                                  'verify')
+                                  'verified')
                                 Row(
                                   children: [
                                     SvgPicture.asset(Images.svgVerified),

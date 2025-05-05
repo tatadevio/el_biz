@@ -286,7 +286,9 @@
   "select_category" : "Select Category",
   "add_certificate" : "Add Certificate",
   "no_favorite_products": "No favorite products found",
-  "product_reviews" : "Product Reviews"
+  "product_reviews" : "Product Reviews",
+  "no_product_found" : "No product found",
+  "all_categories" : "All categories"
 
 
 }

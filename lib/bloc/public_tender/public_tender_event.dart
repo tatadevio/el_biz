@@ -7,3 +7,11 @@ sealed class PublicTenderEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetPublicTender extends PublicTenderEvent {
+  final int currentPage;
+
+  const GetPublicTender(this.currentPage);
+
+  @override
+  List<Object> get props => [currentPage];
+}

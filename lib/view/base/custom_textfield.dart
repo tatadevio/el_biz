@@ -18,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final Widget? suffix;
   final String? Function(String?)? validator;
+  final Function(String)? onChanged;
   const CustomTextField({
     super.key,
     required this.controller,
@@ -31,6 +32,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLines,
     this.suffix,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -59,6 +61,7 @@ class CustomTextField extends StatelessWidget {
                 }
                 return null;
               },
+          onChanged: onChanged,
           inputFormatters: maxLength == 9
               ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
               : null,

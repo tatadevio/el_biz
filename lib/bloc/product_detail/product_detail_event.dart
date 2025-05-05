@@ -29,6 +29,15 @@ class ToggleProductFavorite extends ProductDetailEvent {
   // final ProductDetailModel productDetailModel;
   // const ToggleProductFavorite(this.productDetailModel);
 
-  // @override
+  @override
   List<Object> get props => [context];
+}
+
+class ChangeProductStatus extends ProductDetailEvent {
+  final String productId;
+  final String status;
+  const ChangeProductStatus(this.productId, this.status);
+
+  @override
+  List<Object> get props => [productId, status];
 }

@@ -29,10 +29,11 @@ class TenderListItem extends StatelessWidget {
               .read<TenderDetailBloc>()
               .add(GetTenderDetail(tenderId: tender.id.toString()));
           Get.to(() => TenderDetailScreen(
-              // isProduct: false,
+                // isProduct: false,
+                tenderName: tender.title ?? '',
               ));
         },
-        child: Container(
+        child: SizedBox(
           height: 120,
           child: Row(
             children: [

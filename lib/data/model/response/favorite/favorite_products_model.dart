@@ -13,7 +13,7 @@ String favoriteProductsModelToJson(FavoriteProductsModel data) =>
     json.encode(data.toJson());
 
 class FavoriteProductsModel {
-  final List<CompanyProductItem>? items;
+  final List<ProductListItem>? items;
   final int? totalPages;
   final int? currentPage;
   final int? total;
@@ -30,7 +30,7 @@ class FavoriteProductsModel {
   });
 
   FavoriteProductsModel copyWith({
-    List<CompanyProductItem>? items,
+    List<ProductListItem>? items,
     int? totalPages,
     int? currentPage,
     int? total,
@@ -50,8 +50,8 @@ class FavoriteProductsModel {
       FavoriteProductsModel(
         items: json["items"] == null
             ? []
-            : List<CompanyProductItem>.from(
-                json["items"]!.map((x) => CompanyProductItem.fromJson(x))),
+            : List<ProductListItem>.from(
+                json["items"]!.map((x) => ProductListItem.fromJson(x))),
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         total: json["total"],

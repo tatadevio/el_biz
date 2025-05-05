@@ -1,4 +1,4 @@
-import 'package:el_biz/data/model/response/company/company_product_model.dart';
+import 'package:el_biz/data/model/response/company/company_product_model.dart' as model;
 
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +15,16 @@ import '../screen/product_detail/product_detail_screen.dart';
 import 'check_box_button.dart';
 import 'custom_favorite_button.dart';
 
-class ProductListItem extends StatelessWidget {
+class ProductListItemWidget extends StatelessWidget {
   final bool isFavorite;
   final bool isSelectProduct;
-  final CompanyProductItem? product;
+  final model.ProductListItem? product;
 
-  const ProductListItem(
+  const ProductListItemWidget(
       {super.key,
       this.isFavorite = false,
       this.isSelectProduct = false,
-      this.product});
+       this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class ProductListItem extends StatelessWidget {
                       right: 10,
                       top: 5,
                       child: CustomFavoriteButton(
-                        isFavorite: product!.isFavorite ?? false,
+                        isFavorite: product?.isFavorite ?? false,
                         onTap: () {
                           context.read<CompanyDetailBloc>().add(
                               ToggleFavoriteProduct(product!.id!, context));

@@ -27,4 +27,10 @@ class AddSingleCat extends CategoryEvent {
   List<Object> get props => [singleCategory];
 }
 
+// class GetCategoryById extends CategoryEvent {
+//   final String categoryId;
+//   const GetCategoryById(this.categoryId);
 
+//   @override
+//   List<Object> get props => [categoryId];
+// }

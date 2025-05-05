@@ -30,3 +30,39 @@ class SelectMaterial extends AddProductEvent {
   @override
   List<Object> get props => [materialItem];
 }
+
+class RemoveProductImage extends AddProductEvent {
+  final ProductDetailImages productImage;
+  const RemoveProductImage(this.productImage);
+
+  @override
+  List<Object> get props => [productImage];
+}
+
+class UpdateProduct extends AddProductEvent {
+  final AddProductModel addProductModel;
+  final String productId;
+  const UpdateProduct(this.addProductModel, this.productId);
+
+  @override
+  List<Object> get props => [addProductModel, productId];
+}
+
+class DeleteProductImage extends AddProductEvent {
+  final String productId;
+  final String imageId;
+
+  const DeleteProductImage(this.productId, this.imageId);
+
+  @override
+  List<Object> get props => [productId, imageId];
+}
+
+class GetCategoryById extends AddProductEvent {
+  final String categoryId;
+  const GetCategoryById(this.categoryId);
+
+  @override
+  List<Object> get props => [categoryId];
+}
+

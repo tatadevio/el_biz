@@ -19,6 +19,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
 
     on<GetProductDetail>(_onGetProductDetail);
     on<ToggleProductFavorite>(_onToggleProductFavorite);
+    on<ChangeProductStatus>(_onChangeProductStatus);
   }
   Future<void> _onGetProductDetail(
       GetProductDetail event, Emitter<ProductDetailState> emit) async {
@@ -74,5 +75,31 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       final updatedModel = currentModel.copyWith(data: updatedData);
       emit(state.copywith(productDetailModel: updatedModel));
     }
+  }
+
+  Future<void> _onChangeProductStatus(
+      ChangeProductStatus event, Emitter<ProductDetailState> emit) async {
+    // emit(ProductDetailLoader());
+    emit(state.copywith(statusUpdating: true));
+    try {
+      final response = await productDetailRepo.changeProductStatus(
+          event.productId, event.status);
+      if (response.statusCode == 200) {
+        final updatedProductDetail = state.productDetailModel!.data!.copyWith(
+          status: event.status,
+        );
+
+        emit(state.copywith(
+          productDetailModel:
+              state.productDetailModel?.copyWith(data: updatedProductDetail),
+        ));
+      } else {
+        emit(ProductDetailError(response.body['message']));
+      }
+    } catch (e) {
+      emit(ProductDetailError(e.toString()));
+    }
+
+    emit(state.copywith(statusUpdating: false));
   }
 }

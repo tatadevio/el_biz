@@ -19,4 +19,9 @@ class ProductDetailRepo {
       "id": id,
     });
   }
+
+  Future<Response> changeProductStatus(String id, String status) async {
+    return await apiClient.postData(
+        "${AppConstants.productStatusChangeUrl}/$id", {"status": status});
+  }
 }

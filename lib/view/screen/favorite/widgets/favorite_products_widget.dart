@@ -95,7 +95,7 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
                     controller: _scrollController,
                     itemCount: favoriteState.favoriteProducts.length,
                     itemBuilder: (context, index) {
-                      return ProductListItem(
+                      return ProductListItemWidget(
                         isFavorite:
                             favoriteState.favoriteProducts[index].isFavorite ??
                                 false,
