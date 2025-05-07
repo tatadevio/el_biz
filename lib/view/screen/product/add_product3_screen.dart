@@ -4,7 +4,6 @@ import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
-import 'package:el_biz/data/model/base/add_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';

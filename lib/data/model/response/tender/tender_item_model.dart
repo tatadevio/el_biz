@@ -12,6 +12,7 @@ class TenderItem {
   final DateTime? createdAt;
   final Company? company;
   final TenderCategory? tenderCategory;
+  final bool? isFavorite;
 
   TenderItem({
     this.id,
@@ -25,6 +26,7 @@ class TenderItem {
     this.createdAt,
     this.company,
     this.tenderCategory,
+    this.isFavorite,
   });
 
   factory TenderItem.fromJson(Map<String, dynamic> json) => TenderItem(
@@ -44,6 +46,7 @@ class TenderItem {
         tenderCategory: json["tender_category"] == null
             ? null
             : TenderCategory.fromJson(json["tender_category"]),
+        isFavorite: json["is_favorite"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,5 +61,36 @@ class TenderItem {
         "created_at": createdAt?.toIso8601String(),
         "company": company?.toJson(),
         "tender_category": tenderCategory?.toJson(),
+        "is_favorite": isFavorite,
       };
+
+  TenderItem copyWith({
+    int? id,
+    String? title,
+    String? description,
+    String? quantity,
+    String? status,
+    int? budgetFrom,
+    int? budgetTo,
+    String? location,
+    DateTime? createdAt,
+    Company? company,
+    TenderCategory? tenderCategory,
+    bool? isFavorite,
+  }) {
+    return TenderItem(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      quantity: quantity ?? this.quantity,
+      status: status ?? this.status,
+      budgetFrom: budgetFrom ?? this.budgetFrom,
+      budgetTo: budgetTo ?? this.budgetTo,
+      location: location ?? this.location,
+      createdAt: createdAt ?? this.createdAt,
+      company: company ?? this.company,
+      tenderCategory: tenderCategory ?? this.tenderCategory,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

@@ -70,39 +70,41 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
                 );
               }
 
-              return
-                  // SizedBox();
-                  productState.isGridView
-                      ? GridView.builder(
-                          controller: _scrollController,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 0.7),
-                          itemCount: state.publicProducts.length,
-                          itemBuilder: (context, index) {
-                            return ProductGridItem(
-                              isFavorite:
-                                  state.publicProducts[index].isFavorite ??
-                                      false,
-                              product: state.publicProducts[index],
-                            );
-                          },
-                        )
-                      : ListView.builder(
-                          controller: _scrollController,
-                          itemCount: state.publicProducts.length,
-                          itemBuilder: (context, index) {
-                            return ProductListItemWidget(
-                              isFavorite:
-                                  state.publicProducts[index].isFavorite ??
-                                      false,
-                              product: state.publicProducts[index],
-                            );
-                          },
+              return productState.isGridView
+                  ? GridView.builder(
+                      controller: _scrollController,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 0.7),
+                      itemCount: state.publicProducts.length,
+                      itemBuilder: (context, index) {
+                        print(
+                            'value of isFavorite at $index = ${state.publicProducts[index].isFavorite}');
+                        return ProductGridItem(
+                          // isFavorite:
+                          //     state.publicProducts[index].isFavorite ??
+                          //         false,
+                          product: state.publicProducts[index],
+                          isPublicProduct: true,
                         );
+                      },
+                    )
+                  : ListView.builder(
+                      controller: _scrollController,
+                      itemCount: state.publicProducts.length,
+                      itemBuilder: (context, index) {
+                        return ProductListItemWidget(
+                          // isFavorite:
+                          //     state.publicProducts[index].isFavorite ??
+                          //         false,
+                          product: state.publicProducts[index],
+                          isPublicProduct: true,
+                        );
+                      },
+                    );
             },
           );
         }),

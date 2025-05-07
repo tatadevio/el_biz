@@ -91,3 +91,12 @@ class ToggleFavoriteProductInList extends CompanyDetailEvent {
   @override
   List<Object> get props => [productId];
 }
+
+class ToggleTenderFavorite extends CompanyDetailEvent {
+  final int tenderId;
+  final BuildContext context;
+  const ToggleTenderFavorite(this.tenderId, this.context);
+
+  @override
+  List<Object> get props => [tenderId, context];
+}

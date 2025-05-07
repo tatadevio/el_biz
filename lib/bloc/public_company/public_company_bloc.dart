@@ -14,6 +14,7 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
     on<PublicCompanyEvent>((event, emit) {});
 
     on<GetPublicCompany>(_onGetPublicCompany);
+    on<GetNewPublicCompany>(_onGetNewPublicCompany);
   }
 
   Future<void> _onGetPublicCompany(
@@ -34,6 +35,36 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
             ..addAll(myCompaniesList),
           companyCurrentPage: myCompanies.data?.currentPage ?? 1,
           companyPageSize: myCompanies.data?.totalPages ?? 1,
+        ));
+        // have to add the pagination
+      } else {
+        showShortToast(res.body['message']);
+      }
+    } catch (e) {
+      showShortToast(e.toString());
+    }
+
+    emit(state.copyWith(isLoading: false, isMoreLoading: false));
+  }
+
+  Future<void> _onGetNewPublicCompany(
+      GetNewPublicCompany event, Emitter<PublicCompanyState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(isMoreLoading: true));
+    }
+    try {
+      final res = await publicCompanyRepo.getNewMyCompanies(event.currentPage);
+      if (res.statusCode == 200) {
+        MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
+
+        List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
+        emit(state.copyWith(
+          newCompanies: List<CompanyItem>.from(state.newCompanies)
+            ..addAll(myCompaniesList),
+          newCompanyCurrentPage: myCompanies.data?.currentPage ?? 1,
+          newCompanyPageSize: myCompanies.data?.totalPages ?? 1,
         ));
         // have to add the pagination
       } else {

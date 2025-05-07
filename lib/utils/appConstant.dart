@@ -29,6 +29,7 @@ class AppConstants {
   static const String tendersUrl = "api/tenders";
   static const String addTenderUrl = "api/tenders/store";
   static const String publicTendersUrl = "api/tender-list";
+  static const String tenderStatusChangeUrl = "api/tenders/change-status";
 
   /// Company
   static const String addCompanyUrl = "api/companies/store";
@@ -77,6 +78,9 @@ class AppConstants {
   static const String favoriteProductsUrl = "api/favorites/products";
   static const String favoriteCompaniesUrl = "api/favorites/companies";
   static const String favoriteTendersUrl = "api/favorites/tenders";
+
+  // notification
+  static const String notificationUrl = "api/notifications";
 
   // Common
   static const String citiesUrl = "api/cities";
@@ -185,6 +189,7 @@ class AppConstants {
   // static const String userNumber = 'number';
   static const String COUNTRY_CODE = 'country_code';
   static const String LANGUAGE_CODE = 'language_code';
+  static const String selecteAccount = 'selected_account1';
   // static const String TOPIC = 'newsletter';
   // static const String THEME = 'turabekov_theme';
   // static const String ThemeId = 'theme';
@@ -200,14 +205,14 @@ class AppConstants {
   static List<LanguageModel> languages = [
     LanguageModel(
         imageUrl: Images.svgLock,
-        languageName: 'English',
-        countryCode: 'US',
-        languageCode: 'en'),
-    LanguageModel(
-        imageUrl: Images.svgLock,
         languageName: 'Русский',
         countryCode: 'RU',
         languageCode: 'ru'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'English',
+        countryCode: 'US',
+        languageCode: 'en'),
     // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
   ];
 }

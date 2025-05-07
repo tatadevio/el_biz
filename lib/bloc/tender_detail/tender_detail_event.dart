@@ -15,3 +15,12 @@ class GetTenderDetail extends TenderDetailEvent {
   @override
   List<Object> get props => [tenderId];
 }
+
+class ChangeTenderStatus extends TenderDetailEvent {
+  final String tenderId;
+  final String status;
+  const ChangeTenderStatus(this.tenderId, this.status);
+
+  @override
+  List<Object> get props => [tenderId, status];
+}

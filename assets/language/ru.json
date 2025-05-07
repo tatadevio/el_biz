@@ -288,6 +288,7 @@
   "no_favorite_products": "Избранные товары не найдены",
   "product_reviews" : "Отзывы о товаре",
   "no_product_found" : "Товар не найден",
-  "all_categories" : "Все категории"
+  "all_categories" : "Все категории",
+  "no_tender_found" : "Тендер не найден"
 
 }

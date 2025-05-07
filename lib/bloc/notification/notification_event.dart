@@ -6,3 +6,11 @@ sealed class NotificationEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetNotification extends NotificationEvent {
+  final int currentPage;
+  const GetNotification(this.currentPage);
+
+  @override
+  List<Object> get props => [currentPage];
+}

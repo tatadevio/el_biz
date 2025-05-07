@@ -18,9 +18,8 @@ import '../../base/custom_button.dart';
 import 'widgets/add_tenders_image_preview.dart';
 
 class NewTenderPreviewScreen extends StatefulWidget {
-  const NewTenderPreviewScreen({
-    super.key,
-  });
+  final bool isEdit;
+  const NewTenderPreviewScreen({super.key, this.isEdit = false});
 
   @override
   State<NewTenderPreviewScreen> createState() => _NewTenderPreviewScreenState();

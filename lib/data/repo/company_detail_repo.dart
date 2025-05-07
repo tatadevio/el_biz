@@ -50,9 +50,9 @@ class CompnayDetailRepo {
         .deleteData("${AppConstants.companyReviewsDeleteUrl}/$reviewId");
   }
 
-  Future<Response> toggleFavorite(String id) async {
+  Future<Response> toggleFavorite(String id, {String type = "Product"}) async {
     return await apiClient.postData(AppConstants.favoriteToggleUrl, {
-      "type": "Product",
+      "type": type,
       "id": id,
     });
   }

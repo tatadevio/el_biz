@@ -1,7 +1,10 @@
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_like_button.dart';
 import 'package:flutter/material.dart';
@@ -48,10 +51,18 @@ class TenderGridItem extends StatelessWidget {
                       radius: 16),
                   // Image.asset(Images.splashLogo),
                   Positioned(
-                    right: 5,
-                    top: 5,
-                    child: CustomLikeButton(isFavorite: isFavorite),
-                  ),
+                      right: 5,
+                      top: 5,
+                      child: CustomFavoriteButton(
+                        isFavorite: tender.isFavorite ?? false,
+                        onTap: () {
+                          context
+                              .read<CompanyDetailBloc>()
+                              .add(ToggleTenderFavorite(tender.id!, context));
+                        },
+                      )
+                      // CustomLikeButton(isFavorite: isFavorite),
+                      ),
                 ],
               ),
             ),

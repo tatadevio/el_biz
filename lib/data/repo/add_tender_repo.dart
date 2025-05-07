@@ -52,4 +52,11 @@ class AddTenderRepo {
       files: files,
     );
   }
+
+  Future<Response> getCategoryById(
+    String categoryId,
+  ) async {
+    return await apiClient
+        .getData("${AppConstants.categoryDetailUrl}/$categoryId");
+  }
 }

@@ -54,7 +54,6 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ) async {
     List<ProductListItem> allFavorites = List.from(state.favoriteProducts);
 
-    // Check if product exists
     final index =
         allFavorites.indexWhere((product) => product.id == event.productId);
 

@@ -1,4 +1,6 @@
-import 'package:el_biz/data/model/response/company/company_product_model.dart' as model;
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
+import 'package:el_biz/data/model/response/company/company_product_model.dart'
+    as model;
 
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +18,18 @@ import 'check_box_button.dart';
 import 'custom_favorite_button.dart';
 
 class ProductListItemWidget extends StatelessWidget {
-  final bool isFavorite;
+  // final bool isFavorite;
   final bool isSelectProduct;
   final model.ProductListItem? product;
+  final bool isPublicProduct;
 
-  const ProductListItemWidget(
-      {super.key,
-      this.isFavorite = false,
-      this.isSelectProduct = false,
-       this.product});
+  const ProductListItemWidget({
+    super.key,
+    // this.isFavorite = false,
+    this.isSelectProduct = false,
+    this.product,
+    this.isPublicProduct = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +40,7 @@ class ProductListItemWidget extends StatelessWidget {
           context
               .read<ProductDetailBloc>()
               .add(GetProductDetail(product?.id.toString() ?? ''));
+
           context
               .read<ProductReviewBloc>()
               .add(GetProductReviews(product?.id.toString() ?? '', 1));
@@ -59,8 +65,15 @@ class ProductListItemWidget extends StatelessWidget {
                       child: CustomFavoriteButton(
                         isFavorite: product?.isFavorite ?? false,
                         onTap: () {
-                          context.read<CompanyDetailBloc>().add(
-                              ToggleFavoriteProduct(product!.id!, context));
+                          if (isPublicProduct) {
+                            print('favorite icon pressed...');
+                            context.read<PublicProductBloc>().add(
+                                ToggleFavoritePublicProduct(
+                                    context, product!.id!));
+                          } else {
+                            context.read<CompanyDetailBloc>().add(
+                                ToggleFavoriteProduct(product!.id!, context));
+                          }
                         },
                       ),
                     ),
@@ -89,8 +102,8 @@ class ProductListItemWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      // product?.description ?? ''
-                      'Раскладной садовый стул из дерева',
+                      product?.description ?? '',
+                      // 'Раскладной садовый стул из дерева',
                       style: body14.copyWith(color: ColorResources.gray),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
+import 'package:el_biz/bloc/notification/notification_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
@@ -37,11 +38,14 @@ class HomeScreen extends StatelessWidget {
     context.read<UserBloc>().add(const GetUserInfo());
     context.read<CompanyBloc>().add(GetMyCompanies());
     context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
+    context.read<PublicCompanyBloc>().add(GetNewPublicCompany(1));
     context.read<PublicProductBloc>().add(GetPublicProduct(1));
     context.read<PublicTenderBloc>().add(GetPublicTender(1));
     context.read<AccountBloc>().add(GetMyAccounts());
     context.read<CitiesBloc>().add(GetCitites(1, true));
     context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));
+    context.read<NotificationBloc>().add(GetNotification(1));
+    // context.read<UserBloc>().add(GetSelectedAccount()); // added in the user info bloc
   }
 
   @override

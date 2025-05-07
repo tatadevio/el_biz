@@ -16,32 +16,38 @@ class NotificationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('notifications'.tr),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: BlocBuilder<NotificationBloc, NotificationState>(
-            builder: (context, notificationState) {
-          if (notificationState.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (notificationState.notificationsList.isNotEmpty) {
-            return Center(
-              child: Text(
-                'no_notifications'.tr,
-                style: body16.copyWith(color: ColorResources.gray),
-              ),
-            );
-          }
-          return ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return NotificationItem(
-                index: index,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          context.read<NotificationBloc>().add(GetNotification(1));
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: BlocBuilder<NotificationBloc, NotificationState>(
+              builder: (context, notificationState) {
+            if (notificationState.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-          );
-        }),
+            }
+            if (notificationState.notificationsList.isEmpty) {
+              return Center(
+                child: Text(
+                  'no_notifications'.tr,
+                  style: body16.copyWith(color: ColorResources.gray),
+                ),
+              );
+            }
+            return ListView.builder(
+              itemCount: notificationState.notificationsList.length,
+              itemBuilder: (context, index) {
+                return NotificationItem(
+                  notification: notificationState.notificationsList[index],
+                  index: index,
+                );
+              },
+            );
+          }),
+        ),
       ),
     );
   }

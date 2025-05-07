@@ -288,7 +288,8 @@
   "no_favorite_products": "No favorite products found",
   "product_reviews" : "Product Reviews",
   "no_product_found" : "No product found",
-  "all_categories" : "All categories"
+  "all_categories" : "All categories",
+  "no_tender_found" : "No tender found"
 
 
 }

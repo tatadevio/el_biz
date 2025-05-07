@@ -31,6 +31,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     // });
     on<ToggleFavoriteProduct>(_onToggleFavoriteProduct);
     on<ToggleFavoriteProductInList>(_onToggleFavoriteProductInList);
+    on<ToggleTenderFavorite>(_onToggleTenderFavorite);
   }
 
   Future<void> _onGetCompanyDetail(
@@ -359,5 +360,49 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     }).toList();
 
     emit(state.copyWith(companyProducts: updatedProducts));
+  }
+
+  Future<void> _onToggleTenderFavorite(
+      ToggleTenderFavorite event, Emitter<CompanyDetailState> emit) async {
+    final updatedProducts = state.companyTenders!.map((tender) {
+      if (tender.id == event.tenderId) {
+        return tender.copyWith(
+          isFavorite: !(tender.isFavorite ?? false),
+        );
+      }
+      return tender;
+    }).toList();
+
+    emit(state.copyWith(companyTenders: updatedProducts));
+    try {
+      final response = await compnayDetailRepo
+          .toggleFavorite(event.tenderId.toString(), type: "Tender");
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        // event.context
+        //     .read<FavoriteBloc>()
+        //     .add(RemoveProductFromFavoriteList(event.tenderId));
+      } else {
+        final updatedProducts = state.companyTenders!.map((product) {
+          if (product.id == event.tenderId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+        emit(state.copyWith(companyTenders: updatedProducts));
+      }
+    } catch (e) {
+      final updatedProducts = state.companyTenders!.map((product) {
+        if (product.id == event.tenderId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(companyTenders: updatedProducts));
+    }
   }
 }

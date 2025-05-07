@@ -14,3 +14,11 @@ class GetPublicCompany extends PublicCompanyEvent {
   @override
   List<Object> get props => [currentPage];
 }
+
+class GetNewPublicCompany extends PublicCompanyEvent {
+  final int currentPage;
+  const GetNewPublicCompany(this.currentPage);
+
+  @override
+  List<Object> get props => [currentPage];
+}

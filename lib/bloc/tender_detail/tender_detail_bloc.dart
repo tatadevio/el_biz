@@ -14,6 +14,7 @@ class TenderDetailBloc extends Bloc<TenderDetailEvent, TenderDetailState> {
     // });
 
     on<GetTenderDetail>(_onGetTenderDetail);
+    on<ChangeTenderStatus>(_onChangeTenderStatus);
   }
 
   Future<void> _onGetTenderDetail(
@@ -23,14 +24,40 @@ class TenderDetailBloc extends Bloc<TenderDetailEvent, TenderDetailState> {
       final response = await tenderDetailRepo.getTenderDetail(event.tenderId);
       if (response.statusCode == 200) {
         final tenderDetail = TenderDetailModel.fromJson(response.body);
-        emit(TenderDetailSuccess(
-          tenderDetailModel: tenderDetail,
-        ));
+        // emit(TenderDetailSuccess(
+        //   tenderDetailModel: tenderDetail,
+        // ));
+        emit(state.copyWith(tenderDetailModel: tenderDetail));
       } else {
         emit(TenderDetailError());
       }
     } catch (e) {
       emit(TenderDetailError());
     }
+  }
+
+  Future<void> _onChangeTenderStatus(
+      ChangeTenderStatus event, Emitter<TenderDetailState> emit) async {
+    // emit(state.copyWith(statusUpdating: true));
+    try {
+      final response = await tenderDetailRepo.changeTenderStatus(
+          event.tenderId, event.status);
+      if (response.statusCode == 200) {
+        // final updatedProductDetail = state.productDetailModel!.data!.copyWith(
+        //   status: event.status,
+        // );
+
+        // emit(state.copywith(
+        //   productDetailModel:
+        //       state.productDetailModel?.copyWith(data: updatedProductDetail),
+        // ));
+      } else {
+        // emit(ProductDetailError(response.body['message']));
+      }
+    } catch (e) {
+      // emit(ProductDetailError(e.toString()));
+    }
+
+    // emit(state.copywith(statusUpdating: false));
   }
 }

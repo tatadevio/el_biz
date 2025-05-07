@@ -14,3 +14,28 @@ class GetPublicProduct extends PublicProductEvent {
   @override
   List<Object> get props => [currentPage];
 }
+
+class RemoveProductFromFavoriteList extends PublicProductEvent {
+  final int productId;
+  const RemoveProductFromFavoriteList(this.productId);
+
+  @override
+  List<Object> get props => [productId];
+}
+
+class ToggleFavoritePublicProductInList extends PublicProductEvent {
+  final int productId;
+  const ToggleFavoritePublicProductInList(this.productId);
+
+  @override
+  List<Object> get props => [productId];
+}
+
+class ToggleFavoritePublicProduct extends PublicProductEvent {
+  final BuildContext context;
+  final int productId;
+  const ToggleFavoritePublicProduct(this.context, this.productId);
+
+  @override
+  List<Object> get props => [context, productId];
+}

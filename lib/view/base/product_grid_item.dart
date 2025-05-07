@@ -13,16 +13,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/public_product/public_product_bloc.dart';
+
 class ProductGridItem extends StatelessWidget {
-  final bool isFavorite;
+  // final bool isFavorite;
   final bool isSelectProduct;
   final ProductListItem? product;
+  final bool isPublicProduct;
 
-  const ProductGridItem(
-      {super.key,
-      this.isFavorite = false,
-      this.isSelectProduct = false,
-      this.product});
+  const ProductGridItem({
+    super.key,
+    // this.isFavorite = false,
+    this.isSelectProduct = false,
+    this.product,
+    this.isPublicProduct = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +65,14 @@ class ProductGridItem extends StatelessWidget {
                       child: CustomFavoriteButton(
                         isFavorite: product!.isFavorite ?? false,
                         onTap: () {
-                          context.read<CompanyDetailBloc>().add(
-                              ToggleFavoriteProduct(product!.id!, context));
+                          if (isPublicProduct) {
+                            context.read<PublicProductBloc>().add(
+                                ToggleFavoritePublicProduct(
+                                    context, product!.id!));
+                          } else {
+                            context.read<CompanyDetailBloc>().add(
+                                ToggleFavoriteProduct(product!.id!, context));
+                          }
                         },
                       ),
                       // CustomLikeButton(
@@ -92,7 +103,8 @@ class ProductGridItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  'Раскладной садовый стул из дерева',
+                  product?.description ?? '',
+                  // 'Раскладной садовый стул из дерева',
                   style: body14.copyWith(color: ColorResources.gray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

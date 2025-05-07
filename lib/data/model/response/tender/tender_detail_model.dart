@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
+
 TenderDetailModel tenderDetailModelFromJson(String str) =>
     TenderDetailModel.fromJson(json.decode(str));
 
@@ -77,7 +79,7 @@ class Data {
   final int? quantity;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final Company? company;
+  final CompanyItem? company;
   final TenderCategory? tenderCategory;
   final bool? isFavorite;
   final List<TenderProduct>? tenderProducts;
@@ -116,7 +118,7 @@ class Data {
     int? quantity,
     DateTime? createdAt,
     DateTime? updatedAt,
-    Company? company,
+    CompanyItem? company,
     TenderCategory? tenderCategory,
     bool? isFavorite,
     List<TenderProduct>? tenderProducts,
@@ -159,8 +161,9 @@ class Data {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        company:
-            json["company"] == null ? null : Company.fromJson(json["company"]),
+        company: json["company"] == null
+            ? null
+            : CompanyItem.fromJson(json["company"]),
         tenderCategory: json["tender_category"] == null
             ? null
             : TenderCategory.fromJson(json["tender_category"]),
@@ -199,64 +202,64 @@ class Data {
       };
 }
 
-class Company {
-  final int? id;
-  final String? name;
-  final String? email;
-  final String? phone;
-  final String? logo;
-  final String? verificationStatus;
-  final Owner? owner;
+// class Company {
+//   final int? id;
+//   final String? name;
+//   final String? email;
+//   final String? phone;
+//   final String? logo;
+//   final String? verificationStatus;
+//   final Owner? owner;
 
-  Company({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.logo,
-    this.verificationStatus,
-    this.owner,
-  });
+//   Company({
+//     this.id,
+//     this.name,
+//     this.email,
+//     this.phone,
+//     this.logo,
+//     this.verificationStatus,
+//     this.owner,
+//   });
 
-  Company copyWith({
-    int? id,
-    String? name,
-    String? email,
-    String? phone,
-    String? logo,
-    String? verificationStatus,
-    Owner? owner,
-  }) =>
-      Company(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        logo: logo ?? this.logo,
-        verificationStatus: verificationStatus ?? this.verificationStatus,
-        owner: owner ?? this.owner,
-      );
+//   Company copyWith({
+//     int? id,
+//     String? name,
+//     String? email,
+//     String? phone,
+//     String? logo,
+//     String? verificationStatus,
+//     Owner? owner,
+//   }) =>
+//       Company(
+//         id: id ?? this.id,
+//         name: name ?? this.name,
+//         email: email ?? this.email,
+//         phone: phone ?? this.phone,
+//         logo: logo ?? this.logo,
+//         verificationStatus: verificationStatus ?? this.verificationStatus,
+//         owner: owner ?? this.owner,
+//       );
 
-  factory Company.fromJson(Map<String, dynamic> json) => Company(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        phone: json["phone"],
-        logo: json["logo"],
-        verificationStatus: json["verification_status"],
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-      );
+//   factory Company.fromJson(Map<String, dynamic> json) => Company(
+//         id: json["id"],
+//         name: json["name"],
+//         email: json["email"],
+//         phone: json["phone"],
+//         logo: json["logo"],
+//         verificationStatus: json["verification_status"],
+//         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "logo": logo,
-        "verification_status": verificationStatus,
-        "owner": owner?.toJson(),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "email": email,
+//         "phone": phone,
+//         "logo": logo,
+//         "verification_status": verificationStatus,
+//         "owner": owner?.toJson(),
+//       };
+// }
 
 class Owner {
   final int? id;

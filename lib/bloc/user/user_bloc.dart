@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_utils/get_utils.dart';
 
+import '../../data/model/response/account/selected_account_model.dart';
+import '../../data/model/response/company/my_companies_model.dart';
 import '../../data/model/response/userinfo_model.dart';
 import '../../data/repo/user_repo.dart';
 
@@ -12,10 +17,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepo userRepo;
   UserBloc(this.userRepo) : super(UserInitial()) {
     on<GetUserInfo>((event, emit) async {
-      final res = await userRepo.getUserInfo();
-      print('====> User Info: ${res.body}');
-      UserInfoModel userInfo = UserInfoModel.fromJson(res.body);
-      emit(state.copyWith(userInfo: userInfo));
+      try {
+        final res = await userRepo.getUserInfo();
+        print('====> User Info: ${res.body}');
+        if (res.statusCode == 200) {
+          UserInfoModel userInfo = UserInfoModel.fromJson(res.body);
+          emit(state.copyWith(userInfo: userInfo));
+          add(GetSelectedAccount());
+        } else {
+          showShortToast(res.body['message']);
+        }
+      } catch (e) {
+        showShortToast(e.toString());
+      }
     });
 
     // on<UserEvent>((event, emit) {
@@ -23,6 +37,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // });
 
     on<UpdateUserData>(_onUpdateUserData);
+    on<SwitchSelectedAccount>(_onSwichSelectedAccount);
+    on<GetSelectedAccount>(_onGetSelectedAccount);
   }
 
   Future<void> _onUpdateUserData(
@@ -49,5 +65,94 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> _onSwichSelectedAccount(
+      SwitchSelectedAccount event, Emitter<UserState> emit) async {
+    if (event.isUser) {
+      final data = event.profile;
+      SelectedAccountModel selectedAccount = SelectedAccountModel(
+        userId: data.id!,
+        userName: data.name ?? '',
+        userImage: data.image ?? '',
+        userRole: data.userRole,
+        userPhone: data.phone ?? '',
+        userEmail: data.email ?? '',
+        companyId: 0,
+        companyName: '',
+        isUser: true,
+        companyPhone: '',
+        companyLogo: '',
+        companyEmail: '',
+      );
+      emit(state.copyWith(selectedAccountModel: selectedAccount));
+      bool isSave = await userRepo.saveSelectedAccount(selectedAccount);
+      if (isSave) {
+        // showShortToast('udpated'.tr);
+      }
+    } else {
+      final data = event.companyItem;
+      final selectedAccount = SelectedAccountModel(
+        userId: data.owner?.id ?? 0,
+        userName: data.owner?.name ?? '',
+        userImage: data.owner?.image ?? '',
+        userPhone: data.owner?.phone ?? '',
+        userEmail: data.owner?.email ?? '',
+        userRole: 'owner',
+        companyId: data.id!,
+        companyName: data.name ?? '',
+        companyLogo: data.logo ?? '',
+        verificationStatus: data.verificationStatus ?? '',
+        companyPhone: data.phone ?? '',
+        companyEmail: data.email ?? '',
+        isUser: false,
+      );
+      emit(state.copyWith(selectedAccountModel: selectedAccount));
+      bool isSave = await userRepo.saveSelectedAccount(selectedAccount);
+      if (isSave) {
+        // showShortToast('udpated'.tr);
+      }
+    }
+  }
+
+  Future<void> _onGetSelectedAccount(
+      GetSelectedAccount event, Emitter<UserState> emit) async {
+    String accountData = userRepo.getSelectedAccount();
+    if (accountData == "") {
+      final data = state.userInfo?.data;
+      if (data != null) {
+        SelectedAccountModel selectedAccount = SelectedAccountModel(
+          userId: data.id!,
+          userName: data.name ?? '',
+          userImage: data.image ?? '',
+          userRole: data.userRole,
+          userPhone: data.phone ?? '',
+          userEmail: data.email ?? '',
+          companyId: 0,
+          companyName: '',
+          isUser: true,
+          companyPhone: '',
+          companyLogo: '',
+          companyEmail: '',
+        );
+        emit(state.copyWith(selectedAccountModel: selectedAccount));
+        // bool isSave =
+        await userRepo.saveSelectedAccount(selectedAccount);
+        // if (isSave) {
+        //   showShortToast('udpate new profile data');
+        // } else {
+        //   showShortToast('updated new profile data is not save');
+        // }
+      }
+      // else {
+      //   showShortToast('data is null');
+      // }
+    } else {
+      SelectedAccountModel selectedAccount =
+          SelectedAccountModel.fromJson(jsonDecode(accountData));
+      // showShortToast(selectedAccount.toJson().toString());
+      // print('this is loaded data : ${selectedAccount.toJson()}');
+      emit(state.copyWith(selectedAccountModel: selectedAccount));
+    }
   }
 }

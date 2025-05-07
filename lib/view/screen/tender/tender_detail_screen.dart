@@ -1,11 +1,10 @@
-import 'package:el_biz/data/model/response/tender/tender_detail_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
-import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/similar_products_widget.dart';
+import 'package:el_biz/view/screen/tender/new_tende2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -65,10 +64,13 @@ class TenderDetailScreen extends StatelessWidget {
             child: Text('error'),
           );
         }
-        var tenderDetail = TenderDetailModel();
-        if (productDetialController is TenderDetailSuccess) {
-          tenderDetail = productDetialController.tenderDetailModel;
+        if (productDetialController.tenderDetailModel?.data == null) {
+          return SizedBox.shrink();
         }
+        var tenderDetail = productDetialController.tenderDetailModel!;
+        // if (productDetialController is TenderDetailSuccess) {
+        //   tenderDetail = productDetialController.tenderDetailModel;
+        // }
         // tenderDetail = productDetialController.tenderDetailModel;
         return SingleChildScrollView(
           child: Column(
@@ -293,48 +295,100 @@ class TenderDetailScreen extends StatelessWidget {
         );
       }),
       bottomNavigationBar: "user" == "user"
-          ? BottomAppBar(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomBorderButton(
-                      height: Get.height,
-                      width: Get.width,
-                      padding: const EdgeInsets.all(0),
-                      border: Border.all(width: 1, color: ColorResources.blue),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShaow: const [ColorResources.shadow1],
-                      child: Text(
-                        "edit".tr,
-                        style: button16.copyWith(color: ColorResources.blue),
+          ? BlocBuilder<TenderDetailBloc, TenderDetailState>(
+              builder: (context, state) {
+                if (state is TenderDetailLoading ||
+                    state is TenderDetailError ||
+                    state.tenderDetailModel?.data == null) {
+                  return SizedBox.shrink();
+                }
+
+                var tenderDetail = state.tenderDetailModel!;
+                // if (state is TenderDetailSuccess) {
+                //   tenderDetail = state.tenderDetailModel;
+                // }
+                return BottomAppBar(
+                  color: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomBorderButton(
+                          height: Get.height,
+                          width: Get.width,
+                          padding: const EdgeInsets.all(0),
+                          border:
+                              Border.all(width: 1, color: ColorResources.blue),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShaow: const [ColorResources.shadow1],
+                          child: Text(
+                            "edit".tr,
+                            style:
+                                button16.copyWith(color: ColorResources.blue),
+                          ),
+                          onTap: () {
+                            Get.to(() => NewTende2Screen(isEdit: true));
+                          },
+                        ),
                       ),
-                      onTap: () {
-                        Get.to(() => AddProductScreen(isEdit: true));
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: CustomBorderButton(
-                      height: Get.height,
-                      width: Get.width,
-                      padding: const EdgeInsets.all(0),
-                      border: Border.all(width: 1, color: ColorResources.red),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShaow: const [ColorResources.shadow1],
-                      child: Text(
-                        "not_active".tr,
-                        style: button16.copyWith(color: ColorResources.red),
+                      const SizedBox(
+                        width: 10,
                       ),
-                      onTap: () {},
-                    ),
+                      // Expanded(
+                      //   child: CustomBorderButton(
+                      //     height: Get.height,
+                      //     width: Get.width,
+                      //     padding: const EdgeInsets.all(0),
+                      //     border: Border.all(width: 1, color: ColorResources.red),
+                      //     borderRadius: BorderRadius.circular(12),
+                      //     boxShaow: const [ColorResources.shadow1],
+                      //     child: Text(
+                      //       "not_active".tr,
+                      //       style: button16.copyWith(color: ColorResources.red),
+                      //     ),
+                      //     onTap: () {},
+                      //   ),
+                      // ),
+                      Expanded(
+                        child: CustomBorderButton(
+                          height: Get.height,
+                          width: Get.width,
+                          padding: const EdgeInsets.all(0),
+                          border:
+                              Border.all(width: 1, color: ColorResources.red),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShaow: const [ColorResources.shadow1],
+                          onTap: state.statusUpdating
+                              ? () {}
+                              : () {
+                                  context
+                                      .read<TenderDetailBloc>()
+                                      .add(ChangeTenderStatus(
+                                        tenderDetail.data!.id.toString(),
+                                        tenderDetail.data!.status == 'published'
+                                            ? 'draft'
+                                            : 'published',
+                                      ));
+                                },
+                          child: state.statusUpdating
+                              ? SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator())
+                              : Text(
+                                  tenderDetail.data!.status == 'published'
+                                      ? "not_active".tr
+                                      : 'active'.tr,
+                                  style: button16.copyWith(
+                                      color: ColorResources.red),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             )
           : null,
     );

@@ -2,6 +2,8 @@ import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../response/tender/tender_detail_model.dart';
+
 class AddTenderModel {
   String? id;
   String? whatToBuy;
@@ -14,6 +16,8 @@ class AddTenderModel {
   String? email;
   List<CategoryItem>? categories;
   CompanyItem? selectedCompany;
+  List<Media>? uploadedImages;
+  List<Media>? deleteImages;
 
   AddTenderModel({
     this.id,
@@ -27,6 +31,8 @@ class AddTenderModel {
     this.email,
     this.categories,
     this.selectedCompany,
+    this.uploadedImages,
+    this.deleteImages,
   });
 
   factory AddTenderModel.fromJson(Map<String, dynamic> json) {
@@ -43,7 +49,9 @@ class AddTenderModel {
       phone: json['phone'],
       email: json['email'],
       categories: json['categories'],
-      selectedCompany: CompanyItem.fromJson(json['company'])
+      selectedCompany: CompanyItem.fromJson(json['company']),
+      uploadedImages: (json['uploadedImages'] as List<dynamic>?)?.cast<Media>(),
+      deleteImages: (json['deleteImages'] as List<dynamic>?)?.cast<Media>(),
     );
   }
 
@@ -59,7 +67,9 @@ class AddTenderModel {
       'phone': phone,
       'email': email,
       "categories": categories,
-      "company" : selectedCompany,
+      "company": selectedCompany,
+      "uploadedImages": uploadedImages,
+      "deleteImages": deleteImages,
     };
   }
 
@@ -75,6 +85,8 @@ class AddTenderModel {
     String? email,
     List<CategoryItem>? categories,
     CompanyItem? selectedCompany,
+    List<Media>? uploadedImages,
+    List<Media>? deleteImages,
   }) {
     return AddTenderModel(
       id: id ?? this.id,
@@ -87,7 +99,9 @@ class AddTenderModel {
       phone: phone ?? this.phone,
       email: email ?? this.email,
       categories: categories ?? this.categories,
-      selectedCompany: selectedCompany ??  this.selectedCompany,
+      selectedCompany: selectedCompany ?? this.selectedCompany,
+      uploadedImages: uploadedImages ?? this.uploadedImages,
+      deleteImages: deleteImages ?? this.deleteImages,
     );
   }
 }

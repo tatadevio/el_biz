@@ -13,4 +13,9 @@ class TenderDetailRepo {
   Future<Response> getTenderDetail(String id) async {
     return await apiClient.getData("${AppConstants.tendersUrl}/$id");
   }
+
+  Future<Response> changeTenderStatus(String id, String status) async {
+    return await apiClient.postData(
+        "${AppConstants.tenderStatusChangeUrl}/$id", {"status": status});
+  }
 }

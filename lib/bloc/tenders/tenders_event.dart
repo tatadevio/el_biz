@@ -32,4 +32,3 @@ class RemoveGallery extends TendersEvent {
 }
 
 class ResetNewTenderModel extends TendersEvent {}
-

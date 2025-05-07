@@ -10,6 +10,12 @@ class PublicCompanyRepo {
   PublicCompanyRepo(this.apiClient, this.sharedPreferences);
 
   Future<Response> getMyCompanies(int page) async {
-    return await apiClient.getData("${AppConstants.publicCompaniesUrl}?page=$page");
+    return await apiClient
+        .getData("${AppConstants.publicCompaniesUrl}?page=$page");
+  }
+
+  Future<Response> getNewMyCompanies(int page) async {
+    return await apiClient.getData(
+        "${AppConstants.publicCompaniesUrl}?order_by=created_at&order_direction=desc&page=$page");
   }
 }

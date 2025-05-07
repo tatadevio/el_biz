@@ -1,4 +1,3 @@
-import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -10,8 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../base/custom_button.dart';
-import '../category/select_category_screen.dart';
-import 'keywords_tags_screen.dart';
 
 class CompanyDescriptionScreen extends StatefulWidget {
   const CompanyDescriptionScreen({super.key});
@@ -29,9 +26,8 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
     if (_formKey.currentState!.validate()) {
       context.read<CompanyBloc>().state.addCompanyModel.description =
           descriptionController.text;
- 
+
       Get.to(() => AboutCompanyScreen());
-     
     } else {
       // validation issue...
     }

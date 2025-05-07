@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:el_biz/data/model/response/account/selected_account_model.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +26,18 @@ class UserRepo {
       'email': email
     });
   }
+
+
+    Future<bool> saveSelectedAccount(SelectedAccountModel account) async {
+   final accountString = jsonEncode(account.toJson());
+    return await sharedPreferences.setString(AppConstants.selecteAccount, accountString);
+  }
+
+  String getSelectedAccount() {
+    return sharedPreferences.getString(AppConstants.selecteAccount) ?? "";
+  }
+
+  
 
   // Future<Response> changePassword(String password, String confirmPassword) async {
   //   return await apiClient.postData(AppConstants.changePasswordUrl, {"password": password, "password_confirmation": confirmPassword});

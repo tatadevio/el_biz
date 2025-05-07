@@ -1,3 +1,5 @@
+import 'package:el_biz/data/model/response/notification/notifications_model.dart';
+import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -5,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NotificationItem extends StatelessWidget {
+  final NotificationData notification;
   final int index;
 
-  const NotificationItem({super.key, required this.index});
+  const NotificationItem(
+      {super.key, required this.notification, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +60,16 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'Вам был отправлен документ от компании ст',
+                          notification.title ?? '',
+                          // 'Вам был отправлен документ от компании ст',
                           style: h16.copyWith(color: ColorResources.darkGray),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Text(
-                        '12 сен. 2024',
+                        formatDateInRu(notification.createdAt.toString()),
+                        // '12 сен. 2024',
                         style: body12.copyWith(color: ColorResources.gray),
                       ),
                     ],
@@ -72,7 +78,8 @@ class NotificationItem extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    'Садовая мебель Loft добавил вашу закупку',
+                    notification.description ?? '',
+                    // 'Садовая мебель Loft добавил вашу закупку',
                     style: body14.copyWith(color: ColorResources.gray),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

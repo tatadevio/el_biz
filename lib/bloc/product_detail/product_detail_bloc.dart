@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/data/model/response/product/product_detail_model.dart';
 import 'package:el_biz/data/repo/product_detail_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -59,6 +60,10 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
         // ignore: use_build_context_synchronously
         event.context.read<CompanyDetailBloc>().add(
             ToggleFavoriteProductInList(state.productDetailModel!.data!.id!));
+
+        event.context.read<PublicProductBloc>().add(
+            ToggleFavoritePublicProductInList(
+                state.productDetailModel!.data!.id!));
       } else {
         final currentModel = state.productDetailModel!;
         final updatedData = currentModel.data!.copyWith(

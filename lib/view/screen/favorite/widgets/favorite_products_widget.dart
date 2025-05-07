@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
@@ -34,10 +35,26 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
     });
   }
 
+  late PublicProductBloc publicProductBloc;
+  late FavoriteBloc favoriteBloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    publicProductBloc = context.read<PublicProductBloc>();
+    favoriteBloc = context.read<FavoriteBloc>();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
+    updateProducts();
     super.dispose();
+  }
+
+  void updateProducts() async {
+    publicProductBloc.add(GetPublicProduct(1));
+    favoriteBloc.add(GetFavoriteProducts(1));
   }
 
   void _scrollToTop() {
@@ -84,9 +101,9 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
                     itemCount: favoriteState.favoriteProducts.length,
                     itemBuilder: (context, index) {
                       return ProductGridItem(
-                        isFavorite:
-                            favoriteState.favoriteProducts[index].isFavorite ??
-                                false,
+                        // isFavorite:
+                        //     favoriteState.favoriteProducts[index].isFavorite ??
+                        //         false,
                         product: favoriteState.favoriteProducts[index],
                       );
                     },
@@ -96,9 +113,9 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
                     itemCount: favoriteState.favoriteProducts.length,
                     itemBuilder: (context, index) {
                       return ProductListItemWidget(
-                        isFavorite:
-                            favoriteState.favoriteProducts[index].isFavorite ??
-                                false,
+                        // isFavorite:
+                        //     favoriteState.favoriteProducts[index].isFavorite ??
+                        //         false,
                         product: favoriteState.favoriteProducts[index],
                       );
                     },
