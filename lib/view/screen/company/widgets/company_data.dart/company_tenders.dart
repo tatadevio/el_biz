@@ -140,6 +140,8 @@ class CompanyTenders extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return TenderGridItem(
                     tender: companyDetailState.companyTenders![index],
+                    isCompanyTender: true,
+                    isPublicTender: false,
                   );
                 },
               ),
@@ -151,6 +153,8 @@ class CompanyTenders extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return TenderListItem(
                     tender: companyDetailState.companyTenders![index],
+                    isCompanyTender: true,
+                    isPublicTender: false,
                   );
                 },
               ),

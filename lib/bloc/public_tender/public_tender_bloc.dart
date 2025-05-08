@@ -13,12 +13,14 @@ class PublicTenderBloc extends Bloc<PublicTenderEvent, PublicTenderState> {
   PublicTenderBloc(this.publicTenderRepo) : super(PublicTenderState()) {
     on<PublicTenderEvent>((event, emit) {});
     on<GetPublicTender>(_onGetPublicTenders);
+    on<TogglePublicTenderFavorite>(_onTogglePublicTenderFavorite);
+    on<ToggleFavoritePublicTenderInList>(_onToggleFavoritePublicTenderInList);
   }
 
   Future<void> _onGetPublicTenders(
       GetPublicTender event, Emitter<PublicTenderState> emit) async {
     if (event.currentPage == 1) {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, publicTenders: []));
     } else {
       // emit.is
     }
@@ -37,5 +39,64 @@ class PublicTenderBloc extends Bloc<PublicTenderEvent, PublicTenderState> {
     } catch (e) {
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  Future<void> _onTogglePublicTenderFavorite(
+      TogglePublicTenderFavorite event, Emitter<PublicTenderState> emit) async {
+    final updatedProducts = state.publicTenders.map((tender) {
+      if (tender.id == event.tenderId) {
+        return tender.copyWith(
+          isFavorite: !(tender.isFavorite ?? false),
+        );
+      }
+      return tender;
+    }).toList();
+
+    emit(state.copyWith(publicTenders: updatedProducts));
+    try {
+      final response = await publicTenderRepo
+          .toggleFavorite(event.tenderId.toString(), type: "Tender");
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        // event.context
+        //     .read<FavoriteBloc>()
+        //     .add(RemoveProductFromFavoriteList(event.tenderId));
+      } else {
+        final updatedProducts = state.publicTenders.map((product) {
+          if (product.id == event.tenderId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+        emit(state.copyWith(publicTenders: updatedProducts));
+      }
+    } catch (e) {
+      final updatedProducts = state.publicTenders.map((product) {
+        if (product.id == event.tenderId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(publicTenders: updatedProducts));
+    }
+  }
+
+  Future<void> _onToggleFavoritePublicTenderInList(
+      ToggleFavoritePublicTenderInList event,
+      Emitter<PublicTenderState> emit) async {
+    final updatedTender = state.publicTenders.map((tender) {
+      if (tender.id == event.tenderId) {
+        return tender.copyWith(
+          isFavorite: !(tender.isFavorite ?? false),
+        );
+      }
+      return tender;
+    }).toList();
+
+    emit(state.copyWith(publicTenders: updatedTender));
   }
 }

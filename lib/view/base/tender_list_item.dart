@@ -15,9 +15,11 @@ import '../screen/tender/tender_detail_screen.dart';
 class TenderListItem extends StatelessWidget {
   final bool isFavorite;
   final TenderItem tender;
+    final bool isCompanyTender;
+  final bool isPublicTender;
 
   const TenderListItem(
-      {super.key, this.isFavorite = false, required this.tender});
+      {super.key, this.isFavorite = false, required this.tender, this.isCompanyTender = false, this.isPublicTender = false});
 
   @override
   Widget build(BuildContext context) {

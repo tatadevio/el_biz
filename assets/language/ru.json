@@ -289,6 +289,11 @@
   "product_reviews" : "Отзывы о товаре",
   "no_product_found" : "Товар не найден",
   "all_categories" : "Все категории",
-  "no_tender_found" : "Тендер не найден"
+  "no_tender_found" : "Тендер не найден",
+  "tender_updated": "Тендер обновлён",
+  "tender_updated_successfully": "Детали тендера были успешно обновлены.",
+  "tender_added": "Тендер добавлен",
+  "tender_added_successfully": "Тендер был успешно добавлен."
+
 
 }

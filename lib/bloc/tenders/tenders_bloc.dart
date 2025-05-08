@@ -9,6 +9,8 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../data/model/response/category/categories_list_model.dart';
+import '../../data/model/response/tender/tender_detail_model.dart';
 import 'tenders_state.dart';
 
 class TendersBloc extends Bloc<TendersEvent, TendersState> {
@@ -28,6 +30,12 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
         newTenderModel: AddTenderModel(),
       ));
     });
+    //
+    on<RemoveTenderImage>(_onRemoveTenderImage);
+    on<UpdateTenderImages>(_onUpdateTenderImages);
+    on<GetCategoryById>(_onGetCategoryById);
+    on<SelectCategory>(_onSelectCategory);
+    on<UpdateTenderCompany>(_onUpdateTenderCompany);
   }
 
   void _updateToggleShowGridView(
@@ -174,5 +182,61 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
       format: CompressFormat.jpeg,
     );
     return XFile(result!.path);
+  }
+  //
+
+  Future<void> _onSelectCategory(
+      SelectCategory event, Emitter<TendersState> emit) async {
+    emit(state.copywith(
+        newTenderModel:
+            state.newTenderModel.copyWith(categories: [event.category])));
+  }
+
+  Future<void> _onUpdateTenderCompany(
+      UpdateTenderCompany event, Emitter<TendersState> emit) async {
+    print('this is the company data ${event.company.toJson()}');
+    emit(state.copywith(
+        newTenderModel:
+            state.newTenderModel.copyWith(selectedCompany: event.company)));
+  }
+
+  Future<void> _onRemoveTenderImage(
+      RemoveTenderImage event, Emitter<TendersState> emit) async {
+    final updatedDeletedImages = List<Media>.from(
+      state.newTenderModel.deleteImages ?? [],
+    )..add(event.tenderImage);
+    final updatedImages = List<Media>.from(state.newTenderModel.uploadedImages!)
+      ..remove(event.tenderImage);
+
+    emit(state.copywith(
+      newTenderModel: state.newTenderModel.copyWith(
+        uploadedImages: updatedImages,
+        deleteImages: updatedDeletedImages,
+      ),
+    ));
+  }
+
+  Future<void> _onUpdateTenderImages(
+      UpdateTenderImages event, Emitter<TendersState> emit) async {
+    final updateImages =
+        state.newTenderModel.copyWith(uploadedImages: event.images);
+    print('called this on update tender = ${event.images.length}');
+    emit(state.copywith(newTenderModel: updateImages));
+  }
+
+  Future<void> _onGetCategoryById(
+      GetCategoryById event, Emitter<TendersState> emit) async {
+    try {
+      final response = await tendersRepo.getCategoryById(event.categoryId);
+      if (response.statusCode == 200) {
+        final category = CategoryItem.fromJson(response.body['data']);
+        final categories =
+            List<CategoryItem>.from(state.newTenderModel.categories ?? [])
+              ..add(category);
+        emit(state.copywith(
+            newTenderModel:
+                state.newTenderModel.copyWith(categories: categories)));
+      }
+    } catch (e) {}
   }
 }

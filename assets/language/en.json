@@ -289,7 +289,12 @@
   "product_reviews" : "Product Reviews",
   "no_product_found" : "No product found",
   "all_categories" : "All categories",
-  "no_tender_found" : "No tender found"
+  "no_tender_found" : "No tender found",
+  "tender_updated" : "Tender Updated",
+  "tender_updated_successfully" : "he tender details have been updated successfully.",
+  "tender_added": "Tender Added",
+  "tender_added_successfully": "The tender has been added successfully."
+
 
 
 }

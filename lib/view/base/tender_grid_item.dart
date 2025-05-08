@@ -1,12 +1,11 @@
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
+import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
-import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
-import 'package:el_biz/view/base/custom_like_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -17,8 +16,14 @@ import '../screen/tender/tender_detail_screen.dart';
 class TenderGridItem extends StatelessWidget {
   final bool isFavorite;
   final TenderItem tender;
+  final bool isCompanyTender;
+  final bool isPublicTender;
   const TenderGridItem(
-      {super.key, this.isFavorite = false, required this.tender});
+      {super.key,
+      this.isFavorite = false,
+      required this.tender,
+      required this.isCompanyTender,
+      this.isPublicTender = false});
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +61,15 @@ class TenderGridItem extends StatelessWidget {
                       child: CustomFavoriteButton(
                         isFavorite: tender.isFavorite ?? false,
                         onTap: () {
-                          context
-                              .read<CompanyDetailBloc>()
-                              .add(ToggleTenderFavorite(tender.id!, context));
+                          if (isCompanyTender) {
+                            context
+                                .read<CompanyDetailBloc>()
+                                .add(ToggleTenderFavorite(tender.id!, context));
+                          } else if (isPublicTender) {
+                            context
+                                .read<PublicTenderBloc>()
+                                .add(TogglePublicTenderFavorite(tender.id!));
+                          }
                         },
                       )
                       // CustomLikeButton(isFavorite: isFavorite),

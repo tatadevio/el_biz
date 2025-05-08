@@ -16,6 +16,14 @@ class TenderDetailRepo {
 
   Future<Response> changeTenderStatus(String id, String status) async {
     return await apiClient.postData(
-        "${AppConstants.tenderStatusChangeUrl}/$id", {"status": status});
+        "${AppConstants.tendersUrl}/$id/active-status",
+        {"active_status": status});
+  }
+
+  Future<Response> toggleFavorite(String id) async {
+    return await apiClient.postData(AppConstants.favoriteToggleUrl, {
+      "type": "Tender",
+      "id": id,
+    });
   }
 }

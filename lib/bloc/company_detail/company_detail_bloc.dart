@@ -32,6 +32,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     on<ToggleFavoriteProduct>(_onToggleFavoriteProduct);
     on<ToggleFavoriteProductInList>(_onToggleFavoriteProductInList);
     on<ToggleTenderFavorite>(_onToggleTenderFavorite);
+    on<ToggleFavoriteTenderInList>(_onToggleFavoriteTenderInList);
   }
 
   Future<void> _onGetCompanyDetail(
@@ -404,5 +405,19 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
       }).toList();
       emit(state.copyWith(companyTenders: updatedProducts));
     }
+  }
+
+  Future<void> _onToggleFavoriteTenderInList(ToggleFavoriteTenderInList event,
+      Emitter<CompanyDetailState> emit) async {
+    final updatedTender = state.companyTenders!.map((tender) {
+      if (tender.id == event.tenderId) {
+        return tender.copyWith(
+          isFavorite: !(tender.isFavorite ?? false),
+        );
+      }
+      return tender;
+    }).toList();
+
+    emit(state.copyWith(companyTenders: updatedTender));
   }
 }

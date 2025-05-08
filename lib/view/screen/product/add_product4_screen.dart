@@ -3,7 +3,6 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
-import 'package:el_biz/view/screen/product/preview_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

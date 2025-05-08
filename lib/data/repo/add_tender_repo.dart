@@ -13,7 +13,9 @@ class AddTenderRepo {
 
   AddTenderRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> addNewTender(AddTenderModel addTenderModel) async {
+  Future<Response> addNewTender(AddTenderModel addTenderModel,
+      {bool? isUpdate = false, String? tenderId}) async {
+    print('this is the tender detail : ${addTenderModel.toJson()}');
     Map<String, String> fields = {
       'title': addTenderModel.whatToBuy ?? '',
       // 'name' : addTenderModel.whatToBuy ?? '',
@@ -29,6 +31,21 @@ class AddTenderRepo {
       // new fields added form the validation
       "quantity": '2'
     };
+
+    //   {
+    //      'title': ' Test Tender',
+    // 'description': ' Test Description',
+    // 'location': ' Test Location',
+    // 'budget_from': ' 1000',
+    // 'budget_to': ' 2000',
+    // 'phone': ' 1234567890',
+    // 'email': ' test@example.com',
+    // 'tender_category_id': '1',
+    // 'tender_products[0][product_name]': ' Product 1',
+    // 'tender_products[0][quantity]': ' 10',
+    // 'tender_products[0][unit]': ' pcs',
+    // 'company_id': '1'
+    //   }
 
     if (addTenderModel.product != null && addTenderModel.product!.isNotEmpty)
       // ignore: curly_braces_in_flow_control_structures
@@ -47,16 +64,19 @@ class AddTenderRepo {
     }
 
     return await apiClient.postMultipartData(
-      AppConstants.addTenderUrl,
+      isUpdate == true
+          ? "${AppConstants.udpateTenderUrl}/$tenderId"
+          : AppConstants.addTenderUrl,
       fields: fields,
       files: files,
     );
   }
 
-  Future<Response> getCategoryById(
-    String categoryId,
+  Future<Response> deleteTenderImage(
+    String tenderId,
+    String imageId,
   ) async {
     return await apiClient
-        .getData("${AppConstants.categoryDetailUrl}/$categoryId");
+        .deleteData("${AppConstants.tendersUrl}/$tenderId/images/$imageId");
   }
 }

@@ -14,4 +14,11 @@ class PublicTenderRepo {
     return await apiClient.getData(
         "${AppConstants.publicTendersUrl}?order_by=company&order_direction=asc&page=$page");
   }
+
+  Future<Response> toggleFavorite(String id, {String type = "Tender"}) async {
+    return await apiClient.postData(AppConstants.favoriteToggleUrl, {
+      "type": type,
+      "id": id,
+    });
+  }
 }

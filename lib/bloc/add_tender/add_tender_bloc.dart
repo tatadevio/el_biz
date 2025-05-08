@@ -1,11 +1,12 @@
-import 'package:el_biz/data/model/base/add_tender_model.dart';
-import 'package:el_biz/data/model/response/tender/tender_detail_model.dart';
-import 'package:el_biz/data/repo/add_tender_repo.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:developer';
 
-import '../../data/model/response/category/categories_list_model.dart';
-import '../../data/model/response/company/my_companies_model.dart';
+import 'package:el_biz/data/model/base/add_tender_model.dart';
+import 'package:el_biz/data/repo/add_tender_repo.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 
 part 'add_tender_event.dart';
 part 'add_tender_state.dart';
@@ -14,32 +15,16 @@ class AddTenderBloc extends Bloc<AddTenderEvent, AddTenderState> {
   final AddTenderRepo addTenderRepo;
   AddTenderBloc(this.addTenderRepo)
       : super(AddTenderState(
-            isLoading: false, addTenderModel: AddTenderModel())) {
+          isLoading: false,
+          // addTenderModel: AddTenderModel(),
+        )) {
     // on<AddTenderEvent>((event, emit) {
-    //   // TODO: implement event handler
     // });
 
     on<AddNewTender>(_onAddNewTender);
-    on<RemoveTenderImage>(_onRemoveTenderImage);
-    on<UpdateTenderImages>(_onUpdateTenderImages);
-    on<GetCategoryById>(_onGetCategoryById);
-    on<SelectCategory>(_onSelectCategory);
-    on<UpdateTenderCompany>(_onUpdateTenderCompany);
-  }
 
-  Future<void> _onSelectCategory(
-      SelectCategory event, Emitter<AddTenderState> emit) async {
-    emit(state.copyWith(
-        addTenderModel:
-            state.addTenderModel?.copyWith(categories: [event.category])));
-  }
-
-  Future<void> _onUpdateTenderCompany(
-      UpdateTenderCompany event, Emitter<AddTenderState> emit) async {
-    print('this is the company data ${event.company.toJson()}');
-    emit(state.copyWith(
-        addTenderModel:
-            state.addTenderModel!.copyWith(selectedCompany: event.company)));
+    on<UpdateTender>(_onUpdateTender);
+    on<DeleteTenderImage>(_onDeleteTenderImage);
   }
 
   Future<void> _onAddNewTender(
@@ -51,53 +36,60 @@ class AddTenderBloc extends Bloc<AddTenderEvent, AddTenderState> {
       final response = await addTenderRepo.addNewTender(event.addTenderModel);
       if (response.statusCode == 200) {
         emit(AddTenderSuccess());
+        //  event. context.read<TendersBloc>().add(ResetNewTendersData());
       } else {
-        emit(AddTenderError());
+        emit(AddTenderError(response.body['message']));
       }
     } catch (e) {
-      emit(AddTenderError());
+      emit(AddTenderError(e.toString()));
     }
     emit(state.copyWith(isLoading: false));
   }
 
-  Future<void> _onRemoveTenderImage(
-      RemoveTenderImage event, Emitter<AddTenderState> emit) async {
-    final updatedDeletedImages = List<Media>.from(
-      state.addTenderModel!.deleteImages ?? [],
-    )..add(event.tenderImage);
-    final updatedImages =
-        List<Media>.from(state.addTenderModel!.uploadedImages!)
-          ..remove(event.tenderImage);
-
-    emit(state.copyWith(
-      addTenderModel: state.addTenderModel!.copyWith(
-        uploadedImages: updatedImages,
-        deleteImages: updatedDeletedImages,
-      ),
-    ));
-  }
-
-  Future<void> _onUpdateTenderImages(
-      UpdateTenderImages event, Emitter<AddTenderState> emit) async {
-    final updateImages =
-        state.addTenderModel!.copyWith(uploadedImages: event.images);
-    print('called this on update tender = ${event.images.length}');
-    emit(state.copyWith(addTenderModel: updateImages));
-  }
-
-  Future<void> _onGetCategoryById(
-      GetCategoryById event, Emitter<AddTenderState> emit) async {
+  Future<void> _onUpdateTender(
+      UpdateTender event, Emitter<AddTenderState> emit) async {
+    emit(AddTenderLoader());
+    emit(state.copyWith(isLoading: true));
+    // emit(AddProductState(productData: state.productData));
     try {
-      final response = await addTenderRepo.getCategoryById(event.categoryId);
+      Response response = await addTenderRepo.addNewTender(event.addTenderModel,
+          isUpdate: true, tenderId: event.tenderId.toString());
+
       if (response.statusCode == 200) {
-        final category = CategoryItem.fromJson(response.body['data']);
-        final categories =
-            List<CategoryItem>.from(state.addTenderModel!.categories ?? [])
-              ..add(category);
-        emit(state.copyWith(
-            addTenderModel:
-                state.addTenderModel?.copyWith(categories: categories)));
+        if (event.addTenderModel.deleteImages != null &&
+            event.addTenderModel.deleteImages!.isNotEmpty) {
+          for (var delImage in event.addTenderModel.deleteImages!) {
+            add(DeleteTenderImage(
+                event.tenderId.toString(), delImage.id.toString()));
+          }
+        }
+        emit(AddTenderSuccess());
+        // emit(state.copyWith(addTenderModel: AddTenderModel()));
+      } else {
+        showShortToast(response.body['message']);
+        emit(AddTenderError(response.body['message']));
       }
-    } catch (e) {}
+    } catch (e) {
+      log('update product catch = $e');
+      showShortToast(e.toString());
+      emit(AddTenderError(e.toString()));
+      // emit(AddProductFailure(e.toString()));
+      // emit(AddProductState(productData: event.addProductModel, error: e.toString()));
+    }
+  }
+
+  Future<void> _onDeleteTenderImage(
+      DeleteTenderImage event, Emitter<AddTenderState> emit) async {
+    try {
+      Response response =
+          await addTenderRepo.deleteTenderImage(event.tenderId, event.imageId);
+      if (kDebugMode) {
+        print(response.body);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('update product catch = $e');
+      }
+    }
   }
 }

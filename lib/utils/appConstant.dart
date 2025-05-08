@@ -30,6 +30,8 @@ class AppConstants {
   static const String addTenderUrl = "api/tenders/store";
   static const String publicTendersUrl = "api/tender-list";
   static const String tenderStatusChangeUrl = "api/tenders/change-status";
+  static const String deleteTenderImageUrl = "api/tenders/delete-images";
+  static const String udpateTenderUrl = "api/tenders/update";
 
   /// Company
   static const String addCompanyUrl = "api/companies/store";
@@ -205,14 +207,14 @@ class AppConstants {
   static List<LanguageModel> languages = [
     LanguageModel(
         imageUrl: Images.svgLock,
-        languageName: 'Русский',
-        countryCode: 'RU',
-        languageCode: 'ru'),
-    LanguageModel(
-        imageUrl: Images.svgLock,
         languageName: 'English',
         countryCode: 'US',
         languageCode: 'en'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'Русский',
+        countryCode: 'RU',
+        languageCode: 'ru'),
     // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
   ];
 }

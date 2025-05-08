@@ -343,6 +343,8 @@ class _TenderScreenState extends State<TenderScreen> {
                                 return TenderGridItem(
                                   tender:
                                       publicTenderState.publicTenders[index],
+                                  isCompanyTender: false,
+                                  isPublicTender: true,
                                 );
                               },
                             )
@@ -353,6 +355,8 @@ class _TenderScreenState extends State<TenderScreen> {
                                 return TenderListItem(
                                   tender:
                                       publicTenderState.publicTenders[index],
+                                         isCompanyTender: false,
+                                  isPublicTender: true,
                                 );
                               },
                             ),

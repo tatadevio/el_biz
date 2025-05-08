@@ -24,3 +24,13 @@ class ChangeTenderStatus extends TenderDetailEvent {
   @override
   List<Object> get props => [tenderId, status];
 }
+
+class ToggleTenderDetailFavorite extends TenderDetailEvent {
+  final int tenderId;
+  final BuildContext context;
+  const ToggleTenderDetailFavorite(
+      {required this.tenderId, required this.context});
+
+  @override
+  List<Object> get props => [tenderId, context];
+}

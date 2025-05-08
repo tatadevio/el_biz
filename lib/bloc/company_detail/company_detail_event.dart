@@ -100,3 +100,11 @@ class ToggleTenderFavorite extends CompanyDetailEvent {
   @override
   List<Object> get props => [tenderId, context];
 }
+
+class ToggleFavoriteTenderInList extends CompanyDetailEvent {
+  final int tenderId;
+  const ToggleFavoriteTenderInList({required this.tenderId});
+
+  @override
+  List<Object> get props => [tenderId];
+}

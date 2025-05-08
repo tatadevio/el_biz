@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
+import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
@@ -34,11 +36,15 @@ class _NewTenderPreviewScreenState extends State<NewTenderPreviewScreen> {
       body: BlocListener<AddTenderBloc, AddTenderState>(
         listener: (context, stateListner) async {
           if (stateListner is AddTenderSuccess) {
-            showShortToast('new tended added');
+            // showShortToast('new tended added');
+            context.read<PublicTenderBloc>().add(GetPublicTender(1));
             await Get.dialog(CustomDialog(
                 widget: AlertDialog(
-              title: Text('Tender added'),
-              content: Text('New tender added successfully...'),
+              title:
+                  Text(widget.isEdit ? "tender_updated".tr : 'tender_added'.tr),
+              content: Text(widget.isEdit
+                  ? 'tender_updated_successfully'.tr
+                  : 'tender_added_successfully'.tr),
               actions: [
                 ElevatedButton(
                     onPressed: () {
@@ -242,22 +248,36 @@ class _NewTenderPreviewScreenState extends State<NewTenderPreviewScreen> {
               width: Get.width,
               height: Get.height,
               onTap: () {
-                // if (widget.isEdit) {
-                //   showCustomSnackBar('Product Updated....');
-                //   Get.offAll(() => const DashboardScreen());
-                // } else {
-
-                showCustomSnackBar('Tender Added');
-                final tenderdata =
-                    context.read<TendersBloc>().state.newTenderModel;
-                log('this is tender data = ${tenderdata.toJson()}');
-                context
-                    .read<AddTenderBloc>()
-                    .add(AddNewTender(addTenderModel: tenderdata));
-                // print('tender data = ${}')
-                // Get.offAll(() => const DashboardScreen());
-                // context.read<TendersBloc>().add(ResetNewTenderModel());
-                // }
+                if (widget.isEdit) {
+                  showCustomSnackBar('Product Updated....');
+                  // Get.offAll(() => const DashboardScreen());
+                  final tenderdata =
+                      context.read<TendersBloc>().state.newTenderModel;
+                  log('this is tender data = ${tenderdata.toJson()}');
+                  context.read<AddTenderBloc>().add(UpdateTender(
+                      context.read<TendersBloc>().state.newTenderModel,
+                      // context.read<AddTenderBloc>().state.addTenderModel!,
+                      context
+                          .read<TenderDetailBloc>()
+                          .state
+                          .tenderDetailModel!
+                          .data!
+                          .id!));
+                  // context
+                  //     .read<AddTenderBloc>()
+                  //     .add(AddNewTender(addTenderModel: tenderdata));
+                } else {
+                  showCustomSnackBar('Tender Added');
+                  final tenderdata =
+                      context.read<TendersBloc>().state.newTenderModel;
+                  log('this is tender data = ${tenderdata.toJson()}');
+                  context
+                      .read<AddTenderBloc>()
+                      .add(AddNewTender(addTenderModel: tenderdata));
+                  // print('tender data = ${}')
+                  // Get.offAll(() => const DashboardScreen());
+                  // context.read<TendersBloc>().add(ResetNewTenderModel());
+                }
               },
               title: 'save'.tr);
         }),

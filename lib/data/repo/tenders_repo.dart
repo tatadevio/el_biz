@@ -1,5 +1,7 @@
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
 
 class TendersRepo {
@@ -10,4 +12,10 @@ class TendersRepo {
   // Future<Response> fetchAllTenders(int offSet) async {
   //   return await apiClient.getData();
   // }
+    Future<Response> getCategoryById(
+    String categoryId,
+  ) async {
+    return await apiClient
+        .getData("${AppConstants.categoryDetailUrl}/$categoryId");
+  }
 }
