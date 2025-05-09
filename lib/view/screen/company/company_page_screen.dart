@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../bloc/user/user_bloc.dart';
 import '../../../helper/date_helper.dart';
 import '../../base/custom_button.dart';
 
@@ -274,27 +275,41 @@ class CompanyPageScreen extends StatelessWidget {
                 height: 50,
               ),
               if (isCompany) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CustomButtonWithIcon(
-                        onTap: () {
-                          Get.to(() => DeleteCompanyScreen(
-                                id: companyDetail?.data?.id.toString() ?? '',
-                              ));
-                        },
-                        title: 'delete_profile'.tr,
-                        svgIcon: Images.svgTrash,
-                        textColor: Colors.white,
-                        svgIconColor: Colors.white,
-                        buttonColor: ColorResources.red,
-                        borderColor: ColorResources.red,
-                        isMaxSize: false,
-                      ),
-                    ],
-                  ),
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, userState) {
+                    if ((userState.selectedAccountModel!.isUser == true &&
+                            companyDetail?.data!.owner!.id ==
+                                userState.selectedAccountModel!.userId) ||
+                        (userState.selectedAccountModel!.isUser == false &&
+                            userState.selectedAccountModel!.companyId ==
+                                companyDetail?.data!.id)) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CustomButtonWithIcon(
+                              onTap: () {
+                                Get.to(() => DeleteCompanyScreen(
+                                      id: companyDetail?.data?.id.toString() ??
+                                          '',
+                                    ));
+                              },
+                              title: 'delete_profile'.tr,
+                              svgIcon: Images.svgTrash,
+                              textColor: Colors.white,
+                              svgIconColor: Colors.white,
+                              buttonColor: ColorResources.red,
+                              borderColor: ColorResources.red,
+                              isMaxSize: false,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 50,
@@ -304,40 +319,65 @@ class CompanyPageScreen extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        elevation: 0,
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: isCompany
-                ? Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(width: 1, color: ColorResources.blue),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 2,
-                          spreadRadius: 0,
-                          offset: Offset(0, 1),
-                          color: Color.fromRGBO(16, 24, 40, 0.05),
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'edit_profile'.tr,
-                      style: button16.copyWith(color: ColorResources.blue),
-                    ),
-                  )
-                : CustomButton(
-                    width: Get.width,
-                    height: 50,
-                    title: "continue".tr,
-                    onTap: () {},
-                  )),
+      bottomNavigationBar: BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
+        builder: (context, companyState) {
+          if (companyState.companyDetailLoading ||
+              companyState.companyDetailModel?.data == null) {
+            return SizedBox.shrink();
+          }
+          final companyData = companyState.companyDetailModel!;
+
+          return BlocBuilder<UserBloc, UserState>(
+            builder: (context, userState) {
+              if ((userState.selectedAccountModel!.isUser == true &&
+                      companyData.data!.owner!.id ==
+                          userState.selectedAccountModel!.userId) ||
+                  (userState.selectedAccountModel!.isUser == false &&
+                      userState.selectedAccountModel!.companyId ==
+                          companyData.data!.id)) {
+                return BottomAppBar(
+                  color: Colors.white,
+                  elevation: 0,
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: isCompany
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    width: 1, color: ColorResources.blue),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    blurRadius: 2,
+                                    spreadRadius: 0,
+                                    offset: Offset(0, 1),
+                                    color: Color.fromRGBO(16, 24, 40, 0.05),
+                                  ),
+                                ],
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'edit_profile'.tr,
+                                style: button16.copyWith(
+                                    color: ColorResources.blue),
+                              ),
+                            )
+                          : CustomButton(
+                              width: Get.width,
+                              height: 50,
+                              title: "continue".tr,
+                              onTap: () {},
+                            )),
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          );
+        },
       ),
     );
   }

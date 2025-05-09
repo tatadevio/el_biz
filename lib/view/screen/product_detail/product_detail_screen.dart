@@ -5,7 +5,6 @@ import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
-import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:el_biz/view/screen/product/add_product_screen.dart';
@@ -129,8 +128,8 @@ class ProductDetailScreen extends StatelessWidget {
                               context
                                   .read<ProductDetailBloc>()
                                   .add(ToggleProductFavorite(context));
-                              print(
-                                  'this is value of favorite = ${productDetail.data!.isFavorite}');
+                              // print(
+                              //     'this is value of favorite = ${productDetail.data!.isFavorite}');
                             },
                           ),
                         ],
@@ -479,72 +478,92 @@ class ProductDetailScreen extends StatelessWidget {
           if (state.productDetailModel?.data == null) {
             return SizedBox.shrink();
           }
-          if (context.read<UserBloc>().state.userInfo?.data?.id !=
-              state.productDetailModel?.data?.user?.id) {
-            return SizedBox.shrink();
-          }
-          return BottomAppBar(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            child: Row(
-              children: [
-                Expanded(
-                  child: CustomBorderButton(
-                    height: Get.height,
-                    width: Get.width,
-                    padding: const EdgeInsets.all(0),
-                    border: Border.all(width: 1, color: ColorResources.blue),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShaow: const [ColorResources.shadow1],
-                    child: Text(
-                      "edit".tr,
-                      style: button16.copyWith(color: ColorResources.blue),
-                    ),
-                    onTap: () {
-                      Get.to(() => AddProductScreen(isEdit: true));
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: CustomBorderButton(
-                    height: Get.height,
-                    width: Get.width,
-                    padding: const EdgeInsets.all(0),
-                    border: Border.all(width: 1, color: ColorResources.red),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShaow: const [ColorResources.shadow1],
-                    onTap: state.statusUpdating
-                        ? () {}
-                        : () {
-                            context
-                                .read<ProductDetailBloc>()
-                                .add(ChangeProductStatus(
-                                  state.productDetailModel!.data!.id.toString(),
+          // if (context.read<UserBloc>().state.userInfo?.data?.id !=
+          //     state.productDetailModel?.data?.user?.id) {
+          //   return SizedBox.shrink();
+          // }
+          return BlocBuilder<UserBloc, UserState>(
+            builder: (context, userState) {
+              if ((userState.selectedAccountModel!.isUser == true &&
+                      state.productDetailModel?.data?.user?.id ==
+                          userState.selectedAccountModel!.userId) ||
+                  (userState.selectedAccountModel!.isUser == false &&
+                      userState.selectedAccountModel!.companyId ==
+                          state.productDetailModel?.data?.company?.id)) {
+                return BottomAppBar(
+                  color: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomBorderButton(
+                          height: Get.height,
+                          width: Get.width,
+                          padding: const EdgeInsets.all(0),
+                          border:
+                              Border.all(width: 1, color: ColorResources.blue),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShaow: const [ColorResources.shadow1],
+                          child: Text(
+                            "edit".tr,
+                            style:
+                                button16.copyWith(color: ColorResources.blue),
+                          ),
+                          onTap: () {
+                            Get.to(() => AddProductScreen(isEdit: true));
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: CustomBorderButton(
+                          height: Get.height,
+                          width: Get.width,
+                          padding: const EdgeInsets.all(0),
+                          border:
+                              Border.all(width: 1, color: ColorResources.red),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShaow: const [ColorResources.shadow1],
+                          onTap: state.statusUpdating
+                              ? () {}
+                              : () {
+                                  context
+                                      .read<ProductDetailBloc>()
+                                      .add(ChangeProductStatus(
+                                        state.productDetailModel!.data!.id
+                                            .toString(),
+                                        state.productDetailModel!.data!
+                                                    .status ==
+                                                'published'
+                                            ? 'draft'
+                                            : 'published',
+                                      ));
+                                },
+                          child: state.statusUpdating
+                              ? SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator())
+                              : Text(
                                   state.productDetailModel!.data!.status ==
                                           'published'
-                                      ? 'draft'
-                                      : 'published',
-                                ));
-                          },
-                    child: state.statusUpdating
-                        ? SizedBox(
-                            height: 25,
-                            width: 25,
-                            child: CircularProgressIndicator())
-                        : Text(
-                            state.productDetailModel!.data!.status ==
-                                    'published'
-                                ? "not_active".tr
-                                : 'active'.tr,
-                            style: button16.copyWith(color: ColorResources.red),
-                          ),
+                                      ? "not_active".tr
+                                      : 'active'.tr,
+                                  style: button16.copyWith(
+                                      color: ColorResources.red),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
           );
         },
       ),

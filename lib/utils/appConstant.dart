@@ -87,6 +87,7 @@ class AppConstants {
   // Common
   static const String citiesUrl = "api/cities";
   static const String materialsUrl = "api/materials";
+  static const String filterFieldsUrl = "api/filters-fields";
 
   /// Auth
   // static const String registration = "api/v1/users/update";

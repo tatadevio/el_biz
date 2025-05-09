@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/data/repo/add_tender_repo.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
+import 'package:el_biz/data/repo/filter_fields_repo.dart';
 import 'package:el_biz/data/repo/material_repo.dart';
 import 'package:el_biz/data/repo/notification_repo.dart';
 import 'package:el_biz/data/repo/product_detail_repo.dart';
@@ -114,6 +116,8 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<PublicTenderRepo>(() => PublicTenderRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<FilterFieldsRepo>(() => FilterFieldsRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -134,6 +138,8 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<PublicProductBloc>(() => PublicProductBloc(Get.find()),
       fenix: true);
   Get.lazyPut<PublicTenderBloc>(() => PublicTenderBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<FilterFieldsBloc>(() => FilterFieldsBloc(Get.find()),
       fenix: true);
 ////////
   ///

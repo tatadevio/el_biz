@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 
 import '../../../bloc/add_product/add_product_bloc.dart';
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/user/user_bloc.dart';
 import '../../../data/model/response/company/my_companies_model.dart';
 import '../../../utils/Images.dart';
 import '../../base/custom_button.dart';
@@ -74,6 +75,21 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
         .read<AddProductBloc>()
         .add(GetCategoryById(productDetail.categoryId.toString()));
     // selectCompany();
+    updateCompany(productDetail.company!);
+  }
+
+  void updateCompany(CompanyItem company) {
+    final companyList = context.read<CompanyBloc>().state.myCompanies;
+
+    CompanyItem? matchedCompany =
+        companyList.firstWhereOrNull((c) => c.id == company.id);
+
+    if (matchedCompany != null) {
+      setState(() {
+        context.read<AddProductBloc>().state.productData?.company =
+            matchedCompany;
+      });
+    }
   }
 
   @override
@@ -500,11 +516,19 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                             ),
                             underline:
                                 const SizedBox(), // Remove default underline
-                            onChanged: (CompanyItem? newValue) {
-                              setState(() {
-                                addProductState.productData?.company = newValue;
-                              });
-                            },
+                            onChanged: context
+                                        .read<UserBloc>()
+                                        .state
+                                        .selectedAccountModel!
+                                        .isUser ==
+                                    true
+                                ? (CompanyItem? newValue) {
+                                    setState(() {
+                                      addProductState.productData?.company =
+                                          newValue;
+                                    });
+                                  }
+                                : null,
                             items: companyState.myCompanies
                                 .map((CompanyItem city) {
                               return DropdownMenuItem<CompanyItem>(

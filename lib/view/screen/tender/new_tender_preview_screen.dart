@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
+import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -65,11 +66,34 @@ class _NewTenderPreviewScreenState extends State<NewTenderPreviewScreen> {
             final tenderData = state.newTenderModel;
             return SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: AddTenderImagesPreview(),
-                  ),
+                  if (state.newTenderModel.images != null &&
+                      state.newTenderModel.images!.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.all(16),
+                      child: AddTenderImagesPreview(),
+                    ),
+                  if (state.newTenderModel.uploadedImages != null &&
+                      state.newTenderModel.uploadedImages!.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        children: state.newTenderModel.uploadedImages!
+                            .map(
+                              (image) => Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: CustomImage(
+                                    image: image.url ?? '',
+                                    height: 80,
+                                    width: 70,
+                                    radius: 10),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 24),

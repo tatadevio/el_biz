@@ -81,8 +81,8 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
                               childAspectRatio: 0.7),
                       itemCount: state.publicProducts.length,
                       itemBuilder: (context, index) {
-                        print(
-                            'value of isFavorite at $index = ${state.publicProducts[index].isFavorite}');
+                        // print(
+                        //     'value of isFavorite at $index = ${state.publicProducts[index].isFavorite}');
                         return ProductGridItem(
                           // isFavorite:
                           //     state.publicProducts[index].isFavorite ??

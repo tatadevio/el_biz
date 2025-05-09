@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -154,6 +155,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             if (productController.isShowCategories) {
                               Get.to(() => const CompanyFilterScreen());
                             } else {
+                              context.read<FilterFieldsBloc>().add(GetFilterFields());
                               Get.to(() => const ProductsFilterScreen());
                             }
                           },

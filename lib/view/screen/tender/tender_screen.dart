@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/filter_fields/filter_fields_bloc.dart';
 import '../../base/tender_grid_item.dart';
 import '../../base/tender_list_item.dart';
 
@@ -160,6 +161,7 @@ class _TenderScreenState extends State<TenderScreen> {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
+                        context.read<FilterFieldsBloc>().add(GetFilterFields());
                         Get.to(() => const ProductsFilterScreen());
                       },
                       child: Container(
@@ -355,7 +357,7 @@ class _TenderScreenState extends State<TenderScreen> {
                                 return TenderListItem(
                                   tender:
                                       publicTenderState.publicTenders[index],
-                                         isCompanyTender: false,
+                                  isCompanyTender: false,
                                   isPublicTender: true,
                                 );
                               },
