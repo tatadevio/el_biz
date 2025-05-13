@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/data/model/response/cities_model.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
@@ -14,7 +15,8 @@ import '../../base/custom_button.dart';
 import 'widgets/custom_add_company_appbar.dart';
 
 class CompanyInfoScreen extends StatefulWidget {
-  const CompanyInfoScreen({super.key});
+  final bool isEdit;
+  const CompanyInfoScreen({super.key, required this.isEdit});
 
   @override
   State<CompanyInfoScreen> createState() => _CompanyInfoScreenState();
@@ -75,22 +77,77 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
   @override
   void initState() {
     super.initState();
-    lunchStartController.text = "13:00";
-    lunchEndController.text = "14:00";
+    // lunchStartController.text = "13:00";
+    // lunchEndController.text = "14:00";
+
+    if (widget.isEdit) {
+      loadData();
+    } else {
+      lunchStartController.text = "13:00";
+      lunchEndController.text = "14:00";
+    }
   }
 
-  // for now without using api
-  // List<String> kyrgyzstanCities = [
-  //   'Bishkek',
-  //   'Osh',
-  //   'Jalal-Abad',
-  //   'Karakol',
-  //   'Naryn',
-  //   'Talas',
-  //   'Batken',
-  // ];
-
   CityItem? selectedCity;
+
+  void loadData() {
+    final companyData =
+        context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+    streetController.text = companyData.street ?? '';
+    houseController.text = companyData.house ?? '';
+    officeController.text = companyData.office ?? '';
+    postalCodeController.text = companyData.postalCode ?? '';
+    lunchStartController.text = companyData.lunchBreak?.open ?? '';
+    lunchEndController.text = companyData.lunchBreak?.close ?? '';
+
+    schedule[0].isOpen = companyData.workingHours?.monday?.open != null;
+    schedule[0].openingTime = companyData.workingHours?.monday?.open ?? '00:00';
+    schedule[0].closingTime =
+        companyData.workingHours?.monday?.close ?? '00:00';
+    schedule[1].isOpen = companyData.workingHours?.tuesday?.open != null;
+    schedule[1].openingTime =
+        companyData.workingHours?.tuesday?.open ?? '00:00';
+    schedule[1].closingTime =
+        companyData.workingHours?.tuesday?.close ?? '00:00';
+    schedule[2].isOpen = companyData.workingHours?.wednesday?.open != null;
+    schedule[2].openingTime =
+        companyData.workingHours?.wednesday?.open ?? '00:00';
+    schedule[2].closingTime =
+        companyData.workingHours?.wednesday?.close ?? '00:00';
+    schedule[3].isOpen = companyData.workingHours?.thursday?.open != null;
+    schedule[3].openingTime =
+        companyData.workingHours?.thursday?.open ?? '00:00';
+    schedule[3].closingTime =
+        companyData.workingHours?.thursday?.close ?? '00:00';
+    schedule[4].isOpen = companyData.workingHours?.friday?.open != null;
+    schedule[4].openingTime = companyData.workingHours?.friday?.open ?? '00:00';
+    schedule[4].closingTime =
+        companyData.workingHours?.friday?.close ?? '00:00';
+    schedule[5].isOpen = companyData.workingHours?.saturday?.open != null;
+    schedule[5].openingTime =
+        companyData.workingHours?.saturday?.open ?? '00:00';
+    schedule[5].closingTime =
+        companyData.workingHours?.saturday?.close ?? '00:00';
+    schedule[6].isOpen = companyData.workingHours?.sunday?.open != null;
+    schedule[6].openingTime = companyData.workingHours?.sunday?.open ?? '00:00';
+    schedule[6].closingTime =
+        companyData.workingHours?.sunday?.close ?? '00:00';
+    loadSelectedCity();
+    for (var sch in schedule) {
+      print('this is sch = ${sch.toJson()}');
+    }
+  }
+
+  loadSelectedCity() {
+    final companyData =
+        context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+
+    final cityState = context.read<CitiesBloc>().state.cityItem;
+    selectedCity =
+        cityState.firstWhereOrNull((city) => city.id == companyData.city?.id);
+
+    setState(() {});
+  }
 
   void _submitForm() {
     if (selectedCity == null) {
@@ -121,13 +178,16 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
       print('this is schedule of the compnay : ${sch.day}');
     }
 
-    Get.to(() => const CompanyContactInfoScreen());
+    Get.to(() => CompanyContactInfoScreen(
+          isEdit: widget.isEdit,
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
     return Scaffold(
+      backgroundColor: ColorResources.backgroundColor,
       appBar: customAddCompanyAppbar(title: ''),
       body: BlocBuilder<CompanyBloc, CompanyState>(
           builder: (context, sellerState) {
@@ -292,6 +352,37 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           // Checkbox for Open/Closed
+                          // Checkbox(
+                          //   value: schedule[index].isOpen,
+                          //   onChanged: (value) {
+                          //     setState(() {
+                          //       schedule[index].isOpen = value!;
+                          //       if (!schedule[index].isOpen) {
+                          //         schedule[index].openingTime = "00:00";
+                          //         schedule[index].closingTime = "00:00";
+                          //       } else {
+                          //         schedule[index].openingTime = "09:00";
+                          //         schedule[index].closingTime = "18:00";
+                          //       }
+                          //     });
+                          //   },
+                          //   checkColor:
+                          //       ColorResources.primary, // Tick mark color
+                          //   fillColor: MaterialStateProperty.resolveWith<Color>(
+                          //       (states) {
+                          //     // Always white background
+                          //     return Colors.white;
+                          //   }),
+                          //   side: const BorderSide(
+                          //     color:
+                          //         ColorResources.primary, // Always blue border
+                          //     width: 2,
+                          //   ),
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(4),
+                          //   ),
+
+                          // ),
                           Checkbox(
                             value: schedule[index].isOpen,
                             onChanged: (value) {
@@ -306,10 +397,28 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                                 }
                               });
                             },
+
+                            checkColor:
+                                ColorResources.primary, // Tick mark color
+                            fillColor: WidgetStateProperty.resolveWith<Color>(
+                                (states) {
+                              // Keep background white at all times
+                              return Colors.white;
+                            }),
+                            side: WidgetStateBorderSide.resolveWith((states) {
+                              return BorderSide(
+                                color: ColorResources
+                                    .primary, // Always blue border
+                                width: 2,
+                              );
+                            }),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                           ),
                           // Day Name
                           Expanded(
-                            flex: 2,
+                            flex: 4,
                             child: Text(
                               schedule[index].day,
                               style: const TextStyle(
@@ -317,37 +426,75 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                             ),
                           ),
 
-                          // Opening Time TextField
                           Expanded(
-                            child: TextField(
-                              enabled: schedule[index].isOpen,
-                              controller: TextEditingController(
-                                  text: schedule[index].openingTime),
-                              // decoration:
-                              //     const InputDecoration(labelText: "Open Time"),
-                              onChanged: (value) {
-                                setState(() {
-                                  schedule[index].openingTime = value;
-                                });
-                              },
-                            ),
-                          ),
+                            flex: 3,
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextField(
+                                      enabled: schedule[index].isOpen,
 
-                          const SizedBox(width: 8),
+                                      controller: TextEditingController(
+                                          text: schedule[index].openingTime),
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                          filled: false),
 
-                          // Closing Time TextField
-                          Expanded(
-                            child: TextField(
-                              enabled: schedule[index].isOpen,
-                              controller: TextEditingController(
-                                  text: schedule[index].closingTime),
-                              // decoration: const InputDecoration(
-                              //     labelText: "Close Time"),
-                              onChanged: (value) {
-                                setState(() {
-                                  schedule[index].closingTime = value;
-                                });
-                              },
+                                      // decoration:
+                                      //     const InputDecoration(labelText: "Open Time"),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          schedule[index].openingTime = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+
+                                  // const SizedBox(width: 8),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        '-',
+                                        textAlign: TextAlign.center,
+                                      )),
+
+                                  // Closing Time TextField
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextField(
+                                      enabled: schedule[index].isOpen,
+                                      controller: TextEditingController(
+                                          text: schedule[index].closingTime),
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                          filled: false),
+                                      // decoration: const InputDecoration(
+                                      //     labelText: "Close Time"),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          schedule[index].closingTime = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Opening Time TextField
                             ),
                           ),
                         ],

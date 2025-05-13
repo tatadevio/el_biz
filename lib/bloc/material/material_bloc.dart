@@ -45,4 +45,6 @@ class MaterialBloc extends Bloc<MaterialEvent, MaterialState> {
 
     emit(state.copyWith(isLoading: false, isLoadingMore: false));
   }
+
+ 
 }

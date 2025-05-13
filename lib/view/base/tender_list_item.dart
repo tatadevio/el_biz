@@ -1,25 +1,30 @@
-import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/company_detail/company_detail_bloc.dart';
+import '../../bloc/public_tender/public_tender_bloc.dart';
 import '../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
 import '../../helper/date_helper.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/tender/tender_detail_screen.dart';
+import 'custom_favorite_button.dart';
 
 class TenderListItem extends StatelessWidget {
   final bool isFavorite;
   final TenderItem tender;
-    final bool isCompanyTender;
+  final bool isCompanyTender;
   final bool isPublicTender;
 
   const TenderListItem(
-      {super.key, this.isFavorite = false, required this.tender, this.isCompanyTender = false, this.isPublicTender = false});
+      {super.key,
+      this.isFavorite = false,
+      required this.tender,
+      this.isCompanyTender = false,
+      this.isPublicTender = false});
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +48,24 @@ class TenderListItem extends StatelessWidget {
                 children: [
                   CustomImage(image: '', height: 120, width: 100, radius: 16),
                   Positioned(
-                    right: 10,
-                    top: 5,
-                    child: Container(
-                      height: 32,
-                      width: 32,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 2,
-                            spreadRadius: 0,
-                            offset: Offset(0, 1),
-                            color: Color.fromRGBO(16, 24, 40, 0.05),
-                          ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(
-                        isFavorite ? Images.svgHeart : Images.svgHeartBorder,
-                        color: isFavorite ? ColorResources.primaryRed : null,
-                      ),
-                    ),
-                  ),
+                      right: 5,
+                      top: 5,
+                      child: CustomFavoriteButton(
+                        isFavorite: tender.isFavorite ?? false,
+                        onTap: () {
+                          if (isCompanyTender) {
+                            context
+                                .read<CompanyDetailBloc>()
+                                .add(ToggleTenderFavorite(tender.id!, context));
+                          } else
+                          // if (isPublicTender)
+                          {
+                            context.read<PublicTenderBloc>().add(
+                                TogglePublicTenderFavorite(
+                                    tender.id!, context));
+                          }
+                        },
+                      )),
                 ],
               ),
               const SizedBox(

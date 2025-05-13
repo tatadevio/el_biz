@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -16,13 +17,24 @@ import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
 
 class AddCompanyDocumentScreen extends StatelessWidget {
-  const AddCompanyDocumentScreen({super.key});
+  final bool isEdit;
+  const AddCompanyDocumentScreen({super.key, required this.isEdit});
 
   void _submitForm(BuildContext context) {
     final companyData = context.read<CompanyBloc>().state.addCompanyModel;
 
     if (companyData.certificateDocument != null) {
-      context.read<CompanyBloc>().add(AddNewCompany(companyData));
+      if (isEdit) {
+        final companyDetail =
+            context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+        context.read<CompanyBloc>().add(UpdateCompany(
+            addCompanyModel: companyData,
+            companyId: companyDetail.id.toString(),
+            context: context));
+        print(companyData.categories);
+      } else {
+        context.read<CompanyBloc>().add(AddNewCompany(companyData, context));
+      }
     } else {
       showShortToast('add_certificate'.tr);
     }

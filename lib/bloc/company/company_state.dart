@@ -57,11 +57,19 @@ class CompanyState extends Equatable {
         isShowGoodsGridView,
         isShowTendersGridView,
         scheduleTiming,
-        addCompanyModel ,
+        addCompanyModel,
       ];
 }
 
-// final class CompanyInitial extends CompanyState {}
+// final class CompanyInitial extends CompanyState {
+//   CompanyInitial() : super(addCompanyModel: AddCompanyModel());
+// }
+
+// class AddCompanyError extends CompanyState {
+//   final String? error;
+
+//   const AddCompanyError(this.error);
+// }
 
 // final class CompanyLoading extends CompanyState {
 //   CompanyLoading({required super.addCompanyModel});

@@ -293,7 +293,8 @@
   "tender_updated": "Тендер обновлён",
   "tender_updated_successfully": "Детали тендера были успешно обновлены.",
   "tender_added": "Тендер добавлен",
-  "tender_added_successfully": "Тендер был успешно добавлен."
+  "tender_added_successfully": "Тендер был успешно добавлен.",
+  "no_favorite_tenders" : "Избранные тендеры не найдены."
 
 
 }

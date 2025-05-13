@@ -14,3 +14,11 @@ class GetNotification extends NotificationEvent {
   @override
   List<Object> get props => [currentPage];
 }
+
+class ReadNotification extends NotificationEvent {
+  final String notificationId;
+  const ReadNotification(this.notificationId);
+
+  @override
+  List<Object> get props => [notificationId];
+}

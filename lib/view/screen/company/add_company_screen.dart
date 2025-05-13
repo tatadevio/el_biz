@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
+import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/company/company_description_screen.dart';
@@ -13,11 +15,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../bloc/category/category_bloc.dart';
 import '../../base/custom_dialog.dart';
 import 'widgets/custom_add_company_appbar.dart';
 
 class AddCompanyScreen extends StatefulWidget {
-  const AddCompanyScreen({super.key});
+  final bool isEdit;
+  const AddCompanyScreen({super.key, this.isEdit = false});
 
   @override
   State<AddCompanyScreen> createState() => _AddCompanyScreenState();
@@ -28,16 +32,35 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
   final TextEditingController legalNameController = TextEditingController();
   final TextEditingController okpoController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      loadCompanyData();
+    }
+  }
+
+  void loadCompanyData() {
+    final companyData =
+        context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+    legalNameController.text = companyData.name ?? '';
+    okpoController.text = companyData.okpo ?? '';
+    context.read<CategoryBloc>().add(GetCategory());
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final companyData = context.read<CompanyBloc>().state;
-      if (companyData.addCompanyModel.companyLogo != null &&
-          companyData.addCompanyModel.companyBanner != null) {
+      if ((widget.isEdit ||
+          (companyData.addCompanyModel.companyLogo != null &&
+              companyData.addCompanyModel.companyBanner != null))) {
         context.read<CompanyBloc>().state.addCompanyModel.companyName =
             legalNameController.text;
         context.read<CompanyBloc>().state.addCompanyModel.companyNumber =
             okpoController.text;
-        Get.to(() => CompanyDescriptionScreen());
+        Get.to(() => CompanyDescriptionScreen(
+              isEdit: widget.isEdit,
+            ));
       } else {
         showShortToast('logo_and_banner_is_requried'.tr);
       }
@@ -85,7 +108,15 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                           style: h16.copyWith(color: ColorResources.darkGray),
                         ),
                         Text(
-                          state.addCompanyModel.tinNumber ?? '',
+                          widget.isEdit
+                              ? context
+                                      .read<CompanyDetailBloc>()
+                                      .state
+                                      .companyDetailModel!
+                                      .data!
+                                      .tinNumber ??
+                                  ""
+                              : state.addCompanyModel.tinNumber ?? '',
                           style: body14,
                         ),
                       ],
@@ -204,7 +235,19 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                             ),
                             alignment: Alignment.center,
                             child: state.addCompanyModel.companyLogo == null
-                                ? Image.asset(Images.uploadImagePng)
+                                ? widget.isEdit
+                                    ? CustomImage(
+                                        image: context
+                                                .read<CompanyDetailBloc>()
+                                                .state
+                                                .companyDetailModel!
+                                                .data!
+                                                .logo ??
+                                            '',
+                                        height: 72,
+                                        width: 72,
+                                        radius: 72)
+                                    : Image.asset(Images.uploadImagePng)
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(72),
                                     child: Image.file(
@@ -262,37 +305,54 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                             borderRadius: BorderRadius.circular(12)),
                         alignment: Alignment.center,
                         child: state.addCompanyModel.companyBanner == null
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    Images.imagePng,
-                                    height: 40,
-                                    width: 40,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                            ? widget.isEdit
+                                ? CustomImage(
+                                    image: context
+                                            .read<CompanyDetailBloc>()
+                                            .state
+                                            .companyDetailModel!
+                                            .data!
+                                            .banner ??
+                                        '',
+                                    height: 100,
+                                    width: Get.width,
+                                    radius: 12)
+                                :
+
+                                // context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+
+                                Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(
-                                        'download_banner'.tr,
-                                        style: body14.copyWith(
-                                            color: ColorResources.gray),
+                                      Image.asset(
+                                        Images.imagePng,
+                                        height: 40,
+                                        width: 40,
                                       ),
-                                      Text(
-                                        'SVG, PNG, JPG',
-                                        style: textXS.copyWith(
-                                            color: ColorResources.gray),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'download_banner'.tr,
+                                            style: body14.copyWith(
+                                                color: ColorResources.gray),
+                                          ),
+                                          Text(
+                                            'SVG, PNG, JPG',
+                                            style: textXS.copyWith(
+                                                color: ColorResources.gray),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                ],
-                              )
+                                  )
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.file(

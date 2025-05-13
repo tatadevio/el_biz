@@ -48,6 +48,7 @@ class AppConstants {
   static const String verifyTinNumberUrl = "api/companies/verify";
   static const String addCompanyDocumentUrl = "api/companies/documents-upload";
   static const String publicCompaniesUrl = "api/company-list";
+  static const String updateCompanyUrl = "api/companies/update";
 
   /// Categories
   static const String categoriesUrl = "api/categories";

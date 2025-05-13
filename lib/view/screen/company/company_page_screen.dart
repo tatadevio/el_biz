@@ -3,6 +3,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/screen/company/add_company_screen.dart';
 import 'package:el_biz/view/screen/company/delete_company_screen.dart';
 import 'package:el_biz/view/screen/company/widgets/company_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
+import '../../../data/model/response/company/company_detail_model.dart';
 import '../../../helper/date_helper.dart';
 import '../../base/custom_button.dart';
 
@@ -145,18 +147,21 @@ class CompanyPageScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(
-                                '(${companyDetail?.data?.rating == null ? '0' : companyDetail?.data?.rating == "" ? '0' : companyDetail?.data?.rating ?? '0'})',
+                                '(${companyDetail?.data?.reviewsAvgRating == null ? '0' : companyDetail?.data?.reviewsAvgRating == "" ? '0' : companyDetail?.data?.reviewsAvgRating ?? '0'})',
                                 style:
                                     body14.copyWith(color: ColorResources.gray),
                               ),
                               RatingBar.builder(
                                 initialRating: double.parse(companyDetail
-                                            ?.data?.rating ==
+                                            ?.data?.reviewsAvgRating ==
                                         null
                                     ? '0'
-                                    : companyDetail?.data?.rating == ""
+                                    : companyDetail?.data?.reviewsAvgRating ==
+                                            ""
                                         ? '0'
-                                        : companyDetail?.data?.rating ?? '0'),
+                                        : companyDetail
+                                                ?.data?.reviewsAvgRating ??
+                                            '0'),
                                 minRating: 0,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
@@ -236,7 +241,24 @@ class CompanyPageScreen extends StatelessWidget {
                           ),
                           Text(
                             // 'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
-                            companyDetail?.data?.workingTime ?? '',
+                            formatWorkingHours(
+                                companyDetail!.data!.workingHours!),
+                            style: body14.copyWith(
+                                color: ColorResources.darkGray,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'lunch_break'.tr,
+                            style: body14.copyWith(
+                                color: ColorResources.darkGray,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            // 'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
+                            '${companyDetail.data!.lunchBreak!.open} - ${companyDetail.data!.lunchBreak!.close}',
                             style: body14.copyWith(
                                 color: ColorResources.darkGray,
                                 fontWeight: FontWeight.w400),
@@ -260,7 +282,7 @@ class CompanyPageScreen extends StatelessWidget {
                           ),
                           Text(
                             // 'ОсОО “Loft”',
-                            companyDetail?.data?.legalEntity ?? '',
+                            companyDetail.data?.legalEntity ?? '',
                             style: body14.copyWith(
                                 color: ColorResources.darkGray,
                                 fontWeight: FontWeight.w400),
@@ -278,11 +300,11 @@ class CompanyPageScreen extends StatelessWidget {
                 BlocBuilder<UserBloc, UserState>(
                   builder: (context, userState) {
                     if ((userState.selectedAccountModel!.isUser == true &&
-                            companyDetail?.data!.owner!.id ==
+                            companyDetail.data!.owner!.id ==
                                 userState.selectedAccountModel!.userId) ||
                         (userState.selectedAccountModel!.isUser == false &&
                             userState.selectedAccountModel!.companyId ==
-                                companyDetail?.data!.id)) {
+                                companyDetail.data!.id)) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
@@ -291,7 +313,7 @@ class CompanyPageScreen extends StatelessWidget {
                             CustomButtonWithIcon(
                               onTap: () {
                                 Get.to(() => DeleteCompanyScreen(
-                                      id: companyDetail?.data?.id.toString() ??
+                                      id: companyDetail.data?.id.toString() ??
                                           '',
                                     ));
                               },
@@ -341,28 +363,35 @@ class CompanyPageScreen extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: isCompany
-                          ? Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                    width: 1, color: ColorResources.blue),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 2,
-                                    spreadRadius: 0,
-                                    offset: Offset(0, 1),
-                                    color: Color.fromRGBO(16, 24, 40, 0.05),
-                                  ),
-                                ],
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'edit_profile'.tr,
-                                style: button16.copyWith(
-                                    color: ColorResources.blue),
+                          ? GestureDetector(
+                              onTap: () {
+                                Get.to(() => AddCompanyScreen(
+                                      isEdit: true,
+                                    ));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: ColorResources.blue),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 2,
+                                      spreadRadius: 0,
+                                      offset: Offset(0, 1),
+                                      color: Color.fromRGBO(16, 24, 40, 0.05),
+                                    ),
+                                  ],
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'edit_profile'.tr,
+                                  style: button16.copyWith(
+                                      color: ColorResources.blue),
+                                ),
                               ),
                             )
                           : CustomButton(
@@ -380,5 +409,56 @@ class CompanyPageScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String formatWorkingHours(WorkingHours workingHours) {
+    final Map<String, LunchBreak?> hoursMap = {
+      'monday': workingHours.monday,
+      'tuesday': workingHours.tuesday,
+      'wednesday': workingHours.wednesday,
+      'thursday': workingHours.thursday,
+      'friday': workingHours.friday,
+      'saturday': workingHours.saturday,
+      'sunday': workingHours.sunday,
+    };
+
+    const ruDays = {
+      'monday': 'Пн',
+      'tuesday': 'Вт',
+      'wednesday': 'Ср',
+      'thursday': 'Чт',
+      'friday': 'Пт',
+      'saturday': 'Сб',
+      'sunday': 'Вс',
+    };
+
+    List<String> resultLines = ["Время работы:"];
+    Map<String, List<String>> grouped = {};
+
+    for (var entry in hoursMap.entries) {
+      final day = entry.key;
+      final value = entry.value;
+      final open = value?.open;
+      final close = value?.close;
+
+      // Only include days with both open and close times
+      if (open != null && close != null) {
+        final timeRange = '$open-$close';
+        grouped.putIfAbsent(timeRange, () => []).add(ruDays[day]!);
+      }
+    }
+
+    for (var entry in grouped.entries) {
+      final List<String> days = entry.value;
+      final time = entry.key;
+
+      if (days.length == 1) {
+        resultLines.add('${days.first}, $time');
+      } else {
+        resultLines.add('с ${days.first} по ${days.last}, $time');
+      }
+    }
+
+    return resultLines.join('\n');
   }
 }

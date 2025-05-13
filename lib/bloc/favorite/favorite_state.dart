@@ -5,14 +5,17 @@ class FavoriteState extends Equatable {
   final bool isShowCategories;
   final bool isShowGridView;
   final List<ProductListItem> favoriteProducts;
+  final List<TenderItem> favoriteTenders;
   final bool isProductsLoadingMore;
   final int productsCurrentPage;
   final int productsPageSize;
+
   const FavoriteState(
       {this.isLoading = false,
       this.isShowCategories = false,
       this.isShowGridView = true,
       this.favoriteProducts = const [],
+      this.favoriteTenders = const [],
       this.isProductsLoadingMore = false,
       this.productsCurrentPage = 1,
       this.productsPageSize = 1});
@@ -22,6 +25,7 @@ class FavoriteState extends Equatable {
     bool? isShowCategories,
     bool? isShowGridView,
     List<ProductListItem>? favoriteProducts,
+    List<TenderItem>? favoriteTenders,
     bool? isProductsLoadingMore,
     int? productsCurrentPage,
     int? productsPageSize,
@@ -31,6 +35,7 @@ class FavoriteState extends Equatable {
       isShowCategories: isShowCategories ?? this.isShowCategories,
       isShowGridView: isShowGridView ?? this.isShowGridView,
       favoriteProducts: favoriteProducts ?? this.favoriteProducts,
+      favoriteTenders: favoriteTenders ?? this.favoriteTenders,
       isProductsLoadingMore:
           isProductsLoadingMore ?? this.isProductsLoadingMore,
       productsCurrentPage: productsCurrentPage ?? this.productsCurrentPage,
@@ -39,13 +44,28 @@ class FavoriteState extends Equatable {
   }
 
   @override
-  List<Object> get props =>
-      [isLoading, isShowCategories, isShowGridView, favoriteProducts];
+  List<Object> get props => [
+        isLoading,
+        isShowCategories,
+        isShowGridView,
+        favoriteProducts,
+        favoriteTenders,
+        isProductsLoadingMore,
+        productsCurrentPage,
+        productsPageSize,
+      ];
 }
 
-final class FavoriteInitial extends FavoriteState {}
+final class FavoriteInitial extends FavoriteState {
+  const FavoriteInitial() : super();
+}
 
 class FavoriteProductsError extends FavoriteState {
   final String error;
   const FavoriteProductsError(this.error);
+}
+
+class FavoriteTendersError extends FavoriteState {
+  final String error;
+  const FavoriteTendersError(this.error);
 }

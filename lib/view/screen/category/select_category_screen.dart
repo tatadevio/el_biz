@@ -13,11 +13,13 @@ import '../../base/custom_image.dart';
 
 class SelectCategoryScreen extends StatefulWidget {
   final Function(List<CategoryItem>)? onSelect;
+  final List<CategoryItem>? alreadySelected;
   final bool isCompanyCategory;
   final bool isProductCategory;
   const SelectCategoryScreen(
       {super.key,
       this.onSelect,
+      this.alreadySelected,
       this.isCompanyCategory = false,
       this.isProductCategory = false});
 
@@ -40,6 +42,25 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
   }
 
   List<CategoryItem> selectedCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.alreadySelected != null) {
+      loadCategory();
+    }
+  }
+
+  loadCategory() {
+    final categoryItems = context.read<CategoryBloc>().state.categoryItem;
+    for (var already in widget.alreadySelected!) {
+      for (var category in categoryItems) {
+        if (already.id == category.id) {
+          selectedCategories.add(category);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -11,6 +11,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(this.notificationRepo) : super(const NotificationState()) {
     on<NotificationEvent>((event, emit) {});
     on<GetNotification>(_onGetNotification);
+    on<ReadNotification>(_onReadNotification);
   }
 
   Future<void> _onGetNotification(
@@ -32,5 +33,30 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       NotificationError(e.toString());
     }
     emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> _onReadNotification(
+      ReadNotification event, Emitter<NotificationState> emit) async {
+    try {
+      final response =
+          await notificationRepo.readNotification(event.notificationId);
+      // print(response.statusCode);
+      // print(response.body);
+      if (response.statusCode == 200) {
+        List<NotificationData> allNotification =
+            List.from(state.notificationsList);
+
+        final index = allNotification.indexWhere((product) =>
+            product.id.toString() == event.notificationId.toString());
+
+        if (index != -1) {
+          allNotification[index].readAt = DateTime.now().toString();
+          // .removeAt(index);
+          emit(state.copyWith(notificationsList: allNotification));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

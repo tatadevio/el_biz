@@ -31,6 +31,8 @@ class UpdateKeywordSelected extends ProductEvent {
   List<Object> get props => [keyword];
 }
 
+class ResetSelectedKeyword extends ProductEvent {}
+
 class UpdateMaterialSelected extends ProductEvent {
   final String material;
   const UpdateMaterialSelected(this.material);
@@ -121,4 +123,6 @@ class ChangeSlectedProduct extends ProductEvent {
 
 class ClearSelectedProduct extends ProductEvent {}
 
-class EmptyPickedLogo extends ProductEvent{}
+class EmptyPickedLogo extends ProductEvent {}
+
+class ResetSelectedMaterial extends ProductEvent {}

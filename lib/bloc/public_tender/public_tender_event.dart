@@ -18,7 +18,8 @@ class GetPublicTender extends PublicTenderEvent {
 
 class TogglePublicTenderFavorite extends PublicTenderEvent {
   final int tenderId;
-  const TogglePublicTenderFavorite(this.tenderId);
+  final BuildContext context;
+  const TogglePublicTenderFavorite(this.tenderId, this.context);
 
   @override
   List<Object> get props => [tenderId];

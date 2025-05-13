@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:el_biz/data/model/base/add_company_model.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
+import 'package:el_biz/view/screen/home/home_screen.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
@@ -63,6 +66,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     on<RemoveCompanyOtherDocument>(_removeCompanyOtherDocument);
 
     on<AddNewCompany>(_onAddNewCompany);
+    on<UpdateCompany>(_onUpdateCompany);
   }
 
   // void _onGetMyCompanies(GetMyCompanies event, Emitter<CompanyState> emit) {}
@@ -249,20 +253,44 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   Future<void> _onAddNewCompany(
       AddNewCompany event, Emitter<CompanyState> emit) async {
     emit(state.copywith(isLoading: true));
-    final res = await compnayRepo.addNewCompany(event.addCompanyModel);
+    try {
+      final res = await compnayRepo.addNewCompany(event.addCompanyModel);
 
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      emit(state.copywith(isLoading: false));
-      add(GetMyCompanies());
-      Get.offAll(() => DashboardScreen());
-      emit(state.copywith(addCompanyModel: AddCompanyModel()));
-    } else {
-      emit(state.copywith(isLoading: false));
-      // Get.snackbar(
-      //   'Error',
-      //   'Failed to add company',
-      //   snackPosition: SnackPosition.BOTTOM,
-      // );
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        emit(state.copywith(isLoading: false));
+        HomeScreen().loadCompanyData(event.context);
+        Get.offAll(() => DashboardScreen());
+        emit(state.copywith(addCompanyModel: AddCompanyModel()));
+      } else {
+        emit(state.copywith(isLoading: false));
+        // AddCompanyError(res.body['message']);
+        showShortToast(res.body['message']);
+      }
+    } catch (e) {
+      // AddCompanyError(e.toString());
+      showShortToast(e.toString());
+    }
+  }
+
+  Future<void> _onUpdateCompany(
+      UpdateCompany event, Emitter<CompanyState> emit) async {
+    emit(state.copywith(isLoading: true));
+    try {
+      final res = await compnayRepo.addNewCompany(event.addCompanyModel,
+          isUpdate: true, companyId: event.companyId);
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        emit(state.copywith(isLoading: false));
+        HomeScreen().loadCompanyData(event.context);
+        Get.offAll(() => DashboardScreen());
+        emit(state.copywith(addCompanyModel: AddCompanyModel()));
+      } else {
+        emit(state.copywith(isLoading: false));
+        // AddCompanyError(res.body['message']);
+        showShortToast(res.body['message']);
+      }
+    } catch (e) {
+      showShortToast(e.toString());
     }
   }
 }

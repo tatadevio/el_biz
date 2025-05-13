@@ -65,10 +65,12 @@ class TenderGridItem extends StatelessWidget {
                             context
                                 .read<CompanyDetailBloc>()
                                 .add(ToggleTenderFavorite(tender.id!, context));
-                          } else if (isPublicTender) {
-                            context
-                                .read<PublicTenderBloc>()
-                                .add(TogglePublicTenderFavorite(tender.id!));
+                          } else
+                          // if (isPublicTender)
+                          {
+                            context.read<PublicTenderBloc>().add(
+                                TogglePublicTenderFavorite(
+                                    tender.id!, context));
                           }
                         },
                       )

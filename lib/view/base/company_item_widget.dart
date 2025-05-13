@@ -1,5 +1,4 @@
 import 'package:el_biz/data/model/response/company/my_companies_model.dart';
-import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -33,155 +32,123 @@ class CompanyItemWidget extends StatelessWidget {
                 isCompany: true,
               ));
         },
-        child: Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(
-                color: ColorResources.lightBlue,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(width: 1, color: ColorResources.lgColor),
-              ),
-              child: Column(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          decoration: BoxDecoration(
+            color: ColorResources.lightBlue,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(width: 1, color: ColorResources.lgColor),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomImage(
-                          image: company.logo ?? '',
-                          height: 40,
-                          width: 40,
-                          radius: 40),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  CustomImage(
+                      image: company.logo ?? '',
+                      height: 40,
+                      width: 40,
+                      radius: 40),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          company.name ?? '',
+                          style: h16.copyWith(
+                            color: ColorResources.darkGray,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          company.email ?? '',
+                          style:
+                              body14.copyWith(color: ColorResources.darkGray),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
                           children: [
-                            Text(
-                              company.name ?? '',
-                              style: h16.copyWith(
-                                color: ColorResources.darkGray,
+                            SvgPicture.asset(Images.svgMap),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: Text(
+                                company.address ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style:
+                                    body14.copyWith(color: ColorResources.gray),
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              company.email ?? '',
-                              style: body14.copyWith(
-                                  color: ColorResources.darkGray),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                SvgPicture.asset(Images.svgMap),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    company.address ?? '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '(4.8)',
                                     style: body14.copyWith(
                                         color: ColorResources.gray),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
+                                  RatingBar.builder(
+                                    initialRating: 4.8,
+                                    minRating: 0,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    itemSize: 14,
+                                    ignoreGestures: true,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 0),
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: ColorResources.yellow,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '(4.8)',
-                                        style: body14.copyWith(
-                                            color: ColorResources.gray),
-                                      ),
-                                      RatingBar.builder(
-                                        initialRating: 4.8,
-                                        minRating: 0,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: true,
-                                        itemCount: 5,
-                                        itemSize: 14,
-                                        ignoreGestures: true,
-                                        itemPadding: const EdgeInsets.symmetric(
-                                            horizontal: 0),
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: ColorResources.yellow,
-                                        ),
-                                        onRatingUpdate: (rating) {
-                                          print(rating);
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                Text(
+                                  'more_details'.tr,
+                                  style: button16.copyWith(
+                                      color: ColorResources.blue),
                                 ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'more_details'.tr,
-                                      style: button16.copyWith(
-                                          color: ColorResources.blue),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    SvgPicture.asset(Images.svgArrowForward),
-                                  ],
+                                const SizedBox(
+                                  width: 5,
                                 ),
+                                SvgPicture.asset(Images.svgArrowForward),
                               ],
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-            Positioned(
-              right: 10,
-              top: 10,
-              child: CustomFavoriteButton(
-                isFavorite: false,
-                // company.,
-                onTap: () {},
-              ),
-              // Container(
-              //   height: 32,
-              //   width: 32,
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(10),
-              //     backgroundBlendMode: BlendMode.colorDodge,
-              //     boxShadow: const [
-              //       BoxShadow(
-              //         blurRadius: 1.6,
-              //         spreadRadius: 0,
-              //         offset: Offset(0, 0.8),
-              //         color: Color.fromRGBO(16, 24, 40, 0.05),
-              //       ),
-              //     ],
-              //   ),
-              //   alignment: Alignment.center,
-              //   child: SvgPicture.asset(Images.svgHeartBorder),
-              // ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

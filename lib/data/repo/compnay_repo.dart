@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:el_biz/data/api/api_client.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +25,8 @@ class CompnayRepo {
     return await apiClient.deleteData("${AppConstants.companyDeleteUrl}/$id");
   }
 
-  Future<Response> addNewCompany(AddCompanyModel addCompanyModel) async {
+  Future<Response> addNewCompany(AddCompanyModel addCompanyModel,
+      {bool isUpdate = false, String? companyId}) async {
     Map<String, String> fields = {
       'name': addCompanyModel.companyName ?? '',
       'tin_number': addCompanyModel.tinNumber ?? '',
@@ -49,13 +52,16 @@ class CompnayRepo {
     };
 
     // Add category_ids[] dynamically
-    for (CategoryItem category in addCompanyModel.categories!) {
-      fields['category_ids[]'] = category.id.toString();
+    // for (CategoryItem category in addCompanyModel.categories!) {
+    //   fields['category_ids[]'] = category.id.toString();
+    // }
+    for (int i = 0; i < addCompanyModel.categories!.length; i++) {
+      fields['category_ids[$i]'] = addCompanyModel.categories![i].id.toString();
     }
     if (addCompanyModel.phoneNumbers != null &&
         addCompanyModel.phoneNumbers!.isNotEmpty) {
-      for (String number in addCompanyModel.phoneNumbers!) {
-        fields['phone_numbers[]'] = number;
+      for (int i = 0; i < addCompanyModel.phoneNumbers!.length; i++) {
+        fields['phone_numbers[$i]'] = addCompanyModel.phoneNumbers![i];
       }
     }
 
@@ -113,8 +119,14 @@ class CompnayRepo {
       }
     }
 
-    return await apiClient.postMultipartData(AppConstants.addCompanyUrl,
-        fields: fields, files: files);
+    log('this is the fields data for update company : $fields');
+
+    return await apiClient.postMultipartData(
+        isUpdate
+            ? "${AppConstants.updateCompanyUrl}/$companyId"
+            : AppConstants.addCompanyUrl,
+        fields: fields,
+        files: files);
   }
 
   // var headers = {'Accept': 'application/json', 'Authorization': '••••••'};

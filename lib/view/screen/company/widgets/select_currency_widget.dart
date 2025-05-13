@@ -7,7 +7,8 @@ import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 
 class SelectCurrencyWidget extends StatefulWidget {
-  const SelectCurrencyWidget({super.key});
+  final bool isEdit;
+  const SelectCurrencyWidget({super.key, required this.isEdit});
 
   @override
   State<SelectCurrencyWidget> createState() => _SelectCurrencyWidgetState();
@@ -78,7 +79,9 @@ class _SelectCurrencyWidgetState extends State<SelectCurrencyWidget> {
             height: 44,
             onTap: () {
               Get.back();
-              Get.to(() => AddCompanyDocumentScreen());
+              Get.to(() => AddCompanyDocumentScreen(
+                isEdit: widget.isEdit,
+              ));
             },
             title: 'ready'.tr,
           ),

@@ -15,7 +15,8 @@ import 'widgets/custom_add_company_appbar.dart';
 import 'widgets/select_currency_widget.dart';
 
 class CompanyAccountInfoScreen extends StatefulWidget {
-  const CompanyAccountInfoScreen({super.key});
+  final bool isEdit;
+  const CompanyAccountInfoScreen({super.key, required this.isEdit});
 
   @override
   State<CompanyAccountInfoScreen> createState() =>
@@ -71,8 +72,21 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
 
     Get.bottomSheet(
       backgroundColor: Colors.white,
-      const SelectCurrencyWidget(),
+       SelectCurrencyWidget(isEdit: widget.isEdit,),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() {
+    // final companyData =
+    //     context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+    //     final companyDocument = context.read<CompanyDetailBloc>().state.companyDocuments!;
+    //     // if(companyDocument.)
   }
 
   @override
@@ -100,6 +114,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
                     onTap: () {
                       Get.to(() => AccountScreen(
                             isAddNewCompany: true,
+                            isEdit: widget.isEdit,
                           ));
                     },
                     child: Row(
@@ -214,7 +229,7 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => AddCompanyDocumentScreen());
+                    Get.to(() => AddCompanyDocumentScreen(isEdit: widget.isEdit,));
                   },
                   child: Container(
                     // height: 48,

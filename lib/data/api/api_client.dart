@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -40,7 +39,7 @@ class ApiClient extends GetxService {
 
   Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
-    SharedPreferences prefer = await SharedPreferences.getInstance();
+    // SharedPreferences prefer = await SharedPreferences.getInstance();
     try {
       if (foundation.kDebugMode) {
         print('====> API Call: $uri');
@@ -172,7 +171,6 @@ class ApiClient extends GetxService {
     return _response;
   }
 
-
   Future<Response> postMultipartData(
     String uri, {
     required Map<String, String> fields,
@@ -182,7 +180,6 @@ class ApiClient extends GetxService {
     SharedPreferences prefer = await SharedPreferences.getInstance();
     try {
       var request = http.MultipartRequest(
-        
         'POST',
         Uri.parse(AppConstants.baseUrl + uri),
       );
@@ -231,4 +228,39 @@ class ApiClient extends GetxService {
     }
   }
 
+  // patch data
+  Future<Response> patchData(String uri, dynamic body,
+      {Map<String, String>? headers}) async {
+    SharedPreferences prefer = await SharedPreferences.getInstance();
+    try {
+      if (foundation.kDebugMode) {
+        print('====> API PATCH Call: $uri');
+        print('====> API PATCH Body: ${jsonEncode(body)}');
+      }
+
+      http.Response _response = await http
+          .patch(
+            Uri.parse(AppConstants.baseUrl + uri),
+            body: jsonEncode(body),
+            headers: headers ?? _mainHeaders,
+          )
+          .timeout(Duration(seconds: timeoutInSeconds));
+
+      Response response = handleResponse(_response);
+
+      if (foundation.kDebugMode) {
+        print(
+            '====> API PATCH Response: [${response.statusCode}] $uri\n${response.body}');
+      }
+
+      if (response.body["message"] == "Unauthenticated.") {
+        prefer.clear();
+        Get.offAllNamed(RouteHelper.getLoginRoute());
+      }
+
+      return response;
+    } catch (e) {
+      return const Response(statusCode: 1, statusText: noInternetMessage);
+    }
+  }
 }

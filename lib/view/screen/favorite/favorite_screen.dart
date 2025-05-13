@@ -1,11 +1,14 @@
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
+import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/favorite/widgets/favorite_products_widget.dart';
+import 'package:el_biz/view/screen/favorite/widgets/favorite_tenders_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/public_product/public_product_bloc.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
@@ -37,11 +40,32 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     });
   }
 
+  late PublicProductBloc publicProductBloc;
+  // late FavoriteBloc favoriteBloc;
+  late PublicTenderBloc publicTenderBloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    publicProductBloc = context.read<PublicProductBloc>();
+    // favoriteBloc = context.read<FavoriteBloc>();
+    publicTenderBloc = context.read<PublicTenderBloc>();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
+    updateProducts();
     super.dispose();
   }
+
+  void updateProducts() async {
+    publicProductBloc.add(GetPublicProduct(1));
+    // favoriteBloc.add(GetFavoriteProducts(1));
+    // favoriteBloc.add(GetFavoriteTenders(1));
+    publicTenderBloc.add(GetPublicTender(1));
+  }
+
 
   void _scrollToTop() {
     _scrollController.animateTo(
@@ -110,7 +134,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    "Закупки".tr,
+                                    "tenders".tr,
                                     style: mediumTextStyle.copyWith(
                                       color: favoriteState.isShowCategories
                                           ? ColorResources.primary
@@ -250,7 +274,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             child: BlocBuilder<FavoriteBloc, FavoriteState>(
               builder: (context, state) {
                 if (state.isShowCategories) {
-                  return SizedBox();
+                  return FavoriteTendersWidget();
+                  // SizedBox();
                   // return state.isShowGridView
                   // ? GridView.builder(
                   //     controller: _scrollController,

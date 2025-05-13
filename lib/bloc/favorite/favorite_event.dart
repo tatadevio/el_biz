@@ -31,10 +31,27 @@ class GetFavoriteProducts extends FavoriteEvent {
   List<Object> get props => [currentPage];
 }
 
+class GetFavoriteTenders extends FavoriteEvent {
+  final int currentPage;
+  const GetFavoriteTenders(this.currentPage);
+
+  @override
+  List<Object> get props => [currentPage];
+}
+
 class RemoveProductFromFavoriteList extends FavoriteEvent {
   final int productId;
   const RemoveProductFromFavoriteList(this.productId);
 
   @override
   List<Object> get props => [productId];
+}
+
+
+class RemoveTenderFromFavoriteList extends FavoriteEvent {
+  final int tenderId ;
+  const RemoveTenderFromFavoriteList(this.tenderId);
+
+  @override
+  List<Object> get props => [tenderId];
 }

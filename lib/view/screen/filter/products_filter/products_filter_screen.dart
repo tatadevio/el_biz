@@ -141,7 +141,11 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
     setState(() {
       _priceRange = const RangeValues(1, 20000);
       selectedCategoryId = null;
+      selectedDimensions = [];
+      selectedPriceOption = '';
     });
+    context.read<ProductBloc>().add(ResetSelectedKeyword());
+    context.read<ProductBloc>().add(ResetSelectedMaterial());
   }
 
   @override

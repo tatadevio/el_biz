@@ -15,7 +15,9 @@ import 'widgets/edit_account_info_bottom_sheet.dart';
 
 class AccountScreen extends StatefulWidget {
   final bool isAddNewCompany;
-  const AccountScreen({super.key, this.isAddNewCompany = false});
+  final bool isEdit;
+  const AccountScreen(
+      {super.key, this.isAddNewCompany = false, this.isEdit = false});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -172,7 +174,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     context.read<CompanyBloc>().state.addCompanyModel;
 
                 companyModel.bankData = allBanks;
-                Get.to(() => AddCompanyDocumentScreen());
+                Get.to(() => AddCompanyDocumentScreen(
+                      isEdit: widget.isEdit,
+                    ));
               } else {
                 Get.bottomSheet(
                     const EditAccountInfoBottomSheet(

@@ -58,7 +58,7 @@ class NotificationData {
   final String? image;
   final String? actionUrl;
   final String? type;
-  final String? readAt;
+  String? readAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 

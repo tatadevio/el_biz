@@ -14,4 +14,9 @@ class NotificationRepo {
     return await apiClient
         .getData("${AppConstants.notificationUrl}?page=$page");
   }
+
+  Future<Response> readNotification(String notificationId) async {
+    return await apiClient
+        .patchData("${AppConstants.notificationUrl}/$notificationId/read", {});
+  }
 }

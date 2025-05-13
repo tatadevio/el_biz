@@ -20,7 +20,7 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
   Future<void> _onGetPublicCompany(
       GetPublicCompany event, Emitter<PublicCompanyState> emit) async {
     if (event.currentPage == 1) {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, publicCompanies: []));
     } else {
       emit(state.copyWith(isMoreLoading: true));
     }
@@ -77,5 +77,3 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
     emit(state.copyWith(isLoading: false, isMoreLoading: false));
   }
 }
-
-     

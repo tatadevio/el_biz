@@ -9,13 +9,15 @@ import 'package:get/get.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../data/model/base/add_company_model.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/custom_button.dart';
 import 'widgets/custom_add_company_appbar.dart';
 
 class CompanyContactInfoScreen extends StatefulWidget {
-  const CompanyContactInfoScreen({super.key});
+  final bool isEdit;
+  const CompanyContactInfoScreen({super.key, required this.isEdit});
 
   @override
   State<CompanyContactInfoScreen> createState() =>
@@ -90,7 +92,47 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
     companyModel.email = emailController.text;
     companyModel.otherContacts = otherContacts;
 
-    Get.to(() => const CompanyAccountInfoScreen());
+    Get.to(() => CompanyAccountInfoScreen(isEdit: widget.isEdit));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      loadData();
+    }
+  }
+
+  void loadData() {
+    final companyData =
+        context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+
+    emailController.text = companyData.email ?? '';
+    if (companyData.phoneNumbers != null &&
+        companyData.phoneNumbers!.isNotEmpty) {
+      for (int i = 0; i < companyData.phoneNumbers!.length; i++) {
+        phoneControllers[i].text =
+            companyData.phoneNumbers![i].startsWith('+996')
+                ? companyData.phoneNumbers![i].replaceFirst('+996', '')
+                : companyData.phoneNumbers![i];
+        // phoneControllers[i].text = companyData.phoneNumbers![i];
+        int valid = i;
+        if (++valid < companyData.phoneNumbers!.length) {
+          addNewPhoneNumber();
+        }
+      }
+    }
+
+    if (companyData.contacts != null && companyData.contacts!.isNotEmpty) {
+      for (int i = 0; i < companyData.contacts!.length; i++) {
+        accountNameControllers[i].text = companyData.contacts![i].name ?? '';
+        accountControllers[i].text = companyData.contacts![i].contact ?? '';
+        int valid = i;
+        if (++valid < companyData.contacts!.length) {
+          addNewAccount();
+        }
+      }
+    }
   }
 
   @override

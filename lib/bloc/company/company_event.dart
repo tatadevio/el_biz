@@ -92,10 +92,11 @@ class RemoveCompanyOtherDocument extends CompanyEvent {
 
 class AddNewCompany extends CompanyEvent {
   final AddCompanyModel addCompanyModel;
-  const AddNewCompany(this.addCompanyModel);
+  final BuildContext context;
+  const AddNewCompany(this.addCompanyModel, this.context);
 
   @override
-  List<Object> get props => [addCompanyModel];
+  List<Object> get props => [addCompanyModel, context];
 }
 
 class VerifyTinNumber extends CompanyEvent {
@@ -104,4 +105,15 @@ class VerifyTinNumber extends CompanyEvent {
 
   @override
   List<Object> get props => [tinNumber];
+}
+
+// update company
+class UpdateCompany extends CompanyEvent {
+  final AddCompanyModel addCompanyModel;
+  final String companyId;
+  final BuildContext context;
+  const UpdateCompany({required this.addCompanyModel, required this.companyId, required this.context});
+
+  @override
+  List<Object> get props => [addCompanyModel, companyId, context];
 }

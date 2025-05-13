@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
@@ -11,7 +12,8 @@ import '../../../bloc/company/company_bloc.dart';
 import '../../base/custom_button.dart';
 
 class KeywordsTagsScreen extends StatefulWidget {
-  const KeywordsTagsScreen({super.key});
+  final bool isEdit;
+  const KeywordsTagsScreen({super.key, required this.isEdit});
 
   @override
   State<KeywordsTagsScreen> createState() => _KeywordsTagsScreenState();
@@ -19,6 +21,24 @@ class KeywordsTagsScreen extends StatefulWidget {
 
 class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
   final TextEditingController keywordsController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      loadData();
+    }
+  }
+
+  void loadData() {
+    final keywords = context
+        .read<CompanyDetailBloc>()
+        .state
+        .companyDetailModel!
+        .data!
+        .searchTags;
+    keywordsController.text = keywords!.join(', ');
+  }
 
   void _submitForm() {
     // if (_formKey.currentState!.validate()) {
@@ -30,7 +50,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
         .toList();
     context.read<CompanyBloc>().state.addCompanyModel.keywords = keywordsList;
 
-    Get.to(() => CompanyInfoScreen());
+    Get.to(() => CompanyInfoScreen(isEdit:  widget.isEdit));
     // } else {
     // validation issue...
     // }

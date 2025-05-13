@@ -1,20 +1,20 @@
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
+import 'package:el_biz/view/base/tender_grid_item.dart';
+import 'package:el_biz/view/base/tender_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
 
 import '../../../../utils/color_resources.dart';
-import '../../../base/product_grid_item.dart';
-import '../../../base/product_list_item.dart';
 
-class FavoriteProductsWidget extends StatefulWidget {
-  const FavoriteProductsWidget({super.key});
+class FavoriteTendersWidget extends StatefulWidget {
+  const FavoriteTendersWidget({super.key});
 
   @override
-  State<FavoriteProductsWidget> createState() => _FavoriteProductsWidgetState();
+  State<FavoriteTendersWidget> createState() => _FavoriteTendersWidgetState();
 }
 
-class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
+class _FavoriteTendersWidgetState extends State<FavoriteTendersWidget> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
 
@@ -53,17 +53,17 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
               child: CircularProgressIndicator(),
             );
           }
-          if (favoriteState is FavoriteProductsError) {
+          if (favoriteState is FavoriteTendersError) {
             return Center(
               child: Text(favoriteState.error),
             );
           }
 
           if (!favoriteState.isLoading &&
-              favoriteState is! FavoriteProductsError) {
-            if (favoriteState.favoriteProducts.isEmpty) {
+              favoriteState is! FavoriteTendersError) {
+            if (favoriteState.favoriteTenders.isEmpty) {
               return Center(
-                child: Text('no_favorite_products'.tr),
+                child: Text('no_favorite_tenders'.tr),
               );
             }
             return favoriteState.isShowGridView
@@ -75,25 +75,26 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
                             mainAxisSpacing: 10,
                             crossAxisSpacing: 10,
                             childAspectRatio: 0.7),
-                    itemCount: favoriteState.favoriteProducts.length,
+                    itemCount: favoriteState.favoriteTenders.length,
                     itemBuilder: (context, index) {
-                      return ProductGridItem(
+                      return TenderGridItem(
+                        isCompanyTender: false,
                         // isFavorite:
                         //     favoriteState.favoriteProducts[index].isFavorite ??
                         //         false,
-                        product: favoriteState.favoriteProducts[index],
+                        tender: favoriteState.favoriteTenders[index],
                       );
                     },
                   )
                 : ListView.builder(
                     controller: _scrollController,
-                    itemCount: favoriteState.favoriteProducts.length,
+                    itemCount: favoriteState.favoriteTenders.length,
                     itemBuilder: (context, index) {
-                      return ProductListItemWidget(
+                      return TenderListItem(
                         // isFavorite:
                         //     favoriteState.favoriteProducts[index].isFavorite ??
                         //         false,
-                        product: favoriteState.favoriteProducts[index],
+                        tender: favoriteState.favoriteTenders[index],
                       );
                     },
                   );

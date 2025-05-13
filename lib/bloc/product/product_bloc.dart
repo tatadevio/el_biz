@@ -20,6 +20,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<UpdateGridView>((event, emit) {
       emit(state.copywith(isGridView: event.gridView));
     });
+    on<ResetSelectedMaterial>(_onResetSelectedMaterial);
 
     on<UpdateShowCategories>((event, emit) {
       emit(state.copywith(isShowCategories: event.showCategories));
@@ -43,6 +44,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         }
       }
     });
+    on<ResetSelectedKeyword>((event, emit) {
+      emit(state.copywith(selectedKeywords: []));
+    },);
+
 
     on<UpdateMaterialSelected>((event, emit) {
       final currentMaterials = List<String>.from(state.selectedMaterial);
@@ -205,5 +210,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   Future<void> _onEmptyPickedLogo(
       EmptyPickedLogo event, Emitter<ProductState> emit) async {
     emit(state.copywith(pickedLogo: []));
+  }
+
+   Future<void> _onResetSelectedMaterial(ResetSelectedMaterial event, Emitter<ProductState> emit ) async {
+    emit(state.copywith(selectedMaterial: []));
   }
 }

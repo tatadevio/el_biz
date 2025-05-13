@@ -11,10 +11,10 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
-import 'package:el_biz/view/screen/company/my_companies_screen.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
 import 'package:el_biz/view/screen/home/widgets/new_companies_widget.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
+import 'package:el_biz/view/screen/public_companies/public_companies_screen.dart';
 import 'package:el_biz/view/screen/search/search_screen.dart';
 import 'package:el_biz/view/screen/tender/tender_screen.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +46,12 @@ class HomeScreen extends StatelessWidget {
     context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));
     context.read<NotificationBloc>().add(GetNotification(1));
     // context.read<UserBloc>().add(GetSelectedAccount()); // added in the user info bloc
+  }
+
+  loadCompanyData(BuildContext context) {
+    context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
+    context.read<PublicCompanyBloc>().add(GetNewPublicCompany(1));
+    context.read<CompanyBloc>().add(GetMyCompanies());
   }
 
   @override
@@ -210,7 +216,9 @@ class HomeScreen extends StatelessWidget {
                                   .tr,
                           backgroundColor: ColorResources.blue,
                           onTap: () {
-                            Get.to(() => const MyCompaniesScreen());
+                            Get.to(() => PublicCompaniesScreen()
+                                // const MyCompaniesScreen(),
+                                );
                           }),
                       SizedBox(
                         height: height * 0.025,
@@ -261,6 +269,9 @@ class HomeScreen extends StatelessWidget {
                             context
                                 .read<favorite.FavoriteBloc>()
                                 .add(favorite.GetFavoriteProducts(1));
+                            context
+                                .read<favorite.FavoriteBloc>()
+                                .add(favorite.GetFavoriteTenders(1));
                             Get.to(() => const FavoriteScreen());
                           }),
                       SizedBox(

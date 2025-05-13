@@ -13,6 +13,11 @@ class FavoriteRepo {
         .getData("${AppConstants.favoriteProductsUrl}?page=$page");
   }
 
+  Future<Response> getFavoriteTenders(int page) async {
+    return await apiClient
+        .getData("${AppConstants.favoriteTendersUrl}?page=$page");
+  }
+
   // Future<Response> saveSearch(String title, String path, String type) async {
   //   return await apiClient.postData(AppConstants.saveSearchUrl,
   //       {"title": title, "result": path, "type": type});

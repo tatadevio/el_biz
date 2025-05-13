@@ -293,7 +293,8 @@
   "tender_updated" : "Tender Updated",
   "tender_updated_successfully" : "he tender details have been updated successfully.",
   "tender_added": "Tender Added",
-  "tender_added_successfully": "The tender has been added successfully."
+  "tender_added_successfully": "The tender has been added successfully.",
+  "no_favorite_tenders" : "No favorite tenders found."
 
 
 

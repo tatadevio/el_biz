@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
@@ -11,7 +12,8 @@ import 'package:get/get.dart';
 import '../../base/custom_button.dart';
 
 class CompanyDescriptionScreen extends StatefulWidget {
-  const CompanyDescriptionScreen({super.key});
+  final bool isEdit;
+  const CompanyDescriptionScreen({super.key, this.isEdit = false});
 
   @override
   State<CompanyDescriptionScreen> createState() =>
@@ -22,12 +24,29 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController descriptionController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      loadCompanyData();
+    }
+  }
+
+  void loadCompanyData() {
+    final companyData =
+        context.read<CompanyDetailBloc>().state.companyDetailModel!.data;
+    descriptionController.text = companyData?.description ?? '';
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       context.read<CompanyBloc>().state.addCompanyModel.description =
           descriptionController.text;
 
-      Get.to(() => AboutCompanyScreen());
+
+      Get.to(() => AboutCompanyScreen(
+            isEdit: widget.isEdit,
+          ));
     } else {
       // validation issue...
     }

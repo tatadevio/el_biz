@@ -1,9 +1,11 @@
 import 'package:el_biz/data/repo/public_tender_repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/model/response/company/company_tenders_model.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
+import '../favorite/favorite_bloc.dart';
 
 part 'public_tender_event.dart';
 part 'public_tender_state.dart';
@@ -58,9 +60,9 @@ class PublicTenderBloc extends Bloc<PublicTenderEvent, PublicTenderState> {
           .toggleFavorite(event.tenderId.toString(), type: "Tender");
       if (response.statusCode == 200) {
         // ignore: use_build_context_synchronously
-        // event.context
-        //     .read<FavoriteBloc>()
-        //     .add(RemoveProductFromFavoriteList(event.tenderId));
+        event.context
+            .read<FavoriteBloc>()
+            .add(RemoveTenderFromFavoriteList(event.tenderId));
       } else {
         final updatedProducts = state.publicTenders.map((product) {
           if (product.id == event.tenderId) {
