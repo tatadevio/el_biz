@@ -39,3 +39,26 @@ class ToggleFavoritePublicProduct extends PublicProductEvent {
   @override
   List<Object> get props => [context, productId];
 }
+
+class UpdateFilterEnable extends PublicProductEvent {
+  final bool isEnable;
+  const UpdateFilterEnable(this.isEnable);
+
+  @override
+  List<Object> get props => [isEnable];
+}
+
+class FilterPublicProduct extends PublicProductEvent {
+  final ProductFilterValuesModel productFilterValuesModel;
+  final int currentPage;
+  const FilterPublicProduct({
+    required this.productFilterValuesModel,
+    required this.currentPage,
+  });
+
+  @override
+  List<Object> get props => [
+        productFilterValuesModel,
+        currentPage,
+      ];
+}

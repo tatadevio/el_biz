@@ -52,7 +52,11 @@ class ProductListItemWidget extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  CustomImage(image: '', height: 120, width: 100, radius: 16),
+                  CustomImage(
+                      image: product?.image ?? '',
+                      height: 120,
+                      width: 100,
+                      radius: 16),
                   // Image.asset(
                   //   Images.splashLogo,
                   //   height: 120,
@@ -123,11 +127,13 @@ class ProductListItemWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '(4.8) ',
+                          '(${product?.reviewsAvgRating ?? '0'}) ',
                           style: body14.copyWith(color: ColorResources.gray),
                         ),
                         RatingBar.builder(
-                          initialRating: 4.8,
+                          initialRating: double.tryParse(
+                                  product?.reviewsAvgRating ?? '0') ??
+                              0,
                           minRating: 0,
                           direction: Axis.horizontal,
                           allowHalfRating: true,

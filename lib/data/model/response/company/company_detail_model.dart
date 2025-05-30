@@ -6,6 +6,8 @@ import 'package:el_biz/data/model/response/cities_model.dart';
 
 import 'dart:convert';
 
+import '../account/my_accounts_model.dart';
+
 CompanyDetailModel companyDetailModelFromJson(String str) =>
     CompanyDetailModel.fromJson(json.decode(str));
 
@@ -94,6 +96,7 @@ class Data {
   final String? postalCode;
   final CityItem? city;
   final List<CategoryItem>? categories;
+  final List<AccountItem>? accounts;
 
   Data({
     this.id,
@@ -123,6 +126,7 @@ class Data {
     this.postalCode,
     this.city,
     this.categories,
+    this.accounts,
   });
 
   Data copyWith({
@@ -153,6 +157,7 @@ class Data {
     String? postalCode,
     CityItem? city,
     List<CategoryItem>? categories,
+    List<AccountItem>? accounts,
   }) =>
       Data(
         id: id ?? this.id,
@@ -182,6 +187,7 @@ class Data {
         postalCode: postalCode ?? this.postalCode,
         city: city ?? this.city,
         categories: categories ?? this.categories,
+        accounts: accounts ?? this.accounts,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -249,6 +255,10 @@ class Data {
             ? []
             : List<CategoryItem>.from(
                 json["categories"]!.map((x) => CategoryItem.fromJson(x))),
+        accounts: json["accounts"] == null
+            ? []
+            : List<AccountItem>.from(
+                json["accounts"].map((x) => AccountItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -287,6 +297,7 @@ class Data {
         "categories": categories == null
             ? []
             : List<dynamic>.from(categories!.map((x) => x.toJson())),
+        "accounts": List<dynamic>.from(accounts!.map((x) => x.toJson())),
       };
 }
 

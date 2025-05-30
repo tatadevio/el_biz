@@ -101,12 +101,16 @@ class CompanyItemWidget extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    '(4.8)',
+                                    "(${company.reviewsAverageRating == "" ? "0" : company.reviewsAverageRating ?? '0'})",
+                                    // '(4.8)',
                                     style: body14.copyWith(
                                         color: ColorResources.gray),
                                   ),
                                   RatingBar.builder(
-                                    initialRating: 4.8,
+                                    initialRating: double.tryParse(
+                                            company.reviewsAverageRating ??
+                                                '0') ??
+                                        0,
                                     minRating: 0,
                                     direction: Axis.horizontal,
                                     allowHalfRating: true,

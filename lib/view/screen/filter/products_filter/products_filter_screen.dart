@@ -1,10 +1,10 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
+import 'package:el_biz/data/model/base/product_filter_values_model.dart';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
-import 'package:el_biz/utils/utilities.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/category/select_category_screen.dart';
-import 'package:el_biz/view/screen/product/add_product4_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import '../../../../bloc/filter_fields/filter_fields_bloc.dart';
 import '../../../../bloc/material/material_bloc.dart' as material;
+import '../../../../data/model/base/rating_option_model.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
@@ -33,68 +34,33 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
   CategoryItem? selectedCategoryId;
   RangeValues _priceRange = const RangeValues(1, 20000);
 
-  List<Map> sort = [
-    {
-      "value": "popular",
-      "type": "popular".tr,
-    },
-    {
-      "value": "latest",
-      "type": "newest_first".tr,
-    },
-    {
-      "value": "low-high",
-      "type": "cheapest_first".tr,
-    },
-    {
-      "value": "high-low",
-      "type": "expensive_first".tr,
-    },
-  ];
-
-  // List<String> keywordsList = [
-  //   'Мебель',
-  //   'Стол',
-  //   'Садовая мебель',
-  //   'Стулья',
-  //   'Шкафы',
-  //   'Светильник',
-  //   'Светильник',
+  // List<String> ratingList = [
+  //   'companies_rated_4_and_5',
+  //   'companies_rated_2_and_3',
+  //   'all_companies',
   // ];
-  // List<String> materialList = [
-  //   'Дерево',
-  //   'Пластик',
-  //   'Железо',
-  //   'Камень',
-  //   'Текстиль',
-  //   'ЛДСП',
-  //   'МДФ',
-  //   'Стекло',
-  //   'Эпоксидная смола',
-  //   'Плитка',
-  // ];
-
-  List<String> ratingList = [
-    'companies_rated_4_and_5',
-    'companies_rated_2_and_3',
-    'all_companies',
+  List<RatingOption> ratingOptions = [
+    RatingOption(name: 'Rated 4 & 5 Stars', value: '45'),
+    RatingOption(name: 'Rated 2 & 3 Stars', value: '23'),
+    RatingOption(name: 'All Companies', value: 'all'),
   ];
-  String selectedRating = 'companies_rated_4_and_5';
+  RatingOption selectedRating =
+      RatingOption(name: 'All Companies', value: 'all');
   bool isVerifiedCompany = false;
 
-  List<String> colors = [
-    "#F1A9A0",
-    "#8E44AD",
-    "#3498DB",
-    "#2ECC71",
-    "#E74C3C",
-    "#F39C12",
-    "#16A085",
-    "#D35400",
-    "#1ABC9C",
-    "#34495E",
-  ];
-  String selectedColor = '';
+  // List<String> colors = [
+  //   "#F1A9A0",
+  //   "#8E44AD",
+  //   "#3498DB",
+  //   "#2ECC71",
+  //   "#E74C3C",
+  //   "#F39C12",
+  //   "#16A085",
+  //   "#D35400",
+  //   "#1ABC9C",
+  //   "#34495E",
+  // ];
+  // String selectedColor = '';
 
   List<String> priceOptions = [
     'price_excuding_taxes',
@@ -146,6 +112,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
     });
     context.read<ProductBloc>().add(ResetSelectedKeyword());
     context.read<ProductBloc>().add(ResetSelectedMaterial());
+    context.read<PublicProductBloc>().add(UpdateFilterEnable(false));
+    Get.back();
   }
 
   @override
@@ -402,6 +370,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                             ),
                           ),
                         ),
+                        // category end
                         // const SizedBox(
                         //   height: 15,
                         // ),
@@ -417,11 +386,11 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(
-                                    () => AddProduct4Screen(
-                                      isEdit: false,
-                                    ),
-                                  );
+                                  // Get.to(
+                                  //   () => AddProduct4Screen(
+                                  //     isEdit: false,
+                                  //   ),
+                                  // );
                                 },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -504,6 +473,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                     .toList(),
                           ),
                         ],
+                        // keyword.... selected_keyword
                         const Divider(),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -515,17 +485,17 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: ratingList.length,
+                          itemCount: ratingOptions.length,
                           itemBuilder: (context, index) {
-                            return RadioListTile<String>(
+                            return RadioListTile<RatingOption>(
                               contentPadding: const EdgeInsets.all(0),
                               dense: true,
                               title: Text(
-                                ratingList[index].tr,
+                                ratingOptions[index].name.tr,
                                 style:
                                     body16.copyWith(color: ColorResources.gray),
                               ),
-                              value: ratingList[index],
+                              value: ratingOptions[index],
                               groupValue: selectedRating,
                               onChanged: (value) {
                                 setState(() {
@@ -535,6 +505,8 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                             );
                           },
                         ),
+
+                        // rating end
 
                         const Divider(),
                         // const SizedBox(
@@ -642,69 +614,69 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                             );
                           },
                         ),
-                        const Divider(),
-                        // select color
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'color'.tr,
-                                style: h16.copyWith(
-                                    color: ColorResources.darkGray),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'all'.tr,
-                                    style: button16.copyWith(
-                                        color: ColorResources.blue),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  SvgPicture.asset(Images.svgArrowForwardIcon),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: colors
-                              .map(
-                                (color) => InkWell(
-                                  borderRadius: BorderRadius.circular(28),
-                                  onTap: () {
-                                    setState(() {
-                                      selectedColor = color;
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 28,
-                                    width: 28,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: hexToColor(color),
-                                      border: Border.all(
-                                          color: ColorResources.lgColor,
-                                          width: 0.88),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: selectedColor == color
-                                        ? const Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                          )
-                                        : const SizedBox(),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
+                        // const Divider(),
+                        // // select color
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(vertical: 5),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text(
+                        //         'color'.tr,
+                        //         style: h16.copyWith(
+                        //             color: ColorResources.darkGray),
+                        //       ),
+                        //       Row(
+                        //         mainAxisSize: MainAxisSize.min,
+                        //         children: [
+                        //           Text(
+                        //             'all'.tr,
+                        //             style: button16.copyWith(
+                        //                 color: ColorResources.blue),
+                        //           ),
+                        //           const SizedBox(
+                        //             width: 10,
+                        //           ),
+                        //           SvgPicture.asset(Images.svgArrowForwardIcon),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Wrap(
+                        //   spacing: 8,
+                        //   runSpacing: 8,
+                        //   children: colors
+                        //       .map(
+                        //         (color) => InkWell(
+                        //           borderRadius: BorderRadius.circular(28),
+                        //           onTap: () {
+                        //             setState(() {
+                        //               selectedColor = color;
+                        //             });
+                        //           },
+                        //           child: Container(
+                        //             height: 28,
+                        //             width: 28,
+                        //             decoration: BoxDecoration(
+                        //               shape: BoxShape.circle,
+                        //               color: hexToColor(color),
+                        //               border: Border.all(
+                        //                   color: ColorResources.lgColor,
+                        //                   width: 0.88),
+                        //             ),
+                        //             alignment: Alignment.center,
+                        //             child: selectedColor == color
+                        //                 ? const Icon(
+                        //                     Icons.check,
+                        //                     color: Colors.white,
+                        //                   )
+                        //                 : const SizedBox(),
+                        //           ),
+                        //         ),
+                        //       )
+                        //       .toList(),
+                        // ),
                         const Divider(),
                         if (filterState.filterFieldsModel?.data?.dimentions !=
                                 null &&
@@ -1007,7 +979,44 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: CustomButton(
-            width: Get.width, height: 44, onTap: () {}, title: 'filter'.tr),
+            width: Get.width,
+            height: 44,
+            onTap: () {
+              final productState = context.read<ProductBloc>().state;
+              // selectedCategory
+              // print(
+              //     'this is the filter data ${selectedCategoryId?.name} and keyword = ${context.read<ProductBloc>().state.selectedKeywords} rating = $selectedRating');
+              // print(
+              //     'selected material = ${productState.selectedMaterial} and color =${selectedColor} , Dimensions = ${selectedDimensions} , price = ${selectedPriceOption} ');
+              // print(
+              //     'sected price range = ${_priceRange.start}, and ${_priceRange.end}');
+
+              String keyword =
+                  context.read<ProductBloc>().state.selectedKeywords.join(', ');
+              String material = productState.selectedMaterial.join(', ');
+              String dimensions = selectedDimensions.join(', ');
+
+              // print(
+              //     'categoryid = ${selectedCategoryId?.id ?? ''} and keywords = $keyword and material = $material and dimentions = $dimensions');
+
+              ProductFilterValuesModel productFilterValuesModel =
+                  ProductFilterValuesModel(
+                categoryId: "${selectedCategoryId?.id ?? ''}",
+                keywords: keyword,
+                highRating: selectedRating.value,
+                materials: material,
+                dimensions: dimensions,
+                price: selectedPriceOption,
+                priceMin: _priceRange.start.toStringAsFixed(2),
+                priceMax: _priceRange.end.toStringAsFixed(2),
+              );
+
+              context.read<PublicProductBloc>().add(FilterPublicProduct(
+                  productFilterValuesModel: productFilterValuesModel,
+                  currentPage: 1));
+              Get.back();
+            },
+            title: 'filter'.tr),
       ),
     );
   }

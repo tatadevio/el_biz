@@ -46,7 +46,7 @@ class TenderListItem extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  CustomImage(image: '', height: 120, width: 100, radius: 16),
+                  CustomImage(image: tender.image ?? '', height: 120, width: 100, radius: 16),
                   Positioned(
                       right: 5,
                       top: 5,

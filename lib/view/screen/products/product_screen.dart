@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -47,9 +48,18 @@ class _ProductScreenState extends State<ProductScreen> {
     });
   }
 
+  late PublicProductBloc publicBloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    publicBloc = context.read<PublicProductBloc>();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
+    publicBloc.add(UpdateFilterEnable(false));
     super.dispose();
   }
 
@@ -149,51 +159,68 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                     child: Row(
                       children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: () {
-                            if (productController.isShowCategories) {
-                              Get.to(() => const CompanyFilterScreen());
-                            } else {
-                              context.read<FilterFieldsBloc>().add(GetFilterFields());
-                              Get.to(() => const ProductsFilterScreen());
-                            }
-                          },
-                          child: Container(
-                            height: 40,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 14),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                12,
-                              ),
-                              color: ColorResources.green,
-                              boxShadow: const [
-                                BoxShadow(
-                                  blurRadius: 2,
-                                  spreadRadius: 0,
-                                  offset: Offset(0, 1),
-                                  color: Color.fromRGBO(16, 24, 40, 0.05),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                        BlocBuilder<PublicProductBloc, PublicProductState>(
+                            builder: (context, publicState) {
+                          return InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              if (productController.isShowCategories) {
+                                Get.to(() => const CompanyFilterScreen());
+                              } else {
+                                context
+                                    .read<FilterFieldsBloc>()
+                                    .add(GetFilterFields());
+                                Get.to(() => const ProductsFilterScreen());
+                              }
+                            },
+                            child: Stack(
                               children: [
-                                SvgPicture.asset(
-                                  Images.filter,
+                                Container(
+                                  height: 40,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 14),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ),
+                                    color: ColorResources.green,
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        blurRadius: 2,
+                                        spreadRadius: 0,
+                                        offset: Offset(0, 1),
+                                        color: Color.fromRGBO(16, 24, 40, 0.05),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        Images.filter,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'filter'.tr,
+                                        style: button16,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'filter'.tr,
-                                  style: button16,
-                                ),
+                                if (publicState.isFilterEnable)
+                                  Positioned(
+                                      top: 5,
+                                      right: 6,
+                                      child: CircleAvatar(
+                                        radius: 3,
+                                        backgroundColor: ColorResources.red,
+                                      ))
                               ],
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                         //
                         const SizedBox(
                           width: 10,

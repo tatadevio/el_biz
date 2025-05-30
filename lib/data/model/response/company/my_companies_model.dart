@@ -100,6 +100,7 @@ class CompanyItem {
   final String? tinNumber;
   final DateTime? createdAt;
   final Owner? owner;
+  final String? reviewsAverageRating;
 
   CompanyItem({
     this.id,
@@ -113,6 +114,7 @@ class CompanyItem {
     this.tinNumber,
     this.createdAt,
     this.owner,
+    this.reviewsAverageRating,
   });
 
   factory CompanyItem.fromJson(Map<String, dynamic> json) => CompanyItem(
@@ -129,6 +131,7 @@ class CompanyItem {
             ? null
             : DateTime.parse(json["created_at"]),
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        reviewsAverageRating: json["reviews_avg_rating"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -143,6 +146,7 @@ class CompanyItem {
         "tin_number": tinNumber,
         "created_at": createdAt?.toIso8601String(),
         "owner": owner?.toJson(),
+        "reviews_avg_rating": reviewsAverageRating,
       };
 }
 

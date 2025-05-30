@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../data/model/response/bank_model.dart';
 import '../../../utils/color_resources.dart';
 import '../account/account_screen.dart';
@@ -72,22 +73,70 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
 
     Get.bottomSheet(
       backgroundColor: Colors.white,
-       SelectCurrencyWidget(isEdit: widget.isEdit,),
+      SelectCurrencyWidget(
+        isEdit: widget.isEdit,
+      ),
     );
   }
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    if (widget.isEdit) {
+      loadData();
+    }
   }
 
   void loadData() {
-    // final companyData =
-    //     context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+    final companyData =
+        context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
     //     final companyDocument = context.read<CompanyDetailBloc>().state.companyDocuments!;
     //     // if(companyDocument.)
+    print('this is the company account = ${companyData.accounts}');
+    for (int i = 0; i < companyData.accounts!.length; i++) {
+      accountNameControllers[i].text =
+          companyData.accounts?[i].accountName ?? '';
+      accountNumberControllers[i].text =
+          companyData.accounts?[i].accountNumber ?? '';
+      bikControllers[i].text = companyData.accounts?[i].bic ?? '';
+      int valid = i;
+      if (++valid < companyData.accounts!.length) {
+        addNewAccount();
+      }
+    }
   }
+
+  // void loadData() {
+  //   // final companyData =
+  //   //     context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+
+  //   // emailController.text = companyData.email ?? '';
+  //   // if (companyData.phoneNumbers != null &&
+  //   //     companyData.phoneNumbers!.isNotEmpty) {
+  //   //   for (int i = 0; i < companyData.phoneNumbers!.length; i++) {
+  //   //     phoneControllers[i].text =
+  //   //         companyData.phoneNumbers![i].startsWith('+996')
+  //   //             ? companyData.phoneNumbers![i].replaceFirst('+996', '')
+  //   //             : companyData.phoneNumbers![i];
+  //   //     // phoneControllers[i].text = companyData.phoneNumbers![i];
+  //   //     int valid = i;
+  //   //     if (++valid < companyData.phoneNumbers!.length) {
+  //   //       addNewPhoneNumber();
+  //   //     }
+  //   //   }
+  //   // }
+
+  //   // if (companyData.contacts != null && companyData.contacts!.isNotEmpty) {
+  //   //   for (int i = 0; i < companyData.contacts!.length; i++) {
+  //   //     accountNameControllers[i].text = companyData.contacts![i].name ?? '';
+  //   //     accountControllers[i].text = companyData.contacts![i].contact ?? '';
+  //   //     int valid = i;
+  //   //     if (++valid < companyData.contacts!.length) {
+  //   //       addNewAccount();
+  //   //     }
+  //   //   }
+  //   // }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +278,9 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => AddCompanyDocumentScreen(isEdit: widget.isEdit,));
+                    Get.to(() => AddCompanyDocumentScreen(
+                          isEdit: widget.isEdit,
+                        ));
                   },
                   child: Container(
                     // height: 48,

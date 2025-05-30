@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/base/product_filter_values_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,13 +11,15 @@ part 'public_product_state.dart';
 
 class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
   final PublicProductRepo publicProductRepo;
-  PublicProductBloc(this.publicProductRepo) : super(PublicProductState()) {
+  PublicProductBloc(this.publicProductRepo) : super(PublicProductInitial()) {
     on<PublicProductEvent>((event, emit) {});
 
     on<GetPublicProduct>(_onGetPublicProduct);
     on<RemoveProductFromFavoriteList>(_onRemoveProductFromFavoriteList);
     on<ToggleFavoritePublicProductInList>(_onToggleFavoriteProductInList);
     on<ToggleFavoritePublicProduct>(_onToggleFavoriteProduct);
+    on<UpdateFilterEnable>(_onUpdateFilterEnable);
+    on<FilterPublicProduct>(_onFilterPublicProduct);
   }
 
   Future<void> _onGetPublicProduct(
@@ -26,12 +29,17 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
     } else {
       emit(state.copyWith(isMoreLoading: true));
     }
+
     try {
+      print('public products status code = start try');
       final response =
           await publicProductRepo.getPublicProducts(event.currentPage);
+      print('public products status code =  ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final companyProducts = CompanyProductModel.fromJson(response.body);
+        print(
+            'public products list length =  ${companyProducts.data?.items?.length}');
 
         if (event.currentPage == 1) {
           emit(state.copyWith(
@@ -42,11 +50,6 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
           emit(state.copyWith(
             publicProducts: List<ProductListItem>.from(state.publicProducts)
               ..addAll(companyProducts.data?.items ?? []),
-
-            // [
-            //   ...state.publicProducts ,
-            //   ...companyProducts.data?.items ?? []
-            // ]
           ));
         }
 
@@ -57,7 +60,7 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
         emit(state.copyWith(isLoading: false));
       }
     } catch (e) {
-      print(e.toString());
+      print("public product catch part = ${e.toString()}");
     }
     emit(state.copyWith(isLoading: false, isMoreLoading: false));
   }
@@ -137,5 +140,72 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
       // Product not found, no action needed, optionally re-emit same state
       emit(state);
     }
+  }
+
+  Future<void> _onUpdateFilterEnable(
+    UpdateFilterEnable event,
+    Emitter<PublicProductState> emit,
+  ) async {
+    emit(state.copyWith(isFilterEnable: event.isEnable));
+  }
+
+  Future<void> _onFilterPublicProduct(
+    FilterPublicProduct event,
+    Emitter<PublicProductState> emit,
+  ) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(
+          isLoading: true,
+          isFilterEnable: true,
+          productFilterValuesModel: event.productFilterValuesModel));
+    } else {
+      emit(state.copyWith(
+          isMoreLoading: true,
+          isFilterEnable: true,
+          productFilterValuesModel: event.productFilterValuesModel));
+    }
+    try {
+      final response = await publicProductRepo.getPublicFilterProducts(
+        categoryId: event.productFilterValuesModel.categoryId ?? '',
+        keywords: event.productFilterValuesModel.keywords ?? '',
+        highRating: event.productFilterValuesModel.highRating ?? '',
+        materials: event.productFilterValuesModel.materials ?? '',
+        priceMin: event.productFilterValuesModel.priceMin ?? '',
+        priceMax: event.productFilterValuesModel.priceMax ?? '',
+        dimensions: event.productFilterValuesModel.dimensions ?? '',
+        page: event.currentPage,
+      );
+
+      if (response.statusCode == 200) {
+        final companyProducts = CompanyProductModel.fromJson(response.body);
+
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            publicFilterProducts: companyProducts.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(
+            publicFilterProducts:
+                List<ProductListItem>.from(state.publicFilterProducts)
+                  ..addAll(companyProducts.data?.items ?? []),
+
+            // [
+            //   ...state.publicProducts ,
+            //   ...companyProducts.data?.items ?? []
+            // ]
+          ));
+        }
+
+        emit(state.copyWith(
+            filterCurrentPage: companyProducts.data?.currentPage ?? 1,
+            filterPageSize: companyProducts.data?.totalPages ?? 1));
+      } else {
+        emit(state.copyWith(isLoading: false));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    emit(state.copyWith(isLoading: false, isMoreLoading: false));
   }
 }

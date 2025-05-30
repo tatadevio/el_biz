@@ -13,6 +13,7 @@ class TenderItem {
   final Company? company;
   final TenderCategory? tenderCategory;
   final bool? isFavorite;
+  final String? image;
 
   TenderItem({
     this.id,
@@ -27,6 +28,7 @@ class TenderItem {
     this.company,
     this.tenderCategory,
     this.isFavorite,
+    this.image,
   });
 
   factory TenderItem.fromJson(Map<String, dynamic> json) => TenderItem(
@@ -47,6 +49,7 @@ class TenderItem {
             ? null
             : TenderCategory.fromJson(json["tender_category"]),
         isFavorite: json["is_favorite"],
+        image: json["image"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -62,6 +65,7 @@ class TenderItem {
         "company": company?.toJson(),
         "tender_category": tenderCategory?.toJson(),
         "is_favorite": isFavorite,
+        "image": image,
       };
 
   TenderItem copyWith({

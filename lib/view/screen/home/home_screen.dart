@@ -39,6 +39,7 @@ class HomeScreen extends StatelessWidget {
     context.read<CompanyBloc>().add(GetMyCompanies());
     context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
     context.read<PublicCompanyBloc>().add(GetNewPublicCompany(1));
+    print('now there calling get public product');
     context.read<PublicProductBloc>().add(GetPublicProduct(1));
     context.read<PublicTenderBloc>().add(GetPublicTender(1));
     context.read<AccountBloc>().add(GetMyAccounts());

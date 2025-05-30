@@ -120,6 +120,7 @@ class ProductListItem {
   final String? image;
   final User? user;
   final bool? isFavorite;
+  final String? reviewsAvgRating;
 
   ProductListItem({
     this.id,
@@ -131,6 +132,7 @@ class ProductListItem {
     this.image,
     this.user,
     this.isFavorite,
+    this.reviewsAvgRating,
   });
 
   ProductListItem copyWith({
@@ -143,6 +145,7 @@ class ProductListItem {
     String? image,
     User? user,
     bool? isFavorite,
+    String? reviewsAvgRating,
   }) =>
       ProductListItem(
         id: id ?? this.id,
@@ -154,20 +157,21 @@ class ProductListItem {
         image: image ?? this.image,
         user: user ?? this.user,
         isFavorite: isFavorite ?? this.isFavorite,
+        reviewsAvgRating: reviewsAvgRating ?? this.reviewsAvgRating,
       );
 
   factory ProductListItem.fromJson(Map<String, dynamic> json) =>
       ProductListItem(
-        id: json["id"],
-        name: json["name"],
-        description: json['description'],
-        slug: json["slug"],
-        price: json["price"],
-        quantity: json["quantity"],
-        image: json["image"],
-        user: json["user"] == null ? null : User.fromJson(json["user"]),
-        isFavorite: json["is_favorite"],
-      );
+          id: json["id"],
+          name: json["name"],
+          description: json['description'],
+          slug: json["slug"],
+          price: json["price"],
+          quantity: json["quantity"],
+          image: json["image"],
+          user: json["user"] == null ? null : User.fromJson(json["user"]),
+          isFavorite: json["is_favorite"],
+          reviewsAvgRating: json["reviews_avg_rating"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -179,6 +183,7 @@ class ProductListItem {
         "image": image,
         "user": user?.toJson(),
         "is_favorite": isFavorite,
+        "reviews_avg_rating": reviewsAvgRating,
       };
 }
 

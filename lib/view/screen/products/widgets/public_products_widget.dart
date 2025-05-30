@@ -2,7 +2,7 @@ import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/get.dart';
 
 import '../../../../utils/color_resources.dart';
 import '../../../base/product_grid_item.dart';
@@ -34,6 +34,7 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
         });
       }
     });
+    _callScrolling(context, _scrollController);
   }
 
   @override
@@ -50,6 +51,42 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
     );
   }
 
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final publicProductBloc = context.read<PublicProductBloc>();
+
+    scrollController.addListener(() {
+      if (Get.find<PublicProductBloc>().state.isFilterEnable) {
+        if (scrollController.position.pixels >=
+                scrollController.position.maxScrollExtent - 300 &&
+            !publicProductBloc.state.isLoading &&
+            !publicProductBloc.state.isMoreLoading) {
+          int pageSize = publicProductBloc.state.filterPageSize;
+          if (publicProductBloc.state.filterCurrentPage < pageSize) {
+            int nextPage = publicProductBloc.state.filterCurrentPage;
+
+            publicProductBloc.add(FilterPublicProduct(
+                productFilterValuesModel: Get.find<PublicProductBloc>()
+                    .state
+                    .productFilterValuesModel!,
+                currentPage: nextPage + 1));
+          }
+        }
+      } else {
+        if (scrollController.position.pixels >=
+                scrollController.position.maxScrollExtent - 300 &&
+            !publicProductBloc.state.isLoading &&
+            !publicProductBloc.state.isMoreLoading) {
+          int pageSize = publicProductBloc.state.pageSize;
+          if (publicProductBloc.state.currentPage < pageSize) {
+            int nextPage = publicProductBloc.state.currentPage;
+
+            publicProductBloc.add(GetPublicProduct(nextPage + 1));
+          }
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -64,7 +101,12 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
                 );
               }
 
-              if (state.publicProducts.isEmpty) {
+              if (state.publicProducts.isEmpty && !state.isFilterEnable) {
+                return Center(
+                  child: Text('no_product_found'.tr),
+                );
+              }
+              if (state.publicFilterProducts.isEmpty && state.isFilterEnable) {
                 return Center(
                   child: Text('no_product_found'.tr),
                 );
@@ -79,7 +121,9 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 10,
                               childAspectRatio: 0.7),
-                      itemCount: state.publicProducts.length,
+                      itemCount: state.isFilterEnable
+                          ? state.publicFilterProducts.length
+                          : state.publicProducts.length,
                       itemBuilder: (context, index) {
                         // print(
                         //     'value of isFavorite at $index = ${state.publicProducts[index].isFavorite}');
@@ -87,7 +131,9 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
                           // isFavorite:
                           //     state.publicProducts[index].isFavorite ??
                           //         false,
-                          product: state.publicProducts[index],
+                          product: state.isFilterEnable
+                              ? state.publicFilterProducts[index]
+                              : state.publicProducts[index],
                           isPublicProduct: true,
                         );
                       },

@@ -15,6 +15,19 @@ class PublicProductRepo {
         .getData("${AppConstants.publicProductUrl}?page=$page");
   }
 
+  Future<Response> getPublicFilterProducts(
+      {required String categoryId,
+      required String keywords,
+      required String highRating,
+      required String materials,
+      required String priceMin,
+      required String priceMax,
+      required String dimensions,
+     required  int page}) async {
+    return await apiClient.getData(
+        "${AppConstants.publicProductUrl}?category_id=$categoryId&price_min=$priceMin&price_max=$priceMax&search_keywords=$keywords&high_rating=$highRating&materials=$materials&dimensions=$dimensions&page=$page");
+  }
+
   Future<Response> toggleFavorite(String id) async {
     return await apiClient.postData(AppConstants.favoriteToggleUrl, {
       "type": "Product",

@@ -50,7 +50,7 @@ class TenderGridItem extends StatelessWidget {
               child: Stack(
                 children: [
                   CustomImage(
-                      image: '',
+                      image: tender.image ?? '',
                       height: Get.height,
                       width: Get.width,
                       radius: 16),

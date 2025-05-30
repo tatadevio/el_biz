@@ -181,12 +181,16 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
                                   child: Row(
                                     children: [
                                       Text(
-                                        '(4.8)',
+                                        company.reviewsAverageRating ?? '0',
+                                        // '(4.8)',
                                         style: body14.copyWith(
                                             color: ColorResources.gray),
                                       ),
                                       RatingBar.builder(
-                                        initialRating: 4.8,
+                                        initialRating: double.tryParse(
+                                                company.reviewsAverageRating ??
+                                                    '0') ??
+                                            0,
                                         minRating: 0,
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
@@ -230,29 +234,29 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
                 ],
               ),
             ),
-            Positioned(
-              right: 10,
-              top: 10,
-              child: Container(
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  backgroundBlendMode: BlendMode.colorDodge,
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 1.6,
-                      spreadRadius: 0,
-                      offset: Offset(0, 0.8),
-                      color: Color.fromRGBO(16, 24, 40, 0.05),
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: SvgPicture.asset(Images.svgHeartBorder),
-              ),
-            ),
+            // Positioned(
+            //   right: 10,
+            //   top: 10,
+            //   child: Container(
+            //     height: 32,
+            //     width: 32,
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       borderRadius: BorderRadius.circular(10),
+            //       backgroundBlendMode: BlendMode.colorDodge,
+            //       boxShadow: const [
+            //         BoxShadow(
+            //           blurRadius: 1.6,
+            //           spreadRadius: 0,
+            //           offset: Offset(0, 0.8),
+            //           color: Color.fromRGBO(16, 24, 40, 0.05),
+            //         ),
+            //       ],
+            //     ),
+            //     alignment: Alignment.center,
+            //     child: SvgPicture.asset(Images.svgHeartBorder),
+            //   ),
+            // ),
           ],
         ),
       ),
