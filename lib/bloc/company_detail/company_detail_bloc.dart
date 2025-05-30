@@ -21,7 +21,10 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     on<GetCompanyDocuments>(_onGetCompanyDocuments);
 
     on<GetCompanyProducts>(_onGetCompanyProducts);
+    on<GetCompanyInactiveProducts>(_onGetCompanyInactiveProducts);
+
     on<GetCompanyTenders>(_onGetCompanyTenders);
+    on<GetCompanyInActiveTenders>(_onGetCompanyInActiveTenders);
     on<GetCompanyReviews>(_onGetCompanyReviews);
     on<DeleteCompanyReview>(_onDeleteCompanyReview);
     on<DeleteCompanyDocument>(_onDeleteCompanyDocument);
@@ -33,6 +36,8 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     on<ToggleFavoriteProductInList>(_onToggleFavoriteProductInList);
     on<ToggleTenderFavorite>(_onToggleTenderFavorite);
     on<ToggleFavoriteTenderInList>(_onToggleFavoriteTenderInList);
+    on<ChangeProductActiveStatus>(_onChangeProductStatus);
+    on<ChangeTenderActiveStatus>(_onChangeTenderStatus);
   }
 
   Future<void> _onGetCompanyDetail(
@@ -40,8 +45,11 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     emit(state.copyWith(companyDetailLoading: true, isLoading: true));
     add(GetCompanyProducts(event.companyId, currentPage: 1));
     add(GetCompanyDocuments(event.companyId));
-    add(GetCompanyTenders(event.companyId));
+    add(GetCompanyTenders(event.companyId, currentPage: 1));
     add(GetCompanyReviews(event.companyId, state.currentPage));
+    add(GetCompanyInactiveProducts(event.companyId, currentPage: 1));
+    add(GetCompanyInActiveTenders(event.companyId, currentPage: 1));
+
     try {
       final response =
           await compnayDetailRepo.companyDetailById(event.companyId);
@@ -79,7 +87,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     }
     try {
       final response = await compnayDetailRepo.companyProducts(
-          event.companyId, event.currentPage);
+          event.companyId, 'published', event.currentPage);
 
       if (response.statusCode == 200) {
         final companyProducts = CompanyProductModel.fromJson(response.body);
@@ -108,21 +116,119 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     emit(state.copyWith(isLoading: false, productShowMore: false));
   }
 
-  Future<void> _onGetCompanyTenders(
-      GetCompanyTenders event, Emitter<CompanyDetailState> emit) async {
-    emit(state.copyWith(isLoading: true));
+  // inactive product
+
+  Future<void> _onGetCompanyInactiveProducts(GetCompanyInactiveProducts event,
+      Emitter<CompanyDetailState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(inActiveProductShowMore: true));
+    }
     try {
-      final response = await compnayDetailRepo.companyTenders(event.companyId);
+      final response = await compnayDetailRepo.companyProducts(
+          event.companyId, 'draft', event.currentPage);
+
       if (response.statusCode == 200) {
-        final companyTenders = CompanyTendersModel.fromJson(response.body);
+        final companyProducts = CompanyProductModel.fromJson(response.body);
+
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            companyInactiveProducts: companyProducts.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(companyInactiveProducts: [
+            ...state.companyProducts ?? [],
+            ...companyProducts.data?.items ?? []
+          ]));
+        }
+
         emit(state.copyWith(
-          companyTenders: companyTenders.data?.items,
-          isLoading: false,
-        ));
+            inActiveProductCurrentPage: companyProducts.data?.currentPage ?? 1,
+            inActiveProductPageSize: companyProducts.data?.totalPages ?? 1));
+      } else {
+        emit(state.copyWith(isLoading: false));
       }
     } catch (e) {
-      emit(state.copyWith(isLoading: false));
+      print(e.toString());
     }
+    emit(state.copyWith(isLoading: false, inActiveProductShowMore: false));
+  }
+
+  // end inactive products
+
+  Future<void> _onGetCompanyTenders(
+      GetCompanyTenders event, Emitter<CompanyDetailState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(inActiveTenderShowMore: true));
+    }
+    try {
+      final response = await compnayDetailRepo.companyTenders(
+          event.companyId, 'active', event.currentPage);
+      if (response.statusCode == 200) {
+        final companyTenders = CompanyTendersModel.fromJson(response.body);
+        print('active tenders list = ${companyTenders.data?.items?.length}');
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            companyTenders: companyTenders.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(companyTenders: [
+            ...state.companyTenders ?? [],
+            ...companyTenders.data?.items ?? []
+          ]));
+        }
+        emit(state.copyWith(
+            activeTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
+            activeTenderPageSize: companyTenders.data?.totalPages ?? 1));
+      }
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, activeTenderShowMore: false));
+    }
+    emit(state.copyWith(isLoading: false, activeTenderShowMore: false));
+  }
+
+  //_onGetCompanyInActiveTenders
+  Future<void> _onGetCompanyInActiveTenders(
+      GetCompanyInActiveTenders event, Emitter<CompanyDetailState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(inActiveTenderShowMore: true));
+    }
+    try {
+      final response = await compnayDetailRepo.companyTenders(
+          event.companyId, 'inactive', event.currentPage);
+
+      if (response.statusCode == 200) {
+        final companyTenders = CompanyTendersModel.fromJson(response.body);
+        print('inactive tenders list = ${companyTenders.data?.items?.length}');
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            companyInactiveTenders: companyTenders.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(companyInactiveTenders: [
+            ...state.companyTenders ?? [],
+            ...companyTenders.data?.items ?? []
+          ]));
+        }
+
+        emit(state.copyWith(
+            inActiveTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
+            inActiveTenderPageSize: companyTenders.data?.totalPages ?? 1));
+      } else {
+        emit(state.copyWith(isLoading: false));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    emit(state.copyWith(isLoading: false, inActiveTenderShowMore: false));
   }
 
   Future<void> _onGetCompanyReviews(
@@ -419,5 +525,93 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     }).toList();
 
     emit(state.copyWith(companyTenders: updatedTender));
+  }
+
+  Future<void> _onChangeProductStatus(
+    ChangeProductActiveStatus event,
+    Emitter<CompanyDetailState> emit,
+  ) async {
+    // Clone lists so we don’t mutate the state directly:
+    final active = List<ProductListItem>.from(state.companyProducts ?? []);
+    final inactive =
+        List<ProductListItem>.from(state.companyInactiveProducts ?? []);
+
+    // Find & remove the item from whichever list it’s in:
+    ProductListItem? moved;
+    if (event.updatedStatus == 'draft') {
+      // Active → Inactive
+      for (var p in active) {
+        if (p.id.toString() == event.productId.toString()) {
+          moved = p;
+          break;
+        }
+      }
+      active.removeWhere((p) => p.id.toString() == event.productId.toString());
+      if (moved != null) {
+        inactive.insert(0, moved);
+      }
+    } else {
+      // Inactive → Active
+      for (var p in inactive) {
+        if (p.id.toString() == event.productId.toString()) {
+          moved = p;
+          break;
+        }
+      }
+      inactive
+          .removeWhere((p) => p.id.toString() == event.productId.toString());
+      if (moved != null) {
+        active.insert(0, moved);
+      }
+    }
+
+    emit(state.copyWith(
+      companyProducts: active,
+      companyInactiveProducts: inactive,
+    ));
+  }
+
+  Future<void> _onChangeTenderStatus(
+    ChangeTenderActiveStatus event,
+    Emitter<CompanyDetailState> emit,
+  ) async {
+    // Clone lists so we don’t mutate the state directly:
+    print(
+        'this is the status of the tender status chang e= ${event.updatedStatus}');
+    final active = List<TenderItem>.from(state.companyTenders ?? []);
+    final inactive = List<TenderItem>.from(state.companyInactiveTenders ?? []);
+
+    // Find & remove the item from whichever list it’s in:
+    TenderItem? moved;
+    if (event.updatedStatus == 'inactive') {
+      // Active → Inactive
+      for (var p in active) {
+        if (p.id.toString() == event.tenderId.toString()) {
+          moved = p;
+          break;
+        }
+      }
+      active.removeWhere((p) => p.id.toString() == event.tenderId.toString());
+      if (moved != null) {
+        inactive.insert(0, moved);
+      }
+    } else {
+      // Inactive → Active
+      for (var p in inactive) {
+        if (p.id.toString() == event.tenderId.toString()) {
+          moved = p;
+          break;
+        }
+      }
+      inactive.removeWhere((p) => p.id.toString() == event.tenderId.toString());
+      if (moved != null) {
+        active.insert(0, moved);
+      }
+    }
+
+    emit(state.copyWith(
+      companyTenders: active,
+      companyInactiveTenders: inactive,
+    ));
   }
 }

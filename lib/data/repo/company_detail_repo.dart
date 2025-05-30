@@ -18,9 +18,10 @@ class CompnayDetailRepo {
         .deleteData("${AppConstants.deleteCompanyDocumentUrl}/$documentId");
   }
 
-  Future<Response> companyProducts(String companyId, int page) async {
-    return await apiClient
-        .getData("${AppConstants.companyProductsUrl}/$companyId?page=$page");
+  Future<Response> companyProducts(
+      String companyId, String status, int page) async {
+    return await apiClient.getData(
+        "${AppConstants.companyProductsUrl}/$companyId?status=$status&page=$page");
   }
 
   Future<Response> companyDocuments(String companyId) async {
@@ -28,9 +29,10 @@ class CompnayDetailRepo {
         .getData("${AppConstants.companyDocumentsUrl}/$companyId");
   }
 
-  Future<Response> companyTenders(String companyId) async {
-    return await apiClient
-        .getData("${AppConstants.companyDetailUrl}/$companyId/tenders");
+  Future<Response> companyTenders(
+      String companyId, String status, int page) async {
+    return await apiClient.getData(
+        "${AppConstants.companyDetailUrl}/$companyId/tenders?active_status=$status&page=$page");
   }
 
   Future<Response> companyReviews(String companyId, int page) async {

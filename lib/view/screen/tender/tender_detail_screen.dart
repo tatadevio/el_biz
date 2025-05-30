@@ -387,12 +387,11 @@ class TenderDetailScreen extends StatelessWidget {
                                           .read<TenderDetailBloc>()
                                           .add(ChangeTenderStatus(
                                             tenderDetail.data!.id.toString(),
-                                            tenderDetail.data!.status ==
-                                                        'active' ||
-                                                    tenderDetail.data!.status ==
-                                                        'open'
+                                            tenderDetail.data!.activeStatus ==
+                                                    'active'
                                                 ? 'inactive'
                                                 : 'active',
+                                            context,
                                           ));
                                     },
                               child: state.statusUpdating
@@ -401,7 +400,7 @@ class TenderDetailScreen extends StatelessWidget {
                                       width: 25,
                                       child: CircularProgressIndicator())
                                   : Text(
-                                      tenderDetail.data!.status ?? '',
+                                      tenderDetail.data!.activeStatus ?? '',
                                       //  == 'published'
                                       //     ? "not_active".tr
                                       //     : 'active'.tr,

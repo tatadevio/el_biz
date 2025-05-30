@@ -3,59 +3,32 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_gridview_widget.dart';
 import 'package:el_biz/view/base/custom_listview_widget.dart';
+import 'package:el_biz/view/screen/company/widgets/company_data.dart/company_products/company_active_products_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../../bloc/company_detail/company_detail_bloc.dart';
-import '../../../../base/product_grid_item.dart';
-import '../../../../base/product_list_item.dart';
+import 'company_products/company_inactive_products_widget.dart';
 
 class CompanyItems extends StatelessWidget {
-  const CompanyItems({super.key});
-
-  void _callScrolling(BuildContext context, ScrollController scrollController) {
-    final accountController = context.read<CompanyDetailBloc>();
-
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent - 300 &&
-          !accountController.state.isLoading &&
-          !accountController.state.productShowMore) {
-        int pageSize = accountController.state.productPageSize;
-        if (accountController.state.productCurrentPage < pageSize) {
-          int nextPage = accountController.state.currentPage;
-          String companyId = context
-                  .read<CompanyDetailBloc>()
-                  .state
-                  .companyDetailModel
-                  ?.data
-                  ?.id
-                  .toString() ??
-              '';
-          accountController
-              .add(GetCompanyProducts(companyId, currentPage: nextPage + 1));
-        }
-      }
-    });
-  }
+  final ScrollController scrollController;
+  const CompanyItems({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController _controller = ScrollController();
-    _callScrolling(context, _controller);
     return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
         builder: (context, companyDetailState) {
       return BlocBuilder<CompanyBloc, CompanyState>(
           builder: (context, compnayState) {
-        if (companyDetailState.companyProducts!.isEmpty) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text('no_product_found'.tr),
-            ),
-          );
-        }
+        // if (companyDetailState.companyProducts!.isEmpty) {
+        //   return Center(
+        //     child: Padding(
+        //       padding: EdgeInsets.symmetric(vertical: 10),
+        //       child: Text('no_product_found'.tr),
+        //     ),
+        //   );
+        // }
         return Column(
           children: [
             const SizedBox(
@@ -155,38 +128,14 @@ class CompanyItems extends StatelessWidget {
                 ],
               ),
             ),
-            if (compnayState.isShowGoodsGridView) ...[
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.7),
-                itemCount: companyDetailState.companyProducts?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final productData =
-                      companyDetailState.companyProducts![index];
-                  return ProductGridItem(
-                    product: productData,
-                  );
-                },
+            if (compnayState.isShowActiveGoods)
+              CompanyActiveProductsWidget(
+                scrollController: scrollController,
               ),
-            ] else ...[
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: companyDetailState.companyProducts?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final productData =
-                      companyDetailState.companyProducts![index];
-                  return ProductListItemWidget(
-                    product: productData,
-                  );
-                },
+            if (!compnayState.isShowActiveGoods)
+              CompanyInActiveProductsWidget(
+                scrollController: scrollController,
               ),
-            ],
           ],
         );
       });

@@ -25,6 +25,7 @@ class CompanyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController _scrollController = ScrollController();
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
@@ -33,7 +34,11 @@ class CompanyPageScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         final companyDetail = companyController.companyDetailModel;
+        // if (companyDetail?.data == null) {
+        //   return SizedBox();
+        // }
         return SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               const SizedBox(
@@ -205,7 +210,9 @@ class CompanyPageScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CompanyDataWidget(),
+                    CompanyDataWidget(
+                      scrollController: _scrollController,
+                    ),
                   ],
                 ),
               ),
@@ -239,30 +246,33 @@ class CompanyPageScreen extends StatelessWidget {
                                 color: ColorResources.darkGray,
                                 fontWeight: FontWeight.w700),
                           ),
-                          Text(
-                            // 'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
-                            formatWorkingHours(
-                                companyDetail!.data!.workingHours!),
-                            style: body14.copyWith(
-                                color: ColorResources.darkGray,
-                                fontWeight: FontWeight.w400),
-                          ),
+                          if (companyDetail?.data?.workingHours != null)
+                            Text(
+                              // 'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
+                              formatWorkingHours(
+                                  companyDetail!.data!.workingHours!),
+                              style: body14.copyWith(
+                                  color: ColorResources.darkGray,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            'lunch_break'.tr,
-                            style: body14.copyWith(
-                                color: ColorResources.darkGray,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Text(
-                            // 'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
-                            '${companyDetail.data!.lunchBreak!.open} - ${companyDetail.data!.lunchBreak!.close}',
-                            style: body14.copyWith(
-                                color: ColorResources.darkGray,
-                                fontWeight: FontWeight.w400),
-                          ),
+                          if (companyDetail?.data?.lunchBreak != null) ...[
+                            Text(
+                              'lunch_break'.tr,
+                              style: body14.copyWith(
+                                  color: ColorResources.darkGray,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              // 'с Пн по Пт, 09:00-18:00 Обед: 13:00-14:00',
+                              '${companyDetail!.data!.lunchBreak!.open ?? ''} - ${companyDetail.data!.lunchBreak!.close ?? ''}',
+                              style: body14.copyWith(
+                                  color: ColorResources.darkGray,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -282,7 +292,7 @@ class CompanyPageScreen extends StatelessWidget {
                           ),
                           Text(
                             // 'ОсОО “Loft”',
-                            companyDetail.data?.legalEntity ?? '',
+                            companyDetail!.data?.legalEntity ?? '',
                             style: body14.copyWith(
                                 color: ColorResources.darkGray,
                                 fontWeight: FontWeight.w400),

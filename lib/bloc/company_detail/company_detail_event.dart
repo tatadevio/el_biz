@@ -24,12 +24,31 @@ class GetCompanyProducts extends CompanyDetailEvent {
   List<Object> get props => [companyId, currentPage];
 }
 
-class GetCompanyTenders extends CompanyDetailEvent {
+class GetCompanyInactiveProducts extends CompanyDetailEvent {
   final String companyId;
-  const GetCompanyTenders(this.companyId);
+  final int currentPage;
+  const GetCompanyInactiveProducts(this.companyId, {required this.currentPage});
 
   @override
-  List<Object> get props => [companyId];
+  List<Object> get props => [companyId, currentPage];
+}
+
+class GetCompanyTenders extends CompanyDetailEvent {
+  final String companyId;
+  final int currentPage;
+  const GetCompanyTenders(this.companyId, {required this.currentPage});
+
+  @override
+  List<Object> get props => [companyId, currentPage];
+}
+
+class GetCompanyInActiveTenders extends CompanyDetailEvent {
+  final String companyId;
+  final int currentPage;
+  const GetCompanyInActiveTenders(this.companyId, {required this.currentPage});
+
+  @override
+  List<Object> get props => [companyId, currentPage];
 }
 
 class GetCompanyReviews extends CompanyDetailEvent {
@@ -107,4 +126,24 @@ class ToggleFavoriteTenderInList extends CompanyDetailEvent {
 
   @override
   List<Object> get props => [tenderId];
+}
+
+class ChangeProductActiveStatus extends CompanyDetailEvent {
+  final String productId;
+  final String updatedStatus; // e.g. 'draft' or 'published'
+
+  const ChangeProductActiveStatus(this.productId, this.updatedStatus);
+
+  @override
+  List<Object> get props => [productId, updatedStatus];
+}
+
+class ChangeTenderActiveStatus extends CompanyDetailEvent {
+  final String tenderId;
+  final String updatedStatus; // e.g. 'draft' or 'published'
+
+  const ChangeTenderActiveStatus(this.tenderId, this.updatedStatus);
+
+  @override
+  List<Object> get props => [tenderId, updatedStatus];
 }

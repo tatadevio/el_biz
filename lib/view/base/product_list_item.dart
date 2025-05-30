@@ -112,7 +112,7 @@ class ProductListItemWidget extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '2 500 сом/шт',
+                      '${product?.price ?? ''} сом/шт',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: h16.copyWith(color: ColorResources.blue),

@@ -1,5 +1,3 @@
-
-
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/data/model/response/cities_model.dart';
 // To parse this JSON data, do
@@ -208,19 +206,40 @@ class Data {
             : DateTime.parse(json["created_at"]),
         reviewsAvgRating: json["reviews_avg_rating"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-        workingHours: json["working_hours"] == null
-            ? null
-            : WorkingHours.fromJson(json["working_hours"]),
-        lunchBreak: json["lunch_break"] == null
-            ? null
-            : LunchBreak.fromJson(json["lunch_break"]),
-        phoneNumbers: json["phone_numbers"] == null
-            ? []
-            : List<String>.from(json["phone_numbers"]!.map((x) => x)),
-        contacts: json["contacts"] == null
-            ? []
-            : List<Contact>.from(
-                json["contacts"]!.map((x) => Contact.fromJson(x))),
+
+        // <-- Safely handle working_hours as Map or empty
+        workingHours: (json["working_hours"] is Map<String, dynamic>)
+            ? WorkingHours.fromJson(json["working_hours"])
+            : null,
+
+        // <-- Safely handle lunch_break as Map or empty
+        lunchBreak: (json["lunch_break"] is Map<String, dynamic>)
+            ? LunchBreak.fromJson(json["lunch_break"])
+            : null,
+
+        // <-- Safely handle phone_numbers as List<String> or empty list
+        phoneNumbers: (json["phone_numbers"] is List)
+            ? List<String>.from(json["phone_numbers"].map((x) => x.toString()))
+            : [],
+
+        // <-- Safely handle contacts as List<Contact> or empty list
+        contacts: (json["contacts"] is List)
+            ? List<Contact>.from(
+                json["contacts"].map((x) => Contact.fromJson(x)))
+            : [],
+        // workingHours: json["working_hours"] == null
+        //     ? null
+        //     : WorkingHours.fromJson(json["working_hours"]),
+        // lunchBreak: json["lunch_break"] == null
+        //     ? null
+        //     : LunchBreak.fromJson(json["lunch_break"]),
+        // phoneNumbers: json["phone_numbers"] == null
+        //     ? []
+        //     : List<String>.from(json["phone_numbers"]!.map((x) => x)),
+        // contacts: json["contacts"] == null
+        //     ? []
+        //     : List<Contact>.from(
+        //         json["contacts"]!.map((x) => Contact.fromJson(x))),
         street: json["street"],
         house: json["house"],
         office: json["office"],

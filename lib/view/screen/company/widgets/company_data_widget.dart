@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CompanyDataWidget extends StatefulWidget {
-  const CompanyDataWidget({super.key});
+  final ScrollController scrollController;
+  const CompanyDataWidget({super.key, required this.scrollController});
 
   @override
   State<CompanyDataWidget> createState() => _CompanyDataWidgetState();
@@ -58,8 +59,14 @@ class _CompanyDataWidgetState extends State<CompanyDataWidget>
             ],
           ),
           if (selectedOption == 0) const CompanyInfoWidget(),
-          if (selectedOption == 1) const CompanyItems(),
-          if (selectedOption == 2) const CompanyTenders(),
+          if (selectedOption == 1)
+            CompanyItems(
+              scrollController: widget.scrollController,
+            ),
+          if (selectedOption == 2)
+            CompanyTenders(
+              scrollController: widget.scrollController,
+            ),
           if (selectedOption == 3) const MyReviewsWidget(),
           if (selectedOption == 4) const CompanyDocumentsWidget(),
         ],

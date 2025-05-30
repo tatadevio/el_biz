@@ -27,6 +27,23 @@ class CompanyDocumentModel {
     this.statusCode,
   });
 
+  CompanyDocumentModel copyWith({
+    dynamic title,
+    String? message,
+    String? status,
+    String? localizedKey,
+    Data? data,
+    int? statusCode,
+  }) =>
+      CompanyDocumentModel(
+        title: title ?? this.title,
+        message: message ?? this.message,
+        status: status ?? this.status,
+        localizedKey: localizedKey ?? this.localizedKey,
+        data: data ?? this.data,
+        statusCode: statusCode ?? this.statusCode,
+      );
+
   factory CompanyDocumentModel.fromJson(Map<String, dynamic> json) =>
       CompanyDocumentModel(
         title: json["title"],
@@ -64,10 +81,28 @@ class Data {
     this.count,
   });
 
+  Data copyWith({
+    List<DocumentItem>? items,
+    int? totalPages,
+    int? currentPage,
+    int? total,
+    int? perPage,
+    int? count,
+  }) =>
+      Data(
+        items: items ?? this.items,
+        totalPages: totalPages ?? this.totalPages,
+        currentPage: currentPage ?? this.currentPage,
+        total: total ?? this.total,
+        perPage: perPage ?? this.perPage,
+        count: count ?? this.count,
+      );
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         items: json["items"] == null
             ? []
-            : List<DocumentItem>.from(json["items"]!.map((x) => DocumentItem.fromJson(x))),
+            : List<DocumentItem>.from(
+                json["items"]!.map((x) => DocumentItem.fromJson(x))),
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         total: json["total"],
@@ -93,6 +128,7 @@ class DocumentItem {
   final String? type;
   final String? size;
   final int? companyId;
+  final String? documentType;
   final String? filePath;
   final DateTime? createdAt;
 
@@ -102,9 +138,31 @@ class DocumentItem {
     this.type,
     this.size,
     this.companyId,
+    this.documentType,
     this.filePath,
     this.createdAt,
   });
+
+  DocumentItem copyWith({
+    int? id,
+    String? name,
+    String? type,
+    String? size,
+    int? companyId,
+    String? documentType,
+    String? filePath,
+    DateTime? createdAt,
+  }) =>
+      DocumentItem(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        type: type ?? this.type,
+        size: size ?? this.size,
+        companyId: companyId ?? this.companyId,
+        documentType: documentType ?? this.documentType,
+        filePath: filePath ?? this.filePath,
+        createdAt: createdAt ?? this.createdAt,
+      );
 
   factory DocumentItem.fromJson(Map<String, dynamic> json) => DocumentItem(
         id: json["id"],
@@ -112,6 +170,7 @@ class DocumentItem {
         type: json["type"],
         size: json["size"],
         companyId: json["company_id"],
+        documentType: json["document_type"],
         filePath: json["file_path"],
         createdAt: json["created_at"] == null
             ? null
@@ -124,6 +183,7 @@ class DocumentItem {
         "type": type,
         "size": size,
         "company_id": companyId,
+        "document_type": documentType,
         "file_path": filePath,
         "created_at": createdAt?.toIso8601String(),
       };

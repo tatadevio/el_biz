@@ -84,6 +84,7 @@ class Data {
   final bool? isFavorite;
   final List<TenderProduct>? tenderProducts;
   final List<Media>? media;
+  final String? activeStatus;
 
   Data({
     this.id,
@@ -103,6 +104,7 @@ class Data {
     this.isFavorite,
     this.tenderProducts,
     this.media,
+    this.activeStatus,
   });
 
   Data copyWith({
@@ -123,6 +125,7 @@ class Data {
     bool? isFavorite,
     List<TenderProduct>? tenderProducts,
     List<Media>? media,
+    String? activeStatus,
   }) =>
       Data(
         id: id ?? this.id,
@@ -142,6 +145,7 @@ class Data {
         isFavorite: isFavorite ?? this.isFavorite,
         tenderProducts: tenderProducts ?? this.tenderProducts,
         media: media ?? this.media,
+        activeStatus: activeStatus ?? this.activeStatus,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -175,6 +179,7 @@ class Data {
         media: json["media"] == null
             ? []
             : List<Media>.from(json["media"]!.map((x) => Media.fromJson(x))),
+        activeStatus: json["active_status"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -199,6 +204,7 @@ class Data {
         "media": media == null
             ? []
             : List<dynamic>.from(media!.map((x) => x.toJson())),
+        "active_status": activeStatus,
       };
 }
 

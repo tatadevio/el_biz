@@ -19,10 +19,11 @@ class GetTenderDetail extends TenderDetailEvent {
 class ChangeTenderStatus extends TenderDetailEvent {
   final String tenderId;
   final String status;
-  const ChangeTenderStatus(this.tenderId, this.status);
+  final BuildContext context;
+  const ChangeTenderStatus(this.tenderId, this.status, this.context);
 
   @override
-  List<Object> get props => [tenderId, status];
+  List<Object> get props => [tenderId, status, context];
 }
 
 class ToggleTenderDetailFavorite extends TenderDetailEvent {

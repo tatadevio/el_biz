@@ -50,13 +50,17 @@ class TenderDetailBloc extends Bloc<TenderDetailEvent, TenderDetailState> {
           event.tenderId, event.status);
       if (response.statusCode == 200) {
         final updatedProductDetail = state.tenderDetailModel!.data!.copyWith(
-          status: event.status,
+          activeStatus: event.status,
+
         );
 
         emit(state.copyWith(
           tenderDetailModel:
               state.tenderDetailModel?.copyWith(data: updatedProductDetail),
         ));
+        event.context
+            .read<CompanyDetailBloc>()
+            .add(ChangeTenderActiveStatus(event.tenderId, event.status));
       } else {
         // emit(ProductDetailError(response.body['message']));
         showShortToast(response.body['message']);

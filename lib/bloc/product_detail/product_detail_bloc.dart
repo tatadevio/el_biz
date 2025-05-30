@@ -98,6 +98,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
           productDetailModel:
               state.productDetailModel?.copyWith(data: updatedProductDetail),
         ));
+        event.context.read<CompanyDetailBloc>().add(ChangeProductActiveStatus(
+            event.productId, response.body['message']['status']));
       } else {
         emit(ProductDetailError(response.body['message']));
       }

@@ -24,6 +24,7 @@ import '../../base/custom_favorite_button.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final bool isProduct;
+  // final bool isCompanyProduct; // for active or inative list update
 
   const ProductDetailScreen({super.key, this.isProduct = true});
 
@@ -530,17 +531,18 @@ class ProductDetailScreen extends StatelessWidget {
                           onTap: state.statusUpdating
                               ? () {}
                               : () {
-                                  context
-                                      .read<ProductDetailBloc>()
-                                      .add(ChangeProductStatus(
-                                        state.productDetailModel!.data!.id
-                                            .toString(),
-                                        state.productDetailModel!.data!
-                                                    .status ==
-                                                'published'
-                                            ? 'draft'
-                                            : 'published',
-                                      ));
+                                  context.read<ProductDetailBloc>().add(
+                                        ChangeProductStatus(
+                                          state.productDetailModel!.data!.id
+                                              .toString(),
+                                          state.productDetailModel!.data!
+                                                      .status ==
+                                                  'published'
+                                              ? 'draft'
+                                              : 'published',
+                                          context,
+                                        ),
+                                      );
                                 },
                           child: state.statusUpdating
                               ? SizedBox(

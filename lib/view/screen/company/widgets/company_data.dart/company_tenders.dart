@@ -1,8 +1,7 @@
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/tender_grid_item.dart';
-import 'package:el_biz/view/base/tender_list_item.dart';
+import 'package:el_biz/view/screen/company/widgets/company_data.dart/company_tenders/company_active_tenders_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -10,24 +9,27 @@ import 'package:get/get.dart';
 import '../../../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../../base/custom_gridview_widget.dart';
 import '../../../../base/custom_listview_widget.dart';
+import 'company_tenders/company_inactive_tenders_widget.dart';
 
 class CompanyTenders extends StatelessWidget {
-  const CompanyTenders({super.key});
+  final ScrollController scrollController;
+  const CompanyTenders({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
+    context.read<CompanyBloc>().add(const UpdateShowTenders(false));
     return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
         builder: (context, companyDetailState) {
       return BlocBuilder<CompanyBloc, CompanyState>(
           builder: (context, companyState) {
-        if (companyDetailState.companyTenders!.isEmpty) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text('no_tender_found'.tr),
-            ),
-          );
-        }
+        // if (companyDetailState.companyTenders!.isEmpty) {
+        //   return Center(
+        //     child: Padding(
+        //       padding: EdgeInsets.symmetric(vertical: 10),
+        //       child: Text('no_tender_found'.tr),
+        //     ),
+        //   );
+        // }
         return Column(
           children: [
             const SizedBox(
@@ -127,38 +129,14 @@ class CompanyTenders extends StatelessWidget {
                 ],
               ),
             ),
-            if (companyState.isShowTendersGridView) ...[
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.65),
-                itemCount: companyDetailState.companyTenders?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return TenderGridItem(
-                    tender: companyDetailState.companyTenders![index],
-                    isCompanyTender: true,
-                    isPublicTender: false,
-                  );
-                },
+            if (companyState.isShowActiveTenders)
+              CompanyActiveTendersWidget(
+                scrollController: scrollController,
               ),
-            ] else ...[
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: companyDetailState.companyTenders?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return TenderListItem(
-                    tender: companyDetailState.companyTenders![index],
-                    isCompanyTender: true,
-                    isPublicTender: false,
-                  );
-                },
+            if (!companyState.isShowActiveTenders)
+              CompanyInActiveTendersWidget(
+                scrollController: scrollController,
               ),
-            ],
           ],
         );
       });

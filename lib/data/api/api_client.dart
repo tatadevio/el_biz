@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,7 @@ class ApiClient extends GetxService {
   Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
     // SharedPreferences prefer = await SharedPreferences.getInstance();
+    log("token = $token");
     try {
       if (foundation.kDebugMode) {
         print('====> API Call: $uri');
