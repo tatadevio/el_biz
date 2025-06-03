@@ -37,7 +37,8 @@ class VerifyOTP extends AuthEvent {
 class Login extends AuthEvent {
   final String phoneNumber;
   final String password;
-  const Login(this.phoneNumber, this.password);
+  final BuildContext context;
+  const Login(this.phoneNumber, this.password, this.context);
 
   @override
   List<Object> get props => [phoneNumber, password];
@@ -57,7 +58,8 @@ class VerifyOtp extends AuthEvent {
   final String otpToken;
   final String phone;
   final String otpCode;
-  const VerifyOtp(this.otpToken, this.phone, this.otpCode);
+  final BuildContext context;
+  const VerifyOtp(this.otpToken, this.phone, this.otpCode, this.context);
 
   @override
   List<Object> get props => [otpToken, phone, otpCode];
@@ -71,3 +73,7 @@ class ChangePassword extends AuthEvent {
   @override
   List<Object> get props => [password, confirmPassword];
 }
+
+class Logout extends AuthEvent {}
+
+class DeleteAccount extends AuthEvent {}

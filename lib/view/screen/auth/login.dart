@@ -211,6 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             context.read<AuthBloc>().add(Login(
                                   authState.countryCode + phoneController.text,
                                   passwordController.text,
+                                  context
                                 ));
                           } else {
                             context.read<AuthBloc>().add(SendOtp(

@@ -116,6 +116,11 @@ class AuthRepo {
 
   Future<void> saveToken(String token) async {
     await sharedPreferences.setString(AppConstants.token, token);
+    // final sharedPreferences = await SharedPreferences.getInstance();
+    String lang =
+        sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "ru";
+
+    apiClient.updateHeader(token, lang);
   }
 
   Future<Response> changePassword(
@@ -131,6 +136,17 @@ class AuthRepo {
       "phone": phoneNumber,
       "password": password,
     });
+  }
+
+  Future<void> logout() async {
+    await sharedPreferences.remove(AppConstants.token);
+
+    await sharedPreferences.clear();
+    apiClient.updateHeader("", "ru");
+  }
+
+  Future<Response> deleteAccount() async {
+    return await apiClient.deleteData(AppConstants.deleteAccountUrl);
   }
 
   // Future register(String fName, String email, String countryCode) async {

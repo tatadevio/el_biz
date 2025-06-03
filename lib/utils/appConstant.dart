@@ -58,7 +58,7 @@ class AppConstants {
   static const String myAccountsUrl = "api/accounts/my";
   static const String addAccountUrl = "api/accounts/store";
   static const String updateAccountUrl = "api/accounts/update";
-  static const String deleteAccountUrl = "api/accounts/delete";
+  static const String deleteAccountUrl = "api/users/delete";
 
   /// Add Product
   static const String addProductUrl = "api/products/store";
@@ -90,72 +90,16 @@ class AppConstants {
   static const String materialsUrl = "api/materials";
   static const String filterFieldsUrl = "api/filters-fields";
 
-  /// Auth
-  // static const String registration = "api/v1/users/update";
-  // static const String loginViaOtp = "api/v1/login";
-  // static const String loginWithExistingUrl = "api/v1/login-existing-account";
-
-  /// User
-  // static const String userInfoUrl = "api/v1/users/info";
-  // static const String deleteAccountUrl = "api/v1/users/delete";
-  // static const String imageUploadUrl = "api/v1/users/image-upload";
-  // static const String changePasswordUrl = "api/v1/users/change-password";
-  // static const String fcmTokenUrl = "api/v1/users/fcm-token-update";
-  static const String aboutUrl = "api/v1/about";
-  // static const String editProfileUrl = "api/v1/users/update";
-  static const String configUrl = "api/v1/config";
-
   /// common
-  // static const String bannersUrl = "api/v1/banners";
   static const String termsUrl = "api/v1/terms";
   static const String privacyUrl = "api/v1/privacy";
-  // static const String homePageUrl = "api/v1/homepage";
-  // static const String storiesDetailUrl = "api/v1/products/stories";
-  // static const String citiesUrl = "api/v1/cities";
-  // static const String bankUrl = "api/v1/banks";
-  // static const String adPromotionUrl = "api/v1/products/promotion";
-  // static const String packagesUrl = "api/v1/packages";
-  // static const String sellerStoriesUrl = "api/v1/products/userstories";
+  static const String aboutUrl = "api/v1/about";
+  static const String configUrl = "api/v1/config";
 
-  // /// Posts
-  // static const String postsUrl = "api/v1/posts";
-  // static const String categoryPostUrl = "api/v1/posts/categories";
+  //chat
 
-  /// Products
-  // static const String productUrl = "api/v1/products";
-  // static const String favoritesProductUrl = "api/v1/products/fevourites";
-  // static const String categoryProductUrl = "api/v1/products/categories";
-  // static const String productWithCatId = "api/v1/products?category_id=";
-  // static const String addToFavoriteUrl = "api/v1/favourites/store";
-  // static const String removeFavoriteUrl = "api/v1/favourites/remove";
-  // static const String followSellerUri = "api/v1/follows/store";
-  // static const String unFollowSellerUri = "api/v1/follows/remove";
-  // static const String deleteFollowerUri = "api/v1/follows/delete";
-  // static const String myFollowersUri = "api/v1/follows/me";
-  // static const String myFollowingsUri = "api/v1/follows/to";
-  // static const String sellerFollowersUri = "api/v1/follows/follower";
-  // static const String sellerFollowingsUri = "api/v1/follows/following";
-  // static const String myAdsUrl = "api/v1/products/my-list";
-  // static const String editAdsUrl = "api/v1/products/edit";
-  // static const String saveSearchUrl = "api/v1/products/save-search";
-  // static const String searchFavoriteUrl = "api/v1/products/search-list";
-  // static const String deleteSearchUrl = "api/v1/products/delete-search";
-  // static const String favoriteUsersUri = "api/v1/favourites/users";
-  // static const String relatedProductUrl = "api/v1/products/related";
-  // static const String removeImageUrl = "api/v1/products/delete-image";
-  // static const String deleteProductUrl = "api/v1/products/delete";
-  // static const String productReportList = "api/v1/products/reports";
-  // static const String addReport = "api/v1/products/add-report";
-
-  // /// Add Product
-  // static const String attributesUrl = "api/v1/products/attributes";
-  // static const String addProductUrl = "api/v1/products/add";
-  // static const String editProductUrl = "api/v1/products/edit";
-  // static const String updateProductUrl = "api/v1/products/update";
-
-  // ///chat
-
-  // static const String chatListUrl = "api/v1/chats/list";
+  static const String chatListUrl = "api/chats";
+  static const String messagesUrl = "api/chat-init";
   // static const String chatSendUrl = "api/v1/chats/store";
   // static const String ticketUrl = "api/v1/chats";
   // static const String deleteMessage = "api/v1/chats/remove";

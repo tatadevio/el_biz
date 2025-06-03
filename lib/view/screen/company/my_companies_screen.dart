@@ -41,7 +41,7 @@ class MyCompaniesScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async =>
-            context.read<CompanyBloc>().add(GetMyCompanies()),
+            context.read<CompanyBloc>().add(GetMyCompanies(currentPage: 1)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: BlocBuilder<CompanyBloc, CompanyState>(

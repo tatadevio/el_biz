@@ -100,7 +100,7 @@ class ToggleFavoriteProduct extends CompanyDetailEvent {
   const ToggleFavoriteProduct(this.productId, this.context);
 
   @override
-  List<Object> get props => [productId];
+  List<Object> get props => [productId, context];
 }
 
 class ToggleFavoriteProductInList extends CompanyDetailEvent {

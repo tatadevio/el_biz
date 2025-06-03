@@ -1,16 +1,30 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:el_biz/bloc/chat/chat_bloc.dart';
+import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class NewMessageWidget extends StatefulWidget {
-  final String userId;
+  // final String chatId;
   final String receiverId;
-  const NewMessageWidget(
-      {super.key, required this.userId, required this.receiverId});
+  final String senderId;
+  final String productId;
+  final bool isFirstMessage;
+  final String firebaseChatId;
+  const NewMessageWidget({
+    super.key,
+    // required this.chatId,
+    required this.receiverId,
+    required this.senderId,
+    this.productId = '',
+    required this.isFirstMessage,
+    required this.firebaseChatId,
+  });
 
   @override
   State<NewMessageWidget> createState() => _NewMessageWidgetState();
@@ -142,6 +156,10 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
     );
   }
 
+  void senderData() {
+    context.read<UserBloc>().state.selectedAccountModel;
+  }
+
   void _sendOrUpdateMessage(
       {String? message, String? link, String? type = 'message'}) async {
     // UserModel userModel = Get.find<AuthController>().userData;
@@ -152,27 +170,34 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       "sender_type": 'user',
       "text": message?.trim() ?? '',
       "link": link ?? '',
+      "isProduct": false,
       "type": type ?? '',
       'timestamp': FieldValue.serverTimestamp(),
       'last_fcm': '',
       // userModel.fcmToken ?? '',
       "sender": {
-        "id": widget.userId,
-        // "name": userModel.name ?? '',
-        // "image": userModel.image ?? '',
-        // "phone": userModel.mobile ?? '',
-        // "email": userModel.email ?? "",
+        "id": widget.senderId,
+        "name": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+                true
+            ? context.read<UserBloc>().state.selectedAccountModel?.userName
+            : context.read<UserBloc>().state.selectedAccountModel?.companyName,
+        "image": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+                true
+            ? context.read<UserBloc>().state.selectedAccountModel?.userImage
+            : context.read<UserBloc>().state.selectedAccountModel?.userImage,
+        "phone": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+                true
+            ? context.read<UserBloc>().state.selectedAccountModel?.userPhone
+            : context.read<UserBloc>().state.selectedAccountModel?.companyPhone,
+        "email": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+                true
+            ? context.read<UserBloc>().state.selectedAccountModel?.userEmail
+            : context.read<UserBloc>().state.selectedAccountModel?.companyEmail,
         "device": Platform.isAndroid
             ? "Android"
             : Platform.isIOS
                 ? "IOS"
                 : "Unknown",
-        // "version": Platform.isIOS
-        //     ? AppConstants.iosVersion.toString()
-        //     : Platform.isAndroid
-        //         ? AppConstants.androidVersion.toString()
-        //         : 'unknown',
-        // "ip": Get.find<AuthController>().ipAddress,
       },
       "receiver": {
         "id": widget.receiverId,
@@ -181,34 +206,35 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
 
 //updaet message on sender side
     await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
         .collection('chat')
-        .doc(widget.receiverId)
+        .doc(widget.firebaseChatId)
         .collection('messages')
         .add(sendMessage);
     await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
         .collection('chat')
-        .doc(widget.receiverId)
+        .doc(widget.firebaseChatId)
         .set(sendMessage);
+    if (widget.isFirstMessage) {
+      context.read<ChatBloc>().add(SendMessage(
+            productId: widget.productId,
+          ));
+    }
 
     //updaet message on receiver side
 
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.receiverId)
-        .collection('chat')
-        .doc(widget.userId)
-        .collection('messages')
-        .add(sendMessage);
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.receiverId)
-        .collection('chat')
-        .doc(widget.userId)
-        .set(sendMessage);
+    // await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(widget.receiverId)
+    //     .collection('chat')
+    //     .doc(widget.userId)
+    //     .collection('messages')
+    //     .add(sendMessage);
+    // await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(widget.receiverId)
+    //     .collection('chat')
+    //     .doc(widget.userId)
+    //     .set(sendMessage);
     // }
     // _messageController.clear();
 

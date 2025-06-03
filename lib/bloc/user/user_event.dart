@@ -8,10 +8,11 @@ sealed class UserEvent extends Equatable {
 }
 
 class GetUserInfo extends UserEvent {
-  const GetUserInfo();
+  final BuildContext context;
+  const GetUserInfo({required this.context});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }
 
 class UpdateUserData extends UserEvent {
@@ -19,15 +20,16 @@ class UpdateUserData extends UserEvent {
   final String lastName;
   final String email;
   final String phoneNumber;
+  final BuildContext context;
 
   const UpdateUserData(
       {required this.firstName,
       required this.lastName,
       required this.email,
-      required this.phoneNumber});
+      required this.phoneNumber, required this.context});
 
   @override
-  List<Object> get props => [firstName, lastName, email, phoneNumber];
+  List<Object> get props => [firstName, lastName, email, phoneNumber, context];
 }
 
 class SwitchSelectedAccount extends UserEvent {
@@ -35,12 +37,19 @@ class SwitchSelectedAccount extends UserEvent {
   final CompanyItem companyItem;
   final bool isUser;
 
-  const SwitchSelectedAccount({required this.profile, required this.companyItem, required this.isUser});
+  const SwitchSelectedAccount(
+      {required this.profile, required this.companyItem, required this.isUser});
 
   @override
   List<Object> get props => [profile, companyItem, isUser];
 }
 
 class GetSelectedAccount extends UserEvent {
-  
+  final BuildContext context;
+  const GetSelectedAccount({required this.context});
+
+  @override
+  List<Object> get props => [context];
 }
+
+class ClearSelectedAccount extends UserEvent {}

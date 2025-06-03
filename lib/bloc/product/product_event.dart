@@ -114,11 +114,11 @@ class ChangeCurrency extends ProductEvent {
 }
 
 class ChangeSlectedProduct extends ProductEvent {
-  final int productId;
-  const ChangeSlectedProduct(this.productId);
+  final ProductListItem newProduct;
+  const ChangeSlectedProduct(this.newProduct);
 
   @override
-  List<Object> get props => [productId];
+  List<Object> get props => [newProduct];
 }
 
 class ClearSelectedProduct extends ProductEvent {}

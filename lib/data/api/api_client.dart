@@ -41,6 +41,13 @@ class ApiClient extends GetxService {
   Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
     // SharedPreferences prefer = await SharedPreferences.getInstance();
+    if (token == '') {
+      token = sharedPreferences.getString(AppConstants.token) ?? "";
+      debugPrint('Token: $token');
+      String lang =
+          sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "ru";
+      updateHeader(token, lang);
+    }
     log("token = $token");
     try {
       if (foundation.kDebugMode) {

@@ -5,7 +5,9 @@ import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
+import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/screen/chat/chat_conversation.dart';
 import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:el_biz/view/screen/product/add_product_screen.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/about_product_widget.dart';
@@ -562,6 +564,38 @@ class ProductDetailScreen extends StatelessWidget {
                     ],
                   ),
                 );
+              } else if ((userState.selectedAccountModel!.isUser == true &&
+                      state.productDetailModel?.data?.user?.id !=
+                          userState.selectedAccountModel!.userId) ||
+                  (userState.selectedAccountModel!.isUser == false &&
+                      userState.selectedAccountModel!.companyId !=
+                          state.productDetailModel?.data?.company?.id)) {
+                return BottomAppBar(
+                  color: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                  child: CustomButton(
+                      width: width,
+                      height: 56,
+                      onTap: () {
+                        Get.to(() => ChatConversation(
+                              isSeller: false,
+                              receiverId: getReceiverId(userState, state),
+                              // chatId: getChatId(userState, state),
+                              senderId: getReceiverId(userState, state),
+                              isFirstMessage: true,
+                              productId: state.productDetailModel?.data?.id
+                                      .toString() ??
+                                  '',
+                              firebaseChatId:
+                                  "product_${state.productDetailModel?.data?.id}_user_${state.productDetailModel?.data?.user?.id}",
+
+                              // there have to add udpate for company messages
+                            ));
+                      },
+                      title: 'Чат с продавцом'),
+                );
+// chat option
               } else {
                 return SizedBox.shrink();
               }
@@ -570,6 +604,24 @@ class ProductDetailScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String getReceiverId(UserState userState, ProductDetailState state) {
+    if (userState.selectedAccountModel!.isUser == true) {
+      return state.productDetailModel?.data?.user?.id.toString() ?? '';
+    } else if (userState.selectedAccountModel!.isUser == false) {
+      return state.productDetailModel?.data?.company?.id.toString() ?? '';
+    }
+    return '';
+  }
+
+  String getChatId(UserState userState, ProductDetailState state) {
+    if (userState.selectedAccountModel!.isUser == true) {
+      return "${state.productDetailModel?.data?.id}-${state.productDetailModel?.data?.user?.id}";
+    } else if (userState.selectedAccountModel!.isUser == false) {
+      return "${state.productDetailModel?.data?.id}-${state.productDetailModel?.data?.company?.id}";
+    }
+    return '';
   }
 
   Widget productInfoWidget(

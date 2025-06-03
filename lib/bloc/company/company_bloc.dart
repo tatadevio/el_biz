@@ -29,10 +29,24 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         ) {
     on<GetMyCompanies>((event, emit) async {
       // emit(state.copywith(isLoading: true)); // emits loading state
-      final res = await compnayRepo.getMyCompanies();
-      MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
-      List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
-      emit(state.copywith(myCompanies: myCompaniesList)); // emits updated state
+      if (event.currentPage == 1) {
+        emit(state.copywith(isLoading: true));
+      } else {
+        emit(state.copywith(myCompanyLoadMore: true));
+      }
+      try {
+        final res = await compnayRepo.getMyCompanies();
+        print('get my company status code =  ${res.statusCode}');
+
+        MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
+        print('get my company response =  ${myCompanies.toJson()}');
+        List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
+        emit(state.copywith(
+            myCompanies: myCompaniesList)); // emits updated state
+      } catch (e) {
+        print(e.toString());
+      }
+      emit(state.copywith(isLoading: false, myCompanyLoadMore: false));
     });
 
     on<DeleteCompany>(_onDeleteCompany);
@@ -77,7 +91,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     if (res.statusCode == 200) {
       emit(state.copywith(isLoading: false));
       Get.back();
-      add(GetMyCompanies());
+      add(GetMyCompanies(currentPage: 1));
     } else {
       emit(state.copywith(isLoading: false));
     }

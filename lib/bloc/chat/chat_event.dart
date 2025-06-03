@@ -30,3 +30,23 @@ class UpdateShowMySales extends ChatEvent {
   @override
   List<Object> get props => [showMySales];
 }
+
+class SendMessage extends ChatEvent {
+  final String productId;
+
+  const SendMessage({
+    required this.productId,
+  });
+
+  @override
+  List<Object> get props => [productId];
+}
+
+class GetChatList extends ChatEvent {
+  final int currentPage;
+
+  const GetChatList({required this.currentPage});
+
+  @override
+  List<Object> get props => [currentPage];
+}

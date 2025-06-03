@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/product_detail/product_detail_bloc.dart';
+import '../../../../bloc/product_review/product_review_bloc.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/utilities.dart';
 import '../../../base/custom_image.dart';
+import '../../product_detail/product_detail_screen.dart';
 import './full_screen_image.dart';
 
 class ChatMessageWidget1 extends StatefulWidget {
@@ -144,7 +148,8 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.isMe ? 'sender' : 'receiver',
+                          widget.data['sender']['name'].toString(),
+                          // widget.isMe ? 'sender' : 'receiver',
                           style: textSm.copyWith(
                               color: ColorResources.gray,
                               fontWeight: FontWeight.w500),
@@ -197,7 +202,9 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (!widget.isMe) ...[
-                                  if (!(widget.data.data()
+                                  if (widget.data['isProduct'] == true)
+                                    productMessage(widget.isMe, widget.data)
+                                  else if (!(widget.data.data()
                                               as Map<String, dynamic>)
                                           .containsKey('type') ||
                                       widget.data['type'] == 'message') ...[
@@ -338,7 +345,9 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                   // if (data['reply_to'] != null) SizedBox(height: 5),
                                 ],
                                 if (widget.isMe)
-                                  if (!(widget.data.data()
+                                  if (widget.data['isProduct'] == true)
+                                    productMessage(widget.isMe, widget.data)
+                                  else if (!(widget.data.data()
                                               as Map<String, dynamic>)
                                           .containsKey('type') ||
                                       widget.data['type'] == 'message') ...[
@@ -528,5 +537,52 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
         ),
       ),
     ));
+  }
+
+  Widget productMessage(bool isMe, QueryDocumentSnapshot data) {
+    return GestureDetector(
+      onTap: () {
+        context
+            .read<ProductDetailBloc>()
+            .add(GetProductDetail("${data['product']['id']}"));
+        context
+            .read<ProductReviewBloc>()
+            .add(GetProductReviews("${data['product']['id']}", 1));
+        Get.to(() => const ProductDetailScreen());
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: ColorResources.lgColor,
+            borderRadius: BorderRadius.circular(16)),
+        child: Row(
+          children: [
+            CustomImage(
+                image: data['product']['image'],
+                height: 48,
+                width: 48,
+                radius: 8),
+            const SizedBox(
+              width: 5,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  data['product']['name'],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: h16.copyWith(color: ColorResources.darkGray),
+                ),
+                Text(
+                  "${data['product']['price']} сом/шт",
+                  style: h16.copyWith(color: ColorResources.blue),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

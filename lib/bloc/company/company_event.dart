@@ -7,7 +7,13 @@ sealed class CompanyEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetMyCompanies extends CompanyEvent {}
+class GetMyCompanies extends CompanyEvent {
+  final int currentPage ;
+  const GetMyCompanies({required this.currentPage});
+
+  @override
+  List<Object> get props => [currentPage];
+}
 
 // class CompanyDetailById extends CompanyEvent {
 //   final String id;

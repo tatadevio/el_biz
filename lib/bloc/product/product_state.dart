@@ -17,7 +17,7 @@ class ProductState extends Equatable {
   final String sortType;
   final List<CategoriesItem> filterCategories;
   final String selectedCurrency;
-  final List<int>? selectedProductId;
+  final ProductListItem? selectedProduct;
 
   const ProductState({
     this.isLoading = false,
@@ -36,7 +36,7 @@ class ProductState extends Equatable {
     this.sortType = '',
     this.filterCategories = const [],
     this.selectedCurrency = 'KGS',
-    this.selectedProductId,
+    this.selectedProduct,
   });
 
   ProductState copywith({
@@ -56,7 +56,7 @@ class ProductState extends Equatable {
     String? sortType,
     List<CategoriesItem>? filterCategories,
     String? selectedCurrency,
-    List<int>? selectedProductId,
+    ProductListItem? selectedProduct,
   }) {
     return ProductState(
       isLoading: isLoading ?? this.isLoading,
@@ -75,7 +75,7 @@ class ProductState extends Equatable {
       sortType: sortType ?? this.sortType,
       filterCategories: filterCategories ?? this.filterCategories,
       selectedCurrency: selectedCurrency ?? this.selectedCurrency,
-      selectedProductId: selectedProductId ?? this.selectedProductId,
+      selectedProduct: selectedProduct ?? this.selectedProduct,
     );
   }
 
@@ -102,7 +102,7 @@ class ProductState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         isLoading,
         isGridView,
         isShowCategories,
@@ -119,6 +119,10 @@ class ProductState extends Equatable {
         sortType,
         filterCategories,
         selectedCurrency,
-        selectedProductId ?? [],
+        selectedProduct,
       ];
+}
+
+final class ProductStateInitial extends ProductState {
+  ProductStateInitial() : super();
 }

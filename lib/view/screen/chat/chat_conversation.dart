@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -9,21 +11,31 @@ import 'package:el_biz/view/screen/contracts/new_contract_screen.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/utilities.dart';
+import '../../../bloc/product/product_bloc.dart';
+import '../../../bloc/user/user_bloc.dart';
 import 'widgets/message_item.dart';
 
 class ChatConversation extends StatefulWidget {
   final bool isSeller;
-  final String userId;
+  // final String chatId;
   final String receiverId;
+  final String senderId;
+  final bool isFirstMessage;
+  final String productId;
+  final String firebaseChatId;
   const ChatConversation(
       {super.key,
       required this.isSeller,
-      this.userId = 'userId',
-      this.receiverId = 'tskJIEBnmogGnMFUreC8mdu9HFu2'});
+      // this.chatId = '',
+      this.receiverId = '',
+      this.senderId = '',
+      required this.isFirstMessage,
+      this.productId = '',
+      this.firebaseChatId = ''});
 
   @override
   State<ChatConversation> createState() => _ChatConversationState();
@@ -52,10 +64,8 @@ class _ChatConversationState extends State<ChatConversation> {
     // Get.find<AuthController>().userData.id.toString();
 
     return FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
         .collection('chat')
-        .doc(widget.receiverId)
+        .doc(widget.firebaseChatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .snapshots();
@@ -63,13 +73,11 @@ class _ChatConversationState extends State<ChatConversation> {
 
   void _markMessageAsSeen(String messageId) async {
     String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
-    String? myId = widget.userId;
+    // String? myId = widget.firebaseChatId;
     // Get.find<AuthController>().userData.id.toString();
     await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
         .collection('chat')
-        .doc(widget.receiverId)
+        .doc(widget.firebaseChatId)
         .collection('messages')
         .doc(messageId)
         .update({
@@ -77,7 +85,10 @@ class _ChatConversationState extends State<ChatConversation> {
       'seen_at': FieldValue.serverTimestamp(),
       'seen_by': currentUserId,
     });
-    await FirebaseFirestore.instance.collection('chat').doc(myId).update({
+    await FirebaseFirestore.instance
+        .collection('chat')
+        .doc(widget.firebaseChatId)
+        .update({
       'read': true,
       'seen_at': FieldValue.serverTimestamp(),
       'seen_by': currentUserId,
@@ -86,12 +97,12 @@ class _ChatConversationState extends State<ChatConversation> {
 
   void _listenToReceiverSeenStatus() {
     // if (Get.find<AuthController>().userData.id != null) {
-    String userId = widget.userId;
+    // String userId = widget.chatId;
     // Get.find<AuthController>().userData.id.toString();
 
     FirebaseFirestore.instance
         .collection('chat')
-        .doc(userId)
+        .doc(widget.firebaseChatId)
         .collection('messages')
         .where('sender_type', isEqualTo: "user")
         .where('read', isEqualTo: true)
@@ -153,7 +164,113 @@ class _ChatConversationState extends State<ChatConversation> {
                           ),
                           onTap: () {
                             Get.to(
-                              () => const ProductScreen(isSelectProduct: true),
+                              () => ProductScreen(
+                                isSelectProduct: true,
+                                onSendProduct: () async {
+                                  Map<String, dynamic> sendMessage = {
+                                    "read": false,
+                                    "sender_type":
+                                        widget.isSeller ? 'seller' : 'user',
+
+                                    "text": '',
+                                    "link": '',
+                                    "isProduct": true,
+                                    "type": 'product',
+                                    "product": context
+                                        .read<ProductBloc>()
+                                        .state
+                                        .selectedProduct
+                                        ?.toJson(),
+                                    'timestamp': FieldValue.serverTimestamp(),
+                                    'last_fcm': '',
+                                    // userModel.fcmToken ?? '',
+                                    "sender": {
+                                      "id": widget.senderId,
+                                      "name": context
+                                                  .read<UserBloc>()
+                                                  .state
+                                                  .selectedAccountModel
+                                                  ?.isUser ==
+                                              true
+                                          ? context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.userName
+                                          : context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.companyName,
+                                      "image": context
+                                                  .read<UserBloc>()
+                                                  .state
+                                                  .selectedAccountModel
+                                                  ?.isUser ==
+                                              true
+                                          ? context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.userImage
+                                          : context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.userImage,
+                                      "phone": context
+                                                  .read<UserBloc>()
+                                                  .state
+                                                  .selectedAccountModel
+                                                  ?.isUser ==
+                                              true
+                                          ? context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.userPhone
+                                          : context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.companyPhone,
+                                      "email": context
+                                                  .read<UserBloc>()
+                                                  .state
+                                                  .selectedAccountModel
+                                                  ?.isUser ==
+                                              true
+                                          ? context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.userEmail
+                                          : context
+                                              .read<UserBloc>()
+                                              .state
+                                              .selectedAccountModel
+                                              ?.companyEmail,
+                                    },
+                                    "receiver": {
+                                      "id": widget.receiverId,
+                                    },
+                                  };
+                                  await FirebaseFirestore.instance
+                                      .collection('chat')
+                                      .doc(widget.firebaseChatId)
+                                      .collection('messages')
+                                      .add(sendMessage);
+                                  await FirebaseFirestore.instance
+                                      .collection('chat')
+                                      .doc(widget.firebaseChatId)
+                                      .set(sendMessage);
+                                  Get.back();
+                                  // send isProduct message...
+                                  context
+                                      .read<ProductBloc>()
+                                      .add(ClearSelectedProduct());
+                                },
+                              ),
                             );
                           },
                         ),
@@ -275,7 +392,7 @@ class _ChatConversationState extends State<ChatConversation> {
                       var messageData = snapshot.data!.docs[index];
 
                       bool isMe = messageData['sender']['id'].toString() ==
-                          widget.userId;
+                          widget.senderId;
 
                       if (!isMe && !messageData['read']) {
                         _markMessageAsSeen(messageData.id);
@@ -305,8 +422,12 @@ class _ChatConversationState extends State<ChatConversation> {
                 }),
           ),
           NewMessageWidget(
-            userId: widget.userId,
+            firebaseChatId: widget.firebaseChatId,
+            // chatId: widget.chatId,
             receiverId: widget.receiverId,
+            senderId: widget.senderId,
+            productId: widget.productId,
+            isFirstMessage: widget.isFirstMessage,
           ),
         ],
       ),

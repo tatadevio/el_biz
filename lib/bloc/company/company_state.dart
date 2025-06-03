@@ -10,6 +10,9 @@ class CompanyState extends Equatable {
   final bool isShowTendersGridView;
   final List<DaySchedule> scheduleTiming;
   final AddCompanyModel addCompanyModel;
+  final int myCompanyCurrentPage;
+  final int myCompanyPageSize;
+  final bool myCompanyLoadMore;
 
   const CompanyState({
     this.isLoading = false,
@@ -21,18 +24,25 @@ class CompanyState extends Equatable {
     this.isShowTendersGridView = true,
     this.scheduleTiming = const [],
     required this.addCompanyModel,
+    this.myCompanyCurrentPage = 1,
+    this.myCompanyPageSize = 1,
+    this.myCompanyLoadMore = false,
   });
 
-  CompanyState copywith(
-      {bool? isLoading,
-      // List<ComapnyDocumentModel>? companyDocuments,
-      List<CompanyItem>? myCompanies,
-      bool? isShowActiveGoods,
-      bool? isShowActiveTenders,
-      bool? isShowGoodsGridView,
-      bool? isShowTendersGridView,
-      List<DaySchedule>? scheduleTiming,
-      AddCompanyModel? addCompanyModel}) {
+  CompanyState copywith({
+    bool? isLoading,
+    // List<ComapnyDocumentModel>? companyDocuments,
+    List<CompanyItem>? myCompanies,
+    bool? isShowActiveGoods,
+    bool? isShowActiveTenders,
+    bool? isShowGoodsGridView,
+    bool? isShowTendersGridView,
+    List<DaySchedule>? scheduleTiming,
+    AddCompanyModel? addCompanyModel,
+    int? myCompanyCurrentPage,
+    int? myCompanyPageSize,
+    bool? myCompanyLoadMore,
+  }) {
     return CompanyState(
       isLoading: isLoading ?? this.isLoading,
       // companyDocuments: companyDocuments ?? this.companyDocuments,
@@ -44,6 +54,9 @@ class CompanyState extends Equatable {
           isShowTendersGridView ?? this.isShowTendersGridView,
       scheduleTiming: scheduleTiming ?? this.scheduleTiming,
       addCompanyModel: addCompanyModel ?? this.addCompanyModel,
+      myCompanyCurrentPage: myCompanyCurrentPage ?? this.myCompanyCurrentPage,
+      myCompanyPageSize: myCompanyPageSize ?? this.myCompanyPageSize,
+      myCompanyLoadMore: myCompanyLoadMore ?? this.myCompanyLoadMore,
     );
   }
 
@@ -57,7 +70,8 @@ class CompanyState extends Equatable {
         isShowGoodsGridView,
         isShowTendersGridView,
         scheduleTiming,
-        addCompanyModel,
+        addCompanyModel, myCompanyCurrentPage, myCompanyPageSize,
+        myCompanyLoadMore,
       ];
 }
 

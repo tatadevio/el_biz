@@ -246,11 +246,11 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
               print('data is here ');
               // firstname, lastname, email, phone
               context.read<UserBloc>().add(UpdateUserData(
-                    firstName: nameController.text,
-                    lastName: familyNameController.text,
-                    email: emailController.text,
-                    phoneNumber: userState.userInfo?.data?.phone ?? '',
-                  ));
+                  firstName: nameController.text,
+                  lastName: familyNameController.text,
+                  email: emailController.text,
+                  phoneNumber: userState.userInfo?.data?.phone ?? '',
+                  context: context));
             },
             title: 'save_changes'.tr,
           );

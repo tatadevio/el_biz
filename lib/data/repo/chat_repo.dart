@@ -1,3 +1,6 @@
+import 'package:get/get_connect/http/src/response/response.dart';
+
+import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
 
 class ChatRepo {
@@ -5,11 +8,17 @@ class ChatRepo {
 
   ChatRepo(this.apiClient);
 
-  // Future<Response> getChatList(String id, String pageSize) async {
-  //   return await apiClient.getData(
-  //     "${AppConstants.chatListUrl}/$id",
-  //   );
-  // }
+  Future<Response> sendMessage(String productId) async {
+    return await apiClient.postData(AppConstants.messagesUrl, {
+      'product_id': productId,
+    });
+  }
+
+  Future<Response> getChatList(int page) async {
+    return await apiClient.getData(
+      "${AppConstants.chatListUrl}?page=$page",
+    );
+  }
 
   // Future<Response> getTicketList() async {
   //   return await apiClient.getData(
@@ -33,10 +42,6 @@ class ChatRepo {
   //   return await apiClient.deleteData(
   //     "${AppConstants.clearAllMessage}/$id",
   //   );
-  // }
-
-  // Future<Response> sendMessage(String productId, String message) async {
-  //   return await apiClient.postData(AppConstants.chatSendUrl, {"chat_id": productId, "message": message});
   // }
 
   // Future sendImage(String ticketId, XFile image) async {

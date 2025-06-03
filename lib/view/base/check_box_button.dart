@@ -1,11 +1,12 @@
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/product/product_bloc.dart';
 
 class CheckBoxButton extends StatefulWidget {
-  final int? productId;
-  const CheckBoxButton({super.key, this.productId});
+  final ProductListItem? product;
+  const CheckBoxButton({super.key, this.product});
 
   @override
   State<CheckBoxButton> createState() => _CheckBoxButtonState();
@@ -29,12 +30,12 @@ class _CheckBoxButtonState extends State<CheckBoxButton> {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         return Checkbox(
-            value:
-                checkBoxValue(state.selectedProductId ?? [], widget.productId!),
+            value: state.selectedProduct?.id == widget.product?.id,
+                // checkBoxValue(state.selectedProduct.id ?? [], widget.productId!),
             onChanged: (val) {
               context
                   .read<ProductBloc>()
-                  .add(ChangeSlectedProduct(widget.productId!));
+                  .add(ChangeSlectedProduct(widget.product!));
             });
       },
     );

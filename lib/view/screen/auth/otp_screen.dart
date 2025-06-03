@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../utils/color_resources.dart';
-import 'change_password_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phone;
@@ -141,7 +140,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     widget.type,
                                     widget.phone,
                                         
-                                    currentText,
+                                    currentText,context
                                   ));
 
                               // Get.offAll(() => const ChangePasswordScreen());

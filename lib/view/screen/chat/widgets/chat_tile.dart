@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/chat/chat_list_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -10,7 +11,9 @@ import 'package:get/get.dart';
 class ChatTile extends StatelessWidget {
   final bool unSeen;
   final bool isMessage;
-  const ChatTile({super.key, this.unSeen = false, required this.isMessage});
+  final ChatData? chatData;
+  const ChatTile(
+      {super.key, this.unSeen = false, required this.isMessage, this.chatData});
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +23,27 @@ class ChatTile extends StatelessWidget {
         if (_auth.currentUser != null) {}
         if (isMessage) {
           // go to the message conversation screen
-          Get.to(() => ChatConversation(isSeller: unSeen));
+          Get.to(() => ChatConversation(
+                isSeller: unSeen,
+                isFirstMessage: false,
+                firebaseChatId: chatData?.firebaseChatId ?? '',
+              ));
         } else {
           //go to the agrement/contracts screen.
           Get.to(() => ContractsScreen());
         }
       },
-      leading: CustomImage(image: '', height: 48, width: 48, radius: 48),
+      leading: CustomImage(
+          image: chatData?.product?.image ?? '',
+          height: 48,
+          width: 48,
+          radius: 48),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Text(
-              'Садовая мебель Loft',
+              chatData?.product?.name ?? '',
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
           ),

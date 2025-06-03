@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../data/model/response/category/category_model.dart';
+import '../../data/model/response/company/company_product_model.dart';
 import '../../data/model/response/product/product_model.dart';
 
 part 'product_event.dart';
@@ -15,8 +16,7 @@ part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ProductRepo productRepo;
-  ProductBloc(this.productRepo)
-      : super(const ProductState(selectedProductId: [])) {
+  ProductBloc(this.productRepo) : super(ProductStateInitial()) {
     on<UpdateGridView>((event, emit) {
       emit(state.copywith(isGridView: event.gridView));
     });
@@ -44,10 +44,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         }
       }
     });
-    on<ResetSelectedKeyword>((event, emit) {
-      emit(state.copywith(selectedKeywords: []));
-    },);
-
+    on<ResetSelectedKeyword>(
+      (event, emit) {
+        emit(state.copywith(selectedKeywords: []));
+      },
+    );
 
     on<UpdateMaterialSelected>((event, emit) {
       final currentMaterials = List<String>.from(state.selectedMaterial);
@@ -105,17 +106,18 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<ChangeSlectedProduct>((event, emit) {
-      List<int> selectedProductList =
-          List<int>.from(state.selectedProductId ?? []);
-      if (selectedProductList.contains(event.productId)) {
-        selectedProductList.remove(event.productId);
-      } else {
-        selectedProductList.add(event.productId);
-      }
-      emit(state.copywith(selectedProductId: selectedProductList));
+      // List<int> selectedProductList =
+      //     List<int>.from(state.selectedProductId ?? []);
+      // if (selectedProductList.contains(event.productId)) {
+      //   selectedProductList.remove(event.productId);
+      // } else {
+      //   selectedProductList.add(event.productId);
+      // }
+      emit(state.copywith(selectedProduct: event.newProduct));
     });
     on<ClearSelectedProduct>((event, emit) {
-      emit(state.copywith(selectedProductId: []));
+      // emit(state.copywith(selectedProductId: []));
+      emit(state.copywith(selectedProduct: null));
     });
 
     on<EmptyPickedLogo>(_onEmptyPickedLogo);
@@ -212,7 +214,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     emit(state.copywith(pickedLogo: []));
   }
 
-   Future<void> _onResetSelectedMaterial(ResetSelectedMaterial event, Emitter<ProductState> emit ) async {
+  Future<void> _onResetSelectedMaterial(
+      ResetSelectedMaterial event, Emitter<ProductState> emit) async {
     emit(state.copywith(selectedMaterial: []));
   }
 }

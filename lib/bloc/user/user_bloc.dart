@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_utils/get_utils.dart';
 
@@ -23,7 +25,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         if (res.statusCode == 200) {
           UserInfoModel userInfo = UserInfoModel.fromJson(res.body);
           emit(state.copyWith(userInfo: userInfo));
-          add(GetSelectedAccount());
+          // ignore: use_build_context_synchronously
+          add(GetSelectedAccount(context: event.context));
         } else {
           showShortToast(res.body['message']);
         }
@@ -39,6 +42,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UpdateUserData>(_onUpdateUserData);
     on<SwitchSelectedAccount>(_onSwichSelectedAccount);
     on<GetSelectedAccount>(_onGetSelectedAccount);
+    on<ClearSelectedAccount>(_onClearSelectedAccount);
   }
 
   Future<void> _onUpdateUserData(
@@ -51,12 +55,40 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(UpdateUserDataSuccess());
 
         UserData userData = UserData.fromJson(response.body['data']);
+        // final userInfoData = state.userInfo?.copyWith(data: userData);
+        final updatedUserInfo = state.userInfo != null
+            ? state.userInfo!.copyWith(data: userData)
+            : UserInfoModel(data: userData);
 
-        emit(state.copyWith(
-          userInfo: state.userInfo?.copyWith(data: userData) ??
-              UserInfoModel(data: userData),
-        ));
-        // add(GetUserInfo());
+        emit(state.copyWith(userInfo: updatedUserInfo));
+
+// start update saved user data
+        final accountData = userRepo.getSelectedAccount();
+        SelectedAccountModel selectedAccount =
+            SelectedAccountModel.fromJson(jsonDecode(accountData));
+
+        if (selectedAccount.isUser == true) {
+          final updatedAccount = SelectedAccountModel(
+            userId: userData.id!,
+            userName: userData.name ?? '',
+            userImage: userData.image ?? '',
+            userPhone: userData.phone ?? '',
+            userEmail: userData.email ?? '',
+            userRole: userData.userRole,
+            companyId: selectedAccount.companyId,
+            companyName: selectedAccount.companyName,
+            companyLogo: selectedAccount.companyLogo,
+            verificationStatus: selectedAccount.verificationStatus,
+            companyPhone: selectedAccount.companyPhone,
+            companyEmail: selectedAccount.companyEmail,
+            isUser: selectedAccount.isUser,
+          );
+          emit(state.copyWith(selectedAccountModel: updatedAccount));
+          await userRepo.saveSelectedAccount(updatedAccount);
+          add(GetSelectedAccount(context: event.context));
+        }
+
+// end update saved user data
       } else {
         emit(UpdateUserDataError(error: 'error'.tr));
       }
@@ -143,10 +175,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         // } else {
         //   showShortToast('updated new profile data is not save');
         // }
+      } else {
+        // showShortToast('data is null');
+        add(GetUserInfo(context: event.context));
+        if (event.context.read<AuthBloc>().state.isLoggedIn) {
+          Future.delayed(Duration(seconds: 5), () async {
+            // ignore: use_build_context_synchronously
+            add(GetSelectedAccount(context: event.context));
+          });
+        }
       }
-      // else {
-      //   showShortToast('data is null');
-      // }
     } else {
       SelectedAccountModel selectedAccount =
           SelectedAccountModel.fromJson(jsonDecode(accountData));
@@ -154,5 +192,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       // print('this is loaded data : ${selectedAccount.toJson()}');
       emit(state.copyWith(selectedAccountModel: selectedAccount));
     }
+  }
+
+  Future<void> _onClearSelectedAccount(
+      ClearSelectedAccount event, Emitter<UserState> emit) async {
+    emit(state.copyWith(
+        selectedAccountModel: null, userInfo: null, clearUserInfo: true));
   }
 }

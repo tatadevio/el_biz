@@ -1,6 +1,7 @@
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
+import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -20,6 +21,7 @@ class ProductGridItem extends StatelessWidget {
   final bool isSelectProduct;
   final ProductListItem? product;
   final bool isPublicProduct;
+  final bool isSearchProduct;
 
   const ProductGridItem({
     super.key,
@@ -27,6 +29,7 @@ class ProductGridItem extends StatelessWidget {
     this.isSelectProduct = false,
     this.product,
     this.isPublicProduct = false,
+    this.isSearchProduct = false,
   });
 
   @override
@@ -63,12 +66,16 @@ class ProductGridItem extends StatelessWidget {
                       right: 5,
                       top: 5,
                       child: CustomFavoriteButton(
-                        isFavorite: product!.isFavorite ?? false,
+                        isFavorite: product?.isFavorite ?? false,
                         onTap: () {
                           if (isPublicProduct) {
                             context.read<PublicProductBloc>().add(
                                 ToggleFavoritePublicProduct(
                                     context, product!.id!));
+                          } else if (isSearchProduct) {
+                            context.read<SearchBloc>().add(
+                                ToggleFavoriteSearchProduct(
+                                    productId: product!.id!, context: context));
                           } else {
                             context.read<CompanyDetailBloc>().add(
                                 ToggleFavoriteProduct(product!.id!, context));
@@ -83,7 +90,7 @@ class ProductGridItem extends StatelessWidget {
                       right: 0,
                       top: 0,
                       child: CheckBoxButton(
-                        productId: product!.id,
+                        product: product,
                       ),
                     ),
                 ],

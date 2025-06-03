@@ -141,6 +141,7 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<FilterFieldsBloc>(() => FilterFieldsBloc(Get.find()),
       fenix: true);
+
 ////////
   ///
   ///

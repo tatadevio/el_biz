@@ -7,10 +7,17 @@ import 'package:get/get.dart';
 
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
+import '../../base/product_grid_item.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
@@ -24,6 +31,7 @@ class SearchScreen extends StatelessWidget {
               child: SizedBox(
                 height: 40,
                 child: TextFormField(
+                  controller: searchController,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     contentPadding:
@@ -34,6 +42,11 @@ class SearchScreen extends StatelessWidget {
                       child: SvgPicture.asset(Images.svgSearch),
                     ),
                   ),
+                  onChanged: (val) {
+                    context
+                        .read<SearchBloc>()
+                        .add(SearchProduct(search: val, currentPage: 1));
+                  },
                 ),
               ),
             ),
@@ -175,6 +188,30 @@ class SearchScreen extends StatelessWidget {
             );
           }),
         ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, searchState) {
+          return GridView.builder(
+            // controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.7),
+            itemCount: searchState.searchProducts.length,
+            itemBuilder: (context, index) {
+              // return SizedBox();
+              return ProductGridItem(
+                product: searchState.searchProducts[index],
+              
+                // product: companyController.,
+                // product: index,
+              );
+            },
+          );
+        }),
       ),
     );
   }

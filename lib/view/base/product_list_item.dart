@@ -86,7 +86,7 @@ class ProductListItemWidget extends StatelessWidget {
                       right: 0,
                       top: 0,
                       child: CheckBoxButton(
-                        productId: product!.id,
+                        product: product,
                       ),
                     ),
                 ],

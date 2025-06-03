@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
@@ -35,24 +36,24 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   loadData(BuildContext context) {
-    context.read<UserBloc>().add(const GetUserInfo());
-    context.read<CompanyBloc>().add(GetMyCompanies());
+    context.read<UserBloc>().add(GetUserInfo(context: context));
+    context.read<CompanyBloc>().add(GetMyCompanies(currentPage: 1));
     context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
     context.read<PublicCompanyBloc>().add(GetNewPublicCompany(1));
-    print('now there calling get public product');
     context.read<PublicProductBloc>().add(GetPublicProduct(1));
     context.read<PublicTenderBloc>().add(GetPublicTender(1));
     context.read<AccountBloc>().add(GetMyAccounts());
     context.read<CitiesBloc>().add(GetCitites(1, true));
     context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));
     context.read<NotificationBloc>().add(GetNotification(1));
-    // context.read<UserBloc>().add(GetSelectedAccount()); // added in the user info bloc
+    context.read<UserBloc>().add(GetSelectedAccount(context: context));
+    context.read<ChatBloc>().add(GetChatList(currentPage: 1));
   }
 
   loadCompanyData(BuildContext context) {
     context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
     context.read<PublicCompanyBloc>().add(GetNewPublicCompany(1));
-    context.read<CompanyBloc>().add(GetMyCompanies());
+    context.read<CompanyBloc>().add(GetMyCompanies(currentPage: 1));
   }
 
   @override
