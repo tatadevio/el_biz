@@ -3,6 +3,7 @@ part of 'search_bloc.dart';
 class SearchState extends Equatable {
   final bool isSearchProducts;
   final bool isLoading;
+  final bool isGridView;
   final List<ProductListItem> searchProducts;
   final bool isMoreLoading;
   final int currentPage;
@@ -10,6 +11,7 @@ class SearchState extends Equatable {
   const SearchState({
     this.isSearchProducts = true,
     this.isLoading = false,
+    this.isGridView = true,
     this.isMoreLoading = false,
     this.currentPage = 1,
     this.pageSize = 1,
@@ -23,6 +25,7 @@ class SearchState extends Equatable {
     int? currentPage,
     int? pageSize,
     List<ProductListItem>? searchProducts,
+    bool? isGridView,
   }) {
     return SearchState(
       isSearchProducts: isSearchProducts ?? this.isSearchProducts,
@@ -31,6 +34,7 @@ class SearchState extends Equatable {
       isMoreLoading: isMoreLoading ?? this.isMoreLoading,
       currentPage: currentPage ?? this.currentPage,
       pageSize: pageSize ?? this.pageSize,
+      isGridView: isGridView ?? this.isGridView,
     );
   }
 
@@ -42,6 +46,7 @@ class SearchState extends Equatable {
         isMoreLoading,
         currentPage,
         pageSize,
+        isGridView,
       ];
 }
 

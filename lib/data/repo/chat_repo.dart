@@ -1,7 +1,9 @@
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
 import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
+import 'package:http/http.dart' as http;
 
 class ChatRepo {
   final ApiClient apiClient;
@@ -18,6 +20,23 @@ class ChatRepo {
     return await apiClient.getData(
       "${AppConstants.chatListUrl}?page=$page",
     );
+  }
+
+  Future<Response> deleteChat(String chatId) async {
+    return await apiClient.deleteData(
+      "${AppConstants.deleteChaturl}/$chatId",
+    );
+  }
+
+  Future<Response> sendMedia(String chatId, XFile image) async {
+    Map<String, String> fields = {};
+    List<http.MultipartFile> files = [];
+    files.add(await http.MultipartFile.fromPath('medias[]', image.path));
+
+    return await apiClient.postMultipartData(
+        "${AppConstants.chatListUrl}/$chatId/upload-medias",
+        fields: fields,
+        files: files);
   }
 
   // Future<Response> getTicketList() async {

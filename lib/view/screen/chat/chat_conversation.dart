@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -21,42 +22,68 @@ import 'widgets/message_item.dart';
 
 class ChatConversation extends StatefulWidget {
   final bool isSeller;
-  // final String chatId;
   final String receiverId;
   final String senderId;
   final bool isFirstMessage;
   final String productId;
   final String firebaseChatId;
+  final String chatId;
   const ChatConversation(
       {super.key,
       required this.isSeller,
-      // this.chatId = '',
       this.receiverId = '',
-      this.senderId = '',
+      required this.senderId,
       required this.isFirstMessage,
       this.productId = '',
-      this.firebaseChatId = ''});
+      this.firebaseChatId = '',
+      this.chatId = ''});
 
   @override
   State<ChatConversation> createState() => _ChatConversationState();
 }
 
 class _ChatConversationState extends State<ChatConversation> {
-  // String userId = '';
-  // String receiverId = '';
   late Stream<QuerySnapshot> _messagesStream;
+  String chatId = '';
   @override
   void initState() {
     _messagesStream = _createOptimizedMessageStream();
-    // setState(() {
-    // userId = widget.userId;
-    // receiverId = widget.receiverId;
-    // });
 
     Future.delayed(Duration.zero, () {
       _listenToReceiverSeenStatus();
+      updateChatId();
     });
     super.initState();
+  }
+
+  // updateChatId() {
+  //   if(widget.chatId != '' ) {
+  //     chatId = widget.chatId;
+  //   }else {
+  //     context.read<ChatBloc>().add(SendMessage(productId: widget.productId)); // init chat
+  //   }
+  // }
+
+  updateChatId() async {
+    if (widget.chatId != '' && widget.isFirstMessage == false) {
+      chatId = widget.chatId;
+    } else {
+      final completer = Completer<String>();
+
+      context.read<ChatBloc>().add(
+            SendMessage(productId: widget.productId, completer: completer),
+          );
+
+      try {
+        final newChatId = await completer.future;
+        setState(() {
+          chatId = newChatId;
+        });
+        print("Chat ID: $chatId");
+      } catch (e) {
+        print("Failed to get chat ID: $e");
+      }
+    }
   }
 
   Stream<QuerySnapshot> _createOptimizedMessageStream() {
@@ -96,10 +123,6 @@ class _ChatConversationState extends State<ChatConversation> {
   }
 
   void _listenToReceiverSeenStatus() {
-    // if (Get.find<AuthController>().userData.id != null) {
-    // String userId = widget.chatId;
-    // Get.find<AuthController>().userData.id.toString();
-
     FirebaseFirestore.instance
         .collection('chat')
         .doc(widget.firebaseChatId)
@@ -423,7 +446,7 @@ class _ChatConversationState extends State<ChatConversation> {
           ),
           NewMessageWidget(
             firebaseChatId: widget.firebaseChatId,
-            // chatId: widget.chatId,
+            chatId: chatId,
             receiverId: widget.receiverId,
             senderId: widget.senderId,
             productId: widget.productId,

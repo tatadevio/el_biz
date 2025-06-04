@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../bloc/product_detail/product_detail_bloc.dart';
 import '../../bloc/product_review/product_review_bloc.dart';
+import '../../bloc/similar_products/similar_products_bloc.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
@@ -44,6 +45,9 @@ class ProductListItemWidget extends StatelessWidget {
           context
               .read<ProductReviewBloc>()
               .add(GetProductReviews(product?.id.toString() ?? '', 1));
+
+               context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+              productId: product?.id.toString() ?? '', currentPage: 1));
           Get.to(() => const ProductDetailScreen());
         },
         child: Container(

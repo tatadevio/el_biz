@@ -590,7 +590,6 @@ class ProductDetailScreen extends StatelessWidget {
                               firebaseChatId:
                                   "product_${state.productDetailModel?.data?.id}_user_${state.productDetailModel?.data?.user?.id}",
 
-                              // there have to add udpate for company messages
                             ));
                       },
                       title: 'Чат с продавцом'),

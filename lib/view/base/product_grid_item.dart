@@ -2,6 +2,7 @@ import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
+import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -42,6 +43,10 @@ class ProductGridItem extends StatelessWidget {
         context
             .read<ProductReviewBloc>()
             .add(GetProductReviews(product?.id.toString() ?? '', 1));
+
+        context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+            productId: product?.id.toString() ?? '', currentPage: 1));
+
         Get.to(() => const ProductDetailScreen());
       },
       child: Container(

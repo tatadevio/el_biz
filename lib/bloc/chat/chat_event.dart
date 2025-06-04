@@ -33,13 +33,15 @@ class UpdateShowMySales extends ChatEvent {
 
 class SendMessage extends ChatEvent {
   final String productId;
+  final Completer<String> completer;
 
   const SendMessage({
     required this.productId,
+    required this.completer,
   });
 
   @override
-  List<Object> get props => [productId];
+  List<Object> get props => [productId, completer];
 }
 
 class GetChatList extends ChatEvent {
@@ -49,4 +51,23 @@ class GetChatList extends ChatEvent {
 
   @override
   List<Object> get props => [currentPage];
+}
+
+class DeleteChat extends ChatEvent {
+  final String chatId;
+  const DeleteChat({required this.chatId});
+
+  @override
+  List<Object> get props => [chatId];
+}
+
+class SendChatMedia extends ChatEvent {
+  final String chatId;
+  final XFile media;
+  final Completer<AttachmentModel> completer;
+  const SendChatMedia(
+      {required this.chatId, required this.media, required this.completer});
+
+  @override
+  List<Object> get props => [chatId, media, completer];
 }

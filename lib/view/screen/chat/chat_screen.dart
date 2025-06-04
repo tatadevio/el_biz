@@ -5,7 +5,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
-import 'package:el_biz/view/screen/chat/widgets/chat_list_widget.dart';
+import 'package:el_biz/view/screen/chat/widgets/messages_list/chat_list_widget.dart';
 import 'package:el_biz/view/screen/chat/widgets/chat_top_bar_widget.dart';
 import 'package:el_biz/view/screen/chat/widgets/contract_top_bar.dart';
 import 'package:flutter/material.dart';

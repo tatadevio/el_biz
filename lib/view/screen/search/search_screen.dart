@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/product_grid_item.dart';
+import '../../base/product_list_item.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -18,6 +19,64 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollToTopButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 300 && !_showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = true;
+        });
+      } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
+        setState(() {
+          _showScrollToTopButton = false;
+        });
+      }
+
+      searchBloc = context.read<SearchBloc>();
+
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !searchBloc.state.isLoading &&
+          !searchBloc.state.isMoreLoading) {
+        int pageSize = searchBloc.state.pageSize;
+        if (searchBloc.state.currentPage < pageSize) {
+          int nextPage = searchBloc.state.currentPage;
+
+          context.read<SearchBloc>().add(SearchProduct(
+              search: searchController.text, currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
+
+  late SearchBloc searchBloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    searchBloc = context.read<SearchBloc>();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    searchBloc.add(ClearSearchList());
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
@@ -53,14 +112,20 @@ class _SearchScreenState extends State<SearchScreen> {
             const SizedBox(
               width: 5,
             ),
-            Text(
-              'Отмена',
-              style: body14.copyWith(color: ColorResources.gray),
+            GestureDetector(
+              onTap: () {
+                searchController.clear();
+                context.read<SearchBloc>().add(ClearSearchList());
+              },
+              child: Text(
+                'Отмена',
+                style: body14.copyWith(color: ColorResources.gray),
+              ),
             ),
           ],
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(55),
+          preferredSize: const Size.fromHeight(95),
           child: BlocBuilder<SearchBloc, SearchState>(
               builder: (context, searchState) {
             return Container(
@@ -183,35 +248,147 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            // productController.updateGridView(true);
+
+                            context
+                                .read<SearchBloc>()
+                                .add(const UpdateGridView(true));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: searchState.isGridView
+                                  ? ColorResources.primary
+                                  : null,
+                              border: Border.all(
+                                width: 1,
+                                color: searchState.isGridView
+                                    ? ColorResources.primary
+                                    : ColorResources.lgColor,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              Images.svgCategory,
+                              color: searchState.isGridView
+                                  ? ColorResources.white
+                                  : ColorResources.gray,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () {
+                            // productController.updateGridView(false);
+                            context
+                                .read<SearchBloc>()
+                                .add(const UpdateGridView(false));
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: searchState.isGridView
+                                  ? null
+                                  : ColorResources.primary,
+                              border: Border.all(
+                                width: 1,
+                                color: !searchState.isGridView
+                                    ? ColorResources.primary
+                                    : ColorResources.lgColor,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              Images.svgList,
+                              color: !searchState.isGridView
+                                  ? ColorResources.white
+                                  : ColorResources.gray,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             );
           }),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, searchState) {
-          return GridView.builder(
-            // controller: _scrollController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.7),
-            itemCount: searchState.searchProducts.length,
-            itemBuilder: (context, index) {
-              // return SizedBox();
-              return ProductGridItem(
-                product: searchState.searchProducts[index],
-              
-                // product: companyController.,
-                // product: index,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: BlocBuilder<SearchBloc, SearchState>(
+                builder: (context, searchState) {
+              if (searchState.isGridView) {
+                return GridView.builder(
+                  controller: _scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.7),
+                  itemCount: searchState.searchProducts.length,
+                  itemBuilder: (context, index) {
+                    // return SizedBox();
+                    return ProductGridItem(
+                      product: searchState.searchProducts[index],
+
+                      // product: companyController.,
+                      // product: index,
+                    );
+                  },
+                );
+              }
+              return ListView.builder(
+                controller: _scrollController,
+                itemCount: searchState.searchProducts.length,
+                itemBuilder: (context, index) {
+                  return ProductListItemWidget(
+                    product: searchState.searchProducts[index],
+                    isPublicProduct: true,
+                  );
+                },
               );
-            },
-          );
-        }),
+            }),
+          ),
+          if (_showScrollToTopButton)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: _scrollToTop,
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorResources.primary,
+                  ),
+                  child: const Icon(
+                    Icons.keyboard_arrow_up,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

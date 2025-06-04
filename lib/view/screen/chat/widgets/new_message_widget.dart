@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,12 +6,18 @@ import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../data/model/response/chat/attachment_model.dart';
+import '../image_preview_screen.dart';
 
 class NewMessageWidget extends StatefulWidget {
-  // final String chatId;
+  final String chatId;
   final String receiverId;
   final String senderId;
   final String productId;
@@ -18,7 +25,7 @@ class NewMessageWidget extends StatefulWidget {
   final String firebaseChatId;
   const NewMessageWidget({
     super.key,
-    // required this.chatId,
+    required this.chatId,
     required this.receiverId,
     required this.senderId,
     this.productId = '',
@@ -36,8 +43,11 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 50,
-      padding: const EdgeInsets.all(5),
+      padding: EdgeInsets.only(
+          top: 5,
+          left: 10,
+          right: 10,
+          bottom: MediaQuery.of(context).viewPadding.bottom),
       // only(top: 5),
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -48,7 +58,69 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       child: Row(
         children: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.bottomSheet(
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 4,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: ColorResources.greyLight,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          // ListTile(
+                          //   onTap: () {
+                          //     _pickImage(ImageSource.gallery);
+                          //   },
+                          //   title: Text('select_image'.tr),
+                          // ),
+
+                          // children: [
+                          ListTile(
+                            onTap: () {
+                              Get.back();
+                              _pickImage(ImageSource.camera);
+                            },
+                            leading: const Icon(Icons.camera),
+                            title: Text('camera'.tr),
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Get.back();
+                              _pickImage(ImageSource.gallery);
+                            },
+                            leading: const Icon(Icons.image),
+                            title: Text('gallery'.tr),
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Get.back();
+                              _pickPdfFile();
+                            },
+                            leading: const Icon(Icons.picture_as_pdf),
+                            title: Text('pdf'.tr),
+                          ),
+                          // ],
+                        ],
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                    isScrollControlled: true);
+              },
               icon: const Icon(
                 Icons.add,
                 color: ColorResources.gray,
@@ -128,25 +200,6 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 ),
               ),
             ),
-
-            // CustomTextField(
-            //   controller: textController,
-            //   hintColor: '',
-            //   inputType: TextInputType.text,
-            //   leading: '',
-
-            //   readOnly: false,
-            // suffix: Container(
-            //   height: 23,
-            //   width: 23,
-            //   decoration: BoxDecoration(
-            //     color: textController.text.isEmpty ? ColorResources.lgColor : ColorResources.blue,
-            //     shape: BoxShape.circle,
-            //   ),
-            //   alignment: Alignment.center,
-            //   child: SvgPicture.asset(Images.svgSendArrow),
-            // ),
-            // ),
           ),
           const SizedBox(
             width: 10,
@@ -161,7 +214,10 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   }
 
   void _sendOrUpdateMessage(
-      {String? message, String? link, String? type = 'message'}) async {
+      {String? message,
+      String? link,
+      String? type = 'message',
+      String? size = ''}) async {
     // UserModel userModel = Get.find<AuthController>().userData;
     // String userId = context.read<AuthBloc>().state.userData.
 
@@ -174,9 +230,11 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       "type": type ?? '',
       'timestamp': FieldValue.serverTimestamp(),
       'last_fcm': '',
+      'size': size,
       // userModel.fcmToken ?? '',
       "sender": {
         "id": widget.senderId,
+        // context.read<UserBloc>().state.userInfo!.data!.id.toString(),
         "name": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
                 true
             ? context.read<UserBloc>().state.selectedAccountModel?.userName
@@ -214,36 +272,65 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         .collection('chat')
         .doc(widget.firebaseChatId)
         .set(sendMessage);
-    if (widget.isFirstMessage) {
-      context.read<ChatBloc>().add(SendMessage(
-            productId: widget.productId,
-          ));
-    }
-
-    //updaet message on receiver side
-
-    // await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.receiverId)
-    //     .collection('chat')
-    //     .doc(widget.userId)
-    //     .collection('messages')
-    //     .add(sendMessage);
-    // await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.receiverId)
-    //     .collection('chat')
-    //     .doc(widget.userId)
-    //     .set(sendMessage);
+    // if (widget.isFirstMessage) {
+    //   context.read<ChatBloc>().add(SendMessage(
+    //         productId: widget.productId,
+    //       ));
     // }
-    // _messageController.clear();
+  }
 
-    // sendNotificationToToken(
-    //   title: userModel.name,
-    //   message: message ?? '',
-    //   type: 'chat',
-    //   chatId: userModel.id.toString(),
-    //   fcmToken: await getAdminToken() ?? '',
-    // );
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image != null) {
+      File imageFile = File(image.path);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImagePreviewScreen(
+            chatId: widget.chatId,
+            imageFile: imageFile,
+            onSend: (String downloadURL, String caption, String size) {
+              _sendOrUpdateMessage(
+                  message: caption, link: downloadURL, type: 'image');
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  void _pickPdfFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      final file = File(result.files.single.path!);
+      final xFile = XFile(file.path);
+      // emit(CompanyState(
+      //   addCompanyModel:
+      //       state.addCompanyModel.copyWith(certificateDocument: xFile),
+      // ));
+
+      final completer = Completer<AttachmentModel>();
+      context.read<ChatBloc>().add(SendChatMedia(
+          chatId: widget.chatId, media: xFile, completer: completer));
+
+      try {
+        final attachment = await completer.future;
+        // widget.onSend(attachment.url ?? '', _captionController.text);
+        _sendOrUpdateMessage(
+            message: xFile.name,
+            link: attachment.url,
+            type: 'pdf',
+            size: attachment.size.toString());
+        // Get.back();
+      } catch (e) {
+        print("Failed to get chat ID: $e");
+      }
+    }
   }
 }

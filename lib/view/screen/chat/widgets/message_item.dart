@@ -1,12 +1,18 @@
+import 'dart:math' as Math;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/screen/pdf_viewer/pdf_viewer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../../../bloc/product_review/product_review_bloc.dart';
+import '../../../../bloc/similar_products/similar_products_bloc.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/utilities.dart';
 import '../../../base/custom_image.dart';
@@ -204,6 +210,8 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                 if (!widget.isMe) ...[
                                   if (widget.data['isProduct'] == true)
                                     productMessage(widget.isMe, widget.data)
+                                  else if (widget.data['type'] == 'pdf')
+                                    pdfMessage(widget.isMe, widget.data)
                                   else if (!(widget.data.data()
                                               as Map<String, dynamic>)
                                           .containsKey('type') ||
@@ -276,6 +284,8 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
+                                            print(
+                                                'image url = ${widget.data['link']}');
                                             Get.to(() => FullScreenImage(
                                                 imageUrl: widget.data['link']));
                                           },
@@ -347,6 +357,8 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                 if (widget.isMe)
                                   if (widget.data['isProduct'] == true)
                                     productMessage(widget.isMe, widget.data)
+                                  else if (widget.data['type'] == 'pdf')
+                                    pdfMessage(widget.isMe, widget.data)
                                   else if (!(widget.data.data()
                                               as Map<String, dynamic>)
                                           .containsKey('type') ||
@@ -421,6 +433,8 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
+                                            print(
+                                                'image link = ${widget.data['link']}');
                                             Get.to(() => FullScreenImage(
                                                 imageUrl: widget.data['link']));
                                           },
@@ -548,6 +562,9 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
         context
             .read<ProductReviewBloc>()
             .add(GetProductReviews("${data['product']['id']}", 1));
+
+        context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+            productId: "${data['product']['id']}", currentPage: 1));
         Get.to(() => const ProductDetailScreen());
       },
       child: Container(
@@ -584,5 +601,54 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
         ),
       ),
     );
+  }
+
+  Widget pdfMessage(bool isMe, QueryDocumentSnapshot data) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => PdfViewerScreen(name: data['text'], url: data['link']));
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: ColorResources.lgColor,
+            borderRadius: BorderRadius.circular(16)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SvgPicture.asset(Images.svgDocument),
+            // Icon(Icons.picture_as_pdf),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data['text'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: body14.copyWith(color: ColorResources.gray),
+                  ),
+                  Text(
+                    formatBytes(int.tryParse(data['size']) ?? 0),
+                    style: body14.copyWith(color: ColorResources.gray),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  String formatBytes(int bytes, [int decimals = 2]) {
+    if (bytes <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB"];
+    int i = (bytes == 0) ? 0 : (Math.log(bytes) / Math.log(1024)).floor();
+    double size = bytes / Math.pow(1024, i);
+    return "${size.toStringAsFixed(decimals)} ${suffixes[i]}";
   }
 }

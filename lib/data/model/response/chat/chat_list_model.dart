@@ -60,6 +60,7 @@ class ChatData {
   final LastMessage? lastMessage;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final bool? isSeen;
 
   ChatData({
     this.chatId,
@@ -70,6 +71,7 @@ class ChatData {
     this.lastMessage,
     this.createdAt,
     this.updatedAt,
+    this.isSeen = false,
   });
 
   ChatData copyWith({
@@ -81,6 +83,7 @@ class ChatData {
     LastMessage? lastMessage,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? isSeen,
   }) =>
       ChatData(
         chatId: chatId ?? this.chatId,
@@ -91,6 +94,7 @@ class ChatData {
         lastMessage: lastMessage ?? this.lastMessage,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        isSeen: isSeen ?? this.isSeen,
       );
 
   factory ChatData.fromJson(Map<String, dynamic> json) => ChatData(
@@ -110,6 +114,7 @@ class ChatData {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        isSeen: json['isSeen'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -121,6 +126,7 @@ class ChatData {
         "last_message": lastMessage?.toJson(),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "isSeen": isSeen,
       };
 }
 

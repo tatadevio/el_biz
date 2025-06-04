@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:el_biz/data/repo/category_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,6 +52,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
     try {
       final response = await categoryRepo.getCategory();
+
       if (response.statusCode == 200) {
         final categoryItems =
             // CategoryListModel.fromJson(response.body).data.items;
@@ -67,13 +70,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  // Future<void> _onGetCategoryById(GetCategoryById event, Emitter<CategoryState> emit)  async { 
+  // Future<void> _onGetCategoryById(GetCategoryById event, Emitter<CategoryState> emit)  async {
   //   try{
 
   //   }catch(e){
 
   //   }
   // }
-
-
 }

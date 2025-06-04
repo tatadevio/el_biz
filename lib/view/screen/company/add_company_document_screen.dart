@@ -1,20 +1,16 @@
 import 'dart:io';
 
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
-import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/company/widgets/custom_add_company_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../bloc/company/company_bloc.dart';
 import '../../base/custom_button.dart';
-import '../../base/custom_dialog.dart';
 import 'widgets/company_document_tile.dart' show CompanyDocumentTile;
 import 'widgets/company_other_documents_tile.dart';
 

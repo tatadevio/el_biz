@@ -69,6 +69,7 @@ class AppConstants {
   static const String productUpdateUrl = "api/products/update";
   static const String productStatusChangeUrl = "api/products/change-status";
   static const String deleteProductImageUrl = "api/products/delete-images";
+  static const String relatedProductsUrl = "api/products/related";
 
   // product review
   static const String productReviewsUrl = "api/reviews";
@@ -100,6 +101,8 @@ class AppConstants {
 
   static const String chatListUrl = "api/chats";
   static const String messagesUrl = "api/chat-init";
+  static const String deleteChaturl = "api/chat-delete";
+  static const String sendMediaUrl = "api/chats/3/upload-medias";
   // static const String chatSendUrl = "api/v1/chats/store";
   // static const String ticketUrl = "api/v1/chats";
   // static const String deleteMessage = "api/v1/chats/remove";

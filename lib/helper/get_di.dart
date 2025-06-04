@@ -8,6 +8,7 @@ import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
+import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/data/repo/add_tender_repo.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
@@ -22,6 +23,7 @@ import 'package:el_biz/data/repo/public_product_repo.dart';
 import 'package:el_biz/data/repo/public_tender_repo.dart';
 import 'package:el_biz/data/repo/review_repo.dart';
 import 'package:el_biz/data/repo/search_repo.dart';
+import 'package:el_biz/data/repo/similar_product_repo.dart';
 import 'package:el_biz/data/repo/tender_detail_repo.dart';
 import 'package:el_biz/data/repo/tenders_repo.dart';
 import 'package:flutter/services.dart';
@@ -118,6 +120,9 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<FilterFieldsRepo>(() => FilterFieldsRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<SimilarProductRepo>(
+      () => SimilarProductRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -140,6 +145,8 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<PublicTenderBloc>(() => PublicTenderBloc(Get.find()),
       fenix: true);
   Get.lazyPut<FilterFieldsBloc>(() => FilterFieldsBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<SimilarProductsBloc>(() => SimilarProductsBloc(Get.find()),
       fenix: true);
 
 ////////

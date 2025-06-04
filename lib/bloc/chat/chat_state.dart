@@ -53,3 +53,14 @@ class ChatState extends Equatable {
         pageSize,
       ];
 }
+
+
+class SendMediaSuccess extends ChatState{
+  final String url;
+  const SendMediaSuccess(this.url);
+}
+
+class SendMediaError extends ChatState {
+  final String error;
+  const SendMediaError(this.error);
+}

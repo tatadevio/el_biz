@@ -47,12 +47,16 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
       // context.read<CompanyDetailBloc>().state.companyDetailModel!.data!.
 
       // Get.to(() => SelectCategoryScreen());
-      List<CategoryItem> categories = context
-          .read<CompanyDetailBloc>()
-          .state
-          .companyDetailModel!
-          .data!
-          .categories!;
+
+      List<CategoryItem> categories = [];
+      if (widget.isEdit) {
+        categories = context
+            .read<CompanyDetailBloc>()
+            .state
+            .companyDetailModel!
+            .data!
+            .categories!;
+      }
       Get.to(() => SelectCategoryScreen(
             isCompanyCategory: true,
             alreadySelected: categories,

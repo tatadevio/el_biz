@@ -8,7 +8,7 @@ sealed class SearchEvent extends Equatable {
 }
 
 class ChangeStatusSearch extends SearchEvent {
-  final bool showProducts ;
+  final bool showProducts;
   ChangeStatusSearch(this.showProducts);
 
   @override
@@ -28,8 +28,19 @@ class SearchProduct extends SearchEvent {
 class ToggleFavoriteSearchProduct extends SearchEvent {
   final int productId;
   final BuildContext context;
-  const ToggleFavoriteSearchProduct({required this.productId, required  this.context});
+  const ToggleFavoriteSearchProduct(
+      {required this.productId, required this.context});
 
   @override
   List<Object> get props => [productId, context];
 }
+
+class UpdateGridView extends SearchEvent {
+  final bool gridView;
+  const UpdateGridView(this.gridView);
+
+  @override
+  List<Object> get props => [gridView];
+}
+
+class ClearSearchList extends SearchEvent {}

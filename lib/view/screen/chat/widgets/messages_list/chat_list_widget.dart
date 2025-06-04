@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
+import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/view/screen/chat/widgets/chat_tile.dart';
-import 'package:el_biz/view/screen/chat/widgets/get_all_chats_widget.dart';
+import 'package:el_biz/view/screen/chat/widgets/messages_list/get_all_chats_widget.dart';
+import 'package:el_biz/view/screen/chat/widgets/messages_list/get_unseen_chats_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,10 +18,14 @@ class ChatListWidget extends StatelessWidget {
           child: CircularProgressIndicator(),
         );
       }
+      final userId =
+          context.read<UserBloc>().state.userInfo!.data!.id.toString();
 
       if (chatState.isShowAllMessage) {
         //showing all messages
-        return GetAllChatsWidget();
+        return GetAllChatsWidget(
+          currentUserId: userId,
+        );
         // return ListView.builder(
         //   itemCount: chatState.chatList.length,
         //   itemBuilder: (context, index) {
@@ -32,15 +38,16 @@ class ChatListWidget extends StatelessWidget {
         // );
       } else {
         //showing unread messages
-        return ListView.builder(
-          itemCount: 4,
-          itemBuilder: (context, index) {
-            return const ChatTile(
-              unSeen: true,
-              isMessage: true,
-            );
-          },
-        );
+        return GetUnseenChatsWidget(currentUserId: userId);
+        // return ListView.builder(
+        //   itemCount: 4,
+        //   itemBuilder: (context, index) {
+        //     return const ChatTile(
+        //       unSeen: true,
+        //       isMessage: true,
+        //     );
+        //   },
+        // );
       }
 
       // Column(children: [

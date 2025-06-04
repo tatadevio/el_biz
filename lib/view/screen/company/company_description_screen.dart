@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -30,6 +31,9 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
     if (widget.isEdit) {
       loadCompanyData();
     }
+    Future.delayed(Duration.zero, () {
+      context.read<CategoryBloc>().add(GetCategory());
+    });
   }
 
   void loadCompanyData() {
@@ -42,7 +46,6 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
     if (_formKey.currentState!.validate()) {
       context.read<CompanyBloc>().state.addCompanyModel.description =
           descriptionController.text;
-
 
       Get.to(() => AboutCompanyScreen(
             isEdit: widget.isEdit,

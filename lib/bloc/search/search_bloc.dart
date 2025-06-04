@@ -14,12 +14,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<SearchEvent>((event, emit) {
       // TODO: implement event handler
     });
+    on<UpdateGridView>((event, emit) {
+      emit(state.copyWith(isGridView: event.gridView));
+    });
 
     on<ChangeStatusSearch>((event, emit) {
       emit(state.copyWith(isSearchProducts: event.showProducts));
     });
 
     on<SearchProduct>(_onSearchProduct);
+    on<ClearSearchList>(_onClearSearchList);
   }
 
   Future<void> _onSearchProduct(
@@ -63,5 +67,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       print("public product catch part = ${e.toString()}");
     }
     emit(state.copyWith(isLoading: false, isMoreLoading: false));
+  }
+
+  Future<void> _onClearSearchList(
+      ClearSearchList event, Emitter<SearchState> emit) async {
+    emit(state.copyWith(searchProducts: []));
   }
 }
