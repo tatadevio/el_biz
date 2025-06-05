@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
+import 'package:el_biz/data/model/response/userinfo_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -28,26 +30,73 @@ class ChatConversation extends StatefulWidget {
   final String productId;
   final String firebaseChatId;
   final String chatId;
-  const ChatConversation(
-      {super.key,
-      required this.isSeller,
-      this.receiverId = '',
-      required this.senderId,
-      required this.isFirstMessage,
-      this.productId = '',
-      this.firebaseChatId = '',
-      this.chatId = ''});
+  final int userUnread;
+  final int productUserId;
+  final int ownerUnread;
+  final String productName;
+  final String productPrice;
+  const ChatConversation({
+    super.key,
+    required this.isSeller,
+    this.receiverId = '',
+    required this.senderId,
+    required this.isFirstMessage,
+    required this.productId,
+    this.firebaseChatId = '',
+    this.chatId = '',
+    this.userUnread = 0,
+    this.ownerUnread = 0,
+    this.productUserId = 0,
+    required this.productName,
+    required this.productPrice,
+  });
 
   @override
   State<ChatConversation> createState() => _ChatConversationState();
 }
 
 class _ChatConversationState extends State<ChatConversation> {
-  late Stream<QuerySnapshot> _messagesStream;
+  // late Stream<QuerySnapshot> _messagesStream;
+
+  List<DocumentSnapshot> messages = [];
+  bool isLoading = false;
+  bool hasMore = true;
+  DocumentSnapshot? lastDocument;
+  final ScrollController _scrollController = ScrollController();
+  String? _latestFetchedMessageId;
+  bool showScrollToBottomButton = false;
+
   String chatId = '';
   @override
   void initState() {
-    _messagesStream = _createOptimizedMessageStream();
+    // _messagesStream = _createOptimizedMessageStream();
+
+    _fetchMessages().then((_) {
+      _listenToNewMessages(); // Start listening only after first fetch
+    });
+
+    _scrollController.addListener(() {
+      // Since reverse: true, pixels == minScrollExtent is bottom (latest messages)
+      bool isAtBottom = _scrollController.position.pixels <=
+          _scrollController.position.minScrollExtent + 300;
+
+      if (isAtBottom && showScrollToBottomButton) {
+        setState(() {
+          showScrollToBottomButton = false;
+        });
+      } else if (!isAtBottom && !showScrollToBottomButton) {
+        setState(() {
+          showScrollToBottomButton = true;
+        });
+      }
+      // get more messages
+      if (_scrollController.position.pixels >
+              _scrollController.position.maxScrollExtent - 300 &&
+          !isLoading &&
+          hasMore) {
+        _fetchMessages();
+      }
+    });
 
     Future.delayed(Duration.zero, () {
       _listenToReceiverSeenStatus();
@@ -56,17 +105,18 @@ class _ChatConversationState extends State<ChatConversation> {
     super.initState();
   }
 
-  // updateChatId() {
-  //   if(widget.chatId != '' ) {
-  //     chatId = widget.chatId;
-  //   }else {
-  //     context.read<ChatBloc>().add(SendMessage(productId: widget.productId)); // init chat
-  //   }
-  // }
-
   updateChatId() async {
+    int myUserId = context.read<UserBloc>().state.userInfo!.data!.id!;
     if (widget.chatId != '' && widget.isFirstMessage == false) {
-      chatId = widget.chatId;
+      setState(() {
+        chatId = widget.chatId;
+      });
+
+      context.read<ChatBloc>().add(UpdateUnReadCount(
+          chatId: widget.chatId,
+          userCount: widget.productUserId != myUserId ? 0 : widget.userUnread,
+          ownerCount:
+              widget.productUserId == myUserId ? 0 : widget.ownerUnread));
     } else {
       final completer = Completer<String>();
 
@@ -86,22 +136,74 @@ class _ChatConversationState extends State<ChatConversation> {
     }
   }
 
-  Stream<QuerySnapshot> _createOptimizedMessageStream() {
-    // String userId = widget.userId;
-    // Get.find<AuthController>().userData.id.toString();
+  // Update your _fetchMessages function
+  Future<void> _fetchMessages() async {
+    if (isLoading) return;
+    setState(() {
+      isLoading = true;
+    });
 
-    return FirebaseFirestore.instance
+    Query query = FirebaseFirestore.instance
         .collection('chat')
         .doc(widget.firebaseChatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
-        .snapshots();
+        .limit(10);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument!);
+    }
+
+    QuerySnapshot snapshot = await query.get();
+
+    if (snapshot.docs.isNotEmpty) {
+      if (lastDocument == null) {
+        _latestFetchedMessageId = snapshot.docs.first.id;
+      }
+
+      lastDocument = snapshot.docs.last;
+      messages.addAll(snapshot.docs);
+    } else {
+      hasMore = false;
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void _listenToNewMessages() {
+    FirebaseFirestore.instance
+        .collection('chat')
+        .doc(widget.firebaseChatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        final newMessage = snapshot.docs.first;
+
+        if (newMessage.id == _latestFetchedMessageId) {
+          // Skip the first real-time message that's already been fetched
+          _latestFetchedMessageId = null; // Reset to allow future live messages
+          return;
+        }
+
+        // Check if it's already in the list
+        bool alreadyExists = messages.any((msg) => msg.id == newMessage.id);
+        if (!alreadyExists) {
+          setState(() {
+            messages.insert(0, newMessage); // Add new incoming message
+          });
+        }
+      }
+    });
   }
 
   void _markMessageAsSeen(String messageId) async {
     String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
-    // String? myId = widget.firebaseChatId;
-    // Get.find<AuthController>().userData.id.toString();
+
     await FirebaseFirestore.instance
         .collection('chat')
         .doc(widget.firebaseChatId)
@@ -130,8 +232,49 @@ class _ChatConversationState extends State<ChatConversation> {
         .where('sender_type', isEqualTo: "user")
         .where('read', isEqualTo: true)
         .snapshots()
-        .listen((snapshot) {});
-    // }
+        .listen((snapshot) {
+      for (var doc in snapshot.docs) {
+        final messageId = doc.id;
+        final alreadyUpdated =
+            messages.any((msg) => msg.id == messageId && msg['read'] == true);
+
+        if (!alreadyUpdated) {
+          setState(() {
+            final index = messages.indexWhere((msg) => msg.id == messageId);
+            if (index != -1) {
+              messages[index] = doc; // Replace the message with updated one
+            }
+          });
+        }
+      }
+    });
+  }
+
+  void updateLastMessage(ProductListItem? selectedProduct) {
+    try {
+      context.read<ChatBloc>().add(UpdateLastMessage(
+            chatId: widget.chatId,
+            message: '🛍 ${selectedProduct?.name}',
+            userCount: 0,
+            ownerCount: 0,
+          ));
+    } catch (e) {
+      print("Error updating last message: $e");
+    }
+
+    try {
+      context.read<ProductBloc>().add(ClearSelectedProduct());
+    } catch (e) {
+      print("Error clearing product: $e");
+    }
+  }
+
+  void clearSelectedProduct() {
+    try {
+      context.read<ProductBloc>().add(ClearSelectedProduct());
+    } catch (e) {
+      print("Error clearing product: $e");
+    }
   }
 
   @override
@@ -144,11 +287,12 @@ class _ChatConversationState extends State<ChatConversation> {
           contentPadding: const EdgeInsets.all(0),
           leading: CustomImage(image: '', height: 32, width: 32, radius: 5.3),
           title: Text(
-            'Садовая мебель Loft',
+            widget.productName,
+            // 'Садовая мебель Loft',
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           subtitle: Text(
-            '2 500 сом/шт',
+            '${widget.productPrice} сом/шт',
             style: body14.copyWith(color: ColorResources.blue),
           ),
         ),
@@ -186,10 +330,17 @@ class _ChatConversationState extends State<ChatConversation> {
                             style: textSm.copyWith(color: ColorResources.blue),
                           ),
                           onTap: () {
+                            // clearSelectedProduct();
+                            UserData? myUser =
+                                context.read<UserBloc>().state.userInfo?.data;
                             Get.to(
                               () => ProductScreen(
                                 isSelectProduct: true,
                                 onSendProduct: () async {
+                                  ProductListItem? selectedProduct = context
+                                      .read<ProductBloc>()
+                                      .state
+                                      .selectedProduct;
                                   Map<String, dynamic> sendMessage = {
                                     "read": false,
                                     "sender_type":
@@ -199,80 +350,16 @@ class _ChatConversationState extends State<ChatConversation> {
                                     "link": '',
                                     "isProduct": true,
                                     "type": 'product',
-                                    "product": context
-                                        .read<ProductBloc>()
-                                        .state
-                                        .selectedProduct
-                                        ?.toJson(),
+                                    "product": selectedProduct?.toJson(),
                                     'timestamp': FieldValue.serverTimestamp(),
                                     'last_fcm': '',
                                     // userModel.fcmToken ?? '',
                                     "sender": {
                                       "id": widget.senderId,
-                                      "name": context
-                                                  .read<UserBloc>()
-                                                  .state
-                                                  .selectedAccountModel
-                                                  ?.isUser ==
-                                              true
-                                          ? context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.userName
-                                          : context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.companyName,
-                                      "image": context
-                                                  .read<UserBloc>()
-                                                  .state
-                                                  .selectedAccountModel
-                                                  ?.isUser ==
-                                              true
-                                          ? context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.userImage
-                                          : context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.userImage,
-                                      "phone": context
-                                                  .read<UserBloc>()
-                                                  .state
-                                                  .selectedAccountModel
-                                                  ?.isUser ==
-                                              true
-                                          ? context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.userPhone
-                                          : context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.companyPhone,
-                                      "email": context
-                                                  .read<UserBloc>()
-                                                  .state
-                                                  .selectedAccountModel
-                                                  ?.isUser ==
-                                              true
-                                          ? context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.userEmail
-                                          : context
-                                              .read<UserBloc>()
-                                              .state
-                                              .selectedAccountModel
-                                              ?.companyEmail,
+                                      "name": myUser?.name ?? '',
+                                      "image": myUser?.image ?? '',
+                                      "phone": myUser?.phone ?? '',
+                                      "email": myUser?.email ?? '',
                                     },
                                     "receiver": {
                                       "id": widget.receiverId,
@@ -287,11 +374,11 @@ class _ChatConversationState extends State<ChatConversation> {
                                       .collection('chat')
                                       .doc(widget.firebaseChatId)
                                       .set(sendMessage);
+                                  updateLastMessage(selectedProduct);
+                                  clearSelectedProduct();
+
                                   Get.back();
                                   // send isProduct message...
-                                  context
-                                      .read<ProductBloc>()
-                                      .add(ClearSelectedProduct());
                                 },
                               ),
                             );
@@ -350,99 +437,66 @@ class _ChatConversationState extends State<ChatConversation> {
       body: Column(
         children: [
           Expanded(
-            child: StreamBuilder(
-                stream: _messagesStream,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.data == null) {
-                    return const SizedBox();
-                  }
-                  if (snapshot.data!.docs.isEmpty) {
-                    return Center(
-                      child: Text('start_chatting'.tr),
-                    );
-                  }
-                  return ListView.builder(
-                    // controller: _scrollController,
-                    reverse: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      // if (index == snapshot.data!.docs.length) {
-                      //   return Padding(
-                      //     padding: const EdgeInsets.only(top: 20),
-                      //     child: Row(
-                      //       children: [
-                      //         const SizedBox(
-                      //           width: 20,
-                      //         ),
-                      //         Container(
-                      //           constraints: BoxConstraints(
-                      //             maxWidth:
-                      //                 MediaQuery.of(context).size.width * 0.65,
-                      //           ),
-                      //           child: IntrinsicWidth(
-                      //             child: Container(
-                      //               decoration: BoxDecoration(
-                      //                 color: ColorResources.backgroundColor,
-                      //                 borderRadius: BorderRadius.only(
-                      //                   topLeft: isDirectionRTL()
-                      //                       ? const Radius.circular(12)
-                      //                       : Radius.zero,
-                      //                   topRight: isDirectionRTL()
-                      //                       ? Radius.zero
-                      //                       : const Radius.circular(12),
-                      //                   bottomLeft: const Radius.circular(12),
-                      //                   bottomRight: const Radius.circular(12),
-                      //                 ),
-                      //               ),
-                      //               child: Padding(
-                      //                   padding: const EdgeInsets.all(15),
-                      //                   child: Text(
-                      //                     'welcome_chat'.tr,
-                      //                     style: const TextStyle(
-                      //                         fontWeight: FontWeight.w500,
-                      //                         color: Color(0xff29292D),
-                      //                         fontSize: 15),
-                      //                   )),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   );
-                      // }
-                      var messageData = snapshot.data!.docs[index];
+            child: messages.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : Stack(
+                    children: [
+                      ListView.builder(
+                        controller: _scrollController,
+                        reverse: true,
+                        itemCount: messages.length + (isLoading ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == messages.length) {
+                            // Show loading indicator at the bottom
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          }
 
-                      bool isMe = messageData['sender']['id'].toString() ==
-                          widget.senderId;
+                          var messageData = messages[index];
+                          bool isMe = messageData['sender']['id'].toString() ==
+                              widget.senderId;
 
-                      if (!isMe && !messageData['read']) {
-                        _markMessageAsSeen(messageData.id);
-                      }
+                          if (!isMe && !messageData['read']) {
+                            _markMessageAsSeen(messageData.id);
+                          }
 
-                      // List<String> newMessageIds =
-                      //     snapshot.data!.docs.map((doc) => doc.id).toList();
-                      // if (newMessageIds.isNotEmpty &&
-                      //     newMessageIds != _messageIds) {
-                      //   if (_messageIds.isNotEmpty) {}
-                      //   _messageIds = newMessageIds;
-                      // }
-
-                      return ChatMessageWidget1(
-                        data: messageData,
-                        isMe: isMe,
-                      );
-                    },
-                  );
-                  // return ListView.builder(
-                  //   itemCount: 10,
-                  //   itemBuilder: (context, index) {
-                  //     return const SizedBox();
-                  //     // MessageBubble(chat: chatList[index], addDate: false);
-                  //   },
-                  // );
-                }),
+                          return ChatMessageWidget1(
+                            data: messageData as QueryDocumentSnapshot,
+                            isMe: isMe,
+                          );
+                        },
+                      ),
+                      if (showScrollToBottomButton)
+                        Positioned(
+                          bottom: 20,
+                          right: 20,
+                          child: GestureDetector(
+                            onTap: () {
+                              _scrollController.animateTo(
+                                _scrollController.position
+                                    .minScrollExtent, // This is the bottom in reverse mode
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeOut,
+                              );
+                            },
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: ColorResources.primary,
+                              ),
+                              child: const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
           ),
           NewMessageWidget(
             firebaseChatId: widget.firebaseChatId,
@@ -451,6 +505,9 @@ class _ChatConversationState extends State<ChatConversation> {
             senderId: widget.senderId,
             productId: widget.productId,
             isFirstMessage: widget.isFirstMessage,
+            userUnread: widget.userUnread,
+            ownerUnread: widget.ownerUnread,
+            productUserId: widget.productUserId,
           ),
         ],
       ),

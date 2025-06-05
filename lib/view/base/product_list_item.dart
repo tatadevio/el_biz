@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../bloc/product_detail/product_detail_bloc.dart';
 import '../../bloc/product_review/product_review_bloc.dart';
+import '../../bloc/search/search_bloc.dart';
 import '../../bloc/similar_products/similar_products_bloc.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
@@ -23,6 +24,7 @@ class ProductListItemWidget extends StatelessWidget {
   final bool isSelectProduct;
   final model.ProductListItem? product;
   final bool isPublicProduct;
+  final bool isSearchProduct;
 
   const ProductListItemWidget({
     super.key,
@@ -30,6 +32,7 @@ class ProductListItemWidget extends StatelessWidget {
     this.isSelectProduct = false,
     this.product,
     this.isPublicProduct = false,
+    this.isSearchProduct = false,
   });
 
   @override
@@ -46,7 +49,7 @@ class ProductListItemWidget extends StatelessWidget {
               .read<ProductReviewBloc>()
               .add(GetProductReviews(product?.id.toString() ?? '', 1));
 
-               context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+          context.read<SimilarProductsBloc>().add(GetSimilarProducts(
               productId: product?.id.toString() ?? '', currentPage: 1));
           Get.to(() => const ProductDetailScreen());
         },
@@ -78,6 +81,10 @@ class ProductListItemWidget extends StatelessWidget {
                             context.read<PublicProductBloc>().add(
                                 ToggleFavoritePublicProduct(
                                     context, product!.id!));
+                          } else if (isSearchProduct) {
+                            context.read<SearchBloc>().add(
+                                ToggleSearchProductFavorite(
+                                    productId: product!.id!, context: context));
                           } else {
                             context.read<CompanyDetailBloc>().add(
                                 ToggleFavoriteProduct(product!.id!, context));

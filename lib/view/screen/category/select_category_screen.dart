@@ -62,8 +62,28 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
     }
   }
 
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final categoryBloc = context.read<CategoryBloc>();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !categoryBloc.state.isLoading &&
+          !categoryBloc.state.isLoadingMore) {
+        int pageSize = categoryBloc.state.categoryPageSize;
+        if (categoryBloc.state.categoryCurrentPage < pageSize) {
+          int nextPage = categoryBloc.state.categoryCurrentPage;
+
+          categoryBloc.add(GetCategory(currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ScrollController _controller = ScrollController();
+    _callScrolling(context, _controller);
     return Scaffold(
       appBar: widget.isCompanyCategory
           ? customAddCompanyAppbar(title: '')
@@ -112,8 +132,8 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
                   );
                 }
                 return ListView.separated(
-                  // shrinkWrap: true,
-                  // physics: const NeverScrollableScrollPhysics(),
+                  controller: _controller,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: state.categoryItem.length,
                   separatorBuilder: (context, index) {
                     return const Divider();

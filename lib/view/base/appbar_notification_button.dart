@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/notification/notification_bloc.dart';
 import '../../utils/Images.dart';
 import '../../utils/color_resources.dart';
 
@@ -19,6 +20,7 @@ class AppbarNotificationButton extends StatelessWidget {
       }
       return InkWell(
         onTap: () {
+          context.read<NotificationBloc>().add(GetNotification(1));
           Get.to(() => NotificationScreen());
         },
         child: Container(

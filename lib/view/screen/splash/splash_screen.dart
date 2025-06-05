@@ -1,16 +1,12 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
-import 'package:el_biz/bloc/cities/cities_bloc.dart';
-import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helper/route_helper.dart';
 import '../../../utils/Images.dart';
-import '../../../utils/appConstant.dart';
 import '../dashboard/dashboard.dart';
 
 class SplashScreen extends StatefulWidget {

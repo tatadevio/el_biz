@@ -25,15 +25,15 @@ class SearchProduct extends SearchEvent {
   List<Object> get props => [search, currentPage];
 }
 
-class ToggleFavoriteSearchProduct extends SearchEvent {
-  final int productId;
-  final BuildContext context;
-  const ToggleFavoriteSearchProduct(
-      {required this.productId, required this.context});
+// class ToggleFavoriteSearchProduct extends SearchEvent {
+//   final int productId;
+//   final BuildContext context;
+//   const ToggleFavoriteSearchProduct(
+//       {required this.productId, required this.context});
 
-  @override
-  List<Object> get props => [productId, context];
-}
+//   @override
+//   List<Object> get props => [productId, context];
+// }
 
 class UpdateGridView extends SearchEvent {
   final bool gridView;
@@ -44,3 +44,13 @@ class UpdateGridView extends SearchEvent {
 }
 
 class ClearSearchList extends SearchEvent {}
+
+class ToggleSearchProductFavorite extends SearchEvent {
+  final BuildContext context;
+  final int productId;
+  const ToggleSearchProductFavorite(
+      {required this.context, required this.productId});
+
+  @override
+  List<Object> get props => [context, productId];
+}

@@ -1,4 +1,4 @@
-import 'package:el_biz/bloc/category/category_bloc.dart';
+
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/data/model/base/product_filter_values_model.dart';
@@ -328,9 +328,9 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        context
-                                            .read<CategoryBloc>()
-                                            .add(GetCategory());
+                                        // context
+                                        //     .read<CategoryBloc>()
+                                        //     .add(GetCategory());
                                         Get.to(() => SelectCategoryScreen(
                                               onSelect: (val) {
                                                 setState(() {

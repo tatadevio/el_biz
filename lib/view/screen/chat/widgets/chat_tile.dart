@@ -5,29 +5,29 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/chat/chat_conversation.dart';
 import 'package:el_biz/view/screen/contracts/contracts_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../helper/date_helper.dart';
+
 class ChatTile extends StatelessWidget {
   final bool unSeen;
   final bool isMessage;
-  final ChatData? chatData;
-  final String? lastMessage;
-  const ChatTile(
-      {super.key,
-      this.unSeen = false,
-      required this.isMessage,
-      this.chatData,
-      this.lastMessage});
+  final ChatItem? chatData;
+  // final String? lastMessage;
+  const ChatTile({
+    super.key,
+    this.unSeen = false,
+    required this.isMessage,
+    this.chatData,
+    // this.lastMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        final _auth = FirebaseAuth.instance;
-        if (_auth.currentUser != null) {}
         if (isMessage) {
           // go to the message conversation screen
           Get.to(() => ChatConversation(
@@ -42,6 +42,12 @@ class ChatTile extends StatelessWidget {
                     .data!
                     .id
                     .toString(),
+                productUserId: chatData?.product?.user?.id ?? 0,
+                productId: chatData?.product?.id.toString() ?? '',
+                userUnread: chatData?.userUnreadCount ?? 0,
+                ownerUnread: chatData?.productOwnerUnreadCount ?? 0,
+                productName: chatData?.product?.name ?? '',
+                productPrice: "${chatData?.product?.price}",
               ));
         } else {
           //go to the agrement/contracts screen.
@@ -58,12 +64,17 @@ class ChatTile extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              chatData?.product?.name ?? '',
+              chatData?.product?.name ?? 'Садовая мебель Loft',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: h16.copyWith(color: ColorResources.darkGray),
             ),
           ),
           Text(
-            '24 окт',
+            isMessage
+                ? formatDateInRu(chatData?.lastMessageDate.toString() ?? '')
+                : '',
+            // '24 окт',
             style: body12.copyWith(color: ColorResources.gray),
           ),
         ],
@@ -73,7 +84,9 @@ class ChatTile extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              lastMessage ?? '',
+              chatData?.lastMessage ?? 'Мебель для предприятий и для дома',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               // 'Мебель для предприятий и для дома',
               style: body14.copyWith(color: ColorResources.gray),
             ),

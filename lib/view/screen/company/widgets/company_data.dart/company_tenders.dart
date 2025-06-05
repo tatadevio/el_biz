@@ -17,7 +17,7 @@ class CompanyTenders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CompanyBloc>().add(const UpdateShowTenders(false));
+    // context.read<CompanyBloc>().add(const UpdateShowTenders(false));
     return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
         builder: (context, companyDetailState) {
       return BlocBuilder<CompanyBloc, CompanyState>(

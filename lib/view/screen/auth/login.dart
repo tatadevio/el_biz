@@ -194,33 +194,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 20,
                       ),
                       InkWell(
-                        onTap: () {
-                          print(
-                              'this is phone number : ${authState.countryCode + phoneController.text}');
-                          if (phoneController.text.isEmpty &&
-                              passwordController.text.isEmpty) {
-                            showCustomSnackBar("Please enter phone number");
-                            return;
-                          }
-                          // if (passwordController.text.isEmpty) {
-                          //   showCustomSnackBar("Please enter password");
-                          //   return;
-                          // }
-                          if (phoneController.text.isNotEmpty &&
-                              passwordController.text.isNotEmpty) {
-                            context.read<AuthBloc>().add(Login(
-                                  authState.countryCode + phoneController.text,
-                                  passwordController.text,
-                                  context
-                                ));
-                          } else {
-                            context.read<AuthBloc>().add(SendOtp(
-                                  authState.countryCode + phoneController.text,
-                                ));
-                            // showCustomSnackBar(
-                            //     "Please enter phone number and password");
-                          }
-                        },
+                        onTap: terms == false
+                            ? () {
+                                showShortToast(
+                                    'accept_terms_and_conditions'.tr);
+                              }
+                            : () {
+                                print(
+                                    'this is phone number : ${authState.countryCode + phoneController.text}');
+                                if (phoneController.text.isEmpty &&
+                                    passwordController.text.isEmpty) {
+                                  showCustomSnackBar(
+                                      "please_enter_phone_number".tr);
+                                  return;
+                                }
+                                // if (passwordController.text.isEmpty) {
+                                //   showCustomSnackBar("Please enter password");
+                                //   return;
+                                // }
+                                if (phoneController.text.isNotEmpty &&
+                                    passwordController.text.isNotEmpty) {
+                                  context.read<AuthBloc>().add(Login(
+                                      authState.countryCode +
+                                          phoneController.text,
+                                      passwordController.text,
+                                      context));
+                                } else {
+                                  context.read<AuthBloc>().add(SendOtp(
+                                        authState.countryCode +
+                                            phoneController.text,
+                                      ));
+                                  // showCustomSnackBar(
+                                  //     "Please enter phone number and password");
+                                }
+                              },
                         child: Container(
                           width: Get.width * 0.9,
                           height: 48,

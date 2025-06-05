@@ -107,19 +107,20 @@ class CompanyDocumentsWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Get.dialog(CustomDialog(
-                            widget: AlertDialog(
-                                backgroundColor: Colors.white,
-                                content: deleteDocument(
-                                    context, document.id.toString()))));
-                      },
-                      child: Text(
-                        'delete_document'.tr,
-                        style: button16.copyWith(color: ColorResources.red),
+                    if (document.documentType != 'certificate')
+                      InkWell(
+                        onTap: () {
+                          Get.dialog(CustomDialog(
+                              widget: AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  content: deleteDocument(
+                                      context, document.id.toString()))));
+                        },
+                        child: Text(
+                          'delete_document'.tr,
+                          style: button16.copyWith(color: ColorResources.red),
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),

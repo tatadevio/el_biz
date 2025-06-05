@@ -44,7 +44,7 @@ class LanguageWidget extends StatelessWidget {
                   // state.setLanguage(
                   //   );
                   if (fromMenu) {
-                    context.read<CategoryBloc>().add(GetCategory());
+                    context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
                     // context.read<CategoryBloc>().add(GetCategoryFilter());
                   }
                   // state.setSelectIndex(index);

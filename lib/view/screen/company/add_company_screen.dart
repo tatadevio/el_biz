@@ -15,7 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../bloc/category/category_bloc.dart';
 import '../../base/custom_dialog.dart';
 import 'widgets/custom_add_company_appbar.dart';
 
@@ -45,7 +44,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
         context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
     legalNameController.text = companyData.name ?? '';
     okpoController.text = companyData.okpo ?? '';
-    context.read<CategoryBloc>().add(GetCategory());
+    // context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
   }
 
   void _submitForm() {

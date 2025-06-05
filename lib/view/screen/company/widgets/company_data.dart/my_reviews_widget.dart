@@ -23,8 +23,12 @@ class MyReviewsWidget extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state.companyReviews!.isEmpty) {
-            return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Text('no_reviews_found'.tr),
+            );
           }
+          // if(state.companyReviews)
           return ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -47,6 +51,9 @@ class MyReviewsWidget extends StatelessWidget {
           if (state.isLoading || state.companyDetailModel?.data?.id == null) {
             return const SizedBox.shrink();
           }
+          if (state.companyReviews == null) {
+            return const SizedBox.shrink();
+          }
           return InkWell(
             onTap: () {
               Get.to(() => CompanyReviewsScreen(
@@ -57,7 +64,9 @@ class MyReviewsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  'all_reviews'.tr,
+                  state.companyReviews!.isEmpty
+                      ? 'write_a_review'.tr
+                      : 'all_reviews'.tr,
                   style: button16.copyWith(color: ColorResources.blue),
                 ),
                 const SizedBox(

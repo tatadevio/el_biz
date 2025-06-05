@@ -1,7 +1,5 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
-import 'package:el_biz/data/api/api_client.dart';
-import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/account/account_screen.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
@@ -13,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../bloc/tin_number/tin_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../utils/Images.dart';

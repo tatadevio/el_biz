@@ -116,8 +116,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(state.copywith(selectedProduct: event.newProduct));
     });
     on<ClearSelectedProduct>((event, emit) {
-      // emit(state.copywith(selectedProductId: []));
-      emit(state.copywith(selectedProduct: null));
+      emit(state.copywith(isClearSelectedProduct: true, selectedProduct: null));
     });
 
     on<EmptyPickedLogo>(_onEmptyPickedLogo);

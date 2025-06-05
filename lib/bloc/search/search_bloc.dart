@@ -2,8 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:el_biz/data/repo/search_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/model/response/company/company_product_model.dart';
+import '../public_product/public_product_bloc.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -24,6 +26,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     on<SearchProduct>(_onSearchProduct);
     on<ClearSearchList>(_onClearSearchList);
+    on<ToggleSearchProductFavorite>(_onToggleSearchProductFavorite);
   }
 
   Future<void> _onSearchProduct(
@@ -72,5 +75,55 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> _onClearSearchList(
       ClearSearchList event, Emitter<SearchState> emit) async {
     emit(state.copyWith(searchProducts: []));
+  }
+
+  // toggle favorite
+  Future<void> _onToggleSearchProductFavorite(
+      ToggleSearchProductFavorite event, Emitter<SearchState> emit) async {
+    final updatedProducts = state.searchProducts.map((product) {
+      if (product.id == event.productId) {
+        return product.copyWith(
+          isFavorite: !(product.isFavorite ?? false),
+        );
+      }
+      return product;
+    }).toList();
+
+    emit(state.copyWith(searchProducts: updatedProducts));
+    try {
+      final response =
+          await searchRepo.toggleFavorite(event.productId.toString());
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        event.context
+            .read<PublicProductBloc>()
+            .add(ToggleFavoritePublicProductInList(event.productId));
+
+        // ignore: use_build_context_synchronously
+        // event.context
+        //     .read<CompanyDetailBloc>()
+        //     .add(ToggleFavoriteProductInList(event.productId));
+      } else {
+        final updatedProducts = state.searchProducts.map((product) {
+          if (product.id == event.productId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+        emit(state.copyWith(searchProducts: updatedProducts));
+      }
+    } catch (e) {
+      final updatedProducts = state.searchProducts.map((product) {
+        if (product.id == event.productId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(searchProducts: updatedProducts));
+    }
   }
 }

@@ -9,7 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
-import '../../../base/custom_like_button.dart';
+import '../../../../bloc/product_review/product_review_bloc.dart';
+import '../../../base/custom_favorite_button.dart';
 import '../product_detail_screen.dart';
 
 class SimilarProductsWidget extends StatelessWidget {
@@ -71,7 +72,8 @@ class SimilarProductsWidget extends StatelessWidget {
                 itemCount: similarProductState.similarProduct.length,
                 itemBuilder: (context, index) {
                   // return SizedBox(width: Get.width / 2.2, child: ProductGridItem());
-                  return productItem(similarProductState.similarProduct[index]);
+                  return productItem(
+                      similarProductState.similarProduct[index], context);
                 },
               ),
             )
@@ -81,13 +83,23 @@ class SimilarProductsWidget extends StatelessWidget {
     });
   }
 
-  Widget productItem(ProductListItem product) {
+  Widget productItem(ProductListItem product, BuildContext context) {
     double height = Get.height;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: InkWell(
         onTap: () {
-          Get.to(() => ProductDetailScreen());
+          context
+              .read<ProductDetailBloc>()
+              .add(GetProductDetail(product.id.toString()));
+          context
+              .read<ProductReviewBloc>()
+              .add(GetProductReviews(product.id.toString(), 1));
+
+          context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+              productId: product.id.toString(), currentPage: 1));
+
+          Get.to(() => const ProductDetailScreen());
         },
         child: SizedBox(
           width: Get.width * 0.4,
@@ -97,11 +109,26 @@ class SimilarProductsWidget extends StatelessWidget {
               Stack(
                 children: [
                   CustomImage(
-                      image: '',
+                      image: product.image ?? '',
                       height: Get.height * 0.25,
                       width: Get.width * 0.4,
                       radius: 16),
-                  Positioned(top: 7, right: 7, child: CustomLikeButton()),
+                  Positioned(
+                    top: 7,
+                    right: 7,
+                    child:
+                        // CustomLikeButton(),
+                        CustomFavoriteButton(
+                      isFavorite: product.isFavorite ?? false,
+                      onTap: () {
+                        print('favorite button pressed......');
+
+                        context.read<SimilarProductsBloc>().add(
+                            ToggleSimilarProductFavorite(
+                                context: context, productId: product.id!));
+                      },
+                    ),
+                  ),
                 ],
               ),
               SizedBox(
@@ -146,7 +173,7 @@ class SimilarProductsWidget extends StatelessWidget {
                     allowHalfRating: true,
                     itemCount: 5,
                     itemSize: 14,
-                   ignoreGestures: true,
+                    ignoreGestures: true,
                     itemPadding: EdgeInsets.symmetric(horizontal: 0),
                     itemBuilder: (context, _) => Icon(
                       Icons.star,

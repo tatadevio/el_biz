@@ -115,7 +115,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               .add(GetSelectedAccount(context: event.context));
         }
       }
-      showCustomSnackBar(res.body['message']);
+      showShortToast(res.body['message']);
     });
 
     on<PhoneAuthentication>((event, emit) async {

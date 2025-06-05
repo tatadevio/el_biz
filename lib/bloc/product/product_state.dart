@@ -18,6 +18,7 @@ class ProductState extends Equatable {
   final List<CategoriesItem> filterCategories;
   final String selectedCurrency;
   final ProductListItem? selectedProduct;
+  final bool isClearSelectedProduct;
 
   const ProductState({
     this.isLoading = false,
@@ -37,6 +38,7 @@ class ProductState extends Equatable {
     this.filterCategories = const [],
     this.selectedCurrency = 'KGS',
     this.selectedProduct,
+    this.isClearSelectedProduct = false,
   });
 
   ProductState copywith({
@@ -57,6 +59,7 @@ class ProductState extends Equatable {
     List<CategoriesItem>? filterCategories,
     String? selectedCurrency,
     ProductListItem? selectedProduct,
+    bool? isClearSelectedProduct,
   }) {
     return ProductState(
       isLoading: isLoading ?? this.isLoading,
@@ -75,7 +78,9 @@ class ProductState extends Equatable {
       sortType: sortType ?? this.sortType,
       filterCategories: filterCategories ?? this.filterCategories,
       selectedCurrency: selectedCurrency ?? this.selectedCurrency,
-      selectedProduct: selectedProduct ?? this.selectedProduct,
+      selectedProduct: isClearSelectedProduct == true
+          ? null
+          : selectedProduct ?? this.selectedProduct,
     );
   }
 
@@ -120,6 +125,7 @@ class ProductState extends Equatable {
         filterCategories,
         selectedCurrency,
         selectedProduct,
+        isClearSelectedProduct,
       ];
 }
 

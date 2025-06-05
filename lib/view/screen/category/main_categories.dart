@@ -1,5 +1,4 @@
 import 'package:el_biz/bloc/category/category_bloc.dart';
-import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +9,6 @@ import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/custom_image.dart';
 import '../../base/no_data.dart';
-import 'categories.dart';
-import 'sub_category.dart';
 
 class MainCategories extends StatefulWidget {
   final bool type;
@@ -33,7 +30,7 @@ class _MainCategoriesState extends State<MainCategories> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      context.read<CategoryBloc>().add(GetCategory());
+      context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
     });
   }
 
@@ -155,14 +152,16 @@ class _MainCategoriesState extends State<MainCategories> {
                                     ListTile(
                                       dense: true,
                                       leading: CustomImage(
-                                        image:
-                                            categoryState.categoryItem[i].image ?? '',
+                                        image: categoryState
+                                                .categoryItem[i].image ??
+                                            '',
                                         height: 24,
                                         width: 24,
                                         radius: 0.0,
                                       ),
                                       title: Text(
-                                        categoryState.categoryItem[i].name ?? '',
+                                        categoryState.categoryItem[i].name ??
+                                            '',
                                         style: body16.copyWith(
                                             color: ColorResources.darkGray),
                                       ),

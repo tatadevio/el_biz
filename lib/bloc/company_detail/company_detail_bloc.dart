@@ -422,7 +422,19 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
       return product;
     }).toList();
 
-    emit(state.copyWith(companyProducts: updatedProducts));
+    final updatedInactiveProducts =
+        state.companyInactiveProducts!.map((product) {
+      if (product.id == event.productId) {
+        return product.copyWith(
+          isFavorite: !(product.isFavorite ?? false),
+        );
+      }
+      return product;
+    }).toList();
+
+    emit(state.copyWith(
+        companyProducts: updatedProducts,
+        companyInactiveProducts: updatedInactiveProducts));
     try {
       final response =
           await compnayDetailRepo.toggleFavorite(event.productId.toString());
@@ -440,7 +452,18 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
           }
           return product;
         }).toList();
-        emit(state.copyWith(companyProducts: updatedProducts));
+        final updatedInactiveProducts =
+            state.companyInactiveProducts!.map((product) {
+          if (product.id == event.productId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+        emit(state.copyWith(
+            companyProducts: updatedProducts,
+            companyInactiveProducts: updatedInactiveProducts));
       }
     } catch (e) {
       final updatedProducts = state.companyProducts!.map((product) {
@@ -451,7 +474,18 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         }
         return product;
       }).toList();
-      emit(state.copyWith(companyProducts: updatedProducts));
+      final updatedInactiveProducts =
+          state.companyInactiveProducts!.map((product) {
+        if (product.id == event.productId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(
+          companyProducts: updatedProducts,
+          companyInactiveProducts: updatedInactiveProducts));
     }
   }
 
@@ -466,21 +500,49 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
       return product;
     }).toList();
 
-    emit(state.copyWith(companyProducts: updatedProducts));
+    final updatedInactiveProducts = state.companyProducts!.map((product) {
+      if (product.id == event.productId) {
+        return product.copyWith(
+          isFavorite: !(product.isFavorite ?? false),
+        );
+      }
+      return product;
+    }).toList();
+
+    emit(state.copyWith(
+        companyProducts: updatedProducts,
+        companyInactiveProducts: updatedInactiveProducts));
   }
 
   Future<void> _onToggleTenderFavorite(
       ToggleTenderFavorite event, Emitter<CompanyDetailState> emit) async {
-    final updatedProducts = state.companyTenders!.map((tender) {
-      if (tender.id == event.tenderId) {
-        return tender.copyWith(
-          isFavorite: !(tender.isFavorite ?? false),
-        );
-      }
-      return tender;
-    }).toList();
+    try {
+      final updatedTenders = state.companyTenders?.map((tender) {
+        if (tender.id == event.tenderId) {
+          return tender.copyWith(
+            isFavorite: !(tender.isFavorite ?? false),
+            image: tender.image ?? '',
+          );
+        }
+        return tender;
+      }).toList();
 
-    emit(state.copyWith(companyTenders: updatedProducts));
+      final updatedInactiveTenders =
+          state.companyInactiveTenders?.map((tender) {
+        if (tender.id == event.tenderId) {
+          return tender.copyWith(
+            isFavorite: !(tender.isFavorite ?? false),
+          );
+        }
+        return tender;
+      }).toList();
+
+      emit(state.copyWith(
+          companyTenders: updatedTenders,
+          companyInactiveTenders: updatedInactiveTenders));
+    } catch (e) {
+      print('Error: $e');
+    }
     try {
       final response = await compnayDetailRepo
           .toggleFavorite(event.tenderId.toString(), type: "Tender");
@@ -490,7 +552,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         //     .read<FavoriteBloc>()
         //     .add(RemoveProductFromFavoriteList(event.tenderId));
       } else {
-        final updatedProducts = state.companyTenders!.map((product) {
+        final updatedTenders = state.companyTenders?.map((product) {
           if (product.id == event.tenderId) {
             return product.copyWith(
               isFavorite: !(product.isFavorite ?? false),
@@ -498,10 +560,22 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
           }
           return product;
         }).toList();
-        emit(state.copyWith(companyTenders: updatedProducts));
+
+        final updatedInactiveTenders =
+            state.companyInactiveTenders?.map((product) {
+          if (product.id == event.tenderId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+        emit(state.copyWith(
+            companyTenders: updatedTenders,
+            companyInactiveTenders: updatedInactiveTenders));
       }
     } catch (e) {
-      final updatedProducts = state.companyTenders!.map((product) {
+      final updatedTenders = state.companyTenders!.map((product) {
         if (product.id == event.tenderId) {
           return product.copyWith(
             isFavorite: !(product.isFavorite ?? false),
@@ -509,13 +583,25 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         }
         return product;
       }).toList();
-      emit(state.copyWith(companyTenders: updatedProducts));
+
+      final updatedInactiveTenders =
+          state.companyInactiveTenders!.map((product) {
+        if (product.id == event.tenderId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(
+          companyTenders: updatedTenders,
+          companyInactiveTenders: updatedInactiveTenders));
     }
   }
 
   Future<void> _onToggleFavoriteTenderInList(ToggleFavoriteTenderInList event,
       Emitter<CompanyDetailState> emit) async {
-    final updatedTender = state.companyTenders!.map((tender) {
+    final updatedTender = state.companyTenders?.map((tender) {
       if (tender.id == event.tenderId) {
         return tender.copyWith(
           isFavorite: !(tender.isFavorite ?? false),
@@ -524,7 +610,18 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
       return tender;
     }).toList();
 
-    emit(state.copyWith(companyTenders: updatedTender));
+    final updatedInactiveTender = state.companyInactiveTenders?.map((tender) {
+      if (tender.id == event.tenderId) {
+        return tender.copyWith(
+          isFavorite: !(tender.isFavorite ?? false),
+        );
+      }
+      return tender;
+    }).toList();
+
+    emit(state.copyWith(
+        companyTenders: updatedTender,
+        companyInactiveTenders: updatedInactiveTender));
   }
 
   Future<void> _onChangeProductStatus(

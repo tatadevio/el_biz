@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 import '../../../data/model/response/category/category_model.dart';
 import '../../../utils/Images.dart';
-import '../../../utils/appConstant.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/no_data.dart';
 import '../../base/product_shimmer.dart';

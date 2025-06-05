@@ -14,4 +14,11 @@ class SimilarProductRepo {
     return await apiClient
         .getData("${AppConstants.relatedProductsUrl}/$productId?page=$page");
   }
+
+  Future<Response> toggleFavorite(String id) async {
+    return await apiClient.postData(AppConstants.favoriteToggleUrl, {
+      "type": "Product",
+      "id": id,
+    });
+  }
 }

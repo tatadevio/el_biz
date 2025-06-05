@@ -16,21 +16,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc(this.chatRepo) : super(const ChatState()) {
     on<UpdateShowChat>(
       (event, emit) {
-        print('value of update show chat  = ${event.showChat}');
         emit(state.copyWith(isShowChat: event.showChat));
       },
     );
 
     on<UpdateShowAllMessages>(
       (event, emit) {
-        print('value of update show all messages = ${event.showAllMessages}');
         emit(state.copyWith(isShowAllMessage: event.showAllMessages));
       },
     );
 
     on<UpdateShowMySales>(
       (event, emit) {
-        print('value of update show my sales = ${event.showMySales}');
         emit(state.copyWith(isShowMySales: event.showMySales));
       },
     );
@@ -76,6 +73,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<GetChatList>(_onGetChatList);
     on<DeleteChat>(_onDeleteChat);
     on<SendChatMedia>(_onSendChatMedia);
+    on<UpdateLastMessage>(_onUpdateLastMessage);
+    on<UpdateUnReadCount>(_onUpdateUnReadCount);
   }
 
   Future<void> _onGetChatList(
@@ -90,17 +89,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
       ChatListModel chatData = ChatListModel.fromJson(res.body);
       if (event.currentPage == 1) {
-        final newList = chatData.data ?? [];
+        final newList = chatData.data?.items ?? [];
         emit(state.copyWith(chatList: newList));
       } else {
-        List<ChatData> newItems = [
+        List<ChatItem> newItems = [
           ...state.chatList,
-          ...chatData.data ?? [],
+          ...chatData.data?.items ?? [],
         ];
         emit(state.copyWith(chatList: newItems));
       }
-      int currentPage = chatData.pagination?.currentPage ?? 1;
-      int pageSize = chatData.pagination?.lastPage ?? 1;
+      int currentPage = chatData.data?.currentPage ?? 1;
+      int pageSize = chatData.data?.totalPages ?? 1;
       emit(state.copyWith(pageSize: pageSize, currentPage: currentPage));
     } catch (e) {
       print(e.toString());
@@ -113,7 +112,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       final response = await chatRepo.deleteChat(event.chatId);
       if (response.statusCode == 200) {
-        List<ChatData> myChatList = state.chatList;
+        List<ChatItem> myChatList = state.chatList;
         int index = -1;
         index = myChatList
             .indexWhere((chat) => chat.chatId.toString() == event.chatId);
@@ -145,5 +144,45 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       event.completer.completeError(e.toString());
     }
     emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> _onUpdateLastMessage(
+      UpdateLastMessage event, Emitter<ChatState> emit) async {
+    int index = -1;
+    index = state.chatList
+        .indexWhere((chat) => chat.chatId.toString() == event.chatId);
+
+    if (index != -1) {
+      ChatItem chatItem = state.chatList[index];
+
+      ChatItem updatedChatItem = chatItem.copyWith(
+        lastMessage: event.message,
+        lastMessageDate: DateTime.now().add(Duration(days: 1)),
+      );
+
+      List<ChatItem> updatedChatList = List.from(state.chatList);
+      updatedChatList[index] = updatedChatItem;
+
+      emit(state.copyWith(chatList: updatedChatList));
+    }
+    try {
+      final response = await chatRepo.updateLastMessage(
+          event.chatId, event.message, event.userCount, event.ownerCount);
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> _onUpdateUnReadCount(
+      UpdateUnReadCount event, Emitter<ChatState> emit) async {
+    try {
+      final response = await chatRepo.updateReadCount(
+          event.chatId, event.userCount, event.ownerCount);
+      // if(response.statusCode == 200)
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

@@ -336,6 +336,27 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, searchState) {
+              if (searchState.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (searchState.searchProducts.isEmpty) {
+                if (searchController.text.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'search_for_products'.tr,
+                      style: body14,
+                    ),
+                  );
+                }
+                return Center(
+                  child: Text(
+                    'no_product_found'.tr,
+                    style: body14,
+                  ),
+                );
+              }
               if (searchState.isGridView) {
                 return GridView.builder(
                   controller: _scrollController,
@@ -349,6 +370,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     // return SizedBox();
                     return ProductGridItem(
                       product: searchState.searchProducts[index],
+                      isSearchProduct: true,
 
                       // product: companyController.,
                       // product: index,
@@ -362,7 +384,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemBuilder: (context, index) {
                   return ProductListItemWidget(
                     product: searchState.searchProducts[index],
-                    isPublicProduct: true,
+                    isPublicProduct: false,
+                    isSearchProduct: true,
                   );
                 },
               );

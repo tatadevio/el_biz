@@ -1,4 +1,4 @@
-import 'package:el_biz/bloc/category/category_bloc.dart';
+
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_event.dart';
@@ -90,7 +90,7 @@ class _TenderScreenState extends State<TenderScreen> {
               ),
               InkWell(
                 onTap: () {
-                  context.read<CategoryBloc>().add(GetCategory());
+                  // context.read<CategoryBloc>().add(GetCategory());
                   Get.to(() => SelectCategoryScreen(
                         onSelect: (selectedCategories) {
                           for (var category in selectedCategories) {

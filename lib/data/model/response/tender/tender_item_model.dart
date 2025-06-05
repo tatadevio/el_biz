@@ -81,6 +81,7 @@ class TenderItem {
     Company? company,
     TenderCategory? tenderCategory,
     bool? isFavorite,
+    String? image,
   }) {
     return TenderItem(
       id: id ?? this.id,
@@ -95,6 +96,7 @@ class TenderItem {
       company: company ?? this.company,
       tenderCategory: tenderCategory ?? this.tenderCategory,
       isFavorite: isFavorite ?? this.isFavorite,
+      image: image ?? this.image,
     );
   }
 }

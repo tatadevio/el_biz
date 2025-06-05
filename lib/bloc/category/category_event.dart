@@ -15,7 +15,14 @@ class UpdateFilterSelectedCategory extends CategoryEvent {
   List<Object> get props => [category];
 }
 
-class GetCategory extends CategoryEvent {}
+class GetCategory extends CategoryEvent {
+  final int currentPage;
+
+  const GetCategory({required this.currentPage});
+
+  @override
+  List<Object> get props => [currentPage];
+}
 
 class GetCategoryFilter extends CategoryEvent {}
 

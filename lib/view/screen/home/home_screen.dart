@@ -24,6 +24,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/account/account_bloc.dart';
+import '../../../bloc/category/category_bloc.dart';
 import '../../../bloc/company/company_bloc.dart';
 import '../../../bloc/favorite/favorite_bloc.dart' as favorite;
 import '../../../bloc/tin_number/tin_bloc.dart';
@@ -48,6 +49,7 @@ class HomeScreen extends StatelessWidget {
     context.read<NotificationBloc>().add(GetNotification(1));
     context.read<UserBloc>().add(GetSelectedAccount(context: context));
     context.read<ChatBloc>().add(GetChatList(currentPage: 1));
+    context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
   }
 
   loadCompanyData(BuildContext context) {

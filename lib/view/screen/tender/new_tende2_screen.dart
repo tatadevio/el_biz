@@ -20,7 +20,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/add_tender/add_tender_bloc.dart';
-import '../../../bloc/category/category_bloc.dart';
 import '../../../bloc/public_tender/public_tender_bloc.dart';
 import '../../../bloc/tenders/tenders_bloc.dart';
 import '../../../bloc/tenders/tenders_event.dart';
@@ -817,21 +816,22 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
 
                               GestureDetector(
                                 onTap: () {
-                                  context
-                                      .read<CategoryBloc>()
-                                      .add(GetCategory());
                                   Get.to(() => SelectCategoryScreen(
                                         isProductCategory: true,
+                                        alreadySelected: tendersState
+                                                        .newTenderModel
+                                                        .categories ==
+                                                    null ||
+                                                tendersState.newTenderModel
+                                                    .categories!.isEmpty
+                                            ? []
+                                            : tendersState
+                                                .newTenderModel.categories,
                                         onSelect: (selectedCategories) {
                                           context.read<TendersBloc>().add(
                                               SelectCategory(
                                                   selectedCategories.first));
                                           Get.back();
-                                          // print(
-                                          //     'this is selected category = ${addProductState.productData?.category}');
-                                          // context
-                                          //     .read<MaterialBloc>()
-                                          //     .add(GetMaterials(currentPage: 1));
                                         },
                                       ));
                                 },

@@ -71,3 +71,31 @@ class SendChatMedia extends ChatEvent {
   @override
   List<Object> get props => [chatId, media, completer];
 }
+
+class UpdateLastMessage extends ChatEvent {
+  final String chatId;
+  final String message;
+  final int userCount;
+  final int ownerCount;
+  const UpdateLastMessage(
+      {required this.chatId,
+      required this.message,
+      required this.userCount,
+      required this.ownerCount});
+
+  @override
+  List<Object> get props => [chatId, message, userCount, ownerCount];
+}
+
+class UpdateUnReadCount extends ChatEvent {
+  final String chatId;
+  final int userCount;
+  final int ownerCount;
+  const UpdateUnReadCount(
+      {required this.chatId,
+      required this.userCount,
+      required this.ownerCount});
+
+  @override
+  List<Object> get props => [chatId, userCount, ownerCount];
+}

@@ -589,7 +589,14 @@ class ProductDetailScreen extends StatelessWidget {
                                   '',
                               firebaseChatId:
                                   "product_${state.productDetailModel?.data?.id}_user_${state.productDetailModel?.data?.user?.id}",
-
+                              productName:
+                                  state.productDetailModel?.data?.name ?? '',
+                              productPrice: state
+                                      .productDetailModel?.data?.price
+                                      .toString() ??
+                                  '0',
+                              productUserId:
+                                  state.productDetailModel?.data?.user?.id ?? 0,
                             ));
                       },
                       title: 'Чат с продавцом'),

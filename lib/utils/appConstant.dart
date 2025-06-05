@@ -103,6 +103,8 @@ class AppConstants {
   static const String messagesUrl = "api/chat-init";
   static const String deleteChaturl = "api/chat-delete";
   static const String sendMediaUrl = "api/chats/3/upload-medias";
+  static const String updateLastMessageUrl = "api/lastmessage/update";
+  static const String updateReadCountUrl = "api/messages/read";
   // static const String chatSendUrl = "api/v1/chats/store";
   // static const String ticketUrl = "api/v1/chats";
   // static const String deleteMessage = "api/v1/chats/remove";

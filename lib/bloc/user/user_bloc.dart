@@ -61,6 +61,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             : UserInfoModel(data: userData);
 
         emit(state.copyWith(userInfo: updatedUserInfo));
+        // showShortToast(response.body['message']);
 
 // start update saved user data
         final accountData = userRepo.getSelectedAccount();

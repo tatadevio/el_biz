@@ -4,7 +4,7 @@ class ChatState extends Equatable {
   final bool isShowChat;
   final bool isShowAllMessage;
   final bool isShowMySales;
-  final List<ChatData> chatList;
+  final List<ChatItem> chatList;
   final bool isLoading;
   final bool isLoadingMore;
   final int currentPage;
@@ -23,7 +23,7 @@ class ChatState extends Equatable {
     bool? isShowChat,
     bool? isShowAllMessage,
     bool? isShowMySales,
-    List<ChatData>? chatList,
+    List<ChatItem>? chatList,
     bool? isLoading,
     bool? isLoadingMore,
     int? currentPage,

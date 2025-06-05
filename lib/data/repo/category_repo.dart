@@ -3,14 +3,13 @@ import 'package:get/get_connect/http/src/response/response.dart';
 import '../../utils/appConstant.dart';
 import '../api/api_client.dart';
 
-
 class CategoryRepo {
   final ApiClient apiClient;
 
   CategoryRepo(this.apiClient);
 
-  Future<Response> getCategory() async {
-    return await apiClient.getData(AppConstants.categoriesUrl);
+  Future<Response> getCategory(int page) async {
+    return await apiClient.getData("${AppConstants.categoriesUrl}?page=$page");
   }
 
   // Future<Response> getCategoryFilter() async {
@@ -20,6 +19,4 @@ class CategoryRepo {
   Future<Response> categoryDetail(String id) async {
     return await apiClient.getData("${AppConstants.categoryDetailUrl}/$id");
   }
-
-  
 }

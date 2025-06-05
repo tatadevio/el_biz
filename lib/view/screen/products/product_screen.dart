@@ -11,6 +11,7 @@ import 'package:el_biz/view/screen/filter/company_filter/company_filter_screen.d
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:el_biz/view/screen/products/widgets/public_companies_widget.dart';
 import 'package:el_biz/view/screen/products/widgets/public_products_widget.dart';
+import 'package:el_biz/view/screen/search/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -88,18 +89,23 @@ class _ProductScreenState extends State<ProductScreen> {
                   style: h16.copyWith(color: ColorResources.blackText),
                 ),
               ),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: ColorResources.lgColor,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => SearchScreen());
+                },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: ColorResources.lgColor,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(Images.svgSearch),
                 ),
-                alignment: Alignment.center,
-                child: SvgPicture.asset(Images.svgSearch),
               ),
               const SizedBox(
                 width: 10,

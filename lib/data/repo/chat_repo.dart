@@ -39,57 +39,22 @@ class ChatRepo {
         files: files);
   }
 
-  // Future<Response> getTicketList() async {
-  //   return await apiClient.getData(
-  //     AppConstants.ticketUrl,
-  //   );
-  // }
+  Future<Response> updateLastMessage(String chatId, String message, int userCount, int ownerCount) async {
+    return await apiClient.postData(
+      "${AppConstants.updateLastMessageUrl}/$chatId", {
+      "message": message,
+      "user_unread_count": userCount,
+      "product_owner_unread_count": ownerCount
+    }
+    );
+  }
 
-  // Future<Response> getSearchTicketList(String query) async {
-  //   return await apiClient.getData(
-  //     AppConstants.ticketUrl + "?search=$query",
-  //   );
-  // }
-
-  // Future<Response> deleteMessage(String id) async {
-  //   return await apiClient.deleteData(
-  //     "${AppConstants.deleteMessage}/$id",
-  //   );
-  // }
-
-  // Future<Response> clearMessage(String id) async {
-  //   return await apiClient.deleteData(
-  //     "${AppConstants.clearAllMessage}/$id",
-  //   );
-  // }
-
-  // Future sendImage(String ticketId, XFile image) async {
-  //   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   String? token = sharedPreferences.getString("token");
-  //   http.MultipartRequest request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse(
-  //         '${AppConstants.baseUrl}',
-  //       ));
-  //   request.headers.addAll({
-  //     'Authorization': 'Bearer $token',
-  //   });
-  //   if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-  //     File _file = File(image.path);
-  //     request.files.add(http.MultipartFile('image', _file.readAsBytes().asStream(), _file.lengthSync(), filename: _file.path.split('/').last));
-  //   }
-  //   Map<String, String> _fields = {};
-  //   _fields.addAll(<String, String>{'ticket_id': ticketId});
-  //   request.fields.addAll(_fields);
-  //   //print('=====> ${request.url.path}\n' + request.fields.toString());
-  //   http.StreamedResponse response = await request.send();
-  //   var res = await http.Response.fromStream(response);
-  //   //print('=====Response body is here==>${res.body}');
-  //   try {
-  //     return res;
-  //   } catch (e) {
-  //     return res;
-  //   }
-  //   //return await apiClient.getData(AppConstants.courseDetailUrl+"/"+id);
-  // }
+  Future<Response> updateReadCount(
+      String chatId, int userCount, int ownerCount) async {
+    return await apiClient.postData(
+        "${AppConstants.updateReadCountUrl}/$chatId", {
+      "user_unread_count": userCount,
+      "product_owner_unread_count": ownerCount
+    });
+  }
 }

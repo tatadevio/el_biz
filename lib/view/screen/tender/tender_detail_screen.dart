@@ -5,7 +5,6 @@ import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
-import 'package:el_biz/view/screen/product_detail/widgets/similar_products_widget.dart';
 import 'package:el_biz/view/screen/tender/new_tende2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -299,7 +298,7 @@ class TenderDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const SimilarProductsWidget(),
+              // const SimilarProductsWidget(),
               const SizedBox(
                 height: 20,
               ),

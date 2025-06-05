@@ -79,7 +79,7 @@ class ProductGridItem extends StatelessWidget {
                                     context, product!.id!));
                           } else if (isSearchProduct) {
                             context.read<SearchBloc>().add(
-                                ToggleFavoriteSearchProduct(
+                                ToggleSearchProductFavorite(
                                     productId: product!.id!, context: context));
                           } else {
                             context.read<CompanyDetailBloc>().add(

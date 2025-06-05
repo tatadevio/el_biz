@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
+import 'package:el_biz/data/model/response/userinfo_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:file_picker/file_picker.dart';
@@ -23,6 +24,9 @@ class NewMessageWidget extends StatefulWidget {
   final String productId;
   final bool isFirstMessage;
   final String firebaseChatId;
+  final int userUnread;
+  final int ownerUnread;
+  final int productUserId;
   const NewMessageWidget({
     super.key,
     required this.chatId,
@@ -31,6 +35,9 @@ class NewMessageWidget extends StatefulWidget {
     this.productId = '',
     required this.isFirstMessage,
     required this.firebaseChatId,
+    required this.userUnread,
+    required this.ownerUnread,
+    required this.productUserId,
   });
 
   @override
@@ -42,6 +49,9 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   final FocusNode focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
+    if (widget.chatId == '') {
+      return SizedBox();
+    }
     return Container(
       padding: EdgeInsets.only(
           top: 5,
@@ -140,14 +150,17 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                       counterText: "",
                       suffixIcon: InkWell(
                         borderRadius: BorderRadius.circular(22),
-                        onTap: () {
-                          _sendOrUpdateMessage(
-                            message: textController.text,
-                          );
-                          textController.clear();
-                          // focusNode.unfocus();
-                          setState(() {});
-                        },
+                        onTap: textController.text.isEmpty
+                            ? null
+                            : () {
+                                // print('this is chat id = ${widget.chatId}');
+                                _sendOrUpdateMessage(
+                                  message: textController.text,
+                                );
+                                textController.clear();
+                                // focusNode.unfocus();
+                                setState(() {});
+                              },
                         child: Container(
                           margin: const EdgeInsets.all(3),
                           height: 22,
@@ -220,6 +233,8 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       String? size = ''}) async {
     // UserModel userModel = Get.find<AuthController>().userData;
     // String userId = context.read<AuthBloc>().state.userData.
+    UserData? myUser = context.read<UserBloc>().state.userInfo?.data;
+    int myUserId = myUser?.id ?? 0;
 
     Map<String, dynamic> sendMessage = {
       "read": false,
@@ -235,22 +250,26 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
       "sender": {
         "id": widget.senderId,
         // context.read<UserBloc>().state.userInfo!.data!.id.toString(),
-        "name": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
-                true
-            ? context.read<UserBloc>().state.selectedAccountModel?.userName
-            : context.read<UserBloc>().state.selectedAccountModel?.companyName,
-        "image": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
-                true
-            ? context.read<UserBloc>().state.selectedAccountModel?.userImage
-            : context.read<UserBloc>().state.selectedAccountModel?.userImage,
-        "phone": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
-                true
-            ? context.read<UserBloc>().state.selectedAccountModel?.userPhone
-            : context.read<UserBloc>().state.selectedAccountModel?.companyPhone,
-        "email": context.read<UserBloc>().state.selectedAccountModel?.isUser ==
-                true
-            ? context.read<UserBloc>().state.selectedAccountModel?.userEmail
-            : context.read<UserBloc>().state.selectedAccountModel?.companyEmail,
+        "name": myUser?.name ?? '',
+        // context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+        //         true
+        //     ? context.read<UserBloc>().state.selectedAccountModel?.userName
+        //     : context.read<UserBloc>().state.selectedAccountModel?.companyName,
+        "image": myUser?.image ?? '',
+        // context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+        //         true
+        //     ? context.read<UserBloc>().state.selectedAccountModel?.userImage
+        //     : context.read<UserBloc>().state.selectedAccountModel?.userImage,
+        "phone": myUser?.phone ?? '',
+        // context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+        //         true
+        //     ? context.read<UserBloc>().state.selectedAccountModel?.userPhone
+        //     : context.read<UserBloc>().state.selectedAccountModel?.companyPhone,
+        "email": myUser?.email ?? '',
+        // context.read<UserBloc>().state.selectedAccountModel?.isUser ==
+        //         true
+        //     ? context.read<UserBloc>().state.selectedAccountModel?.userEmail
+        //     : context.read<UserBloc>().state.selectedAccountModel?.companyEmail,
         "device": Platform.isAndroid
             ? "Android"
             : Platform.isIOS
@@ -272,11 +291,20 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         .collection('chat')
         .doc(widget.firebaseChatId)
         .set(sendMessage);
-    // if (widget.isFirstMessage) {
-    //   context.read<ChatBloc>().add(SendMessage(
-    //         productId: widget.productId,
-    //       ));
-    // }
+    String lastMessage = message ?? '';
+    if (type == 'image' && message?.trim() == '') {
+      lastMessage = "🖼 Изображение";
+    } else if (type == 'image' && message?.trim() != '') {
+      lastMessage = "🖼 $message";
+    } else if (type == 'pdf') {
+      lastMessage = "📄 $message $message $message";
+    }
+
+    context.read<ChatBloc>().add(UpdateLastMessage(
+        chatId: widget.chatId,
+        message: lastMessage,
+        userCount: widget.productUserId != myUserId ? 0 : widget.userUnread,
+        ownerCount: widget.productUserId == myUserId ? 0 : widget.ownerUnread));
   }
 
   final ImagePicker _picker = ImagePicker();

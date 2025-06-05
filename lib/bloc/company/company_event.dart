@@ -8,7 +8,7 @@ sealed class CompanyEvent extends Equatable {
 }
 
 class GetMyCompanies extends CompanyEvent {
-  final int currentPage ;
+  final int currentPage;
   const GetMyCompanies({required this.currentPage});
 
   @override
@@ -118,7 +118,10 @@ class UpdateCompany extends CompanyEvent {
   final AddCompanyModel addCompanyModel;
   final String companyId;
   final BuildContext context;
-  const UpdateCompany({required this.addCompanyModel, required this.companyId, required this.context});
+  const UpdateCompany(
+      {required this.addCompanyModel,
+      required this.companyId,
+      required this.context});
 
   @override
   List<Object> get props => [addCompanyModel, companyId, context];

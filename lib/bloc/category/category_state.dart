@@ -6,12 +6,18 @@ class CategoryState extends Equatable {
   final List<CategoryItem> categoryItemFilter;
   final List<CategoryItem> singleCategoryItem;
   final List<CategoryItem> filterCategories;
+  final bool isLoadingMore;
+  final int categoryCurrentPage;
+  final int categoryPageSize;
   const CategoryState({
     this.isLoading = false,
     this.categoryItem = const [],
     this.categoryItemFilter = const [],
     this.singleCategoryItem = const [],
     this.filterCategories = const [],
+    this.isLoadingMore = false,
+    this.categoryCurrentPage = 1,
+    this.categoryPageSize = 1,
   });
 
   CategoryState copyWith({
@@ -20,6 +26,9 @@ class CategoryState extends Equatable {
     List<CategoryItem>? categoryItemFilter,
     List<CategoryItem>? singleCategoryItem,
     List<CategoryItem>? filterCategories,
+    bool? isLoadingMore,
+    int? categoryCurrentPage,
+    int? categoryPageSize,
   }) {
     return CategoryState(
       isLoading: isLoading ?? this.isLoading,
@@ -27,6 +36,9 @@ class CategoryState extends Equatable {
       categoryItemFilter: categoryItemFilter ?? this.categoryItemFilter,
       singleCategoryItem: singleCategoryItem ?? this.singleCategoryItem,
       filterCategories: filterCategories ?? this.filterCategories,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      categoryCurrentPage: categoryCurrentPage ?? this.categoryCurrentPage,
+      categoryPageSize: categoryPageSize ?? this.categoryPageSize,
     );
   }
 
@@ -35,7 +47,16 @@ class CategoryState extends Equatable {
   }
 
   @override
-  List<Object> get props => [isLoading, categoryItem, categoryItemFilter, singleCategoryItem, filterCategories];
+  List<Object> get props => [
+        isLoading,
+        categoryItem,
+        categoryItemFilter,
+        singleCategoryItem,
+        filterCategories,
+        isLoadingMore,
+        categoryCurrentPage,
+        categoryPageSize,
+      ];
 }
 
 // final class CategoryInitial extends CategoryState {}

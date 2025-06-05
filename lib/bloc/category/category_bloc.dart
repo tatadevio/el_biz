@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:el_biz/data/repo/category_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,29 +43,36 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     emit(state.copyWith(filterCategories: updatedCategories));
   }
 
-  void _fetchCategory(CategoryEvent event, Emitter<CategoryState> emit) async {
-    if (state.categoryItem.isEmpty) {
-      emit(state.copyWith(isLoading: true));
+  void _fetchCategory(GetCategory event, Emitter<CategoryState> emit) async {
+    if (state.categoryItem.isEmpty || event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true, categoryItem: []));
+    } else {
+      emit(state.copyWith(isLoadingMore: true));
     }
 
     try {
-      final response = await categoryRepo.getCategory();
+      final response = await categoryRepo.getCategory(event.currentPage);
 
       if (response.statusCode == 200) {
         final categoryItems =
             // CategoryListModel.fromJson(response.body).data.items;
             CategoriesListModel.fromJson(response.body).data?.items;
+        // if(event.currentPage == 1) {
+
         emit(state.copyWith(
-          categoryItem: categoryItems,
+          categoryItem: List<CategoryItem>.from(state.categoryItem)
+            ..addAll(categoryItems ?? []),
+          // categoryItems,
           isLoading: false,
         ));
-      } else {
-        emit(state.copyWith(isLoading: false));
+        // }else {
+
+        // }
       }
     } catch (e) {
       print('Error fetching categories: $e');
-      emit(state.copyWith(isLoading: false));
     }
+    emit(state.copyWith(isLoading: false, isLoadingMore: false));
   }
 
   // Future<void> _onGetCategoryById(GetCategoryById event, Emitter<CategoryState> emit)  async {

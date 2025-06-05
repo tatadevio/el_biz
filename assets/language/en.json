@@ -294,7 +294,12 @@
   "tender_updated_successfully" : "he tender details have been updated successfully.",
   "tender_added": "Tender Added",
   "tender_added_successfully": "The tender has been added successfully.",
-  "no_favorite_tenders" : "No favorite tenders found."
+  "no_favorite_tenders" : "No favorite tenders found.",
+  "search_for_products" : "Search for products...",
+  "no_reviews_found" : "No reviews found.",
+  "no_chats_found" : "No chats found.",
+  "accept_terms_and_conditions" : "Please accept the terms and conditions to proceed.",
+  "please_enter_phone_number" : "Please enter your phone number."
 
 
 

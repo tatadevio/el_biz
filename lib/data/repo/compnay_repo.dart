@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/appConstant.dart';
 import '../model/base/add_company_model.dart';
-import '../model/response/category/categories_list_model.dart';
 import 'package:http/http.dart' as http;
 
 class CompnayRepo {

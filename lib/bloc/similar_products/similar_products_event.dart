@@ -14,5 +14,15 @@ class GetSimilarProducts extends SimilarProductsEvent {
       {required this.productId, required this.currentPage});
 
   @override
-  List<Object> get props => [productId,currentPage];
+  List<Object> get props => [productId, currentPage];
+}
+
+class ToggleSimilarProductFavorite extends SimilarProductsEvent {
+  final BuildContext context;
+  final int productId;
+  const ToggleSimilarProductFavorite(
+      {required this.context, required this.productId});
+
+  @override
+  List<Object> get props => [context, productId];
 }

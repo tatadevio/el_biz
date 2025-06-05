@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
@@ -429,9 +428,15 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
 
                     GestureDetector(
                       onTap: () {
-                        context.read<CategoryBloc>().add(GetCategory());
+                        // context.read<CategoryBloc>().add(GetCategory());
                         Get.to(() => SelectCategoryScreen(
                               isProductCategory: true,
+                              alreadySelected:
+                                  addProductState.productData?.category == null
+                                      ? []
+                                      : [
+                                          addProductState.productData!.category!
+                                        ],
                               onSelect: (selectedCategories) {
                                 context.read<AddProductBloc>().add(
                                     SelectCategory(

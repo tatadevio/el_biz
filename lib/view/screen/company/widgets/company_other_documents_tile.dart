@@ -39,29 +39,29 @@ class CompanyOtherDocumentsTile extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (isEdit &&
-                (remoteOtherDocs.isNotEmpty || localOtherDocs.isNotEmpty)) ...[
+            if ((remoteOtherDocs.isNotEmpty || localOtherDocs.isNotEmpty)) ...[
               const SizedBox(height: 10),
               Wrap(
                 runSpacing: 4,
                 children: [
                   // Remote documents
-                  for (var doc in remoteOtherDocs)
-                    _buildOtherDocumentTile(
-                      title: doc.name ?? '',
-                      path: doc.filePath,
-                      isRemote: true,
-                      remoteSize: doc.size ?? '',
-                      onDelete: () {
-                        Get.dialog(CustomDialog(
-                            widget: AlertDialog(
-                                backgroundColor: Colors.white,
-                                content: deleteDocument(
-                                    context, doc.id.toString()))));
-                        // Uncomment if needed:
-                        // context.read<CompanyDetailBloc>().add(RemoveRemoteOtherDocument(doc.id!));
-                      },
-                    ),
+                  if (isEdit)
+                    for (var doc in remoteOtherDocs)
+                      _buildOtherDocumentTile(
+                        title: doc.name ?? '',
+                        path: doc.filePath,
+                        isRemote: true,
+                        remoteSize: doc.size ?? '',
+                        onDelete: () {
+                          Get.dialog(CustomDialog(
+                              widget: AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  content: deleteDocument(
+                                      context, doc.id.toString()))));
+                          // Uncomment if needed:
+                          // context.read<CompanyDetailBloc>().add(RemoveRemoteOtherDocument(doc.id!));
+                        },
+                      ),
 
                   // Local documents
                   for (int i = 0; i < localOtherDocs.length; i++)
