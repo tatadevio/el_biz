@@ -299,7 +299,13 @@
   "no_reviews_found" : "Отзывы не найдены.",
   "no_chats_found" : "Чаты не найдены.",
   "accept_terms_and_conditions" : "Пожалуйста, примите условия и положения, чтобы продолжить.",
-  "please_enter_phone_number" : "Пожалуйста, введите свой номер телефона."
+  "please_enter_phone_number" : "Пожалуйста, введите свой номер телефона.",
+  "profile_updated" : "Профиль обновлён.",
+  "active" : "Активен",
+  "login_first_to_add_company" : "Сначала войдите, чтобы добавить компанию." ,
+  "no_messages" : "Пока нет сообщений",
+  "switch_and_manage_between_your_company_accounts" : "Переключайтесь и управляйте своими аккаунтами компаний" ,
+  "please_enter_password" : "Пожалуйста, введите пароль."
 
 
 

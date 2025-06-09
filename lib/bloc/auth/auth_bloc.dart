@@ -85,11 +85,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copywith(isLoading: false));
       if (res.body['status_code'] == 200) {
         Get.offAll(() => PasswordChangedScreen());
+        // update user data
+        if (res.body['status_code'] == 200) {
+          add(CheckLoginStatus());
+          if (await authRepo.isLoggedIn() == true) {
+            // ignore: use_build_context_synchronously
+            event.context
+                .read<UserBloc>()
+                // ignore: use_build_context_synchronously
+                .add(GetUserInfo(context: event.context));
+
+            // ignore: use_build_context_synchronously
+            event.context
+                .read<UserBloc>()
+                // ignore: use_build_context_synchronously
+                .add(GetSelectedAccount(context: event.context));
+          }
+        }
       }
       // else {
 
       // }
-      showCustomSnackBar(res.body['message']);
+      showShortToast(res.body['message']);
     });
 
     on<Login>((event, emit) async {

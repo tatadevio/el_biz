@@ -22,7 +22,7 @@ class CompanyInActiveTendersWidget extends StatelessWidget {
           !accountController.state.inActiveTenderShowMore) {
         int pageSize = accountController.state.inActiveTenderPageSize;
         if (accountController.state.inActiveTenderCurrentPage < pageSize) {
-          int nextPage = accountController.state.inActiveTenderPageSize;
+          int nextPage = accountController.state.inActiveTenderCurrentPage;
           String companyId = context
                   .read<CompanyDetailBloc>()
                   .state

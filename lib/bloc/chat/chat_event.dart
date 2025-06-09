@@ -33,10 +33,14 @@ class UpdateShowMySales extends ChatEvent {
 
 class SendMessage extends ChatEvent {
   final String productId;
+  final String tenderId;
+  final String type;
   final Completer<String> completer;
 
   const SendMessage({
     required this.productId,
+    required this.tenderId,
+    required this.type,
     required this.completer,
   });
 
@@ -44,10 +48,19 @@ class SendMessage extends ChatEvent {
   List<Object> get props => [productId, completer];
 }
 
-class GetChatList extends ChatEvent {
+class GetChatProductList extends ChatEvent {
   final int currentPage;
 
-  const GetChatList({required this.currentPage});
+  const GetChatProductList({required this.currentPage});
+
+  @override
+  List<Object> get props => [currentPage];
+}
+
+class GetChatTenderList extends ChatEvent {
+  final int currentPage;
+
+  const GetChatTenderList({required this.currentPage});
 
   @override
   List<Object> get props => [currentPage];
@@ -77,14 +90,16 @@ class UpdateLastMessage extends ChatEvent {
   final String message;
   final int userCount;
   final int ownerCount;
+  final String type;
   const UpdateLastMessage(
       {required this.chatId,
       required this.message,
       required this.userCount,
-      required this.ownerCount});
+      required this.ownerCount,
+      required this.type});
 
   @override
-  List<Object> get props => [chatId, message, userCount, ownerCount];
+  List<Object> get props => [chatId, message, userCount, ownerCount, type];
 }
 
 class UpdateUnReadCount extends ChatEvent {

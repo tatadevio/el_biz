@@ -50,7 +50,7 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
         .toList();
     context.read<CompanyBloc>().state.addCompanyModel.keywords = keywordsList;
 
-    Get.to(() => CompanyInfoScreen(isEdit:  widget.isEdit));
+    Get.to(() => CompanyInfoScreen(isEdit: widget.isEdit));
     // } else {
     // validation issue...
     // }
@@ -60,48 +60,50 @@ class _KeywordsTagsScreenState extends State<KeywordsTagsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAddCompanyAppbar(title: ''),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'search_keywords'.tr,
-              style: h16.copyWith(color: ColorResources.darkGray),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'enter_the_keywords_and_synonyms_for_which_your_company_will_be_searched'
-                  .tr,
-              style: body14.copyWith(color: ColorResources.gray),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTextField(
-              controller: keywordsController,
-              hintColor: 'keywords'.tr,
-              inputType: TextInputType.none,
-              leading: '',
-              readOnly: false,
-              maxLines: 4,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              'optional_field'.tr,
-              style: body12.copyWith(color: ColorResources.gray),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'search_keywords'.tr,
+                style: h16.copyWith(color: ColorResources.darkGray),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'enter_the_keywords_and_synonyms_for_which_your_company_will_be_searched'
+                    .tr,
+                style: body14.copyWith(color: ColorResources.gray),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField(
+                controller: keywordsController,
+                hintColor: 'keywords'.tr,
+                inputType: TextInputType.text,
+                leading: '',
+                readOnly: false,
+                maxLines: 4,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                'optional_field'.tr,
+                style: body12.copyWith(color: ColorResources.gray),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

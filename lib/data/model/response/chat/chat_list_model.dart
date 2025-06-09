@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import '../company/company_product_model.dart';
+import '../tender/tender_item_model.dart';
 
 ChatListModel chatListModelFromJson(String str) =>
     ChatListModel.fromJson(json.decode(str));
@@ -122,6 +123,8 @@ class ChatItem {
   final int? productOwnerUnreadCount;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? type;
+  final TenderItem? tender;
 
   ChatItem({
     this.chatId,
@@ -135,6 +138,8 @@ class ChatItem {
     this.productOwnerUnreadCount,
     this.createdAt,
     this.updatedAt,
+    this.type,
+    this.tender,
   });
 
   ChatItem copyWith({
@@ -149,6 +154,8 @@ class ChatItem {
     int? productOwnerUnreadCount,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? type,
+    TenderItem? tender,
   }) =>
       ChatItem(
         chatId: chatId ?? this.chatId,
@@ -163,6 +170,8 @@ class ChatItem {
             productOwnerUnreadCount ?? this.productOwnerUnreadCount,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        type: type ?? this.type,
+        tender: tender ?? this.tender,
       );
 
   factory ChatItem.fromJson(Map<String, dynamic> json) => ChatItem(
@@ -186,6 +195,9 @@ class ChatItem {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        type: json["type"],
+        tender:
+            json["tender"] == null ? null : TenderItem.fromJson(json["tender"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -200,6 +212,8 @@ class ChatItem {
         "product_owner_unread_count": productOwnerUnreadCount,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "type": type,
+        "tender": tender?.toJson(),
       };
 }
 

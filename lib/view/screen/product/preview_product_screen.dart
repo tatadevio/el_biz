@@ -359,7 +359,7 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                           .id
                           .toString()));
                 } else {
-                  showCustomSnackBar('Product Added');
+                  // showCustomSnackBar('Product Added');
 
                   log('this is product data ${context.read<AddProductBloc>().state.productData}');
                   context.read<AddProductBloc>().add(AddProduct(

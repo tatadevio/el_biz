@@ -162,7 +162,7 @@ class _TenderScreenState extends State<TenderScreen> {
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         context.read<FilterFieldsBloc>().add(GetFilterFields());
-                        Get.to(() => const ProductsFilterScreen());
+                        Get.to(() => const ProductsFilterScreen(isTenderFilter : true));
                       },
                       child: Container(
                         height: 40,

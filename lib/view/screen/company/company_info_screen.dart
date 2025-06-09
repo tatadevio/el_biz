@@ -276,7 +276,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                         child: CustomTextField1(
                             controller: streetController,
                             hintColor: '',
-                            inputType: TextInputType.name,
+                            inputType: TextInputType.text,
                             lableText: 'street'.tr,
                             leading: '',
                             readOnly: false)),
@@ -287,7 +287,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                         child: CustomTextField1(
                             controller: houseController,
                             hintColor: '',
-                            inputType: TextInputType.name,
+                            inputType: TextInputType.text,
                             lableText: 'house'.tr,
                             leading: '',
                             readOnly: false)),
@@ -298,7 +298,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                         child: CustomTextField1(
                             controller: officeController,
                             hintColor: '',
-                            inputType: TextInputType.name,
+                            inputType: TextInputType.text,
                             lableText: 'office'.tr,
                             leading: '',
                             readOnly: false)),
@@ -317,7 +317,7 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
                 CustomTextField(
                     controller: postalCodeController,
                     hintColor: '',
-                    inputType: TextInputType.name,
+                    inputType: TextInputType.text,
                     leading: '',
                     readOnly: false),
                 const SizedBox(

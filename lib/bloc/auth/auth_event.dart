@@ -68,10 +68,11 @@ class VerifyOtp extends AuthEvent {
 class ChangePassword extends AuthEvent {
   final String password;
   final String confirmPassword;
-  const ChangePassword(this.password, this.confirmPassword);
+  final BuildContext context;
+  const ChangePassword(this.password, this.confirmPassword, this.context);
 
   @override
-  List<Object> get props => [password, confirmPassword];
+  List<Object> get props => [password, confirmPassword, context];
 }
 
 class Logout extends AuthEvent {}

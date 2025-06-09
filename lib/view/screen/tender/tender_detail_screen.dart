@@ -13,8 +13,11 @@ import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../bloc/tender_detail/tender_detail_bloc.dart';
+import '../../../data/model/response/company/company_product_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
+import '../../base/custom_button.dart';
+import '../chat/chat_conversation.dart';
 import '../company/company_page_screen.dart';
 
 class TenderDetailScreen extends StatelessWidget {
@@ -306,118 +309,155 @@ class TenderDetailScreen extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: "user" == "user"
-          ? BlocBuilder<TenderDetailBloc, TenderDetailState>(
-              builder: (context, state) {
-                if (state is TenderDetailLoading ||
-                    state is TenderDetailError ||
-                    state.tenderDetailModel?.data == null) {
-                  return SizedBox.shrink();
-                }
+      bottomNavigationBar: BlocBuilder<TenderDetailBloc, TenderDetailState>(
+        builder: (context, state) {
+          if (state is TenderDetailLoading ||
+              state is TenderDetailError ||
+              state.tenderDetailModel?.data == null) {
+            return SizedBox.shrink();
+          }
 
-                var tenderDetail = state.tenderDetailModel!;
-                // if (state is TenderDetailSuccess) {
-                //   tenderDetail = state.tenderDetailModel;
-                // }
-                return BlocBuilder<UserBloc, UserState>(
-                    builder: (context, userState) {
-                  if ((userState.selectedAccountModel!.isUser == true &&
-                          tenderDetail.data!.company!.owner!.id ==
-                              userState.selectedAccountModel!.userId) ||
-                      (userState.selectedAccountModel!.isUser == false &&
-                          userState.selectedAccountModel!.companyId ==
-                              tenderDetail.data!.company!.id)) {
-                    return BottomAppBar(
-                      color: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 15),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: CustomBorderButton(
-                              height: Get.height,
-                              width: Get.width,
-                              padding: const EdgeInsets.all(0),
-                              border: Border.all(
-                                  width: 1, color: ColorResources.blue),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShaow: const [ColorResources.shadow1],
-                              child: Text(
-                                "edit".tr,
-                                style: button16.copyWith(
-                                    color: ColorResources.blue),
-                              ),
-                              onTap: () {
-                                Get.to(() => NewTende2Screen(isEdit: true));
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          // Expanded(
-                          //   child: CustomBorderButton(
-                          //     height: Get.height,
-                          //     width: Get.width,
-                          //     padding: const EdgeInsets.all(0),
-                          //     border: Border.all(width: 1, color: ColorResources.red),
-                          //     borderRadius: BorderRadius.circular(12),
-                          //     boxShaow: const [ColorResources.shadow1],
-                          //     child: Text(
-                          //       "not_active".tr,
-                          //       style: button16.copyWith(color: ColorResources.red),
-                          //     ),
-                          //     onTap: () {},
-                          //   ),
-                          // ),
-                          Expanded(
-                            child: CustomBorderButton(
-                              height: Get.height,
-                              width: Get.width,
-                              padding: const EdgeInsets.all(0),
-                              border: Border.all(
-                                  width: 1, color: ColorResources.red),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShaow: const [ColorResources.shadow1],
-                              onTap: state.statusUpdating
-                                  ? () {}
-                                  : () {
-                                      context
-                                          .read<TenderDetailBloc>()
-                                          .add(ChangeTenderStatus(
-                                            tenderDetail.data!.id.toString(),
-                                            tenderDetail.data!.activeStatus ==
-                                                    'active'
-                                                ? 'inactive'
-                                                : 'active',
-                                            context,
-                                          ));
-                                    },
-                              child: state.statusUpdating
-                                  ? SizedBox(
-                                      height: 25,
-                                      width: 25,
-                                      child: CircularProgressIndicator())
-                                  : Text(
-                                      tenderDetail.data!.activeStatus ?? '',
-                                      //  == 'published'
-                                      //     ? "not_active".tr
-                                      //     : 'active'.tr,
-                                      style: button16.copyWith(
-                                          color: ColorResources.red),
-                                    ),
-                            ),
-                          ),
-                        ],
+          var tenderDetail = state.tenderDetailModel!;
+          // if (state is TenderDetailSuccess) {
+          //   tenderDetail = state.tenderDetailModel;
+          // }
+          return BlocBuilder<UserBloc, UserState>(
+              builder: (context, userState) {
+            if ((userState.selectedAccountModel!.isUser == true &&
+                    tenderDetail.data!.company!.owner!.id ==
+                        userState.selectedAccountModel!.userId) ||
+                (userState.selectedAccountModel!.isUser == false &&
+                    userState.selectedAccountModel!.companyId ==
+                        tenderDetail.data!.company!.id)) {
+              return BottomAppBar(
+                color: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomBorderButton(
+                        height: Get.height,
+                        width: Get.width,
+                        padding: const EdgeInsets.all(0),
+                        border:
+                            Border.all(width: 1, color: ColorResources.blue),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShaow: const [ColorResources.shadow1],
+                        child: Text(
+                          "edit".tr,
+                          style: button16.copyWith(color: ColorResources.blue),
+                        ),
+                        onTap: () {
+                          Get.to(() => NewTende2Screen(isEdit: true));
+                        },
                       ),
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                });
-              },
-            )
-          : null,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    // Expanded(
+                    //   child: CustomBorderButton(
+                    //     height: Get.height,
+                    //     width: Get.width,
+                    //     padding: const EdgeInsets.all(0),
+                    //     border: Border.all(width: 1, color: ColorResources.red),
+                    //     borderRadius: BorderRadius.circular(12),
+                    //     boxShaow: const [ColorResources.shadow1],
+                    //     child: Text(
+                    //       "not_active".tr,
+                    //       style: button16.copyWith(color: ColorResources.red),
+                    //     ),
+                    //     onTap: () {},
+                    //   ),
+                    // ),
+                    Expanded(
+                      child: CustomBorderButton(
+                        height: Get.height,
+                        width: Get.width,
+                        padding: const EdgeInsets.all(0),
+                        border: Border.all(width: 1, color: ColorResources.red),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShaow: const [ColorResources.shadow1],
+                        onTap: state.statusUpdating
+                            ? () {}
+                            : () {
+                                context
+                                    .read<TenderDetailBloc>()
+                                    .add(ChangeTenderStatus(
+                                      tenderDetail.data!.id.toString(),
+                                      tenderDetail.data!.activeStatus ==
+                                              'active'
+                                          ? 'inactive'
+                                          : 'active',
+                                      context,
+                                    ));
+                              },
+                        child: state.statusUpdating
+                            ? SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: CircularProgressIndicator())
+                            : Text(
+                                tenderDetail.data!.activeStatus ?? '',
+                                //  == 'published'
+                                //     ? "not_active".tr
+                                //     : 'active'.tr,
+                                style: button16.copyWith(
+                                    color: ColorResources.red),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state.tenderDetailModel!.data!.company?.owner?.id !=
+                userState.userInfo!.data!.id) {
+              return BottomAppBar(
+                color: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                child: CustomButton(
+                    width: Get.width,
+                    height: 56,
+                    onTap: () {
+                      String tenderUserId = state
+                          .tenderDetailModel!.data!.company!.owner!.id
+                          .toString();
+
+                      String myUserId = userState.userInfo!.data!.id.toString();
+                      Get.to(() => ChatConversation(
+                            isSeller: false,
+                            product: ProductListItem(),
+                            tenderId: tenderDetail.data!.id.toString(),
+                            type: 'tender',
+                            // tender: tenderDetail.data!,
+                            // tenderName: tenderDetail.data!.title ?? '',
+                            receiverId: tenderUserId,
+                            // getReceiverId(userState, state),
+                            senderId: myUserId,
+                            isFirstMessage: true,
+                            productId: '0',
+                            firebaseChatId:
+                                "tender_${state.tenderDetailModel?.data?.id}_user_$myUserId",
+                            productName:
+                                state.tenderDetailModel?.data?.title ?? '',
+                            productPrice:
+                                "${state.tenderDetailModel?.data?.budgetFrom}-${state.tenderDetailModel?.data?.budgetTo}",
+
+                            productUserId: state.tenderDetailModel?.data
+                                    ?.company?.owner?.id ??
+                                0,
+                          ));
+                    },
+                    title: 'Чат с продавцом'),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          });
+        },
+      ),
     );
   }
 

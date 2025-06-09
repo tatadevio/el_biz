@@ -158,14 +158,14 @@ class AppConstants {
   static List<LanguageModel> languages = [
     LanguageModel(
         imageUrl: Images.svgLock,
-        languageName: 'English',
-        countryCode: 'US',
-        languageCode: 'en'),
-    LanguageModel(
-        imageUrl: Images.svgLock,
         languageName: 'Русский',
         countryCode: 'RU',
         languageCode: 'ru'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'English',
+        countryCode: 'US',
+        languageCode: 'en'),
     // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
   ];
 }

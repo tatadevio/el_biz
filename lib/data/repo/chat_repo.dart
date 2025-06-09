@@ -10,15 +10,18 @@ class ChatRepo {
 
   ChatRepo(this.apiClient);
 
-  Future<Response> sendMessage(String productId) async {
+  Future<Response> sendMessage(
+      String productId, String tenderId, String type) async {
     return await apiClient.postData(AppConstants.messagesUrl, {
+      'type': type,
+      'tender_id': tenderId,
       'product_id': productId,
     });
   }
 
-  Future<Response> getChatList(int page) async {
+  Future<Response> getChatList(String type, int page) async {
     return await apiClient.getData(
-      "${AppConstants.chatListUrl}?page=$page",
+      "${AppConstants.chatListUrl}?type=$type&page=$page",
     );
   }
 
@@ -39,14 +42,14 @@ class ChatRepo {
         files: files);
   }
 
-  Future<Response> updateLastMessage(String chatId, String message, int userCount, int ownerCount) async {
-    return await apiClient.postData(
-      "${AppConstants.updateLastMessageUrl}/$chatId", {
+  Future<Response> updateLastMessage(
+      String chatId, String message, int userCount, int ownerCount) async {
+    return await apiClient
+        .postData("${AppConstants.updateLastMessageUrl}/$chatId", {
       "message": message,
       "user_unread_count": userCount,
       "product_owner_unread_count": ownerCount
-    }
-    );
+    });
   }
 
   Future<Response> updateReadCount(

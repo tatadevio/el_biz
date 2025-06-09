@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -7,11 +8,29 @@ import 'package:el_biz/view/screen/contracts/new_contact_list_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/new_contract_product_info.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
-class NewContractScreen extends StatelessWidget {
-  const NewContractScreen({super.key});
+import '../../../bloc/product/product_bloc.dart';
+
+class NewContractScreen extends StatefulWidget {
+  final ProductListItem product;
+
+  const NewContractScreen({super.key, required this.product});
+
+  @override
+  State<NewContractScreen> createState() => _NewContractScreenState();
+}
+
+class _NewContractScreenState extends State<NewContractScreen> {
+  List<ProductListItem> selectedProducts = [];
+
+  @override
+  initState() {
+    super.initState();
+    // Initialize the selected products list with the product passed to this screen.
+    selectedProducts.add(widget.product);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +60,28 @@ class NewContractScreen extends StatelessWidget {
                 'goods'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
-              const NewContractProductInfo(),
+              // Column(
+              //   children: selectedProducts
+              //       .map((product) => NewContractProductInfo(product: product))
+              //       .toList(),
+              // ),
+              ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 20),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: selectedProducts.length,
+                  itemBuilder: (context, index) {
+                    return NewContractProductInfo(
+                      product: selectedProducts[index],
+                      index: index,
+                      onRemove: (int productIndex) {
+                        setState(() {
+                          selectedProducts.removeAt(productIndex);
+                        });
+                      },
+                    );
+                  }),
               const SizedBox(
                 height: 5,
               ),
@@ -94,9 +134,38 @@ class NewContractScreen extends StatelessWidget {
                                 height: 48,
                                 onTap: () {
                                   Get.back();
-                                  Get.to(() => const ProductScreen(
+                                  Get.to(() => ProductScreen(
                                         isSelectProduct: true,
+                                        onSendProduct: () async {
+                                          Get.back();
+
+                                          // Get the selected product from Bloc (you can change this based on your logic)
+                                          ProductListItem? selectedProduct =
+                                              context
+                                                  .read<ProductBloc>()
+                                                  .state
+                                                  .selectedProduct;
+
+                                          if (selectedProduct != null) {
+                                            setState(() {
+                                              selectedProducts
+                                                  .add(selectedProduct);
+                                            });
+                                          }
+                                        },
                                       ));
+
+                                  // Get.to(() => ProductScreen(
+                                  //       isSelectProduct: true,
+                                  //       onSendProduct: () async {
+                                  //         Get.back();
+                                  //         ProductListItem? selectedProduct =
+                                  //             context
+                                  //                 .read<ProductBloc>()
+                                  //                 .state
+                                  //                 .selectedProduct;
+                                  //       },
+                                  //     ));
                                 },
                                 title: 'add_manually'.tr,
                                 color: ColorResources.blue,
@@ -107,8 +176,24 @@ class NewContractScreen extends StatelessWidget {
                                 height: 48,
                                 onTap: () {
                                   Get.back();
-                                  Get.to(() => const ProductScreen(
+                                  Get.to(() => ProductScreen(
                                         isSelectProduct: true,
+                                        onSendProduct: () async {
+                                          Get.back();
+
+                                          ProductListItem? selectedProduct =
+                                              context
+                                                  .read<ProductBloc>()
+                                                  .state
+                                                  .selectedProduct;
+
+                                          if (selectedProduct != null) {
+                                            setState(() {
+                                              selectedProducts
+                                                  .add(selectedProduct);
+                                            });
+                                          }
+                                        },
                                       ));
                                 },
                                 title: 'select_from_the_catalog'.tr,

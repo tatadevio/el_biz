@@ -4,40 +4,57 @@ class ChatState extends Equatable {
   final bool isShowChat;
   final bool isShowAllMessage;
   final bool isShowMySales;
-  final List<ChatItem> chatList;
+  final List<ChatItem> chatProductList;
+  final List<ChatItem> chatTenderList;
   final bool isLoading;
   final bool isLoadingMore;
   final int currentPage;
   final int pageSize;
-  const ChatState(
-      {this.isShowChat = true,
-      this.isShowAllMessage = true,
-      this.isShowMySales = false,
-      this.chatList = const [],
-      this.isLoading = false,
-      this.isLoadingMore = false,
-      this.currentPage = 1,
-      this.pageSize = 1});
+  final bool isLoadingTenderMore;
+  final int currentTenderPage;
+  final int pageTenderSize;
+  const ChatState({
+    this.isShowChat = true,
+    this.isShowAllMessage = true,
+    this.isShowMySales = false,
+    this.chatProductList = const [],
+    this.chatTenderList = const [],
+    this.isLoading = false,
+    this.isLoadingMore = false,
+    this.currentPage = 1,
+    this.pageSize = 1,
+    this.isLoadingTenderMore = false,
+    this.currentTenderPage = 1,
+    this.pageTenderSize = 1,
+  });
 
   ChatState copyWith({
     bool? isShowChat,
     bool? isShowAllMessage,
     bool? isShowMySales,
-    List<ChatItem>? chatList,
+    List<ChatItem>? chatProductList,
+    List<ChatItem>? chatTenderList,
     bool? isLoading,
     bool? isLoadingMore,
     int? currentPage,
     int? pageSize,
+    bool? isLoadingTenderMore,
+    int? currentTenderPage,
+    int? pageTenderSize,
   }) {
     return ChatState(
       isShowChat: isShowChat ?? this.isShowChat,
       isShowAllMessage: isShowAllMessage ?? this.isShowAllMessage,
       isShowMySales: isShowMySales ?? this.isShowMySales,
-      chatList: chatList ?? this.chatList,
+      chatProductList: chatProductList ?? this.chatProductList,
+      chatTenderList: chatTenderList ?? this.chatTenderList,
       isLoading: isLoading ?? this.isLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       currentPage: currentPage ?? this.currentPage,
       pageSize: pageSize ?? this.pageSize,
+      isLoadingTenderMore: isLoadingTenderMore ?? this.isLoadingTenderMore,
+      currentTenderPage: currentTenderPage ?? this.currentTenderPage,
+      pageTenderSize: pageTenderSize ?? this.pageTenderSize,
     );
   }
 
@@ -46,16 +63,19 @@ class ChatState extends Equatable {
         isShowChat,
         isShowAllMessage,
         isShowMySales,
-        chatList,
+        chatProductList,
+        chatTenderList,
         isLoading,
         isLoadingMore,
         currentPage,
         pageSize,
+        isLoadingTenderMore,
+        currentTenderPage,
+        pageTenderSize,
       ];
 }
 
-
-class SendMediaSuccess extends ChatState{
+class SendMediaSuccess extends ChatState {
   final String url;
   const SendMediaSuccess(this.url);
 }

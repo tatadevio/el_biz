@@ -299,7 +299,13 @@
   "no_reviews_found" : "No reviews found.",
   "no_chats_found" : "No chats found.",
   "accept_terms_and_conditions" : "Please accept the terms and conditions to proceed.",
-  "please_enter_phone_number" : "Please enter your phone number."
+  "please_enter_phone_number" : "Please enter your phone number.",
+  "profile_updated" : "Profile updated.",
+  "active" : "Active",
+  "login_first_to_add_company" : "Please log in first to add a company." ,
+  "no_messages" : "No messages yet",
+  "switch_and_manage_between_your_company_accounts" : "Switch and manage between your company accounts"  ,
+  "please_enter_password" : "Please enter your password"
 
 
 

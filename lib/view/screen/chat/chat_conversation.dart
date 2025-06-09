@@ -9,6 +9,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/chat/widgets/new_message_widget.dart';
 import 'package:el_biz/view/screen/contracts/new_contract_screen.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
@@ -20,6 +21,7 @@ import 'package:get/get.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
+import '../../../data/model/response/tender/tender_item_model.dart';
 import 'widgets/message_item.dart';
 
 class ChatConversation extends StatefulWidget {
@@ -35,6 +37,10 @@ class ChatConversation extends StatefulWidget {
   final int ownerUnread;
   final String productName;
   final String productPrice;
+  final ProductListItem product;
+  final String type;
+  final String tenderId;
+  final TenderItem? tender;
   const ChatConversation({
     super.key,
     required this.isSeller,
@@ -49,6 +55,10 @@ class ChatConversation extends StatefulWidget {
     this.productUserId = 0,
     required this.productName,
     required this.productPrice,
+    required this.product,
+    this.type = 'product',
+    this.tenderId = '0',
+    this.tender,
   });
 
   @override
@@ -121,7 +131,11 @@ class _ChatConversationState extends State<ChatConversation> {
       final completer = Completer<String>();
 
       context.read<ChatBloc>().add(
-            SendMessage(productId: widget.productId, completer: completer),
+            SendMessage(
+                productId: widget.productId,
+                type: widget.type,
+                tenderId: widget.tenderId,
+                completer: completer),
           );
 
       try {
@@ -136,9 +150,9 @@ class _ChatConversationState extends State<ChatConversation> {
     }
   }
 
-  // Update your _fetchMessages function
   Future<void> _fetchMessages() async {
-    if (isLoading) return;
+    if (isLoading || !hasMore) return;
+
     setState(() {
       isLoading = true;
     });
@@ -154,23 +168,66 @@ class _ChatConversationState extends State<ChatConversation> {
       query = query.startAfterDocument(lastDocument!);
     }
 
-    QuerySnapshot snapshot = await query.get();
+    try {
+      QuerySnapshot snapshot = await query.get();
 
-    if (snapshot.docs.isNotEmpty) {
-      if (lastDocument == null) {
-        _latestFetchedMessageId = snapshot.docs.first.id;
+      if (snapshot.docs.isNotEmpty) {
+        if (lastDocument == null) {
+          _latestFetchedMessageId = snapshot.docs.first.id;
+        }
+
+        lastDocument = snapshot.docs.last;
+        messages.addAll(snapshot.docs);
+      } else {
+        hasMore = false; // No more messages to fetch
       }
-
-      lastDocument = snapshot.docs.last;
-      messages.addAll(snapshot.docs);
-    } else {
-      hasMore = false;
+    } catch (e) {
+      debugPrint("Error fetching messages: $e");
     }
 
-    setState(() {
-      isLoading = false;
-    });
+    // Ensure loading state is reset no matter what
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
+
+  // Update your _fetchMessages function
+  // Future<void> _fetchMessages() async {
+  //   if (isLoading) return;
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+
+  //   Query query = FirebaseFirestore.instance
+  //       .collection('chat')
+  //       .doc(widget.firebaseChatId)
+  //       .collection('messages')
+  //       .orderBy('timestamp', descending: true)
+  //       .limit(10);
+
+  //   if (lastDocument != null) {
+  //     query = query.startAfterDocument(lastDocument!);
+  //   }
+
+  //   QuerySnapshot snapshot = await query.get();
+
+  //   if (snapshot.docs.isNotEmpty) {
+  //     if (lastDocument == null) {
+  //       _latestFetchedMessageId = snapshot.docs.first.id;
+  //     }
+
+  //     lastDocument = snapshot.docs.last;
+  //     messages.addAll(snapshot.docs);
+  //   } else {
+  //     hasMore = false;
+  //   }
+
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   void _listenToNewMessages() {
     FirebaseFirestore.instance
@@ -257,6 +314,7 @@ class _ChatConversationState extends State<ChatConversation> {
             message: '🛍 ${selectedProduct?.name}',
             userCount: 0,
             ownerCount: 0,
+            type: widget.type,
           ));
     } catch (e) {
       print("Error updating last message: $e");
@@ -285,14 +343,25 @@ class _ChatConversationState extends State<ChatConversation> {
           onTap: () {},
           dense: true,
           contentPadding: const EdgeInsets.all(0),
-          leading: CustomImage(image: '', height: 32, width: 32, radius: 5.3),
+          leading: CustomImage(
+              image: widget.type == 'product'
+                  ? widget.product.image ?? ''
+                  : widget.tender?.image ?? '',
+              height: 32,
+              width: 32,
+              radius: 5.3),
           title: Text(
-            widget.productName,
+            widget.type == 'product'
+                ? widget.product.name ?? ''
+                : widget.tender?.title ?? '',
+            // widget.productName,
             // 'Садовая мебель Loft',
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           subtitle: Text(
-            '${widget.productPrice} сом/шт',
+            widget.type == 'product'
+                ? '${widget.productPrice} сом/шт'
+                : "${widget.tender?.budgetFrom} - ${widget.tender?.budgetTo} сом",
             style: body14.copyWith(color: ColorResources.blue),
           ),
         ),
@@ -329,60 +398,70 @@ class _ChatConversationState extends State<ChatConversation> {
                             'select_products'.tr,
                             style: textSm.copyWith(color: ColorResources.blue),
                           ),
-                          onTap: () {
-                            // clearSelectedProduct();
-                            UserData? myUser =
-                                context.read<UserBloc>().state.userInfo?.data;
-                            Get.to(
-                              () => ProductScreen(
-                                isSelectProduct: true,
-                                onSendProduct: () async {
-                                  ProductListItem? selectedProduct = context
-                                      .read<ProductBloc>()
+                          onTap: widget.type == 'tender'
+                              ? () {
+                                  showShortToast('working......');
+                                }
+                              : () {
+                                  // clearSelectedProduct();
+                                  UserData? myUser = context
+                                      .read<UserBloc>()
                                       .state
-                                      .selectedProduct;
-                                  Map<String, dynamic> sendMessage = {
-                                    "read": false,
-                                    "sender_type":
-                                        widget.isSeller ? 'seller' : 'user',
+                                      .userInfo
+                                      ?.data;
+                                  Get.to(
+                                    () => ProductScreen(
+                                      isSelectProduct: true,
+                                      onSendProduct: () async {
+                                        ProductListItem? selectedProduct =
+                                            context
+                                                .read<ProductBloc>()
+                                                .state
+                                                .selectedProduct;
+                                        Map<String, dynamic> sendMessage = {
+                                          "read": false,
+                                          "sender_type": widget.isSeller
+                                              ? 'seller'
+                                              : 'user',
 
-                                    "text": '',
-                                    "link": '',
-                                    "isProduct": true,
-                                    "type": 'product',
-                                    "product": selectedProduct?.toJson(),
-                                    'timestamp': FieldValue.serverTimestamp(),
-                                    'last_fcm': '',
-                                    // userModel.fcmToken ?? '',
-                                    "sender": {
-                                      "id": widget.senderId,
-                                      "name": myUser?.name ?? '',
-                                      "image": myUser?.image ?? '',
-                                      "phone": myUser?.phone ?? '',
-                                      "email": myUser?.email ?? '',
-                                    },
-                                    "receiver": {
-                                      "id": widget.receiverId,
-                                    },
-                                  };
-                                  await FirebaseFirestore.instance
-                                      .collection('chat')
-                                      .doc(widget.firebaseChatId)
-                                      .collection('messages')
-                                      .add(sendMessage);
-                                  await FirebaseFirestore.instance
-                                      .collection('chat')
-                                      .doc(widget.firebaseChatId)
-                                      .set(sendMessage);
-                                  updateLastMessage(selectedProduct);
-                                  clearSelectedProduct();
+                                          "text": '',
+                                          "link": '',
+                                          "isProduct": true,
+                                          "type": 'product',
+                                          "product": selectedProduct?.toJson(),
+                                          'timestamp':
+                                              FieldValue.serverTimestamp(),
+                                          'last_fcm': '',
+                                          // userModel.fcmToken ?? '',
+                                          "sender": {
+                                            "id": widget.senderId,
+                                            "name": myUser?.name ?? '',
+                                            "image": myUser?.image ?? '',
+                                            "phone": myUser?.phone ?? '',
+                                            "email": myUser?.email ?? '',
+                                          },
+                                          "receiver": {
+                                            "id": widget.receiverId,
+                                          },
+                                        };
+                                        await FirebaseFirestore.instance
+                                            .collection('chat')
+                                            .doc(widget.firebaseChatId)
+                                            .collection('messages')
+                                            .add(sendMessage);
+                                        await FirebaseFirestore.instance
+                                            .collection('chat')
+                                            .doc(widget.firebaseChatId)
+                                            .set(sendMessage);
+                                        updateLastMessage(selectedProduct);
+                                        clearSelectedProduct();
 
-                                  Get.back();
-                                  // send isProduct message...
+                                        Get.back();
+                                        // send isProduct message...
+                                      },
+                                    ),
+                                  );
                                 },
-                              ),
-                            );
-                          },
                         ),
                       ),
                       if (widget.isSeller) ...[
@@ -392,9 +471,15 @@ class _ChatConversationState extends State<ChatConversation> {
                         Expanded(
                           child: InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () {
-                              Get.to(() => const NewContractScreen());
-                            },
+                            onTap: widget.type == 'tender'
+                                ? () {
+                                    showShortToast('working......');
+                                  }
+                                : () {
+                                    Get.to(() => NewContractScreen(
+                                          product: widget.product,
+                                        ));
+                                  },
                             child: Container(
                               height: 36,
                               decoration: BoxDecoration(
@@ -437,66 +522,75 @@ class _ChatConversationState extends State<ChatConversation> {
       body: Column(
         children: [
           Expanded(
-            child: messages.isEmpty
-                ? Center(child: CircularProgressIndicator())
-                : Stack(
-                    children: [
-                      ListView.builder(
-                        controller: _scrollController,
-                        reverse: true,
-                        itemCount: messages.length + (isLoading ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index == messages.length) {
-                            // Show loading indicator at the bottom
-                            return const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          }
+            child: messages.isEmpty && !isLoading
+                ? Center(
+                    child: Text(
+                      'no_messages'.tr,
+                      style: body14.copyWith(color: ColorResources.gray),
+                    ),
+                  )
+                : messages.isEmpty && isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Stack(
+                        children: [
+                          ListView.builder(
+                            controller: _scrollController,
+                            reverse: true,
+                            itemCount: messages.length + (isLoading ? 1 : 0),
+                            itemBuilder: (context, index) {
+                              if (index == messages.length) {
+                                // Show loading indicator at the bottom
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
+                                );
+                              }
 
-                          var messageData = messages[index];
-                          bool isMe = messageData['sender']['id'].toString() ==
-                              widget.senderId;
+                              var messageData = messages[index];
+                              bool isMe =
+                                  messageData['sender']['id'].toString() ==
+                                      widget.senderId;
 
-                          if (!isMe && !messageData['read']) {
-                            _markMessageAsSeen(messageData.id);
-                          }
+                              if (!isMe && !messageData['read']) {
+                                _markMessageAsSeen(messageData.id);
+                              }
 
-                          return ChatMessageWidget1(
-                            data: messageData as QueryDocumentSnapshot,
-                            isMe: isMe,
-                          );
-                        },
-                      ),
-                      if (showScrollToBottomButton)
-                        Positioned(
-                          bottom: 20,
-                          right: 20,
-                          child: GestureDetector(
-                            onTap: () {
-                              _scrollController.animateTo(
-                                _scrollController.position
-                                    .minScrollExtent, // This is the bottom in reverse mode
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.easeOut,
+                              return ChatMessageWidget1(
+                                data: messageData as QueryDocumentSnapshot,
+                                isMe: isMe,
                               );
                             },
-                            child: Container(
-                              height: 32,
-                              width: 32,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: ColorResources.primary,
-                              ),
-                              child: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.white,
+                          ),
+                          if (showScrollToBottomButton)
+                            Positioned(
+                              bottom: 20,
+                              right: 20,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _scrollController.animateTo(
+                                    _scrollController.position
+                                        .minScrollExtent, // This is the bottom in reverse mode
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeOut,
+                                  );
+                                },
+                                child: Container(
+                                  height: 32,
+                                  width: 32,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: ColorResources.primary,
+                                  ),
+                                  child: const Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                    ],
-                  ),
+                        ],
+                      ),
           ),
           NewMessageWidget(
             firebaseChatId: widget.firebaseChatId,
@@ -508,6 +602,7 @@ class _ChatConversationState extends State<ChatConversation> {
             userUnread: widget.userUnread,
             ownerUnread: widget.ownerUnread,
             productUserId: widget.productUserId,
+            type: widget.type,
           ),
         ],
       ),

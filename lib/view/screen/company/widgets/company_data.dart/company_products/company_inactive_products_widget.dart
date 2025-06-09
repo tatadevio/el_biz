@@ -23,7 +23,7 @@ class CompanyInActiveProductsWidget extends StatelessWidget {
         print('this is scroll view page ended....');
         int pageSize = accountController.state.inActiveProductPageSize;
         if (accountController.state.inActiveProductCurrentPage < pageSize) {
-          int nextPage = accountController.state.inActiveProductPageSize;
+          int nextPage = accountController.state.inActiveProductCurrentPage;
           String companyId = context
                   .read<CompanyDetailBloc>()
                   .state

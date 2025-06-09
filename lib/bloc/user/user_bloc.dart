@@ -61,7 +61,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             : UserInfoModel(data: userData);
 
         emit(state.copyWith(userInfo: updatedUserInfo));
-        // showShortToast(response.body['message']);
+        showShortToast('profile_updated'.tr);
 
 // start update saved user data
         final accountData = userRepo.getSelectedAccount();
@@ -91,9 +91,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
 // end update saved user data
       } else {
+        showShortToast(response.body['message']);
         emit(UpdateUserDataError(error: 'error'.tr));
       }
     } catch (e) {
+      showShortToast(e.toString());
       emit(UpdateUserDataError(error: e.toString()));
     }
 

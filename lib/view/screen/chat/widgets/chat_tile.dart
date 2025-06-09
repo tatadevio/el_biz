@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/chat/chat_list_model.dart';
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -30,24 +31,27 @@ class ChatTile extends StatelessWidget {
       onTap: () {
         if (isMessage) {
           // go to the message conversation screen
+          String myUid =
+              context.read<UserBloc>().state.userInfo!.data!.id.toString();
+          print(
+              'this is product user id: ${chatData?.product?.user?.id.toString()}');
+          print('this is my uid: $myUid');
+          // print('this is chat data: ${chatData?.product?.user?.id.toString()}');
           Get.to(() => ChatConversation(
-                isSeller: unSeen,
+                isSeller: chatData?.product?.user?.id.toString() == myUid,
+                product: chatData?.product ?? ProductListItem(),
                 isFirstMessage: false,
                 firebaseChatId: chatData?.firebaseChatId ?? '',
                 chatId: chatData?.chatId.toString() ?? '',
-                senderId: context
-                    .read<UserBloc>()
-                    .state
-                    .userInfo!
-                    .data!
-                    .id
-                    .toString(),
+                senderId: myUid,
                 productUserId: chatData?.product?.user?.id ?? 0,
                 productId: chatData?.product?.id.toString() ?? '',
                 userUnread: chatData?.userUnreadCount ?? 0,
                 ownerUnread: chatData?.productOwnerUnreadCount ?? 0,
                 productName: chatData?.product?.name ?? '',
                 productPrice: "${chatData?.product?.price}",
+                type: chatData?.type ?? '',
+                tender: chatData?.tender,
               ));
         } else {
           //go to the agrement/contracts screen.
@@ -55,7 +59,9 @@ class ChatTile extends StatelessWidget {
         }
       },
       leading: CustomImage(
-          image: chatData?.product?.image ?? '',
+          image: chatData?.type == 'product'
+              ? chatData?.product?.image ?? ''
+              : chatData?.tender?.image ?? '',
           height: 48,
           width: 48,
           radius: 48),
@@ -64,7 +70,9 @@ class ChatTile extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              chatData?.product?.name ?? 'Садовая мебель Loft',
+              chatData?.type == 'product'
+                  ? chatData?.product?.name ?? 'Садовая мебель Loft'
+                  : chatData?.tender?.title ?? 'Садовая мебель Loft',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: h16.copyWith(color: ColorResources.darkGray),

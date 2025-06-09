@@ -1,6 +1,7 @@
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -554,7 +555,7 @@ class ProductDetailScreen extends StatelessWidget {
                               : Text(
                                   state.productDetailModel!.data!.status ==
                                           'published'
-                                      ? "not_active".tr
+                                      ? "inactive".tr
                                       : 'active'.tr,
                                   style: button16.copyWith(
                                       color: ColorResources.red),
@@ -574,32 +575,44 @@ class ProductDetailScreen extends StatelessWidget {
                   color: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-                  child: CustomButton(
-                      width: width,
-                      height: 56,
-                      onTap: () {
-                        Get.to(() => ChatConversation(
-                              isSeller: false,
-                              receiverId: getReceiverId(userState, state),
-                              // chatId: getChatId(userState, state),
-                              senderId: getReceiverId(userState, state),
-                              isFirstMessage: true,
-                              productId: state.productDetailModel?.data?.id
-                                      .toString() ??
-                                  '',
-                              firebaseChatId:
-                                  "product_${state.productDetailModel?.data?.id}_user_${state.productDetailModel?.data?.user?.id}",
-                              productName:
-                                  state.productDetailModel?.data?.name ?? '',
-                              productPrice: state
-                                      .productDetailModel?.data?.price
-                                      .toString() ??
-                                  '0',
-                              productUserId:
-                                  state.productDetailModel?.data?.user?.id ?? 0,
-                            ));
-                      },
-                      title: 'Чат с продавцом'),
+                  child: state.productDetailModel?.data?.user?.id == null
+                      ? SizedBox.shrink()
+                      : CustomButton(
+                          width: width,
+                          height: 56,
+                          onTap: () {
+                            String productUserId = state
+                                .productDetailModel!.data!.user!.id
+                                .toString();
+                            String myUserId = userState
+                                .selectedAccountModel!.userId
+                                .toString();
+                            print('this is my user id = $myUserId ');
+                            Get.to(() => ChatConversation(
+                                  isSeller: false,
+                                  product: ProductListItem(),
+                                  receiverId: productUserId,
+                                  // getReceiverId(userState, state),
+                                  senderId: myUserId,
+                                  isFirstMessage: true,
+                                  productId: state.productDetailModel?.data?.id
+                                          .toString() ??
+                                      '',
+                                  firebaseChatId:
+                                      "product_${state.productDetailModel?.data?.id}_user_$myUserId",
+                                  productName:
+                                      state.productDetailModel?.data?.name ??
+                                          '',
+                                  productPrice: state
+                                          .productDetailModel?.data?.price
+                                          .toString() ??
+                                      '0',
+                                  productUserId: state
+                                          .productDetailModel?.data?.user?.id ??
+                                      0,
+                                ));
+                          },
+                          title: 'Чат с продавцом'),
                 );
 // chat option
               } else {
@@ -612,14 +625,14 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-  String getReceiverId(UserState userState, ProductDetailState state) {
-    if (userState.selectedAccountModel!.isUser == true) {
-      return state.productDetailModel?.data?.user?.id.toString() ?? '';
-    } else if (userState.selectedAccountModel!.isUser == false) {
-      return state.productDetailModel?.data?.company?.id.toString() ?? '';
-    }
-    return '';
-  }
+  // String getReceiverId(UserState userState, ProductDetailState state) {
+  //   if (userState.selectedAccountModel!.isUser == true) {
+  //     return state.productDetailModel?.data?.user?.id.toString() ?? '';
+  //   } else if (userState.selectedAccountModel!.isUser == false) {
+  //     return state.productDetailModel?.data?.company?.id.toString() ?? '';
+  //   }
+  //   return '';
+  // }
 
   String getChatId(UserState userState, ProductDetailState state) {
     if (userState.selectedAccountModel!.isUser == true) {

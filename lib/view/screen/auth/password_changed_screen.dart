@@ -1,12 +1,12 @@
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
-import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
+import 'login.dart';
 
 class PasswordChangedScreen extends StatelessWidget {
   const PasswordChangedScreen({super.key});
@@ -40,7 +40,8 @@ class PasswordChangedScreen extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    'your_password_has_been_successfully_updated_remember_or_save_the_new_password'.tr,
+                    'your_password_has_been_successfully_updated_remember_or_save_the_new_password'
+                        .tr,
                     style: body14,
                     textAlign: TextAlign.center,
                   ),
@@ -49,14 +50,21 @@ class PasswordChangedScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.offAll(() => const DashboardScreen());
+                      Get.offAll(() => const LoginScreen());
                     },
                     child: Container(
                       width: Get.width * 0.9,
                       height: 48,
-                      decoration: BoxDecoration(color: ColorResources.blue, borderRadius: BorderRadius.circular(12.0), boxShadow: const [
-                        BoxShadow(color: Color.fromRGBO(16, 24, 40, 0.05), blurRadius: 2, spreadRadius: 0, offset: Offset(0, 1)),
-                      ]),
+                      decoration: BoxDecoration(
+                          color: ColorResources.blue,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color.fromRGBO(16, 24, 40, 0.05),
+                                blurRadius: 2,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1)),
+                          ]),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Row(

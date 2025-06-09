@@ -1,9 +1,9 @@
-
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/data/model/base/product_filter_values_model.dart';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/category/select_category_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +19,8 @@ import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_button.dart';
 
 class ProductsFilterScreen extends StatefulWidget {
-  const ProductsFilterScreen({super.key});
+  final bool isTenderFilter;
+  const ProductsFilterScreen({super.key, this.isTenderFilter = false});
 
   @override
   State<ProductsFilterScreen> createState() => _ProductsFilterScreenState();
@@ -981,41 +982,45 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
         child: CustomButton(
             width: Get.width,
             height: 44,
-            onTap: () {
-              final productState = context.read<ProductBloc>().state;
-              // selectedCategory
-              // print(
-              //     'this is the filter data ${selectedCategoryId?.name} and keyword = ${context.read<ProductBloc>().state.selectedKeywords} rating = $selectedRating');
-              // print(
-              //     'selected material = ${productState.selectedMaterial} and color =${selectedColor} , Dimensions = ${selectedDimensions} , price = ${selectedPriceOption} ');
-              // print(
-              //     'sected price range = ${_priceRange.start}, and ${_priceRange.end}');
+            onTap: widget.isTenderFilter
+                ? () {
+                    showShortToast('Не завершено');
+                  }
+                : () {
+                    final productState = context.read<ProductBloc>().state;
+                    // selectedCategory
+                    // print(
+                    //     'this is the filter data ${selectedCategoryId?.name} and keyword = ${context.read<ProductBloc>().state.selectedKeywords} rating = $selectedRating');
+                    // print(
+                    //     'selected material = ${productState.selectedMaterial} and color =${selectedColor} , Dimensions = ${selectedDimensions} , price = ${selectedPriceOption} ');
+                    // print(
+                    //     'sected price range = ${_priceRange.start}, and ${_priceRange.end}');
 
-              String keyword =
-                  context.read<ProductBloc>().state.selectedKeywords.join(', ');
-              String material = productState.selectedMaterial.join(', ');
-              String dimensions = selectedDimensions.join(', ');
+                    String keyword = context
+                        .read<ProductBloc>()
+                        .state
+                        .selectedKeywords
+                        .join(', ');
+                    String material = productState.selectedMaterial.join(', ');
+                    String dimensions = selectedDimensions.join(', ');
 
-              // print(
-              //     'categoryid = ${selectedCategoryId?.id ?? ''} and keywords = $keyword and material = $material and dimentions = $dimensions');
+                    ProductFilterValuesModel productFilterValuesModel =
+                        ProductFilterValuesModel(
+                      categoryId: "${selectedCategoryId?.id ?? ''}",
+                      keywords: keyword,
+                      highRating: selectedRating.value,
+                      materials: material,
+                      dimensions: dimensions,
+                      price: selectedPriceOption,
+                      priceMin: _priceRange.start.toStringAsFixed(2),
+                      priceMax: _priceRange.end.toStringAsFixed(2),
+                    );
 
-              ProductFilterValuesModel productFilterValuesModel =
-                  ProductFilterValuesModel(
-                categoryId: "${selectedCategoryId?.id ?? ''}",
-                keywords: keyword,
-                highRating: selectedRating.value,
-                materials: material,
-                dimensions: dimensions,
-                price: selectedPriceOption,
-                priceMin: _priceRange.start.toStringAsFixed(2),
-                priceMax: _priceRange.end.toStringAsFixed(2),
-              );
-
-              context.read<PublicProductBloc>().add(FilterPublicProduct(
-                  productFilterValuesModel: productFilterValuesModel,
-                  currentPage: 1));
-              Get.back();
-            },
+                    context.read<PublicProductBloc>().add(FilterPublicProduct(
+                        productFilterValuesModel: productFilterValuesModel,
+                        currentPage: 1));
+                    Get.back();
+                  },
             title: 'filter'.tr),
       ),
     );

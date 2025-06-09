@@ -1,8 +1,8 @@
 
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
-import 'package:el_biz/view/screen/chat/widgets/messages_list/get_all_chats_widget.dart';
-import 'package:el_biz/view/screen/chat/widgets/messages_list/get_unseen_chats_widget.dart';
+import 'package:el_biz/view/screen/chat/widgets/messages_list/get_products_chats_widget.dart';
+import 'package:el_biz/view/screen/chat/widgets/messages_list/get_tenders_chats_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,12 +22,12 @@ class ChatListWidget extends StatelessWidget {
 
       if (chatState.isShowAllMessage) {
         //showing all messages
-        return GetAllChatsWidget(
+        return GetProductsChatsWidget(
           currentUserId: userId,
         );
       } else {
         //showing unread messages
-        return GetUnseenChatsWidget(currentUserId: userId);
+        return GetTendersChatsWidget(currentUserId: userId);
       }
     });
   }

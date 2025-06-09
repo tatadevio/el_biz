@@ -27,6 +27,7 @@ class NewMessageWidget extends StatefulWidget {
   final int userUnread;
   final int ownerUnread;
   final int productUserId;
+  final String type;
   const NewMessageWidget({
     super.key,
     required this.chatId,
@@ -38,6 +39,7 @@ class NewMessageWidget extends StatefulWidget {
     required this.userUnread,
     required this.ownerUnread,
     required this.productUserId,
+    required this.type,
   });
 
   @override
@@ -304,7 +306,8 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         chatId: widget.chatId,
         message: lastMessage,
         userCount: widget.productUserId != myUserId ? 0 : widget.userUnread,
-        ownerCount: widget.productUserId == myUserId ? 0 : widget.ownerUnread));
+        ownerCount: widget.productUserId == myUserId ? 0 : widget.ownerUnread,
+        type: widget.type));
   }
 
   final ImagePicker _picker = ImagePicker();

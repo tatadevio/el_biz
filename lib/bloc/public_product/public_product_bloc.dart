@@ -77,7 +77,9 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
       return product;
     }).toList();
 
-    emit(state.copyWith(publicProducts: updatedProducts));
+    emit(state.copyWith(
+      publicProducts: updatedProducts,
+    ));
   }
 
   Future<void> _onToggleFavoriteProduct(ToggleFavoritePublicProduct event,
@@ -90,8 +92,20 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
       }
       return product;
     }).toList();
-
     emit(state.copyWith(publicProducts: updatedProducts));
+
+    if (state.isFilterEnable) {
+      final updatedFilterProducts = state.publicFilterProducts.map((product) {
+        if (product.id == event.productId) {
+          return product.copyWith(
+            isFavorite: !(product.isFavorite ?? false),
+          );
+        }
+        return product;
+      }).toList();
+      emit(state.copyWith(publicFilterProducts: updatedFilterProducts));
+    }
+
     try {
       final response =
           await publicProductRepo.toggleFavorite(event.productId.toString());
@@ -109,7 +123,21 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
           }
           return product;
         }).toList();
+
         emit(state.copyWith(publicProducts: updatedProducts));
+        if (state.isFilterEnable) {
+          final updatedFilterProducts =
+              state.publicFilterProducts.map((product) {
+            if (product.id == event.productId) {
+              return product.copyWith(
+                isFavorite: !(product.isFavorite ?? false),
+              );
+            }
+            return product;
+          }).toList();
+
+          emit(state.copyWith(publicFilterProducts: updatedFilterProducts));
+        }
       }
     } catch (e) {
       final updatedProducts = state.publicProducts.map((product) {
@@ -121,6 +149,18 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
         return product;
       }).toList();
       emit(state.copyWith(publicProducts: updatedProducts));
+      if (state.isFilterEnable) {
+        final updatedFilterProducts = state.publicFilterProducts.map((product) {
+          if (product.id == event.productId) {
+            return product.copyWith(
+              isFavorite: !(product.isFavorite ?? false),
+            );
+          }
+          return product;
+        }).toList();
+
+        emit(state.copyWith(publicFilterProducts: updatedFilterProducts));
+      }
     }
   }
 

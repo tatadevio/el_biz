@@ -28,11 +28,15 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   @override
   void initState() {
     super.initState();
-    initializeUserData();
+    Future.delayed(Duration.zero, () {
+      initializeUserData();
+    });
   }
 
   initializeUserData() {
     final userData = context.read<UserBloc>().state.userInfo?.data;
+    print('this is phone number = ${userData?.phone}');
+    print('this is company number  = ${context.read<UserBloc>().state.selectedAccountModel?.userPhone}');
     nameController.text = userData?.firstName ?? '';
     familyNameController.text = userData?.lastName ?? '';
     emailController.text = userData?.email ?? '';

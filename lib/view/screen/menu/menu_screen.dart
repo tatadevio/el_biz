@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import '../../../bloc/company/company_bloc.dart';
 import '../../../bloc/tin_number/tin_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../utils/Images.dart';
@@ -18,6 +19,7 @@ import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
+import '../company/add_company_screen.dart';
 import '../company/widgets/show_company_detail_box.dart';
 import '../company/widgets/show_llc_issue_box.dart';
 
@@ -71,19 +73,23 @@ class MenuScreen extends StatelessWidget {
         return BlocListener<TinBloc, TinState>(
           listener: (context, state) {
             if (state is TinSuccess) {
-              Get.dialog(
-                CustomDialog(
-                  widget: AlertDialog(
-                    backgroundColor: Colors.white,
-                    titlePadding: EdgeInsets.all(0),
-                    contentPadding: EdgeInsets.all(5),
-                    content: Padding(
-                      padding: EdgeInsets.all(0),
-                      child: ShowCompanyDetailBox(tinNumber: state.tinNumber),
-                    ),
-                  ),
-                ),
-              );
+              context.read<CompanyBloc>().state.addCompanyModel.tinNumber =
+                  state.tinNumber;
+              Get.back();
+              Get.to(() => const AddCompanyScreen());
+              // Get.dialog(
+              //   CustomDialog(
+              //     widget: AlertDialog(
+              //       backgroundColor: Colors.white,
+              //       titlePadding: EdgeInsets.all(0),
+              //       contentPadding: EdgeInsets.all(5),
+              //       content: Padding(
+              //         padding: EdgeInsets.all(0),
+              //         child: ShowCompanyDetailBox(tinNumber: state.tinNumber),
+              //       ),
+              //     ),
+              //   ),
+              // );
             }
             if (state is TinError) {
               Get.dialog(

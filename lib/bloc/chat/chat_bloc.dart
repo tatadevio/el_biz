@@ -35,7 +35,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessage>(
       (event, emit) async {
         try {
-          final response = await chatRepo.sendMessage(event.productId);
+          final response = await chatRepo.sendMessage(
+              event.productId, event.tenderId, event.type);
 
           if (response.statusCode == 200 &&
               response.body['data']['chat_id'] != null) {
@@ -70,33 +71,34 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     //     }
     //   },
     // );
-    on<GetChatList>(_onGetChatList);
-    on<DeleteChat>(_onDeleteChat);
+    on<GetChatProductList>(_onGetChatProductList);
+    on<GetChatTenderList>(_onGetChatTenderList);
+    // on<DeleteChat>(_onDeleteChat);
     on<SendChatMedia>(_onSendChatMedia);
     on<UpdateLastMessage>(_onUpdateLastMessage);
     on<UpdateUnReadCount>(_onUpdateUnReadCount);
   }
 
-  Future<void> _onGetChatList(
-      GetChatList event, Emitter<ChatState> emit) async {
+  Future<void> _onGetChatProductList(
+      GetChatProductList event, Emitter<ChatState> emit) async {
     if (event.currentPage == 1) {
       emit(state.copyWith(isLoading: true));
     } else {
       emit(state.copyWith(isLoadingMore: true));
     }
     try {
-      final res = await chatRepo.getChatList(event.currentPage);
+      final res = await chatRepo.getChatList('product', event.currentPage);
 
       ChatListModel chatData = ChatListModel.fromJson(res.body);
       if (event.currentPage == 1) {
         final newList = chatData.data?.items ?? [];
-        emit(state.copyWith(chatList: newList));
+        emit(state.copyWith(chatProductList: newList));
       } else {
         List<ChatItem> newItems = [
-          ...state.chatList,
+          ...state.chatProductList,
           ...chatData.data?.items ?? [],
         ];
-        emit(state.copyWith(chatList: newItems));
+        emit(state.copyWith(chatProductList: newItems));
       }
       int currentPage = chatData.data?.currentPage ?? 1;
       int pageSize = chatData.data?.totalPages ?? 1;
@@ -107,23 +109,54 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(state.copyWith(isLoading: false, isLoadingMore: false));
   }
 
-  Future<void> _onDeleteChat(DeleteChat event, Emitter<ChatState> emit) async {
-    emit(state.copyWith(isLoading: true));
+  Future<void> _onGetChatTenderList(
+      GetChatTenderList event, Emitter<ChatState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(isLoadingTenderMore: true));
+    }
     try {
-      final response = await chatRepo.deleteChat(event.chatId);
-      if (response.statusCode == 200) {
-        List<ChatItem> myChatList = state.chatList;
-        int index = -1;
-        index = myChatList
-            .indexWhere((chat) => chat.chatId.toString() == event.chatId);
-        if (index != -1) {
-          myChatList.removeAt(index);
-          emit(state.copyWith(chatList: myChatList));
-        }
+      final res = await chatRepo.getChatList('tender', event.currentPage);
+
+      ChatListModel chatData = ChatListModel.fromJson(res.body);
+      if (event.currentPage == 1) {
+        final newList = chatData.data?.items ?? [];
+        emit(state.copyWith(chatTenderList: newList));
+      } else {
+        List<ChatItem> newItems = [
+          ...state.chatTenderList,
+          ...chatData.data?.items ?? [],
+        ];
+        emit(state.copyWith(chatTenderList: newItems));
       }
-    } catch (e) {}
-    emit(state.copyWith(isLoading: false));
+      int currentPage = chatData.data?.currentPage ?? 1;
+      int pageSize = chatData.data?.totalPages ?? 1;
+      emit(state.copyWith(
+          pageTenderSize: pageSize, currentTenderPage: currentPage));
+    } catch (e) {
+      print(e.toString());
+    }
+    emit(state.copyWith(isLoading: false, isLoadingTenderMore: false));
   }
+
+  // Future<void> _onDeleteChat(DeleteChat event, Emitter<ChatState> emit) async {
+  //   emit(state.copyWith(isLoading: true));
+  //   try {
+  //     final response = await chatRepo.deleteChat(event.chatId);
+  //     if (response.statusCode == 200) {
+  //       List<ChatItem> myChatList = state.chatList;
+  //       int index = -1;
+  //       index = myChatList
+  //           .indexWhere((chat) => chat.chatId.toString() == event.chatId);
+  //       if (index != -1) {
+  //         myChatList.removeAt(index);
+  //         emit(state.copyWith(chatList: myChatList));
+  //       }
+  //     }
+  //   } catch (e) {}
+  //   emit(state.copyWith(isLoading: false));
+  // }
 
   Future<void> _onSendChatMedia(
       SendChatMedia event, Emitter<ChatState> emit) async {
@@ -148,29 +181,56 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _onUpdateLastMessage(
       UpdateLastMessage event, Emitter<ChatState> emit) async {
-    int index = -1;
-    index = state.chatList
-        .indexWhere((chat) => chat.chatId.toString() == event.chatId);
+    if (event.type == 'tender') {
+      int index = -1;
+      index = state.chatTenderList
+          .indexWhere((chat) => chat.chatId.toString() == event.chatId);
 
-    if (index != -1) {
-      ChatItem chatItem = state.chatList[index];
+      if (index != -1) {
+        ChatItem chatItem = state.chatTenderList[index];
 
-      ChatItem updatedChatItem = chatItem.copyWith(
-        lastMessage: event.message,
-        lastMessageDate: DateTime.now().add(Duration(days: 1)),
-      );
+        ChatItem updatedChatItem = chatItem.copyWith(
+          lastMessage: event.message,
+          lastMessageDate: DateTime.now().add(Duration(days: 1)),
+        );
 
-      List<ChatItem> updatedChatList = List.from(state.chatList);
-      updatedChatList[index] = updatedChatItem;
+        List<ChatItem> updatedChatList = List.from(state.chatTenderList);
+        updatedChatList[index] = updatedChatItem;
 
-      emit(state.copyWith(chatList: updatedChatList));
-    }
-    try {
-      final response = await chatRepo.updateLastMessage(
-          event.chatId, event.message, event.userCount, event.ownerCount);
-      print(response.body);
-    } catch (e) {
-      print(e.toString());
+        emit(state.copyWith(chatTenderList: updatedChatList));
+      }
+      try {
+        final response = await chatRepo.updateLastMessage(
+            event.chatId, event.message, event.userCount, event.ownerCount);
+        print(response.body);
+      } catch (e) {
+        print(e.toString());
+      }
+    } else {
+      int index = -1;
+      index = state.chatProductList
+          .indexWhere((chat) => chat.chatId.toString() == event.chatId);
+
+      if (index != -1) {
+        ChatItem chatItem = state.chatProductList[index];
+
+        ChatItem updatedChatItem = chatItem.copyWith(
+          lastMessage: event.message,
+          lastMessageDate: DateTime.now().add(Duration(days: 1)),
+        );
+
+        List<ChatItem> updatedChatList = List.from(state.chatProductList);
+        updatedChatList[index] = updatedChatItem;
+
+        emit(state.copyWith(chatProductList: updatedChatList));
+      }
+      try {
+        final response = await chatRepo.updateLastMessage(
+            event.chatId, event.message, event.userCount, event.ownerCount);
+        print(response.body);
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 

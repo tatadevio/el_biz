@@ -9,10 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
+
+import '../../../../data/model/response/company/company_product_model.dart';
 
 class NewContractProductInfo extends StatefulWidget {
-  const NewContractProductInfo({super.key});
+  final ProductListItem product;
+  final int index;
+  final ValueChanged<int>? onRemove;
+
+  const NewContractProductInfo(
+      {super.key,
+      required this.product,
+      required this.index,
+      required this.onRemove});
 
   @override
   State<NewContractProductInfo> createState() => _NewContractProductInfoState();
@@ -22,6 +31,35 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController unitPriceController = TextEditingController();
   final TextEditingController totalCostController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize unit price from product
+    unitPriceController.text = widget.product.price?.toString() ?? '0';
+
+    // Listen to changes in quantity or unit price
+    quantityController.addListener(_calculateTotalCost);
+    unitPriceController.addListener(_calculateTotalCost);
+  }
+
+  void _calculateTotalCost() {
+    final quantity = int.tryParse(quantityController.text) ?? 0;
+    final unitPrice = double.tryParse(unitPriceController.text) ?? 0.0;
+
+    final total = quantity * unitPrice;
+    totalCostController.text = total.toStringAsFixed(2);
+  }
+
+  @override
+  void dispose() {
+    quantityController.dispose();
+    unitPriceController.dispose();
+    totalCostController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,19 +90,25 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
             child: Row(
               spacing: 10,
               children: [
-                CustomImage(image: '', height: 40, width: 40, radius: 8),
+                CustomImage(
+                    image: widget.product.image ?? '',
+                    height: 40,
+                    width: 40,
+                    radius: 8),
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Стул раскладной',
+                      widget.product.name ?? '',
+                      // 'Стул раскладной',
                       style: h16.copyWith(color: ColorResources.darkGray),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'Стулья из натурального дерева',
+                      widget.product.description ?? '',
+                      // 'Стулья из натурального дерева',
                       style: body14,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -154,96 +198,100 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
           const SizedBox(
             height: 5,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Get.dialog(
-                    CustomDialog(
-                      widget: AlertDialog(
-                        backgroundColor: Colors.white,
-                        content: Column(
-                          spacing: 20,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // SvgPicture.asset(
-                                //   // Images.svgBoxIcon1,
-                                //   Images.svgHelpCircle,
-                                //   color: ColorResources.red,
-                                // ),
-                                Container(
-                                  height: 48,
-                                  width: 48,
-                                  decoration: const BoxDecoration(
-                                      color: Color.fromRGBO(253, 162, 155, 0.5),
-                                      shape: BoxShape.circle),
-                                  alignment: Alignment.center,
-                                  child: SvgPicture.asset(
-                                    Images.svgHelpCircle,
-                                    color: ColorResources.red,
+          if (widget.index != 0)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.dialog(
+                      CustomDialog(
+                        widget: AlertDialog(
+                          backgroundColor: Colors.white,
+                          content: Column(
+                            spacing: 20,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // SvgPicture.asset(
+                                  //   // Images.svgBoxIcon1,
+                                  //   Images.svgHelpCircle,
+                                  //   color: ColorResources.red,
+                                  // ),
+                                  Container(
+                                    height: 48,
+                                    width: 48,
+                                    decoration: const BoxDecoration(
+                                        color:
+                                            Color.fromRGBO(253, 162, 155, 0.5),
+                                        shape: BoxShape.circle),
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      Images.svgHelpCircle,
+                                      color: ColorResources.red,
+                                    ),
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  icon: const Icon(Icons.close),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              'delete_a_product'.tr,
-                              style: h16.copyWith(
-                                  color: ColorResources.titleColor),
-                            ),
-                            Row(
-                              spacing: 10,
-                              children: [
-                                Expanded(
-                                  child: CustomButton(
-                                    width: Get.width,
-                                    height: 45,
-                                    onTap: () {
+                                  IconButton(
+                                    onPressed: () {
                                       Get.back();
                                     },
-                                    title: 'cancel'.tr,
-                                    color: ColorResources.lgColor,
-                                    textColor: ColorResources.gray,
+                                    icon: const Icon(Icons.close),
                                   ),
-                                ),
-                                Expanded(
-                                  child: CustomButton(
-                                    width: Get.width,
-                                    height: 45,
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    title: 'delete'.tr,
-                                    color: ColorResources.red,
-                                    textColor: ColorResources.white,
+                                ],
+                              ),
+                              Text(
+                                'delete_a_product'.tr,
+                                style: h16.copyWith(
+                                    color: ColorResources.titleColor),
+                              ),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Expanded(
+                                    child: CustomButton(
+                                      width: Get.width,
+                                      height: 45,
+                                      onTap: () {
+                                        Get.back();
+                                      },
+                                      title: 'cancel'.tr,
+                                      color: ColorResources.lgColor,
+                                      textColor: ColorResources.gray,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  Expanded(
+                                    child: CustomButton(
+                                      width: Get.width,
+                                      height: 45,
+                                      onTap: () {
+                                        Get.back();
+                                        widget.onRemove?.call(widget.index);
+                                      },
+                                      title: 'delete'.tr,
+                                      color: ColorResources.red,
+                                      textColor: ColorResources.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                child: Text(
-                  'remove_product'.tr,
-                  style: button16.copyWith(color: ColorResources.red),
+                    );
+                  },
+                  child: Text(
+                    'remove_product'.tr,
+                    style: button16.copyWith(color: ColorResources.red),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );

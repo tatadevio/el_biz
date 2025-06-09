@@ -12,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/auth/auth_bloc.dart';
+import '../../../base/custom_toast.dart';
+
 class AddCompanyBottomSheet extends StatefulWidget {
   const AddCompanyBottomSheet({super.key});
 
@@ -171,6 +174,11 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                             svgIcon: Images.svgPlus,
                             borderColor: ColorResources.green,
                             onTap: () {
+                              if (!context.read<AuthBloc>().state.isLoggedIn) {
+                                showShortToast('login_first_to_add_company'.tr);
+                                Get.back();
+                                return;
+                              }
                               Get.back();
                               Get.to(() => const MyCompaniesScreen());
                             },

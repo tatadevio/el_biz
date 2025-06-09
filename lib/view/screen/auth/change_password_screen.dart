@@ -89,7 +89,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       }
                       context.read<AuthBloc>().add(ChangePassword(
                           passwordController.text,
-                          confPasswordController.text));
+                          confPasswordController.text, context));
                       // Get.to(() => PasswordChangedScreen());
                     },
                     child: Container(

@@ -26,7 +26,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      context.read<ChatBloc>().add(GetChatList(currentPage: 1));
+      context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
+      context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
     });
   }
 

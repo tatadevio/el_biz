@@ -75,49 +75,51 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAddCompanyAppbar(title: ''),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                'about_company'.tr,
-                style: h16.copyWith(color: ColorResources.darkGray),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              // Text(
-              //   'describe_your_companys_activities_products_and_services'.tr,
-              //   style: body14.copyWith(color: ColorResources.gray),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              CustomTextField(
-                controller: aboutController,
-                hintColor: 'about_company'.tr,
-                inputType: TextInputType.none,
-                leading: '',
-                readOnly: false,
-                maxLines: 4,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                'optional_field'.tr,
-                style: body12.copyWith(color: ColorResources.gray),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'about_company'.tr,
+                  style: h16.copyWith(color: ColorResources.darkGray),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                // Text(
+                //   'describe_your_companys_activities_products_and_services'.tr,
+                //   style: body14.copyWith(color: ColorResources.gray),
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                CustomTextField(
+                  controller: aboutController,
+                  hintColor: 'about_company'.tr,
+                  inputType: TextInputType.text,
+                  leading: '',
+                  readOnly: false,
+                  maxLines: 4,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'optional_field'.tr,
+                  style: body12.copyWith(color: ColorResources.gray),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -291,7 +291,7 @@ class _NewTenderPreviewScreenState extends State<NewTenderPreviewScreen> {
                   //     .read<AddTenderBloc>()
                   //     .add(AddNewTender(addTenderModel: tenderdata));
                 } else {
-                  showCustomSnackBar('Tender Added');
+                  // showCustomSnackBar('Tender Added');
                   final tenderdata =
                       context.read<TendersBloc>().state.newTenderModel;
                   log('this is tender data = ${tenderdata.toJson()}');

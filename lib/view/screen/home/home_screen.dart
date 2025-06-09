@@ -1,4 +1,4 @@
-import 'package:el_biz/bloc/chat/chat_bloc.dart';
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
@@ -12,6 +12,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
 import 'package:el_biz/view/screen/home/widgets/new_companies_widget.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
@@ -29,9 +30,10 @@ import '../../../bloc/company/company_bloc.dart';
 import '../../../bloc/favorite/favorite_bloc.dart' as favorite;
 import '../../../bloc/tin_number/tin_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
+import '../company/add_company_screen.dart';
 import '../company/widgets/fill_company_data_box.dart';
-import '../company/widgets/show_company_detail_box.dart';
 import '../company/widgets/show_llc_issue_box.dart';
+import '../menu/widgets/add_company_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -48,8 +50,9 @@ class HomeScreen extends StatelessWidget {
     context.read<MaterialBloc>().add(GetMaterials(currentPage: 1));
     context.read<NotificationBloc>().add(GetNotification(1));
     context.read<UserBloc>().add(GetSelectedAccount(context: context));
-    context.read<ChatBloc>().add(GetChatList(currentPage: 1));
     context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
+    context.read<AuthBloc>().add(CheckLoginStatus());
+    // context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
   }
 
   loadCompanyData(BuildContext context) {
@@ -96,19 +99,23 @@ class HomeScreen extends StatelessWidget {
       body: BlocListener<TinBloc, TinState>(
         listener: (context, state) {
           if (state is TinSuccess) {
-            Get.dialog(
-              CustomDialog(
-                widget: AlertDialog(
-                  backgroundColor: Colors.white,
-                  titlePadding: EdgeInsets.all(0),
-                  contentPadding: EdgeInsets.all(5),
-                  content: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: ShowCompanyDetailBox(tinNumber: state.tinNumber),
-                  ),
-                ),
-              ),
-            );
+            context.read<CompanyBloc>().state.addCompanyModel.tinNumber =
+                state.tinNumber;
+            Get.back();
+            Get.to(() => const AddCompanyScreen());
+            // Get.dialog(
+            //   CustomDialog(
+            //     widget: AlertDialog(
+            //       backgroundColor: Colors.white,
+            //       titlePadding: EdgeInsets.all(0),
+            //       contentPadding: EdgeInsets.all(5),
+            //       content: Padding(
+            //         padding: EdgeInsets.all(0),
+            //         child: ShowCompanyDetailBox(tinNumber: state.tinNumber),
+            //       ),
+            //     ),
+            //   ),
+            // );
           }
           if (state is TinError) {
             Get.dialog(
@@ -211,6 +218,24 @@ class HomeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: height * 0.04,
+                      ),
+                      homeOptions(
+                          title: 'my_companies'.tr,
+                          titleImage: Images.svgBriefcase,
+                          detail:
+                              'switch_and_manage_between_your_company_accounts'
+                                  .tr,
+                          backgroundColor: ColorResources.myCompanies,
+                          onTap: () {
+                            Get.bottomSheet(const AddCompanyBottomSheet(),
+                                backgroundColor: Colors.white,
+                                isScrollControlled: true);
+                            // Get.to(() => PublicCompaniesScreen()
+                            //     // const MyCompaniesScreen(),
+                            //     );
+                          }),
+                      SizedBox(
+                        height: height * 0.025,
                       ),
                       homeOptions(
                           title: 'companies'.tr,
@@ -322,6 +347,14 @@ class HomeScreen extends StatelessWidget {
                               width: width,
                               height: 44,
                               onTap: () {
+                                if (!context
+                                    .read<AuthBloc>()
+                                    .state
+                                    .isLoggedIn) {
+                                  showShortToast(
+                                      'login_first_to_add_company'.tr);
+                                  return;
+                                }
                                 Get.dialog(
                                   const CustomDialog(
                                     widget: AlertDialog(
