@@ -38,12 +38,15 @@ class ChatTile extends StatelessWidget {
           print('this is my uid: $myUid');
           // print('this is chat data: ${chatData?.product?.user?.id.toString()}');
           Get.to(() => ChatConversation(
-                isSeller: chatData?.product?.user?.id.toString() == myUid,
+                isSeller: chatData?.product?.user?.id.toString() != myUid,
                 product: chatData?.product ?? ProductListItem(),
                 isFirstMessage: false,
                 firebaseChatId: chatData?.firebaseChatId ?? '',
                 chatId: chatData?.chatId.toString() ?? '',
                 senderId: myUid,
+                receiverId: myUid != chatData?.product?.user?.id.toString()
+                    ? chatData?.product?.user?.id.toString() ?? ''
+                    : chatData?.user?.id.toString() ?? '',
                 productUserId: chatData?.product?.user?.id ?? 0,
                 productId: chatData?.product?.id.toString() ?? '',
                 userUnread: chatData?.userUnreadCount ?? 0,

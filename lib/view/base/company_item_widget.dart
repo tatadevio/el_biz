@@ -14,7 +14,8 @@ import 'custom_image.dart';
 
 class CompanyItemWidget extends StatelessWidget {
   final CompanyItem company;
-  const CompanyItemWidget({super.key, required this.company});
+  final bool isSearchCompany;
+  const CompanyItemWidget({super.key, required this.company, this.isSearchCompany = false});
 
   @override
   Widget build(BuildContext context) {

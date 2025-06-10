@@ -105,36 +105,10 @@ class AppConstants {
   static const String sendMediaUrl = "api/chats/3/upload-medias";
   static const String updateLastMessageUrl = "api/lastmessage/update";
   static const String updateReadCountUrl = "api/messages/read";
-  // static const String chatSendUrl = "api/v1/chats/store";
-  // static const String ticketUrl = "api/v1/chats";
-  // static const String deleteMessage = "api/v1/chats/remove";
-  // static const String clearAllMessage = "api/v1/chats/remove-all";
 
-  // /// Likes product
-
-  // static const String likeProductUrl = 'api/v1/likes/store';
-  // static const String removeFromLikeProductUrl = 'api/v1/likes/remove';
-  // static const String myLikesProduct = 'api/v1/products/likes';
-
-  // ///Follow api
-  // static const String followUrl = "api/v1/favourites/store";
-
-  // /// Seller api
-
-  // static const String sellerProductListUrl = "api/v1/products/seller-products";
-  // static const String changeStatusUrl = "api/v1/products/change-status";
-  // static const String companyCategoryUrl = "api/v1/company-categories";
-  // static const String registerSellerUrl = "api/v1/sellers/register-company";
-  // static const String completeSellerUrl = "api/v1/sellers/company-update";
-  // static const String sellerInfoUrl = "api/v1/sellers/";
-
-  // ///payment api's
-  // static const String mBankInitializeUrl = "api/v1/mbank-initialize";
-  // static const String mBankConfirmUrl = "api/v1/mbank-confirmed";
-  // static const String megaPayCheckUrl = "api/v1/megapay-check";
-  // static const String megaPayUrl = "api/v1/megapay-pay";
-  // static const String finipayInitialize = "api/v1/finipay-initialize";
-  // static const String walletCreditUrl = "api/v1/wallet/credit";
+  // payment method
+  static const String paymentMethodUrl = "api/paymentmethods";
+  static const String storeContractUrl = "api/contracts/store";
 
   static const String token = "token";
 
@@ -143,29 +117,18 @@ class AppConstants {
   static const String COUNTRY_CODE = 'country_code';
   static const String LANGUAGE_CODE = 'language_code';
   static const String selecteAccount = 'selected_account1';
-  // static const String TOPIC = 'newsletter';
-  // static const String THEME = 'turabekov_theme';
-  // static const String ThemeId = 'theme';
-  // static const String stepCount = 'step_count';
-  // static const String userId = 'user_id';
-  // static const String languageCode = 'languageCode';
-
-  // static const String loginTitle = "Login";
-  // static const String homeTitle = "Home";
-  // static const String settingsTitle = "Settings";
-  // static const String fullPhotoTitle = "Full Photo";
 
   static List<LanguageModel> languages = [
-    LanguageModel(
-        imageUrl: Images.svgLock,
-        languageName: 'Русский',
-        countryCode: 'RU',
-        languageCode: 'ru'),
     LanguageModel(
         imageUrl: Images.svgLock,
         languageName: 'English',
         countryCode: 'US',
         languageCode: 'en'),
+    LanguageModel(
+        imageUrl: Images.svgLock,
+        languageName: 'Русский',
+        countryCode: 'RU',
+        languageCode: 'ru'),
     // LanguageModel(imageUrl: Images.svgLock, languageName: 'Кыргызча', countryCode: 'KG', languageCode: 'ky'),
   ];
 }

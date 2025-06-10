@@ -116,6 +116,7 @@ class CustomTextField1 extends StatefulWidget {
   final TextStyle? lableStyle;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
+  final Function(String)? onChanged;
   const CustomTextField1({
     super.key,
     required this.controller,
@@ -131,6 +132,7 @@ class CustomTextField1 extends StatefulWidget {
     this.lableStyle,
     this.inputFormatters,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -169,6 +171,7 @@ class _CustomTextField1State extends State<CustomTextField1> {
               controller: widget.controller,
               keyboardType: widget.inputType,
               maxLength: widget.maxLength,
+              onChanged: widget.onChanged,
               validator: widget.validator ??
                   (v) {
                     if (widget.validate) {

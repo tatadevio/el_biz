@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/data/model/response/userinfo_model.dart';
@@ -394,10 +395,6 @@ class _ChatConversationState extends State<ChatConversation> {
                               Border.all(width: 1, color: ColorResources.blue),
                           borderRadius: BorderRadius.circular(8),
                           boxShaow: const [ColorResources.shadow1],
-                          child: Text(
-                            'select_products'.tr,
-                            style: textSm.copyWith(color: ColorResources.blue),
-                          ),
                           onTap: widget.type == 'tender'
                               ? () {
                                   showShortToast('working......');
@@ -462,6 +459,10 @@ class _ChatConversationState extends State<ChatConversation> {
                                     ),
                                   );
                                 },
+                          child: Text(
+                            'select_products'.tr,
+                            style: textSm.copyWith(color: ColorResources.blue),
+                          ),
                         ),
                       ),
                       if (widget.isSeller) ...[
@@ -476,8 +477,17 @@ class _ChatConversationState extends State<ChatConversation> {
                                     showShortToast('working......');
                                   }
                                 : () {
+                                    print(
+                                        "this is buyer id = ${widget.receiverId}");
+                                    context
+                                        .read<AgreementBloc>()
+                                        .add(GetPaymentMethod(currentPage: 1));
                                     Get.to(() => NewContractScreen(
                                           product: widget.product,
+                                          buyerId: widget.receiverId,
+                                          type: widget.type,
+                                          tenderId: widget.tender?.id.toString() ?? '0',
+                                          productId: widget.productId,
                                         ));
                                   },
                             child: Container(

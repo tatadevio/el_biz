@@ -305,7 +305,9 @@
   "login_first_to_add_company" : "Сначала войдите, чтобы добавить компанию." ,
   "no_messages" : "Пока нет сообщений",
   "switch_and_manage_between_your_company_accounts" : "Переключайтесь и управляйте своими аккаунтами компаний" ,
-  "please_enter_password" : "Пожалуйста, введите пароль."
+  "please_enter_password" : "Пожалуйста, введите пароль.",
+  "tender_name" : "Название тендера",
+  "add_tender_name": "Добавить название тендера"
 
 
 

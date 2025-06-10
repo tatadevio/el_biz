@@ -1,5 +1,8 @@
 import 'package:el_biz/bloc/search/search_bloc.dart';
+import 'package:el_biz/bloc/search_company/search_company_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
+import 'package:el_biz/view/screen/search/search_company/search_company_widget.dart';
+import 'package:el_biz/view/screen/search/search_product/search_product_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,8 +10,6 @@ import 'package:get/get.dart';
 
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
-import '../../base/product_grid_item.dart';
-import '../../base/product_list_item.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -18,63 +19,28 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final TextEditingController searchController = TextEditingController();
-
-  final ScrollController _scrollController = ScrollController();
-  bool _showScrollToTopButton = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.offset > 300 && !_showScrollToTopButton) {
-        setState(() {
-          _showScrollToTopButton = true;
-        });
-      } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
-        setState(() {
-          _showScrollToTopButton = false;
-        });
-      }
-
-      searchBloc = context.read<SearchBloc>();
-
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 300 &&
-          !searchBloc.state.isLoading &&
-          !searchBloc.state.isMoreLoading) {
-        int pageSize = searchBloc.state.pageSize;
-        if (searchBloc.state.currentPage < pageSize) {
-          int nextPage = searchBloc.state.currentPage;
-
-          context.read<SearchBloc>().add(SearchProduct(
-              search: searchController.text, currentPage: nextPage + 1));
-        }
-      }
-    });
-  }
+  final TextEditingController searchProductController = TextEditingController();
+  final TextEditingController searchCompanyController = TextEditingController();
+  final ScrollController _scrollProductController = ScrollController();
+  final ScrollController _scrollCompanyController = ScrollController();
 
   late SearchBloc searchBloc;
+  late SearchCompanyBloc searchCompanyBloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     searchBloc = context.read<SearchBloc>();
+    searchCompanyBloc = context.read<SearchCompanyBloc>();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollProductController.dispose();
     searchBloc.add(ClearSearchList());
+    _scrollCompanyController.dispose();
+    searchCompanyBloc.add(ClearSearchCompanyList());
     super.dispose();
-  }
-
-  void _scrollToTop() {
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
@@ -84,46 +50,93 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 40,
-                child: TextFormField(
-                  controller: searchController,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                    border: OutlineInputBorder(),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SvgPicture.asset(Images.svgSearch),
+        title: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, searchState) {
+          if (searchState.isSearchProducts) {
+            return Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: TextFormField(
+                      controller: searchProductController,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 0),
+                        border: OutlineInputBorder(),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: SvgPicture.asset(Images.svgSearch),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        context
+                            .read<SearchBloc>()
+                            .add(SearchProduct(search: val, currentPage: 1));
+                      },
                     ),
                   ),
-                  onChanged: (val) {
-                    context
-                        .read<SearchBloc>()
-                        .add(SearchProduct(search: val, currentPage: 1));
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    searchProductController.clear();
+                    context.read<SearchBloc>().add(ClearSearchList());
                   },
+                  child: Text(
+                    'Отмена',
+                    style: body14.copyWith(color: ColorResources.gray),
+                  ),
+                ),
+              ],
+            );
+          }
+          return Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: TextFormField(
+                    controller: searchCompanyController,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 0),
+                      border: OutlineInputBorder(),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: SvgPicture.asset(Images.svgSearch),
+                      ),
+                    ),
+                    onChanged: (val) {
+                      context
+                          .read<SearchCompanyBloc>()
+                          .add(SearchCompany(search: val, currentPage: 1));
+                    },
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            GestureDetector(
-              onTap: () {
-                searchController.clear();
-                context.read<SearchBloc>().add(ClearSearchList());
-              },
-              child: Text(
-                'Отмена',
-                style: body14.copyWith(color: ColorResources.gray),
+              const SizedBox(
+                width: 5,
               ),
-            ),
-          ],
-        ),
+              GestureDetector(
+                onTap: () {
+                  searchCompanyController.clear();
+                  context
+                      .read<SearchCompanyBloc>()
+                      .add(ClearSearchCompanyList());
+                },
+                child: Text(
+                  'Отмена',
+                  style: body14.copyWith(color: ColorResources.gray),
+                ),
+              ),
+            ],
+          );
+        }),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(95),
           child: BlocBuilder<SearchBloc, SearchState>(
@@ -330,89 +343,20 @@ class _SearchScreenState extends State<SearchScreen> {
           }),
         ),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: BlocBuilder<SearchBloc, SearchState>(
-                builder: (context, searchState) {
-              if (searchState.isLoading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (searchState.searchProducts.isEmpty) {
-                if (searchController.text.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'search_for_products'.tr,
-                      style: body14,
-                    ),
-                  );
-                }
-                return Center(
-                  child: Text(
-                    'no_product_found'.tr,
-                    style: body14,
-                  ),
-                );
-              }
-              if (searchState.isGridView) {
-                return GridView.builder(
-                  controller: _scrollController,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.7),
-                  itemCount: searchState.searchProducts.length,
-                  itemBuilder: (context, index) {
-                    // return SizedBox();
-                    return ProductGridItem(
-                      product: searchState.searchProducts[index],
-                      isSearchProduct: true,
-
-                      // product: companyController.,
-                      // product: index,
-                    );
-                  },
-                );
-              }
-              return ListView.builder(
-                controller: _scrollController,
-                itemCount: searchState.searchProducts.length,
-                itemBuilder: (context, index) {
-                  return ProductListItemWidget(
-                    product: searchState.searchProducts[index],
-                    isPublicProduct: false,
-                    isSearchProduct: true,
-                  );
-                },
-              );
-            }),
-          ),
-          if (_showScrollToTopButton)
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: GestureDetector(
-                onTap: _scrollToTop,
-                child: Container(
-                  height: 32,
-                  width: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: ColorResources.primary,
-                  ),
-                  child: const Icon(
-                    Icons.keyboard_arrow_up,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
+      body:
+          BlocBuilder<SearchBloc, SearchState>(builder: (context, searchState) {
+        if (searchState.isSearchProducts) {
+          return SearchProductWidget(
+            searchController: searchProductController,
+            scrollController: _scrollProductController,
+          );
+        } else {
+          return SearchCompanyWidget(
+            searchController: searchCompanyController,
+            scrollController: _scrollCompanyController,
+          );
+        }
+      }),
     );
   }
 }

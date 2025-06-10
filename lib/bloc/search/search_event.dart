@@ -45,6 +45,7 @@ class UpdateGridView extends SearchEvent {
 
 class ClearSearchList extends SearchEvent {}
 
+
 class ToggleSearchProductFavorite extends SearchEvent {
   final BuildContext context;
   final int productId;

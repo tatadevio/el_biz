@@ -10,18 +10,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../data/model/response/company/company_product_model.dart';
+import '../../../../data/model/base/selected_product_info.dart';
 
 class NewContractProductInfo extends StatefulWidget {
-  final ProductListItem product;
+  final SelectedProductInfo product;
   final int index;
   final ValueChanged<int>? onRemove;
+  final ValueChanged<ProductUpdate> onUpdate;
 
-  const NewContractProductInfo(
-      {super.key,
-      required this.product,
-      required this.index,
-      required this.onRemove});
+  const NewContractProductInfo({
+    super.key,
+    required this.product,
+    required this.index,
+    required this.onRemove,
+    required this.onUpdate,
+  });
 
   @override
   State<NewContractProductInfo> createState() => _NewContractProductInfoState();
@@ -37,11 +40,19 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
     super.initState();
 
     // Initialize unit price from product
-    unitPriceController.text = widget.product.price?.toString() ?? '0';
+    unitPriceController.text = widget.product.product.price.toString();
 
     // Listen to changes in quantity or unit price
     quantityController.addListener(_calculateTotalCost);
     unitPriceController.addListener(_calculateTotalCost);
+
+    Future.delayed(Duration.zero, () {
+      unitPriceController.text =
+          widget.product.product.price?.toString() ?? '0';
+      quantityController.text =
+          widget.product.product.quantity?.toString() ?? '0';
+      _calculateTotalCost();
+    });
   }
 
   void _calculateTotalCost() {
@@ -50,6 +61,23 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
 
     final total = quantity * unitPrice;
     totalCostController.text = total.toStringAsFixed(2);
+  }
+
+  SelectedProductInfo getSelectedProductInfo() {
+    final quantity = int.tryParse(quantityController.text) ?? 0;
+    final unitPrice = int.tryParse(unitPriceController.text) ?? 0;
+    final subtotal = quantity * unitPrice;
+
+    SelectedProductInfo info = SelectedProductInfo(
+      product: widget.product.product,
+      totalQuantity: quantity,
+      unitPrice: unitPrice,
+      subtotal: subtotal,
+    );
+
+    widget.onUpdate(ProductUpdate(widget.index, info));
+
+    return info;
   }
 
   @override
@@ -91,7 +119,7 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
               spacing: 10,
               children: [
                 CustomImage(
-                    image: widget.product.image ?? '',
+                    image: widget.product.product.image ?? '',
                     height: 40,
                     width: 40,
                     radius: 8),
@@ -100,14 +128,14 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.product.name ?? '',
+                      widget.product.product.name ?? '',
                       // 'Стул раскладной',
                       style: h16.copyWith(color: ColorResources.darkGray),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      widget.product.description ?? '',
+                      widget.product.product.description ?? '',
                       // 'Стулья из натурального дерева',
                       style: body14,
                       maxLines: 1,
@@ -138,6 +166,9 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  onChanged: (p0) {
+                    getSelectedProductInfo();
+                  },
                 ),
               ),
               unitBox('Ед.изм', 'шт'),
@@ -163,6 +194,9 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  onChanged: (p0) {
+                    getSelectedProductInfo();
+                  },
                 ),
               ),
               unitBox('currency', 'KGS'),
@@ -190,6 +224,9 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
                       RegExp(r'^\d*\.?\d*'),
                     ),
                   ],
+                  onChanged: (p0) {
+                    getSelectedProductInfo();
+                  },
                 ),
               ),
               unitBox('currency', 'KGS'),
@@ -322,4 +359,11 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
       ],
     );
   }
+}
+
+class ProductUpdate {
+  final int index;
+  final SelectedProductInfo info;
+
+  ProductUpdate(this.index, this.info);
 }

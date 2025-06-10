@@ -1,9 +1,12 @@
+import 'package:el_biz/data/model/base/selected_product_info.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_button_with_icon.dart';
+import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/contracts/new_contact_list_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/new_contract_product_info.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
@@ -15,21 +18,39 @@ import '../../../bloc/product/product_bloc.dart';
 
 class NewContractScreen extends StatefulWidget {
   final ProductListItem product;
+  final String buyerId;
+  final String type;
+  final String productId;
+  final String tenderId;
 
-  const NewContractScreen({super.key, required this.product});
+  const NewContractScreen({
+    super.key,
+    required this.product,
+    required this.buyerId,
+    required this.type,
+    required this.productId,
+    required this.tenderId,
+  });
+  // const NewContractScreen({super.key, required this.product, required this.buyerId});
 
   @override
   State<NewContractScreen> createState() => _NewContractScreenState();
 }
 
 class _NewContractScreenState extends State<NewContractScreen> {
-  List<ProductListItem> selectedProducts = [];
+  List<SelectedProductInfo> selectedProductInfoList = [];
+  final TextEditingController contractNameController = TextEditingController();
 
   @override
   initState() {
     super.initState();
-    // Initialize the selected products list with the product passed to this screen.
-    selectedProducts.add(widget.product);
+
+    selectedProductInfoList.add(SelectedProductInfo(
+        product: widget.product,
+        totalQuantity: int.tryParse(widget.product.quantity ?? '0') ?? 0,
+        unitPrice: int.parse(widget.product.price.toString()),
+        subtotal: int.parse(widget.product.price.toString()) *
+            (int.tryParse(widget.product.quantity ?? '0') ?? 0)));
   }
 
   @override
@@ -56,6 +77,21 @@ class _NewContractScreenState extends State<NewContractScreen> {
               const SizedBox(
                 height: 10,
               ),
+              CustomTextField1(
+                controller: contractNameController,
+                hintColor: 'tender_name'.tr,
+                inputType: TextInputType.text,
+                lableText: 'tender_name'.tr,
+                leading: '',
+                readOnly: false,
+                onChanged: (p0) {
+                  setState(() {});
+                },
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
               Text(
                 'goods'.tr,
                 style: h16.copyWith(color: ColorResources.darkGray),
@@ -70,14 +106,19 @@ class _NewContractScreenState extends State<NewContractScreen> {
                       const SizedBox(height: 20),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: selectedProducts.length,
+                  itemCount: selectedProductInfoList.length,
                   itemBuilder: (context, index) {
                     return NewContractProductInfo(
-                      product: selectedProducts[index],
+                      product: selectedProductInfoList[index],
                       index: index,
                       onRemove: (int productIndex) {
                         setState(() {
-                          selectedProducts.removeAt(productIndex);
+                          selectedProductInfoList.removeAt(productIndex);
+                        });
+                      },
+                      onUpdate: (val) {
+                        setState(() {
+                          selectedProductInfoList[val.index] = val.info;
                         });
                       },
                     );
@@ -148,8 +189,22 @@ class _NewContractScreenState extends State<NewContractScreen> {
 
                                           if (selectedProduct != null) {
                                             setState(() {
-                                              selectedProducts
-                                                  .add(selectedProduct);
+                                              selectedProductInfoList.add(
+                                                  SelectedProductInfo(
+                                                      product: selectedProduct,
+                                                      totalQuantity: int.tryParse(
+                                                              selectedProduct
+                                                                      .quantity ??
+                                                                  '0') ??
+                                                          0,
+                                                      unitPrice: selectedProduct
+                                                              .price ??
+                                                          0,
+                                                      subtotal: int.parse(
+                                                              selectedProduct
+                                                                  .quantity!) *
+                                                          selectedProduct
+                                                              .price!));
                                             });
                                           }
                                         },
@@ -189,8 +244,24 @@ class _NewContractScreenState extends State<NewContractScreen> {
 
                                           if (selectedProduct != null) {
                                             setState(() {
-                                              selectedProducts
-                                                  .add(selectedProduct);
+                                              selectedProductInfoList.add(
+                                                  SelectedProductInfo(
+                                                      product: selectedProduct,
+                                                      totalQuantity: int.tryParse(
+                                                              selectedProduct
+                                                                      .quantity ??
+                                                                  '0') ??
+                                                          0,
+                                                      unitPrice: selectedProduct
+                                                              .price ??
+                                                          0,
+                                                      subtotal: int.parse(
+                                                              selectedProduct
+                                                                  .quantity!) *
+                                                          selectedProduct
+                                                              .price!));
+                                              // selectedProducts
+                                              //     .add(selectedProduct);
                                             });
                                           }
                                         },
@@ -225,10 +296,21 @@ class _NewContractScreenState extends State<NewContractScreen> {
         child: CustomButton(
             width: Get.width,
             height: Get.height,
-            onTap: () {
-              // Get.back();
-              Get.to(() => NewContactListScreen());
-            },
+            onTap: contractNameController.text.trim().isEmpty
+                ? () {
+                    showShortToast('add_tender_name'.tr);
+                  }
+                : () {
+                    // Get.back();
+                    Get.to(() => NewContactListScreen(
+                          selectedProductsList: selectedProductInfoList,
+                          buyerId: widget.buyerId,
+                          type: widget.type,
+                          productId: widget.productId,
+                          tenderId: widget.tenderId,
+                          contractName: contractNameController.text.trim(),
+                        ));
+                  },
             title: 'continue'.tr),
       ),
     );

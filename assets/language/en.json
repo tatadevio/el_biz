@@ -305,7 +305,9 @@
   "login_first_to_add_company" : "Please log in first to add a company." ,
   "no_messages" : "No messages yet",
   "switch_and_manage_between_your_company_accounts" : "Switch and manage between your company accounts"  ,
-  "please_enter_password" : "Please enter your password"
+  "please_enter_password" : "Please enter your password",
+  "tender_name" : "Tender Name",
+  "add_tender_name" : "Add Tender Name"
 
 
 

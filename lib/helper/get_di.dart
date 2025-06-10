@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
@@ -8,9 +9,11 @@ import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
+import 'package:el_biz/bloc/search_company/search_company_bloc.dart';
 import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/data/repo/add_tender_repo.dart';
+import 'package:el_biz/data/repo/agreement_repo.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
 import 'package:el_biz/data/repo/filter_fields_repo.dart';
@@ -22,6 +25,7 @@ import 'package:el_biz/data/repo/public_company_repo.dart';
 import 'package:el_biz/data/repo/public_product_repo.dart';
 import 'package:el_biz/data/repo/public_tender_repo.dart';
 import 'package:el_biz/data/repo/review_repo.dart';
+import 'package:el_biz/data/repo/search_company_repo.dart';
 import 'package:el_biz/data/repo/search_repo.dart';
 import 'package:el_biz/data/repo/similar_product_repo.dart';
 import 'package:el_biz/data/repo/tender_detail_repo.dart';
@@ -123,6 +127,11 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<SimilarProductRepo>(
       () => SimilarProductRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<SearchCompanyRepo>(
+      () => SearchCompanyRepo(Get.find(), Get.find()),
+      fenix: true);
+  Get.lazyPut<AgreementRepo>(() => AgreementRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -148,6 +157,9 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<SimilarProductsBloc>(() => SimilarProductsBloc(Get.find()),
       fenix: true);
+  Get.lazyPut<SearchCompanyBloc>(() => SearchCompanyBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<AgreementBloc>(() => AgreementBloc(Get.find()), fenix: true);
 
 ////////
   ///
