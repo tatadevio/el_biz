@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_event.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/data/model/response/userinfo_model.dart';
 import 'package:el_biz/utils/Images.dart';
@@ -23,6 +25,7 @@ import 'package:get/get.dart';
 import '../../../bloc/product/product_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../data/model/response/tender/tender_item_model.dart';
+import '../select_tender/select_tender_screen.dart';
 import 'widgets/message_item.dart';
 
 class ChatConversation extends StatefulWidget {
@@ -308,15 +311,30 @@ class _ChatConversationState extends State<ChatConversation> {
     });
   }
 
-  void updateLastMessage(ProductListItem? selectedProduct) {
+  void updateLastMessage(
+      ProductListItem? selectedProduct, TenderItem? selectedTender) {
+    if (selectedProduct == null && selectedTender == null) {
+      print("No product or tender selected to update last message.");
+      return;
+    }
     try {
-      context.read<ChatBloc>().add(UpdateLastMessage(
-            chatId: widget.chatId,
-            message: '🛍 ${selectedProduct?.name}',
-            userCount: 0,
-            ownerCount: 0,
-            type: widget.type,
-          ));
+      if (selectedProduct != null) {
+        context.read<ChatBloc>().add(UpdateLastMessage(
+              chatId: widget.chatId,
+              message: '🛍 ${selectedProduct.name}',
+              userCount: 0,
+              ownerCount: 0,
+              type: widget.type,
+            ));
+      } else {
+        context.read<ChatBloc>().add(UpdateLastMessage(
+              chatId: widget.chatId,
+              message: '🛍 ${selectedTender?.title}',
+              userCount: 0,
+              ownerCount: 0,
+              type: widget.type,
+            ));
+      }
     } catch (e) {
       print("Error updating last message: $e");
     }
@@ -397,7 +415,63 @@ class _ChatConversationState extends State<ChatConversation> {
                           boxShaow: const [ColorResources.shadow1],
                           onTap: widget.type == 'tender'
                               ? () {
-                                  showShortToast('working......');
+                                  showShortToast('select tender......');
+                                  Get.to(() => SelectTenderScreen(
+                                        onSelect: (selectedTender) async {
+                                          UserData? myUser = context
+                                              .read<UserBloc>()
+                                              .state
+                                              .userInfo
+                                              ?.data;
+                                          if (selectedTender != null) {
+                                            Map<String, dynamic> sendMessage = {
+                                              "read": false,
+                                              "sender_type": widget.isSeller
+                                                  ? 'seller'
+                                                  : 'user',
+
+                                              "text": '',
+                                              "link": '',
+                                              "isProduct": false,
+                                              "isTender": true,
+                                              "tender": selectedTender.toJson(),
+                                              "type": 'tender',
+                                              "product": null,
+                                              'timestamp':
+                                                  FieldValue.serverTimestamp(),
+                                              'last_fcm': '',
+                                              // userModel.fcmToken ?? '',
+                                              "sender": {
+                                                "id": widget.senderId,
+                                                "name": myUser?.name ?? '',
+                                                "image": myUser?.image ?? '',
+                                                "phone": myUser?.phone ?? '',
+                                                "email": myUser?.email ?? '',
+                                              },
+                                              "receiver": {
+                                                "id": widget.receiverId,
+                                              },
+                                            };
+                                            await FirebaseFirestore.instance
+                                                .collection('chat')
+                                                .doc(widget.firebaseChatId)
+                                                .collection('messages')
+                                                .add(sendMessage);
+                                            await FirebaseFirestore.instance
+                                                .collection('chat')
+                                                .doc(widget.firebaseChatId)
+                                                .set(sendMessage);
+                                            updateLastMessage(
+                                                null, selectedTender);
+                                            // clearSelectedProduct();
+                                            context
+                                                .read<TendersBloc>()
+                                                .add(ClearSelectedTender());
+
+                                            Get.back();
+                                          }
+                                        },
+                                      ));
                                 }
                               : () {
                                   // clearSelectedProduct();
@@ -424,6 +498,8 @@ class _ChatConversationState extends State<ChatConversation> {
                                           "text": '',
                                           "link": '',
                                           "isProduct": true,
+                                          "isTender": false,
+                                          "tender": null,
                                           "type": 'product',
                                           "product": selectedProduct?.toJson(),
                                           'timestamp':
@@ -450,7 +526,8 @@ class _ChatConversationState extends State<ChatConversation> {
                                             .collection('chat')
                                             .doc(widget.firebaseChatId)
                                             .set(sendMessage);
-                                        updateLastMessage(selectedProduct);
+                                        updateLastMessage(
+                                            selectedProduct, null);
                                         clearSelectedProduct();
 
                                         Get.back();
@@ -460,7 +537,9 @@ class _ChatConversationState extends State<ChatConversation> {
                                   );
                                 },
                           child: Text(
-                            'select_products'.tr,
+                            widget.type == 'tender'
+                                ? 'select_tender'.tr
+                                : 'select_products'.tr,
                             style: textSm.copyWith(color: ColorResources.blue),
                           ),
                         ),
@@ -486,9 +565,12 @@ class _ChatConversationState extends State<ChatConversation> {
                                           product: widget.product,
                                           buyerId: widget.receiverId,
                                           type: widget.type,
-                                          tenderId: widget.tender?.id.toString() ?? '0',
+                                          tenderId:
+                                              widget.tender?.id.toString() ??
+                                                  '0',
                                           productId: widget.productId,
                                         ));
+                                        // there have to send the company id 
                                   },
                             child: Container(
                               height: 36,

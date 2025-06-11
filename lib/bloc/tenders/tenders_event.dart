@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../data/model/response/category/categories_list_model.dart';
 import '../../data/model/response/company/my_companies_model.dart';
 import '../../data/model/response/tender/tender_detail_model.dart';
+import '../../data/model/response/tender/tender_item_model.dart';
 
 abstract class TendersEvent extends Equatable {
   const TendersEvent();
@@ -36,9 +37,6 @@ class RemoveGallery extends TendersEvent {
 }
 
 class ResetNewTenderModel extends TendersEvent {}
-
-
-
 
 class UpdateTenderImages extends TendersEvent {
   final List<Media> images;
@@ -80,4 +78,17 @@ class UpdateTenderCompany extends TendersEvent {
   List<Object> get props => [company];
 }
 
+class ChangeSlectedTender extends TendersEvent {
+  final TenderItem newTender;
+  const ChangeSlectedTender(this.newTender);
 
+  @override
+  List<Object> get props => [newTender];
+}
+
+class ClearSelectedTender extends TendersEvent {
+  const ClearSelectedTender();
+
+  @override
+  List<Object> get props => [];
+}

@@ -15,13 +15,13 @@ import '../../../../helper/date_helper.dart';
 class ChatTile extends StatelessWidget {
   final bool unSeen;
   final bool isMessage;
-  final ChatItem? chatData;
+  final ChatItem chatData;
   // final String? lastMessage;
   const ChatTile({
     super.key,
     this.unSeen = false,
     required this.isMessage,
-    this.chatData,
+    required this.chatData,
     // this.lastMessage,
   });
 
@@ -34,27 +34,27 @@ class ChatTile extends StatelessWidget {
           String myUid =
               context.read<UserBloc>().state.userInfo!.data!.id.toString();
           print(
-              'this is product user id: ${chatData?.product?.user?.id.toString()}');
+              'this is product user id: ${chatData.product?.user?.id.toString()}');
           print('this is my uid: $myUid');
           // print('this is chat data: ${chatData?.product?.user?.id.toString()}');
           Get.to(() => ChatConversation(
-                isSeller: chatData?.product?.user?.id.toString() != myUid,
-                product: chatData?.product ?? ProductListItem(),
+                isSeller: chatData.product?.user?.id.toString() != myUid,
+                product: chatData.product ?? ProductListItem(),
                 isFirstMessage: false,
-                firebaseChatId: chatData?.firebaseChatId ?? '',
-                chatId: chatData?.chatId.toString() ?? '',
+                firebaseChatId: chatData.firebaseChatId ?? '',
+                chatId: chatData.chatId.toString(),
                 senderId: myUid,
-                receiverId: myUid != chatData?.product?.user?.id.toString()
-                    ? chatData?.product?.user?.id.toString() ?? ''
-                    : chatData?.user?.id.toString() ?? '',
-                productUserId: chatData?.product?.user?.id ?? 0,
-                productId: chatData?.product?.id.toString() ?? '',
-                userUnread: chatData?.userUnreadCount ?? 0,
-                ownerUnread: chatData?.productOwnerUnreadCount ?? 0,
-                productName: chatData?.product?.name ?? '',
-                productPrice: "${chatData?.product?.price}",
-                type: chatData?.type ?? '',
-                tender: chatData?.tender,
+                receiverId: myUid != chatData.product?.user?.id.toString()
+                    ? chatData.product?.user?.id.toString() ?? ''
+                    : chatData.user?.id.toString() ?? '',
+                productUserId: chatData.product?.user?.id ?? 0,
+                productId: chatData.product?.id.toString() ?? '',
+                userUnread: chatData.userUnreadCount ?? 0,
+                ownerUnread: chatData.productOwnerUnreadCount ?? 0,
+                productName: chatData.product?.name ?? '',
+                productPrice: "${chatData.product?.price}",
+                type: chatData.type ?? '',
+                tender: chatData.tender,
               ));
         } else {
           //go to the agrement/contracts screen.
@@ -62,9 +62,9 @@ class ChatTile extends StatelessWidget {
         }
       },
       leading: CustomImage(
-          image: chatData?.type == 'product'
-              ? chatData?.product?.image ?? ''
-              : chatData?.tender?.image ?? '',
+          image: chatData.type == 'product'
+              ? chatData.product?.image ?? ''
+              : chatData.tender?.image ?? '',
           height: 48,
           width: 48,
           radius: 48),
@@ -73,9 +73,9 @@ class ChatTile extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              chatData?.type == 'product'
-                  ? chatData?.product?.name ?? 'Садовая мебель Loft'
-                  : chatData?.tender?.title ?? 'Садовая мебель Loft',
+              chatData.type == 'product'
+                  ? chatData.product?.name ?? ''
+                  : chatData.tender?.title ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: h16.copyWith(color: ColorResources.darkGray),
@@ -83,7 +83,7 @@ class ChatTile extends StatelessWidget {
           ),
           Text(
             isMessage
-                ? formatDateInRu(chatData?.lastMessageDate.toString() ?? '')
+                ? formatDateInRu(chatData.lastMessageDate.toString())
                 : '',
             // '24 окт',
             style: body12.copyWith(color: ColorResources.gray),
@@ -95,7 +95,7 @@ class ChatTile extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              chatData?.lastMessage ?? 'Мебель для предприятий и для дома',
+              chatData.lastMessage ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               // 'Мебель для предприятий и для дома',

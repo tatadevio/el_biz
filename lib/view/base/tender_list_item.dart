@@ -11,6 +11,7 @@ import '../../helper/date_helper.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/tender/tender_detail_screen.dart';
+import 'check_box_tender_button.dart';
 import 'custom_favorite_button.dart';
 
 class TenderListItem extends StatelessWidget {
@@ -18,13 +19,16 @@ class TenderListItem extends StatelessWidget {
   final TenderItem tender;
   final bool isCompanyTender;
   final bool isPublicTender;
+  final bool isSelect;
 
-  const TenderListItem(
-      {super.key,
-      this.isFavorite = false,
-      required this.tender,
-      this.isCompanyTender = false,
-      this.isPublicTender = false});
+  const TenderListItem({
+    super.key,
+    this.isFavorite = false,
+    required this.tender,
+    this.isCompanyTender = false,
+    this.isPublicTender = false,
+    this.isSelect = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,26 +50,39 @@ class TenderListItem extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  CustomImage(image: tender.image ?? '', height: 120, width: 100, radius: 16),
-                  Positioned(
-                      right: 5,
-                      top: 5,
-                      child: CustomFavoriteButton(
-                        isFavorite: tender.isFavorite ?? false,
-                        onTap: () {
-                          if (isCompanyTender) {
-                            context
-                                .read<CompanyDetailBloc>()
-                                .add(ToggleTenderFavorite(tender.id!, context));
-                          } else
-                          // if (isPublicTender)
-                          {
-                            context.read<PublicTenderBloc>().add(
-                                TogglePublicTenderFavorite(
-                                    tender.id!, context));
-                          }
-                        },
-                      )),
+                  CustomImage(
+                      image: tender.image ?? '',
+                      height: 120,
+                      width: 100,
+                      radius: 16),
+                  if (isSelect) ...[
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: CheckBoxTenderButton(
+                        product: tender,
+                      ),
+                    ),
+                  ],
+                  if (!isSelect)
+                    Positioned(
+                        right: 5,
+                        top: 5,
+                        child: CustomFavoriteButton(
+                          isFavorite: tender.isFavorite ?? false,
+                          onTap: () {
+                            if (isCompanyTender) {
+                              context.read<CompanyDetailBloc>().add(
+                                  ToggleTenderFavorite(tender.id!, context));
+                            } else
+                            // if (isPublicTender)
+                            {
+                              context.read<PublicTenderBloc>().add(
+                                  TogglePublicTenderFavorite(
+                                      tender.id!, context));
+                            }
+                          },
+                        )),
                 ],
               ),
               const SizedBox(

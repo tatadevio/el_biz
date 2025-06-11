@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -5,14 +6,13 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
+import 'package:el_biz/view/screen/chat/widgets/contracts/contracts_list_widget.dart';
 import 'package:el_biz/view/screen/chat/widgets/messages_list/chat_list_widget.dart';
 import 'package:el_biz/view/screen/chat/widgets/chat_top_bar_widget.dart';
 import 'package:el_biz/view/screen/chat/widgets/contract_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import 'widgets/chat_tile.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -28,6 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
     Future.delayed(Duration.zero, () {
       context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
       context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
+      context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
+      context.read<AgreementBloc>().add(GetMyPurchases(currentPage: 1));
     });
   }
 
@@ -182,27 +184,28 @@ class _ChatScreenState extends State<ChatScreen> {
             if (chatState.isShowChat) {
               return ChatListWidget();
             } else {
-              if (chatState.isShowMySales) {
-                //showing my sales
-                return ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return ChatTile(
-                      isMessage: false,
-                    );
-                  },
-                );
-              } else {
-                //showing my purchases
-                return ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return const ChatTile(
-                      isMessage: false,
-                    );
-                  },
-                );
-              }
+              return ContractsListWidget();
+              // if (chatState.isShowMySales) {
+              //   //showing my sales
+              //   return ListView.builder(
+              //     itemCount: 10,
+              //     itemBuilder: (context, index) {
+              //       return ChatTile(
+              //         isMessage: false,
+              //       );
+              //     },
+              //   );
+              // } else {
+              //   //showing my purchases
+              //   return ListView.builder(
+              //     itemCount: 10,
+              //     itemBuilder: (context, index) {
+              //       return const ChatTile(
+              //         isMessage: false,
+              //       );
+              //     },
+              //   );
+              // }
             }
           },
         );

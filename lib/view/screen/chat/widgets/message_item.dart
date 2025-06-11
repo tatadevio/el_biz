@@ -13,10 +13,12 @@ import 'package:get/get.dart';
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../../../bloc/product_review/product_review_bloc.dart';
 import '../../../../bloc/similar_products/similar_products_bloc.dart';
+import '../../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/utilities.dart';
 import '../../../base/custom_image.dart';
 import '../../product_detail/product_detail_screen.dart';
+import '../../tender/tender_detail_screen.dart';
 import './full_screen_image.dart';
 
 class ChatMessageWidget1 extends StatefulWidget {
@@ -210,6 +212,10 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                 if (!widget.isMe) ...[
                                   if (widget.data['isProduct'] == true)
                                     productMessage(widget.isMe, widget.data)
+                                  else if ((widget.data.data() as Map<String,
+                                          dynamic>)['isTender'] ??
+                                      false == true)
+                                    tenderMessage(widget.isMe, widget.data)
                                   else if (widget.data['type'] == 'pdf')
                                     pdfMessage(widget.isMe, widget.data)
                                   else if (!(widget.data.data()
@@ -357,6 +363,10 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
                                 if (widget.isMe)
                                   if (widget.data['isProduct'] == true)
                                     productMessage(widget.isMe, widget.data)
+                                  else if ((widget.data.data() as Map<String,
+                                          dynamic>)['isTender'] ??
+                                      false == true)
+                                    tenderMessage(widget.isMe, widget.data)
                                   else if (widget.data['type'] == 'pdf')
                                     pdfMessage(widget.isMe, widget.data)
                                   else if (!(widget.data.data()
@@ -582,20 +592,73 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
             const SizedBox(
               width: 5,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data['product']['name'],
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                Text(
-                  "${data['product']['price']} сом/шт",
-                  style: h16.copyWith(color: ColorResources.blue),
-                )
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data['product']['name'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  Text(
+                    "${data['product']['price']} сом/шт",
+                    style: h16.copyWith(color: ColorResources.blue),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget tenderMessage(bool isMe, QueryDocumentSnapshot data) {
+    return GestureDetector(
+      onTap: () {
+        context
+            .read<TenderDetailBloc>()
+            .add(GetTenderDetail(tenderId: data['tender']['id'].toString()));
+        Get.to(() => TenderDetailScreen(
+              // isProduct: false,
+              tenderName: data['tender']['title'],
+            ));
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: ColorResources.lgColor,
+            borderRadius: BorderRadius.circular(16)),
+        child: Row(
+          children: [
+            CustomImage(
+                image: data['tender']['image'],
+                height: 48,
+                width: 48,
+                radius: 8),
+            const SizedBox(
+              width: 5,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data['tender']['title'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  Text(
+                    "${data['tender']['description']}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: body14,
+                  )
+                ],
+              ),
             )
           ],
         ),

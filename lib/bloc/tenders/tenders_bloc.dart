@@ -36,6 +36,13 @@ class TendersBloc extends Bloc<TendersEvent, TendersState> {
     on<GetCategoryById>(_onGetCategoryById);
     on<SelectCategory>(_onSelectCategory);
     on<UpdateTenderCompany>(_onUpdateTenderCompany);
+
+    on<ChangeSlectedTender>((event, emit) {
+      emit(state.copywith(selectedTender: event.newTender));
+    });
+    on<ClearSelectedTender>((event, emit) {
+      emit(state.copywith(selectedTender: null));
+    });
   }
 
   void _updateToggleShowGridView(

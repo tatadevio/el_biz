@@ -21,3 +21,19 @@ class AddAgreement extends AgreementEvent {
   @override
   List<Object> get props => [data];
 }
+
+class GetMySales extends AgreementEvent {
+  final int currentPage;
+  const GetMySales({required this.currentPage});
+
+  @override
+  List<Object> get props => [currentPage];
+}
+
+class GetMyPurchases extends AgreementEvent {
+  final int currentPage;
+  const GetMyPurchases({required this.currentPage});
+
+  @override
+  List<Object> get props => [currentPage];
+}

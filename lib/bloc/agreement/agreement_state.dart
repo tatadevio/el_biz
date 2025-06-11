@@ -6,12 +6,25 @@ class AgreementState extends Equatable {
   final bool isLoadingMore;
   final int currentPage;
   final int pageSize;
+
+  final List<ContractListItem> mySales;
+  final List<ContractListItem> myPurchases;
+  final int mySalesCurrentPage;
+  final int myPurchasesCurrentPage;
+  final int mySalesPageSize;
+  final int myPurchasesPageSize;
   const AgreementState({
     this.isLoading = false,
     this.paymentMethods = const [],
     this.isLoadingMore = false,
     this.currentPage = 1,
     this.pageSize = 1,
+    this.mySales = const [],
+    this.myPurchases = const [],
+    this.mySalesCurrentPage = 1,
+    this.myPurchasesCurrentPage = 1,
+    this.mySalesPageSize = 1,
+    this.myPurchasesPageSize = 1,
   });
 
   AgreementState copyWith(
@@ -19,13 +32,28 @@ class AgreementState extends Equatable {
       List<PaymentMethod>? paymentMethods,
       bool? isLoadingMore,
       int? currentPage,
-      int? pageSize}) {
+      int? pageSize,
+      List<ContractListItem>? mySales,  
+      List<ContractListItem>? myPurchases,
+      int? mySalesCurrentPage,
+      int? myPurchasesCurrentPage,
+      int? mySalesPageSize,
+      int? myPurchasesPageSize
+      
+      
+      }) {
     return AgreementState(
       isLoading: isLoading ?? this.isLoading,
       paymentMethods: paymentMethods ?? this.paymentMethods,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       currentPage: currentPage ?? this.currentPage,
       pageSize: pageSize ?? this.pageSize,
+      mySales: mySales ?? this.mySales,
+      myPurchases: myPurchases ?? this.myPurchases,
+      mySalesCurrentPage: mySalesCurrentPage ?? this.mySalesCurrentPage,
+      myPurchasesCurrentPage: myPurchasesCurrentPage ?? this.myPurchasesCurrentPage,
+      mySalesPageSize: mySalesPageSize ?? this.mySalesPageSize,
+      myPurchasesPageSize: myPurchasesPageSize ?? this.myPurchasesPageSize,
     );
   }
 
@@ -36,6 +64,12 @@ class AgreementState extends Equatable {
         isLoadingMore,
         currentPage,
         pageSize,
+        mySales,
+        myPurchases,
+        mySalesCurrentPage,
+        myPurchasesCurrentPage,
+        mySalesPageSize,
+        myPurchasesPageSize,
       ];
 }
 

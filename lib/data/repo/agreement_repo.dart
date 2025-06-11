@@ -17,4 +17,16 @@ class AgreementRepo {
   Future<Response> addAgreement(Map<String, dynamic> agreement) async {
     return await apiClient.postData(AppConstants.storeContractUrl, agreement);
   }
+
+  Future<Response> getMySales(int currentPage) async {
+    return await apiClient.getData(
+      '${AppConstants.mySalesUrl}?page=$currentPage',
+    );
+  }
+
+  Future<Response> getMyPurchases(int currentPage) async {
+    return await apiClient.getData(
+      '${AppConstants.myPurchasesUrl}?page=$currentPage',
+    );
+  }
 }

@@ -1,10 +1,12 @@
 import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/data/model/base/selected_product_info.dart';
 import 'package:el_biz/data/model/response/agreement/payment_methods_model.dart';
+import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/contracts/widgets/select_payment_method_widget.dart';
+import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -129,7 +131,8 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                                     textMd.copyWith(color: ColorResources.blue),
                               ),
                               onTap: () {
-                                Get.back();
+                                // Get.back();
+                                Get.offAll(() => DashboardScreen());
                               },
                             ),
                           ),
@@ -262,13 +265,13 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                           ),
                           SizedBox(),
                           productItem('${"total_excluding_taxes".tr}:',
-                              '${calculateTotal()} с'),
+                              '${calculateTotal()} ${AppConstants.currencyCode}'),
                           productItem('${"including_VAT".tr}:',
-                              '${calculateVapTax()} с'),
+                              '${calculateVapTax()} ${AppConstants.currencyCode}'),
                           productItem('${"including_NSP".tr}:',
-                              '${calculateNspTax()} с'),
-                          productItem(
-                              '${"total_payment".tr}:', '${totalPaymnet()} с'),
+                              '${calculateNspTax()} ${AppConstants.currencyCode}'),
+                          productItem('${"total_payment".tr}:',
+                              '${totalPaymnet()} ${AppConstants.currencyCode}'),
                         ],
                       ),
                     ),

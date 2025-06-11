@@ -307,7 +307,8 @@
   "switch_and_manage_between_your_company_accounts" : "Переключайтесь и управляйте своими аккаунтами компаний" ,
   "please_enter_password" : "Пожалуйста, введите пароль.",
   "tender_name" : "Название тендера",
-  "add_tender_name": "Добавить название тендера"
+  "add_tender_name": "Добавить название тендера",
+  "select_tender" : "Выберите тендер"
 
 
 

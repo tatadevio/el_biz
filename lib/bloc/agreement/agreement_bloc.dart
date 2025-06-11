@@ -1,5 +1,6 @@
-import 'package:bloc/bloc.dart';
+import 'package:el_biz/data/model/response/agreement/my_sales_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/model/response/agreement/payment_methods_model.dart';
 import '../../data/repo/agreement_repo.dart';
@@ -14,6 +15,8 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
 
     on<GetPaymentMethod>(_onGetPaymentMethod);
     on<AddAgreement>(_onAddAgreement);
+    on<GetMySales>(_onGetMySales);
+    on<GetMyPurchases>(_onGetMyPurchases);
   }
 
   Future<void> _onGetPaymentMethod(
@@ -30,7 +33,6 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
         emit(state.copyWith(
             paymentMethods:
                 List<PaymentMethod>.from(payment.data?.items ?? [])));
-        // emit(PaymentMethodSuccess(response.body));
       } else {
         // emit(PaymentMethodError('Failed to load payment methods'));
       }
@@ -45,8 +47,7 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
     emit(state.copyWith(isLoading: true));
     try {
       final response = await agreementRepo.addAgreement(event.data);
-      print('response status code == ${response.statusCode}');
-      print('response body == ${response.body}');
+
       if (response.statusCode == 200) {
         emit(AddAgreementSuccess(
             response.body['message'] ?? 'Agreement added successfully'));
@@ -58,5 +59,55 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
       emit(AddAgreementError('Exception occurred: $e'));
     }
     emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> _onGetMySales(
+      GetMySales event, Emitter<AgreementState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true, mySales: []));
+    } else {
+      emit(state.copyWith(isLoadingMore: true));
+    }
+    try {
+      final response = await agreementRepo.getMySales(event.currentPage);
+      if (response.statusCode == 200) {
+        final sales = MySalesModel.fromJson(response.body);
+
+        // response.body['data']['items'] as List;
+        emit(state.copyWith(
+            mySales: List<ContractListItem>.from(sales.data?.items ?? [])
+              ..addAll(state.mySales)));
+      } else {
+        // Handle error
+      }
+    } catch (e) {
+      // Handle exception
+    }
+    emit(state.copyWith(isLoading: false, isLoadingMore: false));
+  }
+
+  Future<void> _onGetMyPurchases(
+      GetMyPurchases event, Emitter<AgreementState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true, myPurchases: []));
+    } else {
+      emit(state.copyWith(isLoadingMore: true));
+    }
+    try {
+      final response = await agreementRepo.getMyPurchases(event.currentPage);
+      if (response.statusCode == 200) {
+        final purchase = MySalesModel.fromJson(response.body);
+
+        // response.body['data']['items'] as List;
+        emit(state.copyWith(
+            myPurchases: List<ContractListItem>.from(purchase.data?.items ?? [])
+              ..addAll(state.myPurchases)));
+      } else {
+        // Handle error
+      }
+    } catch (e) {
+      // Handle exception
+    }
+    emit(state.copyWith(isLoading: false, isLoadingMore: false));
   }
 }
