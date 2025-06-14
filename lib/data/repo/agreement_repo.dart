@@ -20,13 +20,13 @@ class AgreementRepo {
 
   Future<Response> getMySales(int currentPage) async {
     return await apiClient.getData(
-      '${AppConstants.mySalesUrl}?page=$currentPage',
+      '${AppConstants.mySalesCompaniesUrl}?page=$currentPage',
     );
   }
 
   Future<Response> getMyPurchases(int currentPage) async {
     return await apiClient.getData(
-      '${AppConstants.myPurchasesUrl}?page=$currentPage',
+      '${AppConstants.myPurchasesCompaniesUrl}?page=$currentPage',
     );
   }
 }

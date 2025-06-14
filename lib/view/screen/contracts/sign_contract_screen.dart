@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/agreement/company_sales_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -8,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignContractScreen extends StatefulWidget {
-  const SignContractScreen({super.key});
+  final CompanyContractItem contractData;
+  const SignContractScreen({super.key, required this.contractData});
 
   @override
   State<SignContractScreen> createState() => _SignContractScreenState();
@@ -60,7 +62,8 @@ class _SignContractScreenState extends State<SignContractScreen> {
                                     color: ColorResources.titleColor),
                               ),
                               Text(
-                                'ФИО директора',
+                                widget.contractData.seller?.name ?? '',
+                                // 'ФИО директора',
                                 style: body16.copyWith(
                                     color: ColorResources.titleColor),
                               ),
@@ -91,7 +94,8 @@ class _SignContractScreenState extends State<SignContractScreen> {
                                     color: ColorResources.titleColor),
                               ),
                               Text(
-                                'ФИО директора',
+                                widget.contractData.buyer?.name ?? '',
+                                // 'ФИО директора',
                                 style: body16.copyWith(
                                     color: ColorResources.titleColor),
                               ),
@@ -132,7 +136,9 @@ class _SignContractScreenState extends State<SignContractScreen> {
                   CheckboxListTile(
                     value: termsAgreed,
                     onChanged: (val) {
-                      termsAgreed = val!;
+                      setState(() {
+                        termsAgreed = val!;
+                      });
                     },
                     controlAffinity: ListTileControlAffinity.leading,
                     contentPadding: const EdgeInsets.all(0),
@@ -167,7 +173,8 @@ class _SignContractScreenState extends State<SignContractScreen> {
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                       Text(
-                        'OcOO “Loft”',
+                        widget.contractData.buyer?.name ?? '',
+                        // 'OcOO “Loft”',
                         style: body16.copyWith(color: ColorResources.gray),
                       ),
                     ],

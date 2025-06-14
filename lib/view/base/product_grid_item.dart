@@ -16,6 +16,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 import '../../bloc/public_product/public_product_bloc.dart';
+import 'custom_toast.dart';
 
 class ProductGridItem extends StatelessWidget {
   // final bool isFavorite;
@@ -23,6 +24,7 @@ class ProductGridItem extends StatelessWidget {
   final ProductListItem? product;
   final bool isPublicProduct;
   final bool isSearchProduct;
+  final bool isAlreadySelect;
 
   const ProductGridItem({
     super.key,
@@ -31,6 +33,7 @@ class ProductGridItem extends StatelessWidget {
     this.product,
     this.isPublicProduct = false,
     this.isSearchProduct = false,
+    this.isAlreadySelect = false,
   });
 
   @override
@@ -90,13 +93,33 @@ class ProductGridItem extends StatelessWidget {
                       // CustomLikeButton(
                       //     isFavorite: product!.isFavorite ?? false),
                     ),
-                  if (isSelectProduct)
+                  // if (isSelectProduct)
+                  //   Positioned(
+                  //     right: 0,
+                  //     top: 0,
+                  //     child: CheckBoxButton(
+                  //       product: product,
+                  //     ),
+                  //   ),
+                  if (isSelectProduct && !isAlreadySelect) ...[
                     Positioned(
                       right: 0,
                       top: 0,
                       child: CheckBoxButton(
                         product: product,
                       ),
+                    ),
+                  ],
+                  if (isSelectProduct && isAlreadySelect)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Checkbox(
+                          value: true,
+                          // checkBoxValue(state.selectedProduct.id ?? [], widget.productId!),
+                          onChanged: (val) {
+                            showShortToast("${product?.name} уже добавлен");
+                          }),
                     ),
                 ],
               ),

@@ -1,13 +1,17 @@
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 
+import '../response/tender/tender_item_model.dart';
+
 class SelectedProductInfo {
   final ProductListItem product;
+  final TenderItem tenderItem;
   final int totalQuantity;
   final int unitPrice;
   final int subtotal;
 
   SelectedProductInfo({
     required this.product,
+    required this.tenderItem,
     required this.totalQuantity,
     required this.unitPrice,
     required this.subtotal,
@@ -18,6 +22,7 @@ class SelectedProductInfo {
     return {
       'product':
           product.toJson(), // Assumes ProductListItem has a toJson() method
+          'tender' : tenderItem.toJson(), 
       'totalQuantity': totalQuantity,
       'unitPrice': unitPrice,
       'subtotal': subtotal,
@@ -28,6 +33,7 @@ class SelectedProductInfo {
   factory SelectedProductInfo.fromJson(Map<String, dynamic> json) {
     return SelectedProductInfo(
       product: ProductListItem.fromJson(json['product']),
+      tenderItem: TenderItem.fromJson(json['tender']),
       totalQuantity: json['totalQuantity'],
       unitPrice: json['unitPrice'],
       subtotal: json['subtotal'],

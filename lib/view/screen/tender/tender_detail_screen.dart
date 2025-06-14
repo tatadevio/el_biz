@@ -429,7 +429,7 @@ class TenderDetailScreen extends StatelessWidget {
                       Get.to(() => ChatConversation(
                             isSeller: false,
                             product: ProductListItem(),
-                            tenderId: tenderDetail.data!.id.toString(),
+                            // tenderId: tenderDetail.data!.id.toString(),
                             type: 'tender',
                             // tender: tenderDetail.data!,
                             // tenderName: tenderDetail.data!.title ?? '',
@@ -437,7 +437,7 @@ class TenderDetailScreen extends StatelessWidget {
                             // getReceiverId(userState, state),
                             senderId: myUserId,
                             isFirstMessage: true,
-                            productId: '0',
+                            // productId: '0',
                             firebaseChatId:
                                 "tender_${state.tenderDetailModel?.data?.id}_user_$myUserId",
                             productName:
@@ -448,6 +448,8 @@ class TenderDetailScreen extends StatelessWidget {
                             productUserId: state.tenderDetailModel?.data
                                     ?.company?.owner?.id ??
                                 0,
+                            companyId:
+                                state.tenderDetailModel?.data?.company?.id ?? 0,
                           ));
                     },
                     title: 'Чат с продавцом'),

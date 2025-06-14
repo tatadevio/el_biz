@@ -26,6 +26,7 @@ class NewContactListScreen extends StatefulWidget {
   final String productId;
   final String tenderId;
   final String contractName;
+  final int companyId;
   const NewContactListScreen({
     super.key,
     required this.selectedProductsList,
@@ -34,6 +35,7 @@ class NewContactListScreen extends StatefulWidget {
     required this.productId,
     required this.tenderId,
     required this.contractName,
+    required this.companyId,
   });
 
   @override
@@ -330,19 +332,32 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                 'buyer_id': widget.buyerId,
                 'product_id': widget.productId,
                 'tender_id': widget.tenderId,
+                // widget.tenderId,
                 'contract_name': widget.contractName,
                 'vat_rate': vatController.text.trim(),
                 'nps_rate': nspController.text.trim(),
                 'payment_method': selectedPaymentMethod?.type ?? '',
                 'bank_account_id': '',
-                'products': widget.selectedProductsList
-                    .map((product) => {
-                          'id': product.product.id.toString(),
-                          'product_name': product.product.name.toString(),
-                          'quantity': product.totalQuantity.toString(),
-                          'price': product.unitPrice.toString(),
-                        })
-                    .toList()
+                'products': widget.type == 'tender'
+                    ? widget.selectedProductsList
+                        .map((product) => {
+                              'id': product.tenderItem.id.toString(),
+                              'product_name':
+                                  product.tenderItem.title.toString(),
+                              'quantity': product.totalQuantity.toString(),
+                              'price': product.unitPrice.toString(),
+                            })
+                        .toList()
+                    : widget.selectedProductsList
+                        .map((product) => {
+                              'id': product.product.id.toString(),
+                              'product_name': product.product.name.toString(),
+                              'quantity': product.totalQuantity.toString(),
+                              'price': product.unitPrice.toString(),
+                            })
+                        .toList(),
+
+                'seller_company_id': widget.companyId.toString(),
               };
 
               context
@@ -360,17 +375,27 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
     return Column(
       spacing: 10,
       children: [
-        productItem('Номер товара:', selectedProduct.product.id.toString()
+        productItem(
+            'Номер товара:',
+            widget.type == 'tender'
+                ? selectedProduct.tenderItem.id.toString()
+                : selectedProduct.product.id.toString()
             // '1',
 
             ),
-        productItem('Наименование товара:', selectedProduct.product.name ?? ''
+        productItem(
+            'Наименование товара:',
+            widget.type == 'tender'
+                ? selectedProduct.tenderItem.title ?? ''
+                : selectedProduct.product.name ?? ''
             // 'Стул раскладной',
             ),
         productItem(
             'Количество товаров(ед):', '${selectedProduct.totalQuantity} шт'),
-        productItem('Цена за единицу:', '${selectedProduct.unitPrice} сом'),
-        productItem('Общая стоимость:', '${selectedProduct.subtotal} сом'),
+        productItem('Цена за единицу:',
+            '${selectedProduct.unitPrice} ${AppConstants.currencyCode}'),
+        productItem('Общая стоимость:',
+            '${selectedProduct.subtotal} ${AppConstants.currencyCode}'),
       ],
     );
   }

@@ -308,7 +308,9 @@
   "please_enter_password" : "Пожалуйста, введите пароль.",
   "tender_name" : "Название тендера",
   "add_tender_name": "Добавить название тендера",
-  "select_tender" : "Выберите тендер"
+  "select_tender" : "Выберите тендер",
+  "contract_name" : "Название контракта",
+  "add_contract_name" : "Добавить название контракта"
 
 
 

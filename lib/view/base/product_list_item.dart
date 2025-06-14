@@ -18,6 +18,7 @@ import '../../utils/custom_text_style.dart';
 import '../screen/product_detail/product_detail_screen.dart';
 import 'check_box_button.dart';
 import 'custom_favorite_button.dart';
+import 'custom_toast.dart';
 
 class ProductListItemWidget extends StatelessWidget {
   // final bool isFavorite;
@@ -25,6 +26,7 @@ class ProductListItemWidget extends StatelessWidget {
   final model.ProductListItem? product;
   final bool isPublicProduct;
   final bool isSearchProduct;
+  final bool isAlreadySelect;
 
   const ProductListItemWidget({
     super.key,
@@ -33,6 +35,7 @@ class ProductListItemWidget extends StatelessWidget {
     this.product,
     this.isPublicProduct = false,
     this.isSearchProduct = false,
+    this.isAlreadySelect = false,
   });
 
   @override
@@ -92,13 +95,33 @@ class ProductListItemWidget extends StatelessWidget {
                         },
                       ),
                     ),
-                  if (isSelectProduct)
+                  // if (isSelectProduct)
+                  //   Positioned(
+                  //     right: 0,
+                  //     top: 0,
+                  //     child: CheckBoxButton(
+                  //       product: product,
+                  //     ),
+                  //   ),
+                    if (isSelectProduct && !isAlreadySelect) ...[
+                       Positioned(
+                        right: 0,
+                        top: 0,
+                        child: CheckBoxButton(
+                          product: product,
+                        ),
+                      ),
+                  ],
+                  if (isSelectProduct && isAlreadySelect)
                     Positioned(
                       right: 0,
                       top: 0,
-                      child: CheckBoxButton(
-                        product: product,
-                      ),
+                      child: Checkbox(
+                          value: true,
+                          // checkBoxValue(state.selectedProduct.id ?? [], widget.productId!),
+                          onChanged: (val) {
+                            showShortToast("${product?.name} уже добавлен");
+                          }),
                     ),
                 ],
               ),

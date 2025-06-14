@@ -1,6 +1,7 @@
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/chat/chat_list_model.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
+import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -36,25 +37,37 @@ class ChatTile extends StatelessWidget {
           print(
               'this is product user id: ${chatData.product?.user?.id.toString()}');
           print('this is my uid: $myUid');
+          print(
+              'thisis company user id = ${chatData.company?.owner?.id.toString()}, name= ${chatData.company?.name} and user id = ${chatData.user?.id.toString()}');
+          print(
+              'this is receiver id = ${chatData.type == 'tender' ? myUid != chatData.company?.owner?.id.toString() ? chatData.company?.owner?.id.toString() ?? '' : chatData.user?.id.toString() ?? '' : myUid != chatData.product?.user?.id.toString() ? chatData.product?.user?.id.toString() ?? '' : chatData.user?.id.toString() ?? ''}');
           // print('this is chat data: ${chatData?.product?.user?.id.toString()}');
           Get.to(() => ChatConversation(
-                isSeller: chatData.product?.user?.id.toString() != myUid,
+                isSeller: chatData.type == 'tender'
+                    ? chatData.company?.owner?.id.toString() == myUid
+                    : chatData.product?.user?.id.toString() == myUid,
                 product: chatData.product ?? ProductListItem(),
                 isFirstMessage: false,
                 firebaseChatId: chatData.firebaseChatId ?? '',
                 chatId: chatData.chatId.toString(),
                 senderId: myUid,
-                receiverId: myUid != chatData.product?.user?.id.toString()
-                    ? chatData.product?.user?.id.toString() ?? ''
-                    : chatData.user?.id.toString() ?? '',
+                receiverId: chatData.type == 'tender'
+                    ? myUid != chatData.company?.owner?.id.toString()
+                        ? chatData.company?.owner?.id.toString() ?? ''
+                        : chatData.user?.id.toString() ?? ''
+                    : myUid != chatData.product?.user?.id.toString()
+                        ? chatData.product?.user?.id.toString() ?? ''
+                        : chatData.user?.id.toString() ?? '',
                 productUserId: chatData.product?.user?.id ?? 0,
-                productId: chatData.product?.id.toString() ?? '',
+                // productId: chatData.product?.id.toString() ?? '',
                 userUnread: chatData.userUnreadCount ?? 0,
                 ownerUnread: chatData.productOwnerUnreadCount ?? 0,
                 productName: chatData.product?.name ?? '',
                 productPrice: "${chatData.product?.price}",
                 type: chatData.type ?? '',
-                tender: chatData.tender,
+                tender:
+                    chatData.type == 'tender' ? chatData.tender : TenderItem(),
+                companyId: chatData.company?.id ?? 0,
               ));
         } else {
           //go to the agrement/contracts screen.

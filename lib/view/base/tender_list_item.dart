@@ -13,6 +13,7 @@ import '../../utils/custom_text_style.dart';
 import '../screen/tender/tender_detail_screen.dart';
 import 'check_box_tender_button.dart';
 import 'custom_favorite_button.dart';
+import 'custom_toast.dart';
 
 class TenderListItem extends StatelessWidget {
   final bool isFavorite;
@@ -20,6 +21,7 @@ class TenderListItem extends StatelessWidget {
   final bool isCompanyTender;
   final bool isPublicTender;
   final bool isSelect;
+  final bool isAlreadySelect;
 
   const TenderListItem({
     super.key,
@@ -28,6 +30,7 @@ class TenderListItem extends StatelessWidget {
     this.isCompanyTender = false,
     this.isPublicTender = false,
     this.isSelect = false,
+    this.isAlreadySelect = false,
   });
 
   @override
@@ -55,7 +58,7 @@ class TenderListItem extends StatelessWidget {
                       height: 120,
                       width: 100,
                       radius: 16),
-                  if (isSelect) ...[
+                  if (isSelect && !isAlreadySelect) ...[
                     Positioned(
                       right: 0,
                       top: 0,
@@ -64,6 +67,17 @@ class TenderListItem extends StatelessWidget {
                       ),
                     ),
                   ],
+                  if (isSelect && isAlreadySelect)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Checkbox(
+                          value: true,
+                          // checkBoxValue(state.selectedProduct.id ?? [], widget.productId!),
+                          onChanged: (val) {
+                            showShortToast("${tender.title} уже добавлен");
+                          }),
+                    ),
                   if (!isSelect)
                     Positioned(
                         right: 5,

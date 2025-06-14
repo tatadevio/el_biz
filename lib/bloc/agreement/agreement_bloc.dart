@@ -1,4 +1,5 @@
 import 'package:el_biz/data/model/response/agreement/my_sales_model.dart';
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -72,10 +73,13 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
       final response = await agreementRepo.getMySales(event.currentPage);
       if (response.statusCode == 200) {
         final sales = MySalesModel.fromJson(response.body);
+        if (event.currentPage == 1) {
+          emit(state.copyWith(mySales: []));
+        }
 
         // response.body['data']['items'] as List;
         emit(state.copyWith(
-            mySales: List<ContractListItem>.from(sales.data?.items ?? [])
+            mySales: List<CompanyItem>.from(sales.data?.items ?? [])
               ..addAll(state.mySales)));
       } else {
         // Handle error
@@ -97,10 +101,12 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
       final response = await agreementRepo.getMyPurchases(event.currentPage);
       if (response.statusCode == 200) {
         final purchase = MySalesModel.fromJson(response.body);
-
+        if (event.currentPage == 1) {
+          emit(state.copyWith(myPurchases: []));
+        }
         // response.body['data']['items'] as List;
         emit(state.copyWith(
-            myPurchases: List<ContractListItem>.from(purchase.data?.items ?? [])
+            myPurchases: List<CompanyItem>.from(purchase.data?.items ?? [])
               ..addAll(state.myPurchases)));
       } else {
         // Handle error

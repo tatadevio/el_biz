@@ -7,28 +7,66 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ContractsScreen extends StatelessWidget {
   const ContractsScreen({super.key});
 
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<ContractsBloc>();
+
+    // scrollController.addListener(() {
+    //   if (scrollController.position.pixels >=
+    //           scrollController.position.maxScrollExtent - 300 &&
+    //       !accountController.state.isLoading &&
+    //       !accountController.state.inActiveTenderShowMore) {
+    //     int pageSize = accountController.state.inActiveTenderPageSize;
+    //     if (accountController.state.inActiveTenderCurrentPage < pageSize) {
+    //       int nextPage = accountController.state.inActiveTenderCurrentPage;
+    //       String companyId = context
+    //               .read<CompanyDetailBloc>()
+    //               .state
+    //               .companyDetailModel
+    //               ?.data
+    //               ?.id
+    //               .toString() ??
+    //           '';
+    //       accountController
+    //           .add(GetCompanyTenders(companyId, currentPage: nextPage + 1));
+    //     }
+    //   }
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _scrollController = ScrollController();
+    // _callScrolling(context, _scrollController);
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Contracts'),
-          actions: const [
-            AppbarNotificationButton(),
-            SizedBox(
-              width: 10,
-            ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: BlocBuilder<ContractsBloc, ContractsState>(builder: (context, contractState) {
-            return ListView.builder(
-              itemCount: contractState.contracts.length,
-              itemBuilder: (context, index) {
-                return ContractItem(contractModel: contractState.contracts[index]);
-              },
+      appBar: AppBar(
+        title: const Text('Contracts'),
+        actions: const [
+          AppbarNotificationButton(),
+          SizedBox(
+            width: 10,
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: BlocBuilder<ContractsBloc, ContractsState>(
+            builder: (context, contractState) {
+          if (contractState.isLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          }),
-        ));
+          }
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: contractState.salesContractItems.length,
+            // contractState.contracts.length,
+            itemBuilder: (context, index) {
+              return ContractItem(
+                  contractModel: contractState.salesContractItems[index]);
+            },
+          );
+        }),
+      ),
+    );
   }
 }

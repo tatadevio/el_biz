@@ -1,4 +1,3 @@
-import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_event.dart';
 import 'package:el_biz/bloc/tenders/tenders_state.dart';
@@ -6,28 +5,28 @@ import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../bloc/filter_fields/filter_fields_bloc.dart';
+import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../base/custom_button.dart';
 import '../../base/tender_grid_item.dart';
 import '../../base/tender_list_item.dart';
 
-class SelectTenderScreen extends StatefulWidget {
+class SelectCompanyTenderScreen extends StatefulWidget {
   final ValueChanged<TenderItem?> onSelect;
   final List<int> alreadySelectedItems;
-  const SelectTenderScreen(
+  const SelectCompanyTenderScreen(
       {super.key, required this.onSelect, required this.alreadySelectedItems});
 
   @override
-  State<SelectTenderScreen> createState() => _SelectTenderScreenState();
+  State<SelectCompanyTenderScreen> createState() =>
+      _SelectCompanyTenderScreenState();
 }
 
-class _SelectTenderScreenState extends State<SelectTenderScreen> {
+class _SelectCompanyTenderScreenState extends State<SelectCompanyTenderScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
 
@@ -90,62 +89,6 @@ class _SelectTenderScreenState extends State<SelectTenderScreen> {
               const SizedBox(
                 width: 10,
               ),
-              // InkWell(
-              //   onTap: () {
-              //     // context.read<CategoryBloc>().add(GetCategory());
-              //     Get.to(() => SelectCategoryScreen(
-              //           onSelect: (selectedCategories) {
-              //             for (var category in selectedCategories) {
-              //               print(
-              //                   'these are the selected categoris : ${category.toJson()}');
-              //             }
-              //             context
-              //                 .read<TendersBloc>()
-              //                 .state
-              //                 .newTenderModel
-              //                 .categories = selectedCategories;
-              //             Get.to(() => NewTende2Screen());
-              //           },
-              //         ));
-              //     // Get.to(() => const MainCategories(
-              //     //     type: true, fromHome: true, screenName: '/AddNewTender'));
-              //     // Get.to(() => const AddProductScreen());
-              //   },
-              //   child: Container(
-              //     height: 40,
-              //     padding:
-              //         const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(
-              //         12,
-              //       ),
-              //       color: ColorResources.green,
-              //       boxShadow: const [
-              //         BoxShadow(
-              //           blurRadius: 2,
-              //           spreadRadius: 0,
-              //           offset: Offset(0, 1),
-              //           color: Color.fromRGBO(16, 24, 40, 0.05),
-              //         ),
-              //       ],
-              //     ),
-              //     child: Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         SvgPicture.asset(
-              //           Images.svgPlus,
-              //         ),
-              //         const SizedBox(
-              //           width: 5,
-              //         ),
-              //         Text(
-              //           'new_tender'.tr,
-              //           style: button16,
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           bottom: PreferredSize(
@@ -160,48 +103,48 @@ class _SelectTenderScreenState extends State<SelectTenderScreen> {
                 ),
                 child: Row(
                   children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        context.read<FilterFieldsBloc>().add(GetFilterFields());
-                        Get.to(() =>
-                            const ProductsFilterScreen(isTenderFilter: true));
-                      },
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 14),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            12,
-                          ),
-                          color: ColorResources.green,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 0,
-                              offset: Offset(0, 1),
-                              color: Color.fromRGBO(16, 24, 40, 0.05),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.asset(
-                              Images.filter,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'filter'.tr,
-                              style: button16,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // InkWell(
+                    //   borderRadius: BorderRadius.circular(12),
+                    //   onTap: () {
+                    //     context.read<FilterFieldsBloc>().add(GetFilterFields());
+                    //     Get.to(() =>
+                    //         const ProductsFilterScreen(isTenderFilter: true));
+                    //   },
+                    //   child: Container(
+                    //     height: 40,
+                    //     padding: const EdgeInsets.symmetric(
+                    //         vertical: 8, horizontal: 14),
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(
+                    //         12,
+                    //       ),
+                    //       color: ColorResources.green,
+                    //       boxShadow: const [
+                    //         BoxShadow(
+                    //           blurRadius: 2,
+                    //           spreadRadius: 0,
+                    //           offset: Offset(0, 1),
+                    //           color: Color.fromRGBO(16, 24, 40, 0.05),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         SvgPicture.asset(
+                    //           Images.filter,
+                    //         ),
+                    //         const SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         Text(
+                    //           'filter'.tr,
+                    //           style: button16,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     //
                     const SizedBox(
                       width: 10,
@@ -322,7 +265,7 @@ class _SelectTenderScreenState extends State<SelectTenderScreen> {
         children: [
           BlocBuilder<TendersBloc, TendersState>(
             builder: (context, tendersController) {
-              return BlocBuilder<PublicTenderBloc, PublicTenderState>(
+              return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
                   builder: (context, publicTenderState) {
                 if (publicTenderState.isLoading) {
                   return Center(
@@ -343,33 +286,35 @@ class _SelectTenderScreenState extends State<SelectTenderScreen> {
                                       mainAxisSpacing: 10,
                                       crossAxisSpacing: 10,
                                       childAspectRatio: 0.65),
-                              itemCount: publicTenderState.publicTenders.length,
+                              itemCount:
+                                  publicTenderState.companyTenders?.length ?? 0,
                               itemBuilder: (context, index) {
                                 return TenderGridItem(
                                   tender:
-                                      publicTenderState.publicTenders[index],
+                                      publicTenderState.companyTenders![index],
                                   isCompanyTender: false,
                                   isPublicTender: false,
                                   isSelect: true,
                                   isAlreadySelect: widget.alreadySelectedItems
                                       .contains(publicTenderState
-                                          .publicTenders[index].id),
+                                          .companyTenders![index].id),
                                 );
                               },
                             )
                           : ListView.builder(
                               controller: _scrollController,
-                              itemCount: publicTenderState.publicTenders.length,
+                              itemCount:
+                                  publicTenderState.companyTenders?.length ?? 0,
                               itemBuilder: (context, index) {
                                 return TenderListItem(
                                   tender:
-                                      publicTenderState.publicTenders[index],
+                                      publicTenderState.companyTenders![index],
                                   isCompanyTender: false,
                                   isPublicTender: true,
                                   isSelect: true,
                                   isAlreadySelect: widget.alreadySelectedItems
                                       .contains(publicTenderState
-                                          .publicTenders[index].id),
+                                          .companyTenders![index].id),
                                 );
                               },
                             ),

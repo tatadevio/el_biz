@@ -1,5 +1,9 @@
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
+import 'package:el_biz/bloc/tenders/tenders_event.dart';
 import 'package:el_biz/data/model/base/selected_product_info.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
+import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -10,6 +14,8 @@ import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/contracts/new_contact_list_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/new_contract_product_info.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
+import 'package:el_biz/view/screen/select_tender/select_company_product.dart';
+import 'package:el_biz/view/screen/select_tender/select_company_tender_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -18,18 +24,22 @@ import '../../../bloc/product/product_bloc.dart';
 
 class NewContractScreen extends StatefulWidget {
   final ProductListItem product;
+  final TenderItem tenderItem;
   final String buyerId;
   final String type;
-  final String productId;
-  final String tenderId;
+  // final String productId;
+  // final String tenderId;
+  final int companyId;
 
   const NewContractScreen({
     super.key,
     required this.product,
+    required this.tenderItem,
     required this.buyerId,
     required this.type,
-    required this.productId,
-    required this.tenderId,
+    // required this.productId,
+    // required this.tenderId,
+    required this.companyId,
   });
   // const NewContractScreen({super.key, required this.product, required this.buyerId});
 
@@ -39,18 +49,38 @@ class NewContractScreen extends StatefulWidget {
 
 class _NewContractScreenState extends State<NewContractScreen> {
   List<SelectedProductInfo> selectedProductInfoList = [];
+  // List<TenderItem> selectedTenderInfoList = [];
   final TextEditingController contractNameController = TextEditingController();
 
   @override
   initState() {
     super.initState();
 
-    selectedProductInfoList.add(SelectedProductInfo(
-        product: widget.product,
-        totalQuantity: int.tryParse(widget.product.quantity ?? '0') ?? 0,
-        unitPrice: int.parse(widget.product.price.toString()),
-        subtotal: int.parse(widget.product.price.toString()) *
-            (int.tryParse(widget.product.quantity ?? '0') ?? 0)));
+    if (widget.type == 'tender') {
+      selectedProductInfoList.add(SelectedProductInfo(
+          product: ProductListItem(),
+          tenderItem: widget.tenderItem,
+          totalQuantity: int.tryParse(widget.tenderItem.quantity ?? '0') ?? 0,
+          unitPrice: int.parse(widget.tenderItem.budgetFrom.toString()),
+          subtotal: int.parse(widget.tenderItem.budgetFrom.toString()) *
+              (int.tryParse(widget.tenderItem.quantity ?? '0') ?? 0)));
+
+      context
+          .read<CompanyDetailBloc>()
+          .add(GetCompanyTenders(widget.companyId.toString(), currentPage: 1));
+    } else {
+      selectedProductInfoList.add(SelectedProductInfo(
+          product: widget.product,
+          tenderItem: TenderItem(),
+          totalQuantity: int.tryParse(widget.product.quantity ?? '0') ?? 0,
+          unitPrice: int.parse(widget.product.price.toString()),
+          subtotal: int.parse(widget.product.price.toString()) *
+              (int.tryParse(widget.product.quantity ?? '0') ?? 0)));
+
+      context
+          .read<CompanyDetailBloc>()
+          .add(GetCompanyProducts(widget.companyId.toString(), currentPage: 1));
+    }
   }
 
   @override
@@ -79,9 +109,9 @@ class _NewContractScreenState extends State<NewContractScreen> {
               ),
               CustomTextField1(
                 controller: contractNameController,
-                hintColor: 'tender_name'.tr,
+                hintColor: 'contract_name'.tr,
                 inputType: TextInputType.text,
-                lableText: 'tender_name'.tr,
+                lableText: 'contract_name'.tr,
                 leading: '',
                 readOnly: false,
                 onChanged: (p0) {
@@ -111,6 +141,7 @@ class _NewContractScreenState extends State<NewContractScreen> {
                     return NewContractProductInfo(
                       product: selectedProductInfoList[index],
                       index: index,
+                      type: widget.type,
                       onRemove: (int productIndex) {
                         setState(() {
                           selectedProductInfoList.removeAt(productIndex);
@@ -130,7 +161,9 @@ class _NewContractScreenState extends State<NewContractScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CustomButtonWithIcon(
-                    title: 'add_products'.tr,
+                    title: widget.type == 'tender'
+                        ? 'add_tender'.tr
+                        : 'add_products'.tr,
                     svgIcon: Images.svgPlus,
                     buttonColor: ColorResources.lgColor,
                     borderColor: ColorResources.lgColor,
@@ -173,55 +206,95 @@ class _NewContractScreenState extends State<NewContractScreen> {
                               CustomButton(
                                 width: Get.width,
                                 height: 48,
-                                onTap: () {
-                                  Get.back();
-                                  Get.to(() => ProductScreen(
-                                        isSelectProduct: true,
-                                        onSendProduct: () async {
-                                          Get.back();
+                                onTap: widget.type == 'tender'
+                                    ? () {
+                                        context
+                                            .read<TendersBloc>()
+                                            .add(ClearSelectedTender());
 
-                                          // Get the selected product from Bloc (you can change this based on your logic)
-                                          ProductListItem? selectedProduct =
-                                              context
-                                                  .read<ProductBloc>()
-                                                  .state
-                                                  .selectedProduct;
+                                        List<int> tenderIds =
+                                            selectedProductInfoList
+                                                .map(
+                                                    (e) => e.tenderItem.id ?? 0)
+                                                .toList();
+                                        Get.back();
+                                        Get.to(() => SelectCompanyTenderScreen(
+                                              alreadySelectedItems: tenderIds,
+                                              onSelect: (val) async {
+                                                Get.back();
 
-                                          if (selectedProduct != null) {
-                                            setState(() {
-                                              selectedProductInfoList.add(
-                                                  SelectedProductInfo(
-                                                      product: selectedProduct,
-                                                      totalQuantity: int.tryParse(
-                                                              selectedProduct
-                                                                      .quantity ??
-                                                                  '0') ??
-                                                          0,
-                                                      unitPrice: selectedProduct
-                                                              .price ??
-                                                          0,
-                                                      subtotal: int.parse(
-                                                              selectedProduct
-                                                                  .quantity!) *
-                                                          selectedProduct
-                                                              .price!));
-                                            });
-                                          }
-                                        },
-                                      ));
+                                                if (val != null) {
+                                                  setState(() {
+                                                    selectedProductInfoList.add(
+                                                        SelectedProductInfo(
+                                                            product:
+                                                                ProductListItem(),
+                                                            tenderItem: val,
+                                                            totalQuantity:
+                                                                int.tryParse(val
+                                                                            .quantity ??
+                                                                        '0') ??
+                                                                    0,
+                                                            unitPrice:
+                                                                val.budgetFrom ??
+                                                                    0,
+                                                            subtotal: int.parse(
+                                                                    val.quantity!) *
+                                                                val.budgetFrom!));
+                                                  });
+                                                }
+                                              },
+                                            ));
+                                      }
+                                    : () {
+                                        context
+                                            .read<ProductBloc>()
+                                            .add(ClearSelectedProduct());
+                                        List<int> selectedProducts =
+                                            selectedProductInfoList
+                                                .map((e) => e.product.id ?? 0)
+                                                .toList();
+                                        Get.back();
+                                        Get.to(() => SelectCompanyProduct(
+                                              isSelectProduct: true,
+                                              selectedProducts:
+                                                  selectedProducts,
+                                              onSendProduct: () async {
+                                                Get.back();
 
-                                  // Get.to(() => ProductScreen(
-                                  //       isSelectProduct: true,
-                                  //       onSendProduct: () async {
-                                  //         Get.back();
-                                  //         ProductListItem? selectedProduct =
-                                  //             context
-                                  //                 .read<ProductBloc>()
-                                  //                 .state
-                                  //                 .selectedProduct;
-                                  //       },
-                                  //     ));
-                                },
+                                                // Get the selected product from Bloc (you can change this based on your logic)
+                                                ProductListItem?
+                                                    selectedProduct = context
+                                                        .read<ProductBloc>()
+                                                        .state
+                                                        .selectedProduct;
+
+                                                if (selectedProduct != null) {
+                                                  setState(() {
+                                                    selectedProductInfoList.add(SelectedProductInfo(
+                                                        product:
+                                                            selectedProduct,
+                                                        tenderItem:
+                                                            TenderItem(),
+                                                        totalQuantity: int.tryParse(
+                                                                selectedProduct
+                                                                        .quantity ??
+                                                                    '0') ??
+                                                            0,
+                                                        unitPrice:
+                                                            selectedProduct
+                                                                    .price ??
+                                                                0,
+                                                        subtotal: int.parse(
+                                                                selectedProduct
+                                                                    .quantity!) *
+                                                            selectedProduct
+                                                                .price!));
+                                                  });
+                                                }
+                                              },
+                                            ));
+                                      },
                                 title: 'add_manually'.tr,
                                 color: ColorResources.blue,
                                 textColor: ColorResources.white,
@@ -247,6 +320,7 @@ class _NewContractScreenState extends State<NewContractScreen> {
                                               selectedProductInfoList.add(
                                                   SelectedProductInfo(
                                                       product: selectedProduct,
+                                                      tenderItem: TenderItem(),
                                                       totalQuantity: int.tryParse(
                                                               selectedProduct
                                                                       .quantity ??
@@ -298,7 +372,7 @@ class _NewContractScreenState extends State<NewContractScreen> {
             height: Get.height,
             onTap: contractNameController.text.trim().isEmpty
                 ? () {
-                    showShortToast('add_tender_name'.tr);
+                    showShortToast('add_contract_name'.tr);
                   }
                 : () {
                     // Get.back();
@@ -306,9 +380,14 @@ class _NewContractScreenState extends State<NewContractScreen> {
                           selectedProductsList: selectedProductInfoList,
                           buyerId: widget.buyerId,
                           type: widget.type,
-                          productId: widget.productId,
-                          tenderId: widget.tenderId,
+                          productId: widget.type == 'tender'
+                              ? '0'
+                              : widget.product.id.toString(),
+                          tenderId: widget.type == 'tender'
+                              ? widget.tenderItem.id.toString()
+                              : '0',
                           contractName: contractNameController.text.trim(),
+                          companyId: widget.companyId,
                         ));
                   },
             title: 'continue'.tr),

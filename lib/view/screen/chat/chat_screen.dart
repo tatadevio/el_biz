@@ -25,12 +25,16 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
-      context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
-      context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
-      context.read<AgreementBloc>().add(GetMyPurchases(currentPage: 1));
-    });
+    // Future.delayed(Duration.zero, () {
+    // });
+    loadData();
+  }
+
+  loadData() {
+    context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
+    context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
+    context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
+    context.read<AgreementBloc>().add(GetMyPurchases(currentPage: 1));
   }
 
   @override

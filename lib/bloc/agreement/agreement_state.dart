@@ -7,12 +7,13 @@ class AgreementState extends Equatable {
   final int currentPage;
   final int pageSize;
 
-  final List<ContractListItem> mySales;
-  final List<ContractListItem> myPurchases;
+  final List<CompanyItem> mySales;
+  final List<CompanyItem> myPurchases;
   final int mySalesCurrentPage;
   final int myPurchasesCurrentPage;
   final int mySalesPageSize;
   final int myPurchasesPageSize;
+
   const AgreementState({
     this.isLoading = false,
     this.paymentMethods = const [],
@@ -33,15 +34,12 @@ class AgreementState extends Equatable {
       bool? isLoadingMore,
       int? currentPage,
       int? pageSize,
-      List<ContractListItem>? mySales,  
-      List<ContractListItem>? myPurchases,
+      List<CompanyItem>? mySales,
+      List<CompanyItem>? myPurchases,
       int? mySalesCurrentPage,
       int? myPurchasesCurrentPage,
       int? mySalesPageSize,
-      int? myPurchasesPageSize
-      
-      
-      }) {
+      int? myPurchasesPageSize}) {
     return AgreementState(
       isLoading: isLoading ?? this.isLoading,
       paymentMethods: paymentMethods ?? this.paymentMethods,
@@ -51,7 +49,8 @@ class AgreementState extends Equatable {
       mySales: mySales ?? this.mySales,
       myPurchases: myPurchases ?? this.myPurchases,
       mySalesCurrentPage: mySalesCurrentPage ?? this.mySalesCurrentPage,
-      myPurchasesCurrentPage: myPurchasesCurrentPage ?? this.myPurchasesCurrentPage,
+      myPurchasesCurrentPage:
+          myPurchasesCurrentPage ?? this.myPurchasesCurrentPage,
       mySalesPageSize: mySalesPageSize ?? this.mySalesPageSize,
       myPurchasesPageSize: myPurchasesPageSize ?? this.myPurchasesPageSize,
     );

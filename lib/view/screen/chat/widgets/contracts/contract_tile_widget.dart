@@ -1,16 +1,17 @@
-import 'package:el_biz/data/model/response/agreement/my_sales_model.dart';
-import 'package:el_biz/utils/appConstant.dart';
+import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/contracts/contracts_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../../helper/date_helper.dart';
 
 class ContractTileWidget extends StatelessWidget {
-  final ContractListItem contractData;
+  final CompanyItem contractData;
   // final String? lastMessage;
   const ContractTileWidget({
     super.key,
@@ -23,6 +24,7 @@ class ContractTileWidget extends StatelessWidget {
     return ListTile(
       onTap: () {
         //go to the agrement/contracts screen.
+        context.read<ContractsBloc>().add(GetCompanySales(companyId: contractData.id.toString(), currentPage: 1));
         Get.to(() => ContractsScreen());
       },
       leading: CustomImage(image: '', height: 48, width: 48, radius: 48),
@@ -31,7 +33,7 @@ class ContractTileWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              contractData.contractName ?? '',
+              contractData.name ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: h16.copyWith(color: ColorResources.darkGray),
@@ -49,7 +51,7 @@ class ContractTileWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "${contractData.totalAmount} ${AppConstants.currencyCode}",
+              contractData.description ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               // 'Мебель для предприятий и для дома',

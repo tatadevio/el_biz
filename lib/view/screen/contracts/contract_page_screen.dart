@@ -1,3 +1,5 @@
+import 'package:el_biz/bloc/user/user_bloc.dart';
+import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -5,14 +7,17 @@ import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/screen/contracts/sign_contract_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/bill_pay_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../../data/model/base/contract_model.dart';
+//import '../../../data/model/base/contract_model.dart';
+import '../../../data/model/response/agreement/company_sales_model.dart';
 import 'widgets/show_contract_files.dart';
 
 class ContractPageScreen extends StatelessWidget {
-  final ContractModel contractModel;
+  final CompanyContractItem contractModel;
   const ContractPageScreen({super.key, required this.contractModel});
 
   @override
@@ -28,7 +33,8 @@ class ContractPageScreen extends StatelessWidget {
               height: 10,
             ),
             Text(
-              contractModel.title,
+              contractModel.contractName ?? '',
+              // contractModel.title,
               style: body16.copyWith(color: ColorResources.blue),
             ),
             const SizedBox(
@@ -37,35 +43,38 @@ class ContractPageScreen extends StatelessWidget {
             dataItem(
               'Номер договора',
               Text(
-                contractModel.id,
+                contractModel.id.toString(),
+                // contractModel.id,
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
               'Название договора',
               Text(
-                contractModel.contractName,
+                contractModel.contractName ?? '',
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
               'Количество товаров(ед)',
               Text(
-                contractModel.numberOfGoods,
+                contractModel.contractProducts?.length.toString() ?? '0',
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
               'Стоимость заказа',
               Text(
-                contractModel.price,
+                contractModel.totalAmount.toString(),
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
               'Дата заказа',
               Text(
-                contractModel.date,
+                contractModel.createdAt != null
+                    ? formatDateInRu(contractModel.createdAt.toString())
+                    : '',
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
@@ -83,7 +92,7 @@ class ContractPageScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
-                  contractModel.status,
+                  contractModel.status ?? '',
                   style: body14.copyWith(color: ColorResources.white),
                 ),
               ),
@@ -91,10 +100,10 @@ class ContractPageScreen extends StatelessWidget {
             dataItem(
               'payment_status'.tr,
               Text(
-                contractModel.paymentStatus,
+                contractModel.status ?? '',
                 style: body16.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: contractModel.paymentStatus == "Оплачен"
+                    color: contractModel.status == "Оплачен"
                         ? ColorResources.green
                         : ColorResources.red),
               ),
@@ -117,7 +126,8 @@ class ContractPageScreen extends StatelessWidget {
                     boxShadow: const [ColorResources.shadow1],
                   ),
                   child: Text(
-                    contractModel.document,
+                    'document',
+                    // contractModel.document,
                     style: body16.copyWith(color: ColorResources.white),
                   ),
                 ),
@@ -174,31 +184,39 @@ class ContractPageScreen extends StatelessWidget {
         color: Colors.white,
         child: Row(
           children: [
-            Expanded(
-              child: CustomBorderButton(
-                height: 44,
-                width: Get.width,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                border: Border.all(width: 1, color: ColorResources.blue),
-                borderRadius: BorderRadius.circular(12),
-                boxShaow: const [ColorResources.shadow1],
-                child: Text(
-                  'edit'.tr,
-                  style: textMd.copyWith(color: ColorResources.blue),
+            if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
+                contractModel.seller?.id ==
+                    context.read<UserBloc>().state.userInfo!.data?.id)
+              Expanded(
+                child: CustomBorderButton(
+                  height: 44,
+                  width: Get.width,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  border: Border.all(width: 1, color: ColorResources.blue),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShaow: const [ColorResources.shadow1],
+                  child: Text(
+                    'edit'.tr,
+                    style: textMd.copyWith(color: ColorResources.blue),
+                  ),
+                  onTap: () {},
                 ),
-                onTap: () {},
               ),
-            ),
             const SizedBox(
               width: 10,
             ),
+            // if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
+            //     contractModel.seller?.id !=
+            //         context.read<UserBloc>().state.userInfo!.data?.id)
             Expanded(
               child: CustomButton(
                   width: Get.width,
                   height: 44,
                   onTap: () {
-                    Get.to(() => const SignContractScreen());
+                    Get.to(() => SignContractScreen(
+                          contractData: contractModel,
+                        ));
                   },
                   title: 'signing'.tr),
             ),

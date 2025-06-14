@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -17,6 +18,7 @@ class NewContractProductInfo extends StatefulWidget {
   final int index;
   final ValueChanged<int>? onRemove;
   final ValueChanged<ProductUpdate> onUpdate;
+  final String type;
 
   const NewContractProductInfo({
     super.key,
@@ -24,6 +26,7 @@ class NewContractProductInfo extends StatefulWidget {
     required this.index,
     required this.onRemove,
     required this.onUpdate,
+    required this.type,
   });
 
   @override
@@ -40,17 +43,21 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
     super.initState();
 
     // Initialize unit price from product
-    unitPriceController.text = widget.product.product.price.toString();
+    unitPriceController.text = widget.type == 'tender'
+        ? widget.product.tenderItem.budgetFrom.toString()
+        : widget.product.product.price.toString();
 
     // Listen to changes in quantity or unit price
     quantityController.addListener(_calculateTotalCost);
     unitPriceController.addListener(_calculateTotalCost);
 
     Future.delayed(Duration.zero, () {
-      unitPriceController.text =
-          widget.product.product.price?.toString() ?? '0';
-      quantityController.text =
-          widget.product.product.quantity?.toString() ?? '0';
+      unitPriceController.text = widget.type == 'tender'
+          ? widget.product.tenderItem.budgetFrom.toString()
+          : widget.product.product.price?.toString() ?? '0';
+      quantityController.text = widget.type == 'tender'
+          ? widget.product.tenderItem.quantity.toString()
+          : widget.product.product.quantity?.toString() ?? '0';
       _calculateTotalCost();
     });
   }
@@ -69,6 +76,7 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
     final subtotal = quantity * unitPrice;
 
     SelectedProductInfo info = SelectedProductInfo(
+      tenderItem: widget.product.tenderItem,
       product: widget.product.product,
       totalQuantity: quantity,
       unitPrice: unitPrice,
@@ -119,7 +127,9 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
               spacing: 10,
               children: [
                 CustomImage(
-                    image: widget.product.product.image ?? '',
+                    image: widget.type == 'tender'
+                        ? widget.product.tenderItem.image ?? ''
+                        : widget.product.product.image ?? '',
                     height: 40,
                     width: 40,
                     radius: 8),
@@ -128,14 +138,18 @@ class _NewContractProductInfoState extends State<NewContractProductInfo> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.product.product.name ?? '',
+                      widget.type == 'tender'
+                          ? widget.product.tenderItem.title ?? ''
+                          : widget.product.product.name ?? '',
                       // 'Стул раскладной',
                       style: h16.copyWith(color: ColorResources.darkGray),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      widget.product.product.description ?? '',
+                      widget.type == 'tender'
+                          ? widget.product.tenderItem.description ?? ''
+                          : widget.product.product.description ?? '',
                       // 'Стулья из натурального дерева',
                       style: body14,
                       maxLines: 1,

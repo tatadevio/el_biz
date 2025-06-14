@@ -37,3 +37,4 @@ class GetMyPurchases extends AgreementEvent {
   @override
   List<Object> get props => [currentPage];
 }
+

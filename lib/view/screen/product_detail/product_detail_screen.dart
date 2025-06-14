@@ -595,9 +595,9 @@ class ProductDetailScreen extends StatelessWidget {
                                   // getReceiverId(userState, state),
                                   senderId: myUserId,
                                   isFirstMessage: true,
-                                  productId: state.productDetailModel?.data?.id
-                                          .toString() ??
-                                      '',
+                                  // productId: state.productDetailModel?.data?.id
+                                  //         .toString() ??
+                                  //     '',
                                   firebaseChatId:
                                       "product_${state.productDetailModel?.data?.id}_user_$myUserId",
                                   productName:
@@ -609,6 +609,9 @@ class ProductDetailScreen extends StatelessWidget {
                                       '0',
                                   productUserId: state
                                           .productDetailModel?.data?.user?.id ??
+                                      0,
+                                  companyId: state.productDetailModel?.data
+                                          ?.company?.id ??
                                       0,
                                 ));
                           },

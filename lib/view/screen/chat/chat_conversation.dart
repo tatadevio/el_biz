@@ -33,7 +33,7 @@ class ChatConversation extends StatefulWidget {
   final String receiverId;
   final String senderId;
   final bool isFirstMessage;
-  final String productId;
+  // final String productId;
   final String firebaseChatId;
   final String chatId;
   final int userUnread;
@@ -43,15 +43,16 @@ class ChatConversation extends StatefulWidget {
   final String productPrice;
   final ProductListItem product;
   final String type;
-  final String tenderId;
+  // final String tenderId;
   final TenderItem? tender;
+  final int companyId;
   const ChatConversation({
     super.key,
     required this.isSeller,
     this.receiverId = '',
     required this.senderId,
     required this.isFirstMessage,
-    required this.productId,
+    // required this.productId,
     this.firebaseChatId = '',
     this.chatId = '',
     this.userUnread = 0,
@@ -61,8 +62,9 @@ class ChatConversation extends StatefulWidget {
     required this.productPrice,
     required this.product,
     this.type = 'product',
-    this.tenderId = '0',
+    // this.tenderId = '0',
     this.tender,
+    required this.companyId,
   });
 
   @override
@@ -136,9 +138,16 @@ class _ChatConversationState extends State<ChatConversation> {
 
       context.read<ChatBloc>().add(
             SendMessage(
-                productId: widget.productId,
+                productId: widget.type == 'tender'
+                    ? '0'
+                    : widget.product.id.toString(),
+
+                // widget.productId,
                 type: widget.type,
-                tenderId: widget.tenderId,
+                tenderId: widget.type == 'tender'
+                    ? widget.tender?.id.toString() ?? '0'
+                    : '0',
+                // widget.tenderId,
                 completer: completer),
           );
 
@@ -415,8 +424,8 @@ class _ChatConversationState extends State<ChatConversation> {
                           boxShaow: const [ColorResources.shadow1],
                           onTap: widget.type == 'tender'
                               ? () {
-                                  showShortToast('select tender......');
                                   Get.to(() => SelectTenderScreen(
+                                        alreadySelectedItems: [],
                                         onSelect: (selectedTender) async {
                                           UserData? myUser = context
                                               .read<UserBloc>()
@@ -551,27 +560,31 @@ class _ChatConversationState extends State<ChatConversation> {
                         Expanded(
                           child: InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: widget.type == 'tender'
-                                ? () {
-                                    showShortToast('working......');
-                                  }
-                                : () {
-                                    print(
-                                        "this is buyer id = ${widget.receiverId}");
-                                    context
-                                        .read<AgreementBloc>()
-                                        .add(GetPaymentMethod(currentPage: 1));
-                                    Get.to(() => NewContractScreen(
-                                          product: widget.product,
-                                          buyerId: widget.receiverId,
-                                          type: widget.type,
-                                          tenderId:
-                                              widget.tender?.id.toString() ??
-                                                  '0',
-                                          productId: widget.productId,
-                                        ));
-                                        // there have to send the company id 
-                                  },
+                            onTap:
+
+                                //  widget.type == 'tender'
+                                //     ? () {
+
+                                //       }
+                                //     :
+
+                                () {
+                              print("this is buyer id = ${widget.receiverId}");
+                              context
+                                  .read<AgreementBloc>()
+                                  .add(GetPaymentMethod(currentPage: 1));
+                              Get.to(() => NewContractScreen(
+                                    product: widget.product,
+                                    tenderItem: widget.tender ?? TenderItem(),
+                                    buyerId: widget.receiverId,
+                                    type: widget.type,
+                                    // tenderId:
+                                    //     widget.tender?.id.toString() ?? '0',
+                                    // productId: widget.productId,
+                                    companyId: widget.companyId,
+                                  ));
+                              // there have to send the company id
+                            },
                             child: Container(
                               height: 36,
                               decoration: BoxDecoration(
@@ -689,7 +702,9 @@ class _ChatConversationState extends State<ChatConversation> {
             chatId: chatId,
             receiverId: widget.receiverId,
             senderId: widget.senderId,
-            productId: widget.productId,
+            productId: widget.type == 'tender'
+                ? widget.tender?.id.toString() ?? '0'
+                : widget.product.id.toString(),
             isFirstMessage: widget.isFirstMessage,
             userUnread: widget.userUnread,
             ownerUnread: widget.ownerUnread,

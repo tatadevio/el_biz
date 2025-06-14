@@ -1,15 +1,16 @@
+import 'package:el_biz/data/model/response/agreement/company_sales_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/screen/contracts/contract_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../data/model/base/contract_model.dart';
+import '../../../../helper/date_helper.dart';
+import '../contract_page_screen.dart';
 
 class ContractItem extends StatelessWidget {
-  final ContractModel contractModel;
+  final CompanyContractItem contractModel;
   const ContractItem({super.key, required this.contractModel});
 
   @override
@@ -42,12 +43,15 @@ class ContractItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      contractModel.title,
+                      contractModel.contractName ?? '',
+                      // contractModel.title,
                       style: body16.copyWith(color: ColorResources.blue),
                     ),
                   ),
                   Text(
-                    contractModel.date,
+                    contractModel.createdAt != null
+                        ? formatDateInRu(contractModel.createdAt.toString())
+                        : '',
                     style: body14.copyWith(color: ColorResources.gray),
                   ),
                 ],
@@ -56,15 +60,21 @@ class ContractItem extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                contractModel.subTitle,
+                contractModel.status ?? '',
+                // contractModel.subTitle,
                 style: body14.copyWith(color: ColorResources.darkGray),
               ),
               const SizedBox(
                 height: 5,
               ),
               Text(
-                contractModel.paymentStatus,
-                style: body14.copyWith(fontWeight: FontWeight.w500, color: contractModel.paymentStatus == "Оплачен" ? ColorResources.green : ColorResources.red),
+                contractModel.paymentMethod ?? '',
+                // contractModel.paymentStatus,
+                style: body14.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: contractModel.status == "Оплачен"
+                        ? ColorResources.green
+                        : ColorResources.red),
               ),
               const SizedBox(
                 height: 10,
@@ -73,7 +83,8 @@ class ContractItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
                     decoration: BoxDecoration(
                       color: contractModel.status == "Подписан"
                           ? ColorResources.green
@@ -83,7 +94,7 @@ class ContractItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Text(
-                      contractModel.status,
+                      contractModel.status ?? '',
                       style: body14.copyWith(color: ColorResources.white),
                     ),
                   ),

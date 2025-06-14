@@ -46,35 +46,37 @@ class SignatureScreenState extends State<SignatureScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Container(
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: SfSignaturePad(
-                          key: signatureGlobalKey,
-                          backgroundColor: Colors.white,
-                          strokeColor: Colors.black,
-                          minimumStrokeWidth: 1.0,
-                          maximumStrokeWidth: 4.0))),
-              SizedBox(height: 10),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: _handleSaveButtonPressed,
-                      child: Text('to_image'.tr),
-                    ),
-                    TextButton(
-                      onPressed: _handleClearButtonPressed,
-                      child: Text('clear'.tr),
-                    )
-                  ])
-            ]));
+      appBar: AppBar(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.grey)),
+                  child: SfSignaturePad(
+                      key: signatureGlobalKey,
+                      backgroundColor: Colors.white,
+                      strokeColor: Colors.black,
+                      minimumStrokeWidth: 1.0,
+                      maximumStrokeWidth: 4.0))),
+          SizedBox(height: 10),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                TextButton(
+                  onPressed: _handleSaveButtonPressed,
+                  child: Text('to_image'.tr),
+                ),
+                TextButton(
+                  onPressed: _handleClearButtonPressed,
+                  child: Text('clear'.tr),
+                )
+              ])
+        ],
+      ),
+    );
   }
 }

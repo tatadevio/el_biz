@@ -109,8 +109,9 @@ class AppConstants {
   // payment method
   static const String paymentMethodUrl = "api/paymentmethods";
   static const String storeContractUrl = "api/contracts/store";
-  static const String mySalesUrl = "api/contracts/my-sales";
-  static const String myPurchasesUrl = "api/contracts/my-purchases";
+  static const String mySalesCompaniesUrl = "api/contracts/my-sales-companies";
+  static const String contractCompanyUrl = "api/contracts/company";
+  static const String myPurchasesCompaniesUrl = "api/contracts/my-purchases-companies";
   static const String contractDetailUrl = "api/contracts/detail";
 
   static const String token = "token";

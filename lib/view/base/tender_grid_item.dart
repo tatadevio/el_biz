@@ -7,6 +7,7 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/check_box_tender_button.dart';
 import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class TenderGridItem extends StatelessWidget {
   final bool isCompanyTender;
   final bool isPublicTender;
   final bool isSelect;
+  final bool isAlreadySelect;
   const TenderGridItem({
     super.key,
     this.isFavorite = false,
@@ -27,6 +29,7 @@ class TenderGridItem extends StatelessWidget {
     required this.isCompanyTender,
     this.isPublicTender = false,
     this.isSelect = false,
+    this.isAlreadySelect = false,
   });
 
   @override
@@ -59,7 +62,7 @@ class TenderGridItem extends StatelessWidget {
                       width: Get.width,
                       radius: 16),
                   // Image.asset(Images.splashLogo),
-                  if (isSelect) ...[
+                  if (isSelect && !isAlreadySelect) ...[
                     Positioned(
                       right: 0,
                       top: 0,
@@ -68,6 +71,17 @@ class TenderGridItem extends StatelessWidget {
                       ),
                     ),
                   ],
+                  if (isSelect && isAlreadySelect)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Checkbox(
+                          value: true,
+                          // checkBoxValue(state.selectedProduct.id ?? [], widget.productId!),
+                          onChanged: (val) {
+                            showShortToast("${tender.title} уже добавлен");
+                          }),
+                    ),
                   if (!isSelect)
                     Positioned(
                         right: 5,

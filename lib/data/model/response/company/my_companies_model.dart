@@ -94,6 +94,7 @@ class CompanyItem {
   final String? email;
   final String? logo;
   final String? banner;
+  final String? description;
   final String? phone;
   final String? address;
   final String? verificationStatus;
@@ -108,6 +109,7 @@ class CompanyItem {
     this.email,
     this.logo,
     this.banner,
+    this.description,
     this.phone,
     this.address,
     this.verificationStatus,
@@ -123,6 +125,7 @@ class CompanyItem {
         email: json["email"],
         logo: json["logo"],
         banner: json["banner"],
+        description: json["description"],
         phone: json["phone"],
         address: json["address"],
         verificationStatus: json["verification_status"],
@@ -140,6 +143,7 @@ class CompanyItem {
         "email": email,
         "logo": logo,
         "banner": banner,
+        "description": description,
         "phone": phone,
         "address": address,
         "verification_status": verificationStatus,

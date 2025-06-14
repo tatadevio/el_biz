@@ -23,9 +23,13 @@ import '../product/add_product_screen.dart';
 class ProductScreen extends StatefulWidget {
   final bool isSelectProduct;
   final Function? onSendProduct;
+  final List<int> selectedProducts;
 
   const ProductScreen(
-      {super.key, this.isSelectProduct = false, this.onSendProduct});
+      {super.key,
+      this.isSelectProduct = false,
+      this.onSendProduct,
+      this.selectedProducts = const []});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
