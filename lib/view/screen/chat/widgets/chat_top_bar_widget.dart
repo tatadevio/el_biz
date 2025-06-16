@@ -27,7 +27,8 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    context.read<ChatBloc>().add(const UpdateShowAllMessages(showAllMessages: true));
+                    context.read<ChatBloc>().add(
+                        const UpdateShowAllMessages(showAllMessages: true));
                     // chatState.updateShowAllMessages(true);
                   },
                   child: Container(
@@ -36,14 +37,20 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                       border: Border(
                         bottom: BorderSide(
                           width: chatState.isShowAllMessage ? 2 : 1,
-                          color: chatState.isShowAllMessage ? ColorResources.blue : ColorResources.lgColor,
+                          color: chatState.isShowAllMessage
+                              ? ColorResources.blue
+                              : ColorResources.lgColor,
                         ),
                       ),
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'all_messages'.tr,
-                      style: textSm.copyWith(color: chatState.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
+                      'goods'.tr,
+                      // 'all_messages'.tr,
+                      style: textSm.copyWith(
+                          color: chatState.isShowAllMessage
+                              ? ColorResources.blue
+                              : ColorResources.gray),
                     ),
                   ),
                 ),
@@ -51,7 +58,8 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    context.read<ChatBloc>().add(const UpdateShowAllMessages(showAllMessages: false));
+                    context.read<ChatBloc>().add(
+                        const UpdateShowAllMessages(showAllMessages: false));
                     // chatState.updateShowAllMessages(false);
                   },
                   child: Container(
@@ -60,14 +68,20 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                       border: Border(
                         bottom: BorderSide(
                           width: !chatState.isShowAllMessage ? 2 : 1,
-                          color: !chatState.isShowAllMessage ? ColorResources.blue : ColorResources.lgColor,
+                          color: !chatState.isShowAllMessage
+                              ? ColorResources.blue
+                              : ColorResources.lgColor,
                         ),
                       ),
                     ),
                     alignment: Alignment.topCenter,
                     child: Text(
-                      'unread'.tr,
-                      style: textSm.copyWith(color: !chatState.isShowAllMessage ? ColorResources.blue : ColorResources.gray),
+                      'tenders'.tr,
+                      // 'unread'.tr,
+                      style: textSm.copyWith(
+                          color: !chatState.isShowAllMessage
+                              ? ColorResources.blue
+                              : ColorResources.gray),
                     ),
                   ),
                 ),

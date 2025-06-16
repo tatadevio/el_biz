@@ -302,45 +302,134 @@ class _NewContractScreenState extends State<NewContractScreen> {
                               CustomButton(
                                 width: Get.width,
                                 height: 48,
-                                onTap: () {
-                                  Get.back();
-                                  Get.to(() => ProductScreen(
-                                        isSelectProduct: true,
-                                        onSendProduct: () async {
-                                          Get.back();
+                                onTap: widget.type == 'tender'
+                                    ? () {
+                                        context
+                                            .read<TendersBloc>()
+                                            .add(ClearSelectedTender());
 
-                                          ProductListItem? selectedProduct =
-                                              context
-                                                  .read<ProductBloc>()
-                                                  .state
-                                                  .selectedProduct;
+                                        List<int> tenderIds =
+                                            selectedProductInfoList
+                                                .map(
+                                                    (e) => e.tenderItem.id ?? 0)
+                                                .toList();
+                                        Get.back();
+                                        Get.to(() => SelectCompanyTenderScreen(
+                                              alreadySelectedItems: tenderIds,
+                                              onSelect: (val) async {
+                                                Get.back();
 
-                                          if (selectedProduct != null) {
-                                            setState(() {
-                                              selectedProductInfoList.add(
-                                                  SelectedProductInfo(
-                                                      product: selectedProduct,
-                                                      tenderItem: TenderItem(),
-                                                      totalQuantity: int.tryParse(
-                                                              selectedProduct
-                                                                      .quantity ??
-                                                                  '0') ??
-                                                          0,
-                                                      unitPrice: selectedProduct
-                                                              .price ??
-                                                          0,
-                                                      subtotal: int.parse(
-                                                              selectedProduct
-                                                                  .quantity!) *
-                                                          selectedProduct
-                                                              .price!));
-                                              // selectedProducts
-                                              //     .add(selectedProduct);
-                                            });
-                                          }
-                                        },
-                                      ));
-                                },
+                                                if (val != null) {
+                                                  setState(() {
+                                                    selectedProductInfoList.add(
+                                                        SelectedProductInfo(
+                                                            product:
+                                                                ProductListItem(),
+                                                            tenderItem: val,
+                                                            totalQuantity:
+                                                                int.tryParse(val
+                                                                            .quantity ??
+                                                                        '0') ??
+                                                                    0,
+                                                            unitPrice:
+                                                                val.budgetFrom ??
+                                                                    0,
+                                                            subtotal: int.parse(
+                                                                    val.quantity!) *
+                                                                val.budgetFrom!));
+                                                  });
+                                                }
+                                              },
+                                            ));
+                                      }
+                                    : () {
+                                        context
+                                            .read<ProductBloc>()
+                                            .add(ClearSelectedProduct());
+                                        List<int> selectedProducts =
+                                            selectedProductInfoList
+                                                .map((e) => e.product.id ?? 0)
+                                                .toList();
+                                        Get.back();
+                                        Get.to(() => SelectCompanyProduct(
+                                              isSelectProduct: true,
+                                              selectedProducts:
+                                                  selectedProducts,
+                                              onSendProduct: () async {
+                                                Get.back();
+
+                                                // Get the selected product from Bloc (you can change this based on your logic)
+                                                ProductListItem?
+                                                    selectedProduct = context
+                                                        .read<ProductBloc>()
+                                                        .state
+                                                        .selectedProduct;
+
+                                                if (selectedProduct != null) {
+                                                  setState(() {
+                                                    selectedProductInfoList.add(SelectedProductInfo(
+                                                        product:
+                                                            selectedProduct,
+                                                        tenderItem:
+                                                            TenderItem(),
+                                                        totalQuantity: int.tryParse(
+                                                                selectedProduct
+                                                                        .quantity ??
+                                                                    '0') ??
+                                                            0,
+                                                        unitPrice:
+                                                            selectedProduct
+                                                                    .price ??
+                                                                0,
+                                                        subtotal: int.parse(
+                                                                selectedProduct
+                                                                    .quantity!) *
+                                                            selectedProduct
+                                                                .price!));
+                                                  });
+                                                }
+                                              },
+                                            ));
+                                      },
+                                // onTap: () {
+                                //   Get.back();
+                                //   Get.to(() => ProductScreen(
+                                //         isSelectProduct: true,
+                                //         onSendProduct: () async {
+                                //           Get.back();
+
+                                //           ProductListItem? selectedProduct =
+                                //               context
+                                //                   .read<ProductBloc>()
+                                //                   .state
+                                //                   .selectedProduct;
+
+                                //           if (selectedProduct != null) {
+                                //             setState(() {
+                                //               selectedProductInfoList.add(
+                                //                   SelectedProductInfo(
+                                //                       product: selectedProduct,
+                                //                       tenderItem: TenderItem(),
+                                //                       totalQuantity: int.tryParse(
+                                //                               selectedProduct
+                                //                                       .quantity ??
+                                //                                   '0') ??
+                                //                           0,
+                                //                       unitPrice: selectedProduct
+                                //                               .price ??
+                                //                           0,
+                                //                       subtotal: int.parse(
+                                //                               selectedProduct
+                                //                                   .quantity!) *
+                                //                           selectedProduct
+                                //                               .price!));
+                                //               // selectedProducts
+                                //               //     .add(selectedProduct);
+                                //             });
+                                //           }
+                                //         },
+                                //       ));
+                                // },
                                 title: 'select_from_the_catalog'.tr,
                                 color: ColorResources.lgColor,
                                 textColor: ColorResources.gray,

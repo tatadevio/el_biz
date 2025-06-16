@@ -13,29 +13,29 @@ class MySalesWidget extends StatelessWidget {
     context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
   }
 
-  // void _callScrolling(BuildContext context, ScrollController scrollController) {
-  //   final accountController = context.read<ChatBloc>();
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<AgreementBloc>();
 
-  //   scrollController.addListener(() {
-  //     if (scrollController.position.pixels >=
-  //             scrollController.position.maxScrollExtent - 300 &&
-  //         !accountController.state.isLoading &&
-  //         !accountController.state.isLoadingMore) {
-  //       print('this is scroll view page ended....');
-  //       int pageSize = accountController.state.pageSize;
-  //       if (accountController.state.currentPage < pageSize) {
-  //         int nextPage = accountController.state.currentPage;
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !accountController.state.isLoading &&
+          !accountController.state.isLoadingMore) {
+        print('this is scroll view page ended....');
+        int pageSize = accountController.state.mySalesPageSize;
+        if (accountController.state.mySalesCurrentPage < pageSize) {
+          int nextPage = accountController.state.mySalesCurrentPage;
 
-  //         accountController.add(GetChatProductList(currentPage: nextPage + 1));
-  //       }
-  //     }
-  //   });
-  // }
+          accountController.add(GetMySales(currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
-    // _callScrolling(context, scrollController);
+    _callScrolling(context, scrollController);
     return RefreshIndicator(
       onRefresh: () async => reloadAllMessages(context),
       child: BlocBuilder<AgreementBloc, AgreementState>(
@@ -55,6 +55,7 @@ class MySalesWidget extends StatelessWidget {
               final chat = agreement.mySales[index];
               return ContractTileWidget(
                 contractData: chat,
+                isSales: true,
               );
             },
           );

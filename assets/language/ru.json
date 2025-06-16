@@ -310,7 +310,19 @@
   "add_tender_name": "Добавить название тендера",
   "select_tender" : "Выберите тендер",
   "contract_name" : "Название контракта",
-  "add_contract_name" : "Добавить название контракта"
+  "add_contract_name" : "Добавить название контракта",
+  "director_name_required": "Требуется указать имя директора",
+  "terms_not_agreed": "Условия не приняты",
+  "no_contracts_found": "Контракты не найдены",
+  "no_contract_found": "Контракт не найден."
+
+
+
+
+
+
+
+
 
 
 

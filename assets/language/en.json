@@ -310,7 +310,11 @@
   "add_tender_name" : "Add Tender Name",
   "select_tender" : "Select Tender",
   "contract_name" : "Contract Name",
-  "add_contract_name" : "Add Contract Name"
+  "add_contract_name" : "Add Contract Name",
+  "director_name_required" : "Director name is required",
+  "terms_not_agreed" : "Terms not agreed",
+  "no_contracts_found" : "No contracts found.",
+  "no_contract_found" : "No contract found."
 
 
 

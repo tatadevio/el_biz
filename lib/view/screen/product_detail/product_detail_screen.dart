@@ -603,6 +603,9 @@ class ProductDetailScreen extends StatelessWidget {
                                   productName:
                                       state.productDetailModel?.data?.name ??
                                           '',
+                                  productId: state.productDetailModel?.data?.id
+                                          .toString() ??
+                                      '',
                                   productPrice: state
                                           .productDetailModel?.data?.price
                                           .toString() ??

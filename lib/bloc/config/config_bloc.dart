@@ -3,13 +3,16 @@ import 'package:el_biz/data/model/response/config_model.dart';
 import 'package:el_biz/data/model/response/pages_model.dart';
 import 'package:el_biz/data/repo/config_repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 part 'config_event.dart';
 part 'config_state.dart';
 
 class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   final ConfigRepo configRepo;
-  ConfigBloc(this.configRepo) : super(ConfigState()) {
+  ConfigBloc(this.configRepo) : 
+        super( ConfigState(pageController:   PageController(initialPage: 0))){
+          
     on<GetPrivacy>(_getPrivacy);
     on<GetTerms>(_getTerms);
     on<GetAbout>(_getAbout);
@@ -19,6 +22,8 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       emit(state.copywith(selectedIndex: event.value));
     });
   }
+
+
   Future<void> _getPrivacy(GetPrivacy event, Emitter<ConfigState> emit) async {
     emit(state.copywith(isLoading: true));
     try {

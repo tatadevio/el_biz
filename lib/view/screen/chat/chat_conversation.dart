@@ -33,7 +33,6 @@ class ChatConversation extends StatefulWidget {
   final String receiverId;
   final String senderId;
   final bool isFirstMessage;
-  // final String productId;
   final String firebaseChatId;
   final String chatId;
   final int userUnread;
@@ -43,7 +42,11 @@ class ChatConversation extends StatefulWidget {
   final String productPrice;
   final ProductListItem product;
   final String type;
+  final String
+      productId; // getting to init chat only coming form the product detail screen
   // final String tenderId;
+  final String
+      tenderId; // getting to init tender chat from tender detail screen
   final TenderItem? tender;
   final int companyId;
   const ChatConversation({
@@ -62,9 +65,10 @@ class ChatConversation extends StatefulWidget {
     required this.productPrice,
     required this.product,
     this.type = 'product',
-    // this.tenderId = '0',
+    this.tenderId = '0',
     this.tender,
     required this.companyId,
+    this.productId = '0',
   });
 
   @override
@@ -138,15 +142,13 @@ class _ChatConversationState extends State<ChatConversation> {
 
       context.read<ChatBloc>().add(
             SendMessage(
-                productId: widget.type == 'tender'
-                    ? '0'
-                    : widget.product.id.toString(),
+                productId:
+                    widget.type == 'tender' ? '0' : widget.productId.toString(),
 
                 // widget.productId,
                 type: widget.type,
-                tenderId: widget.type == 'tender'
-                    ? widget.tender?.id.toString() ?? '0'
-                    : '0',
+                tenderId:
+                    widget.type == 'tender' ? widget.tenderId.toString() : '0',
                 // widget.tenderId,
                 completer: completer),
           );

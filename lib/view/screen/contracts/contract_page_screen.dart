@@ -7,12 +7,10 @@ import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/screen/contracts/sign_contract_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/bill_pay_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-//import '../../../data/model/base/contract_model.dart';
 import '../../../data/model/response/agreement/company_sales_model.dart';
 import 'widgets/show_contract_files.dart';
 
@@ -206,20 +204,20 @@ class ContractPageScreen extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            // if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
-            //     contractModel.seller?.id !=
-            //         context.read<UserBloc>().state.userInfo!.data?.id)
-            Expanded(
-              child: CustomButton(
-                  width: Get.width,
-                  height: 44,
-                  onTap: () {
-                    Get.to(() => SignContractScreen(
-                          contractData: contractModel,
-                        ));
-                  },
-                  title: 'signing'.tr),
-            ),
+            if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
+                contractModel.seller?.id !=
+                    context.read<UserBloc>().state.userInfo!.data?.id)
+              Expanded(
+                child: CustomButton(
+                    width: Get.width,
+                    height: 44,
+                    onTap: () {
+                      Get.to(() => SignContractScreen(
+                            contractData: contractModel,
+                          ));
+                    },
+                    title: 'signing'.tr),
+              ),
           ],
         ),
       ),

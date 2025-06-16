@@ -429,7 +429,7 @@ class TenderDetailScreen extends StatelessWidget {
                       Get.to(() => ChatConversation(
                             isSeller: false,
                             product: ProductListItem(),
-                            // tenderId: tenderDetail.data!.id.toString(),
+                            tenderId: tenderDetail.data!.id.toString(),
                             type: 'tender',
                             // tender: tenderDetail.data!,
                             // tenderName: tenderDetail.data!.title ?? '',

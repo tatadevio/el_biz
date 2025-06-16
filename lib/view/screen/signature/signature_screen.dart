@@ -1,10 +1,23 @@
+import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
+import 'package:el_biz/view/base/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
+import 'dart:typed_data';
+
 class SignatureScreen extends StatefulWidget {
-  const SignatureScreen({super.key});
+  final String contractId;
+  final String directorName;
+
+  const SignatureScreen(
+      {super.key, required this.contractId, required this.directorName});
 
   @override
   SignatureScreenState createState() => SignatureScreenState();
@@ -37,10 +50,45 @@ class SignatureScreenState extends State<SignatureScreen> {
                 child: Image.memory(bytes!.buffer.asUint8List()),
               ),
             ),
+            bottomNavigationBar: BlocBuilder<ContractsBloc, ContractsState>(
+                builder: (contex, contractState) {
+              if (contractState.isLoading) {
+                return BottomAppBar(
+                  child: Center(
+                      child: CustomButtonLoader(
+                    width: Get.width,
+                    height: Get.height,
+                  )),
+                );
+              }
+              return BottomAppBar(
+                child: CustomButton(
+                  width: Get.width,
+                  height: Get.height,
+                  onTap: () async {
+                    contex.read<ContractsBloc>().add(SignContract(
+                          contractId: widget.contractId,
+                          directorName: widget.directorName,
+                          signatureFile: await convertByteDataToXFile(bytes),
+                        ));
+                  },
+                  title: 'subscribe'.tr,
+                ),
+              );
+            }),
           );
         },
       ),
     );
+  }
+
+  Future<XFile> convertByteDataToXFile(ByteData byteData) async {
+    final pngBytes = byteData.buffer.asUint8List();
+    final tempDir = await getTemporaryDirectory();
+    final filePath =
+        '${tempDir.path}/signature_${DateTime.now().millisecondsSinceEpoch}.png';
+    final file = await File(filePath).writeAsBytes(pngBytes);
+    return XFile(file.path);
   }
 
   @override

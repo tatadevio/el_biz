@@ -12,10 +12,12 @@ import '../../../../../helper/date_helper.dart';
 
 class ContractTileWidget extends StatelessWidget {
   final CompanyItem contractData;
+  final bool isSales;
   // final String? lastMessage;
   const ContractTileWidget({
     super.key,
     required this.contractData,
+    required this.isSales,
     // this.lastMessage,
   });
 
@@ -24,7 +26,14 @@ class ContractTileWidget extends StatelessWidget {
     return ListTile(
       onTap: () {
         //go to the agrement/contracts screen.
+        if(isSales) {
+
         context.read<ContractsBloc>().add(GetCompanySales(companyId: contractData.id.toString(), currentPage: 1));
+        }else {
+        context.read<ContractsBloc>().add(GetCompanyPurchases(
+              companyId: contractData.id.toString(), currentPage: 1));
+
+        }
         Get.to(() => ContractsScreen());
       },
       leading: CustomImage(image: '', height: 48, width: 48, radius: 48),

@@ -1,11 +1,14 @@
+import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/data/model/response/agreement/company_sales_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/signature/signature_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class SignContractScreen extends StatefulWidget {
@@ -189,20 +192,31 @@ class _SignContractScreenState extends State<SignContractScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  CustomBorderButton(
-                    height: 44,
-                    width: Get.width,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    border: Border.all(color: ColorResources.red, width: 1),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShaow: const [ColorResources.shadow1],
-                    child: Text(
-                      'reject'.tr,
-                      style: textMd.copyWith(color: ColorResources.red),
-                    ),
-                    onTap: () {},
-                  ),
+                  BlocBuilder<ContractsBloc, ContractsState>(
+                      builder: (context, contractsState) {
+                    return CustomBorderButton(
+                      height: 44,
+                      width: Get.width,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 20),
+                      border: Border.all(color: ColorResources.red, width: 1),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShaow: const [ColorResources.shadow1],
+                      child: contractsState.isUpdating
+                          ? CircularProgressIndicator(
+                              color: ColorResources.red,
+                            )
+                          : Text(
+                              'reject'.tr,
+                              style: textMd.copyWith(color: ColorResources.red),
+                            ),
+                      onTap: () {
+                        context.read<ContractsBloc>().add(UpdateContractStatus(
+                            contractId: widget.contractData.id.toString(),
+                            status: 'Declined'));
+                      },
+                    );
+                  }),
                 ],
               ),
             ),
@@ -212,17 +226,36 @@ class _SignContractScreenState extends State<SignContractScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomButton(
-            width: Get.width,
-            height: 44,
-            onTap: () {
-              Get.to(() => SignatureScreen());
-            },
-            title: 'subscribe'.tr),
-      ),
+      bottomNavigationBar: BlocBuilder<ContractsBloc, ContractsState>(
+          builder: (context, contractsState) {
+        return BottomAppBar(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+          child: CustomButton(
+              width: Get.width,
+              height: 44,
+              onTap: contractsState.isUpdating
+                  ? () {}
+                  : () {
+                      if (directorNameController.text.trim().isEmpty) {
+                        showShortToast('director_name_required'.tr);
+
+                        return;
+                      }
+                      if (!termsAgreed) {
+                        showShortToast('terms_not_agreed'.tr);
+
+                        return;
+                      }
+
+                      Get.to(() => SignatureScreen(
+                            contractId: widget.contractData.id.toString(),
+                            directorName: directorNameController.text.trim(),
+                          ));
+                    },
+              title: 'subscribe'.tr),
+        );
+      }),
     );
   }
 }

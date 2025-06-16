@@ -38,7 +38,7 @@ class ChatTile extends StatelessWidget {
               'this is product user id: ${chatData.product?.user?.id.toString()}');
           print('this is my uid: $myUid');
           print(
-              'thisis company user id = ${chatData.company?.owner?.id.toString()}, name= ${chatData.company?.name} and user id = ${chatData.user?.id.toString()}');
+              'this is company user id = ${chatData.company?.owner?.id.toString()}, name= ${chatData.company?.name} and user id = ${chatData.user?.id.toString()}');
           print(
               'this is receiver id = ${chatData.type == 'tender' ? myUid != chatData.company?.owner?.id.toString() ? chatData.company?.owner?.id.toString() ?? '' : chatData.user?.id.toString() ?? '' : myUid != chatData.product?.user?.id.toString() ? chatData.product?.user?.id.toString() ?? '' : chatData.user?.id.toString() ?? ''}');
           // print('this is chat data: ${chatData?.product?.user?.id.toString()}');

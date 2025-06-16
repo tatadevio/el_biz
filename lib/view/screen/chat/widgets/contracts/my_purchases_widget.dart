@@ -13,29 +13,28 @@ class MyPurchasesWidget extends StatelessWidget {
     context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
   }
 
-  // void _callScrolling(BuildContext context, ScrollController scrollController) {
-  //   final accountController = context.read<ChatBloc>();
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<AgreementBloc>();
 
-  //   scrollController.addListener(() {
-  //     if (scrollController.position.pixels >=
-  //             scrollController.position.maxScrollExtent - 300 &&
-  //         !accountController.state.isLoading &&
-  //         !accountController.state.isLoadingMore) {
-  //       print('this is scroll view page ended....');
-  //       int pageSize = accountController.state.pageSize;
-  //       if (accountController.state.currentPage < pageSize) {
-  //         int nextPage = accountController.state.currentPage;
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !accountController.state.isLoading &&
+          !accountController.state.isLoadingMore) {
+        int pageSize = accountController.state.myPurchasesPageSize;
+        if (accountController.state.myPurchasesCurrentPage < pageSize) {
+          int nextPage = accountController.state.myPurchasesCurrentPage;
 
-  //         accountController.add(GetChatProductList(currentPage: nextPage + 1));
-  //       }
-  //     }
-  //   });
-  // }
+          accountController.add(GetMyPurchases(currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
-    // _callScrolling(context, scrollController);
+    _callScrolling(context, scrollController);
     return RefreshIndicator(
       onRefresh: () async => reloadAllMessages(context),
       child: BlocBuilder<AgreementBloc, AgreementState>(
@@ -54,8 +53,8 @@ class MyPurchasesWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final chat = agreement.myPurchases[index];
               return ContractTileWidget(
-               
                 contractData: chat,
+                isSales: false,
               );
             },
           );

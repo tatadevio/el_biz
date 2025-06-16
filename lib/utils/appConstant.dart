@@ -111,8 +111,11 @@ class AppConstants {
   static const String storeContractUrl = "api/contracts/store";
   static const String mySalesCompaniesUrl = "api/contracts/my-sales-companies";
   static const String contractCompanyUrl = "api/contracts/company";
-  static const String myPurchasesCompaniesUrl = "api/contracts/my-purchases-companies";
+  static const String myPurchasesCompaniesUrl =
+      "api/contracts/my-purchases-companies";
   static const String contractDetailUrl = "api/contracts/detail";
+  static const String signContractUrl = "api/contracts/signing";
+  static const String updateContractStatusUrl = "api/contracts/update-status";
 
   static const String token = "token";
 
