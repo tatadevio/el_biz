@@ -18,4 +18,16 @@ class PublicCompanyRepo {
     return await apiClient.getData(
         "${AppConstants.publicCompaniesUrl}?order_by=created_at&order_direction=desc&page=$page");
   }
+
+  Future<Response> getPublicFilterCompanies(
+      {required String categoryId,
+      required String keywords,
+      required String highRating,
+      required String city,
+      required String isVerified,
+      required int page}) async {
+    //here apply filter
+    return await apiClient.getData(
+        "${AppConstants.publicCompaniesUrl}?category_id=$categoryId&search_keywords=$keywords&high_rating=$highRating&city=$city&isVarified=$isVerified&page=$page");
+  }
 }

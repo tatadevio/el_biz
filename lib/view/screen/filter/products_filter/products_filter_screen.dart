@@ -17,6 +17,8 @@ import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_button.dart';
+import '../filter_screens/all_keywords_screen.dart';
+import '../filter_screens/all_materials_screen.dart';
 
 class ProductsFilterScreen extends StatefulWidget {
   final bool isTenderFilter;
@@ -340,6 +342,10 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                                 });
                                                 Get.back();
                                               },
+                                              alreadySelected:
+                                                  selectedCategoryId == null
+                                                      ? []
+                                                      : [selectedCategoryId!],
                                               isProductCategory: true,
                                               isCompanyCategory: false,
                                             ));
@@ -387,11 +393,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  // Get.to(
-                                  //   () => AddProduct4Screen(
-                                  //     isEdit: false,
-                                  //   ),
-                                  // );
+                                  Get.to(() => const AllKeywordsScreen());
                                 },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -530,20 +532,26 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                                       style: h16.copyWith(
                                           color: ColorResources.darkGray),
                                     ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'all'.tr,
-                                          style: button16.copyWith(
-                                              color: ColorResources.blue),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        SvgPicture.asset(
-                                            Images.svgArrowForwardIcon),
-                                      ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(
+                                            () => const AllMaterialsScreen());
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'all'.tr,
+                                            style: button16.copyWith(
+                                                color: ColorResources.blue),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SvgPicture.asset(
+                                              Images.svgArrowForwardIcon),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

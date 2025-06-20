@@ -22,3 +22,27 @@ class GetNewPublicCompany extends PublicCompanyEvent {
   @override
   List<Object> get props => [currentPage];
 }
+
+
+class UpdateCompanyFilterEnable extends PublicCompanyEvent {
+  final bool isEnable;
+  const UpdateCompanyFilterEnable(this.isEnable);
+
+  @override
+  List<Object> get props => [isEnable];
+}
+
+class FilterPublicCompanyProduct extends PublicCompanyEvent {
+  final CompanyFilterValuesModel productFilterValuesModel;
+  final int currentPage;
+  const FilterPublicCompanyProduct({
+    required this.productFilterValuesModel,
+    required this.currentPage,
+  });
+
+  @override
+  List<Object> get props => [
+        productFilterValuesModel,
+        currentPage,
+      ];
+}

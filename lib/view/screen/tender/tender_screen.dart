@@ -1,4 +1,3 @@
-
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_event.dart';
@@ -8,6 +7,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/screen/category/select_category_screen.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
+import 'package:el_biz/view/screen/filter/tender_filter/tender_filter_screen.dart';
 import 'package:el_biz/view/screen/tender/new_tende2_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import '../../../bloc/filter_fields/filter_fields_bloc.dart';
 import '../../base/tender_grid_item.dart';
 import '../../base/tender_list_item.dart';
+import '../search/search_tender/search_tender_screen.dart';
 
 class TenderScreen extends StatefulWidget {
   const TenderScreen({super.key});
@@ -28,12 +29,12 @@ class TenderScreen extends StatefulWidget {
 class _TenderScreenState extends State<TenderScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
+  String direction = 'asc';
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      // Show the button if the user scrolls down 300 pixels or more
       if (_scrollController.offset > 300 && !_showScrollToTopButton) {
         setState(() {
           _showScrollToTopButton = true;
@@ -72,18 +73,23 @@ class _TenderScreenState extends State<TenderScreen> {
                   style: h16.copyWith(color: ColorResources.blackText),
                 ),
               ),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: ColorResources.lgColor,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const SearchTenderScreen());
+                },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: ColorResources.lgColor,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(Images.svgSearch),
                 ),
-                alignment: Alignment.center,
-                child: SvgPicture.asset(Images.svgSearch),
               ),
               const SizedBox(
                 width: 10,
@@ -162,7 +168,9 @@ class _TenderScreenState extends State<TenderScreen> {
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         context.read<FilterFieldsBloc>().add(GetFilterFields());
-                        Get.to(() => const ProductsFilterScreen(isTenderFilter : true));
+                        Get.to(() => TenderFilterScreen());
+                        // Get.to(() =>
+                        //     const ProductsFilterScreen(isTenderFilter: true));
                       },
                       child: Container(
                         height: 40,
@@ -204,41 +212,51 @@ class _TenderScreenState extends State<TenderScreen> {
                       width: 10,
                     ),
                     Expanded(
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 14),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            12,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            direction = direction == 'asc' ? 'desc' : 'asc';
+                          });
+                          context
+                              .read<PublicTenderBloc>()
+                              .add(GetPublicTender(1, direction: direction));
+                        },
+                        child: Container(
+                          height: 40,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              12,
+                            ),
+                            border: Border.all(
+                                width: 1, color: ColorResources.lgColor),
+                            color: ColorResources.lightBlue,
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 2,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1),
+                                color: Color.fromRGBO(16, 24, 40, 0.05),
+                              ),
+                            ],
                           ),
-                          border: Border.all(
-                              width: 1, color: ColorResources.lgColor),
-                          color: ColorResources.lightBlue,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 0,
-                              offset: Offset(0, 1),
-                              color: Color.fromRGBO(16, 24, 40, 0.05),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.asset(
-                              Images.svgArrowUpDown,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'new'.tr,
-                              style:
-                                  body14.copyWith(color: ColorResources.gray),
-                            ),
-                          ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                Images.svgArrowUpDown,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'new'.tr,
+                                style:
+                                    body14.copyWith(color: ColorResources.gray),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -321,7 +339,13 @@ class _TenderScreenState extends State<TenderScreen> {
             builder: (context, tendersController) {
               return BlocBuilder<PublicTenderBloc, PublicTenderState>(
                   builder: (context, publicTenderState) {
-                if (publicTenderState.isLoading) {
+                if (publicTenderState.isLoading &&
+                    publicTenderState.publicTenders.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (publicTenderState.publicTenders.isEmpty) {
                   return Center(
                     child: Text('no_tender_found'.tr),
                   );

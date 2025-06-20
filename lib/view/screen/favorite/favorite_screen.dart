@@ -63,7 +63,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     publicProductBloc.add(GetPublicProduct(1));
     // favoriteBloc.add(GetFavoriteProducts(1));
     // favoriteBloc.add(GetFavoriteTenders(1));
-    publicTenderBloc.add(GetPublicTender(1));
+    publicTenderBloc.add(GetPublicTender(1, direction: 'asc'));
   }
 
 

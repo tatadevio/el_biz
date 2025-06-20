@@ -52,7 +52,7 @@ class SignatureScreenState extends State<SignatureScreen> {
             ),
             bottomNavigationBar: BlocBuilder<ContractsBloc, ContractsState>(
                 builder: (contex, contractState) {
-              if (contractState.isLoading) {
+              if (contractState.isSigning) {
                 return BottomAppBar(
                   child: Center(
                       child: CustomButtonLoader(

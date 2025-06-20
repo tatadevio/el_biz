@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../bloc/public_tender/public_tender_bloc.dart';
+import '../../bloc/search_tender/search_tender_bloc.dart';
 import '../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
 import '../../helper/date_helper.dart';
@@ -22,6 +23,7 @@ class TenderListItem extends StatelessWidget {
   final bool isPublicTender;
   final bool isSelect;
   final bool isAlreadySelect;
+  final bool isSearchTender;
 
   const TenderListItem({
     super.key,
@@ -31,6 +33,7 @@ class TenderListItem extends StatelessWidget {
     this.isPublicTender = false,
     this.isSelect = false,
     this.isAlreadySelect = false,
+    this.isSearchTender = false,
   });
 
   @override
@@ -88,6 +91,10 @@ class TenderListItem extends StatelessWidget {
                             if (isCompanyTender) {
                               context.read<CompanyDetailBloc>().add(
                                   ToggleTenderFavorite(tender.id!, context));
+                            } else if (isSearchTender) {
+                              context.read<SearchTenderBloc>().add(
+                                  ToggleSearchTenderFavorite(
+                                      tender.id!, context));
                             } else
                             // if (isPublicTender)
                             {

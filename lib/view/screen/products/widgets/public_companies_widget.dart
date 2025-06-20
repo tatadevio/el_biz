@@ -63,10 +63,12 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
             builder: (context, companyState) {
           return ListView.builder(
             controller: _scrollController,
-            itemCount: companyState.publicCompanies.length,
+            itemCount: companyState.isFilterEnable
+                ? companyState.filterCompanies.length
+                : companyState.publicCompanies.length,
             itemBuilder: (context, index) {
-              print(
-                  'there i have call the company bloc in compnay list : ${companyState.publicCompanies.length}');
+              // print(
+              //     'there i have call the company bloc in compnay list : ${companyState.publicCompanies.length}');
               return myCompanyWidget(companyState.publicCompanies[index]);
             },
           );

@@ -1,13 +1,14 @@
 import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
-import 'package:el_biz/data/model/base/company_filter_values_model.dart';
-import 'package:el_biz/view/screen/filter/filter_screens/all_keywords_screen.dart';
+import 'package:el_biz/data/model/base/tender_filter_values_model.dart';
+import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import '../../../../bloc/public_tender/public_tender_bloc.dart';
 import '../../../../data/model/response/category/categories_list_model.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
@@ -16,60 +17,38 @@ import '../../../base/custom_button.dart';
 import '../../category/select_category_screen.dart';
 import '../../cities/cities_page.dart';
 
-class CompanyFilterScreen extends StatefulWidget {
-  const CompanyFilterScreen({super.key});
+class TenderFilterScreen extends StatefulWidget {
+  const TenderFilterScreen({super.key});
 
   @override
-  State<CompanyFilterScreen> createState() => _CompanyFilterScreenState();
+  State<TenderFilterScreen> createState() => _TenderFilterScreenState();
 }
 
-class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
+class _TenderFilterScreenState extends State<TenderFilterScreen> {
   int value = 0;
   int price = 100;
-  // final TextEditingController _minController = TextEditingController();
-  // final TextEditingController _maxController = TextEditingController();
+  final TextEditingController _minController = TextEditingController();
+  final TextEditingController _maxController = TextEditingController();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   CategoryItem? selectedCategory;
+  RangeValues _priceRange = const RangeValues(1, 20000);
+  final TextEditingController startingQuantityController =
+      TextEditingController();
+  final TextEditingController endingQuantityController =
+      TextEditingController();
 
-  // List<Map> sort = [
-  //   {
-  //     "value": "popular",
-  //     "type": "popular".tr,
-  //   },
-  //   {
-  //     "value": "latest",
-  //     "type": "newest_first".tr,
-  //   },
-  //   {
-  //     "value": "low-high",
-  //     "type": "cheapest_first".tr,
-  //   },
-  //   {
-  //     "value": "high-low",
-  //     "type": "expensive_first".tr,
-  //   },
-  // ];
-
-  List<String> keywordsList = [
-    'Мебель',
-    'Стол',
-    'Садовая мебель',
-    'Стулья',
-    'Шкафы',
-    'Светильник',
-    'Светильник',
+  List<String> profileTypes = [
+    'Юридические лица',
+    'Физические лица',
+    'Все профили',
   ];
-
-  List<String> ratingList = [
-    'Компании с рейтингом 4 и 5',
-    'Компании с рейтингом 2 и 3',
-    'Все компании',
-  ];
-  String selectedRating = 'Компании с рейтингом 4 и 5';
-  bool isVerifiedCompany = false;
+  String selectedProfileType = 'Юридические лица';
 
   void reset() {
+    _minController.clear();
+    _maxController.clear();
     setState(() {
+      _priceRange = const RangeValues(1, 20000);
       selectedCategory = null;
     });
     context.read<ProductBloc>().add(ResetSelectedKeyword());
@@ -132,7 +111,6 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                       const SizedBox(
                         height: 5,
                       ),
-
                       Container(
                         decoration: BoxDecoration(
                           // color: Theme.of(context).cardColor,
@@ -164,16 +142,6 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                                           selectedCategory!.name ?? '',
                                           style: normalTextStyle,
                                         ),
-                                  // productController.selectedSubCatName == ""
-                                  //     ? Text(
-                                  //         "category".tr,
-                                  //         style: h16.copyWith(
-                                  //             color: ColorResources.darkGray),
-                                  //       )
-                                  //     : Text(
-                                  //         productController.selectedSubCatName,
-                                  //         style: normalTextStyle,
-                                  //       ),
                                 ],
                               ),
                               const SizedBox(
@@ -290,92 +258,47 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                         ),
                       ),
                       const Divider(),
-                      // const SizedBox(
-                      //   height: 15,
-                      // ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'keywords'.tr,
-                              style:
-                                  h16.copyWith(color: ColorResources.darkGray),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => AllKeywordsScreen());
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Все',
-                                    style: button16.copyWith(
-                                        color: ColorResources.blue),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  SvgPicture.asset(Images.svgArrowForwardIcon),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'Количество',
+                        style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.start,
-
-                        spacing: 8.0, // Horizontal spacing
-                        runSpacing: 8.0, // Vertical spacing
-                        children: keywordsList
-                            .map((keyword) => Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    InkWell(
-                                      borderRadius: BorderRadius.circular(30),
-                                      onTap: () {
-                                        context.read<ProductBloc>().add(
-                                            UpdateKeywordSelected(keyword));
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 15),
-                                        decoration: BoxDecoration(
-                                          color: productController
-                                                  .keywordsSelected(keyword)
-                                              ? ColorResources.green
-                                              : null,
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          border: Border.all(
-                                              width: 1,
-                                              color: ColorResources.lgColor),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          keyword,
-                                          style: body14.copyWith(
-                                              color: productController
-                                                      .keywordsSelected(keyword)
-                                                  ? ColorResources.white
-                                                  : ColorResources.gray),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ))
-                            .toList(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                                controller: startingQuantityController,
+                                hintColor: 'от 5 шт',
+                                inputType: TextInputType.numberWithOptions(),
+                                leading: '',
+                                readOnly: false),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: CustomTextField(
+                                controller: endingQuantityController,
+                                hintColor: 'до 200 шт',
+                                inputType: TextInputType.numberWithOptions(),
+                                leading: '',
+                                readOnly: false),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       const Divider(),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          'high_rating'.tr,
+                          'profile_type'.tr,
                           // 'Высокий рейтинг',
                           style: h16.copyWith(color: ColorResources.darkGray),
                         ),
@@ -383,21 +306,21 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: ratingList.length,
+                        itemCount: profileTypes.length,
                         itemBuilder: (context, index) {
                           return RadioListTile<String>(
                             contentPadding: const EdgeInsets.all(0),
                             dense: true,
                             title: Text(
-                              ratingList[index],
+                              profileTypes[index],
                               style:
                                   body16.copyWith(color: ColorResources.gray),
                             ),
-                            value: ratingList[index],
-                            groupValue: selectedRating,
+                            value: profileTypes[index],
+                            groupValue: selectedProfileType,
                             onChanged: (value) {
                               setState(() {
-                                selectedRating = value!;
+                                selectedProfileType = value!;
                               });
                             },
                           );
@@ -463,39 +386,84 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      ListTile(
-                        onTap: () {
+                      Text(
+                        'Бюджет'.tr,
+                        style: h16.copyWith(color: ColorResources.darkGray),
+                      ),
+                      RangeSlider(
+                        values: _priceRange,
+                        min: 1,
+                        max: 20000,
+                        activeColor: ColorResources.green,
+                        divisions: 195, // Optional for step control
+                        labels: RangeLabels(
+                          _priceRange.start.toInt().toString(),
+                          _priceRange.end.toInt().toString(),
+                        ),
+                        onChanged: (RangeValues values) {
                           setState(() {
-                            isVerifiedCompany = !isVerifiedCompany;
+                            _priceRange = values;
+                            _minController.text =
+                                values.start.toInt().toString();
+                            _maxController.text = values.end.toInt().toString();
                           });
                         },
-                        title: Text(
-                          'verified_company'.tr,
-                          // 'Проверенная компания',
-                          style: h16.copyWith(color: ColorResources.darkGray),
-                        ),
-                        subtitle: Text(
-                          "companies_passed_moderation".tr,
-                          // 'Компании прошедшие модерацию',
-                          style: body14.copyWith(color: ColorResources.gray),
-                        ),
-                        trailing: Switch(
-                            activeColor: ColorResources.primary,
-                            thumbColor: WidgetStateProperty.all(Colors.white),
-                            inactiveThumbColor: Colors.white,
-                            inactiveTrackColor: ColorResources.lgColor,
-                            value: isVerifiedCompany,
-                            onChanged: (val) {
-                              setState(() {
-                                isVerifiedCompany = val;
-                              });
-                            }),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                              controller: _minController,
+                              hintColor: 'от 500 сом',
+                              inputType: TextInputType.number,
+                              leading: '',
+                              readOnly: false,
+                              maxLines: 1,
+                              onChanged: (val) {
+                                final parsed = double.tryParse(val);
+                                if (parsed != null &&
+                                    parsed >= 500 &&
+                                    parsed <= _priceRange.end) {
+                                  setState(() {
+                                    _priceRange =
+                                        RangeValues(parsed, _priceRange.end);
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: CustomTextField(
+                              controller: _maxController,
+                              hintColor: 'до 20 000 сом',
+                              inputType: TextInputType.number,
+                              leading: '',
+                              readOnly: false,
+                              maxLines: 1,
+                              onChanged: (val) {
+                                final parsed = double.tryParse(val);
+                                if (parsed != null &&
+                                    parsed >= _priceRange.start &&
+                                    parsed <= 20000) {
+                                  setState(() {
+                                    _priceRange =
+                                        RangeValues(_priceRange.start, parsed);
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       const Divider(),
                       const SizedBox(
                         height: 20,
                       ),
-
                       const SizedBox(
                         height: 30,
                       ),
@@ -515,21 +483,25 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
             onTap: () {
               final productController = context.read<ProductBloc>().state;
 
-              String keyword = productController.selectedKeywords.join(', ');
+              // String keyword = productController.selectedKeywords.join(', ');
 
               print(
-                  'this is category = ${selectedCategory?.name} and ${keyword} and ${selectedRating} and ${isVerifiedCompany} and ${productController.selectedCityName}');
+                  'this is category = ${selectedCategory?.name}  and ${selectedProfileType} and ${productController.selectedCityName}');
 
-              CompanyFilterValuesModel companyFilters =
-                  CompanyFilterValuesModel(
-                      categoryId: "${selectedCategory?.id ?? ''}",
-                      keywords: keyword,
-                      highRating: selectedRating,
-                      city: productController.selectedCityName,
-                      isVerified: isVerifiedCompany);
+              TenderFilterValuesModel tenderFilters = TenderFilterValuesModel(
+                categoryId: "${selectedCategory?.id ?? ''}",
+                minQuantity: startingQuantityController.text,
+                maxQuantity: endingQuantityController.text,
+                profileType: selectedProfileType,
+                city: productController.selectedCityName,
+                minBudget: _minController.text,
+                maxBudget: _maxController.text,
+              );
 
-              context.read<PublicCompanyBloc>().add(FilterPublicCompanyProduct(
-                  productFilterValuesModel: companyFilters, currentPage: 1));
+              // print('this is the filter values ${tenderFilters.toJson()}');
+
+              context.read<PublicTenderBloc>().add(FilterPublicTenderProduct(
+                  productFilterValuesModel: tenderFilters, currentPage: 1));
               Get.back();
             },
             title: 'filters'.tr),

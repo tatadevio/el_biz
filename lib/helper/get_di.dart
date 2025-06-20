@@ -10,6 +10,7 @@ import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/search_company/search_company_bloc.dart';
+import 'package:el_biz/bloc/search_tender/search_tender_bloc.dart';
 import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/data/repo/add_tender_repo.dart';
@@ -27,6 +28,7 @@ import 'package:el_biz/data/repo/public_tender_repo.dart';
 import 'package:el_biz/data/repo/review_repo.dart';
 import 'package:el_biz/data/repo/search_company_repo.dart';
 import 'package:el_biz/data/repo/search_repo.dart';
+import 'package:el_biz/data/repo/search_tender_repo.dart';
 import 'package:el_biz/data/repo/similar_product_repo.dart';
 import 'package:el_biz/data/repo/tender_detail_repo.dart';
 import 'package:el_biz/data/repo/tenders_repo.dart';
@@ -132,6 +134,8 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<AgreementRepo>(() => AgreementRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<SearchTenderRepo>(() => SearchTenderRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -160,6 +164,8 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<SearchCompanyBloc>(() => SearchCompanyBloc(Get.find()),
       fenix: true);
   Get.lazyPut<AgreementBloc>(() => AgreementBloc(Get.find()), fenix: true);
+  Get.lazyPut<SearchTenderBloc>(() => SearchTenderBloc(Get.find()),
+      fenix: true);
 
 ////////
   ///

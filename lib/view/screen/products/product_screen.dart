@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/search/search_bloc.dart' as search;
 import '../product/add_product_screen.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -95,6 +97,9 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
               GestureDetector(
                 onTap: () {
+                  context
+                      .read<search.SearchBloc>()
+                      .add(search.ChangeStatusSearch(true));
                   Get.to(() => SearchScreen());
                 },
                 child: Container(
@@ -172,19 +177,70 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                     child: Row(
                       children: [
-                        BlocBuilder<PublicProductBloc, PublicProductState>(
+                        BlocBuilder<PublicCompanyBloc, PublicCompanyState>(
                             builder: (context, publicState) {
+                          if (productController.isShowCategories) {
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                Get.to(() => const CompanyFilterScreen());
+                              },
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 14),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        12,
+                                      ),
+                                      color: ColorResources.green,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          blurRadius: 2,
+                                          spreadRadius: 0,
+                                          offset: Offset(0, 1),
+                                          color:
+                                              Color.fromRGBO(16, 24, 40, 0.05),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SvgPicture.asset(
+                                          Images.filter,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          'filter'.tr,
+                                          style: button16,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (publicState.isFilterEnable)
+                                    Positioned(
+                                        top: 5,
+                                        right: 6,
+                                        child: CircleAvatar(
+                                          radius: 3,
+                                          backgroundColor: ColorResources.red,
+                                        ))
+                                ],
+                              ),
+                            );
+                          }
                           return InkWell(
                             borderRadius: BorderRadius.circular(12),
                             onTap: () {
-                              if (productController.isShowCategories) {
-                                Get.to(() => const CompanyFilterScreen());
-                              } else {
-                                context
-                                    .read<FilterFieldsBloc>()
-                                    .add(GetFilterFields());
-                                Get.to(() => const ProductsFilterScreen());
-                              }
+                              context
+                                  .read<FilterFieldsBloc>()
+                                  .add(GetFilterFields());
+                              Get.to(() => const ProductsFilterScreen());
                             },
                             child: Stack(
                               children: [

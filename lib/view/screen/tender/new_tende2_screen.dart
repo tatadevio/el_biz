@@ -213,7 +213,7 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
         listener: (context, stateListner) async {
           if (stateListner is AddTenderSuccess) {
             // showShortToast('new tended added');
-            context.read<PublicTenderBloc>().add(GetPublicTender(1));
+            context.read<PublicTenderBloc>().add(GetPublicTender(1, direction: 'asc'));
             await Get.dialog(CustomDialog(
                 widget: AlertDialog(
               title:

@@ -10,9 +10,9 @@ class PublicTenderRepo {
 
   PublicTenderRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> companyTenders(int page) async {
+  Future<Response> companyTenders(int page, String direction) async {
     return await apiClient.getData(
-        "${AppConstants.publicTendersUrl}?order_by=company&order_direction=asc&page=$page");
+        "${AppConstants.publicTendersUrl}?order_by=company&order_direction=$direction&order_by=created_at&page=$page");
   }
 
   Future<Response> toggleFavorite(String id, {String type = "Tender"}) async {
@@ -20,5 +20,18 @@ class PublicTenderRepo {
       "type": type,
       "id": id,
     });
+  }
+
+  Future<Response> getPublicFilterTenders(
+      {required String categoryId,
+      required String minQuantity,
+      required String maxQuantity,
+      required String profileType,
+      required String city,
+      required String minBudget,
+      required String maxBudget,
+      required int page}) async {
+    return await apiClient.getData(
+        "${AppConstants.publicTendersUrl}?category_id=$categoryId&budget_min=$minBudget&budget_max=$maxBudget&profile_type=$profileType&min_quantity=$minQuantity&max_quantity=$maxQuantity&city=$city&page=$page");
   }
 }

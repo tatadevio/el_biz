@@ -314,15 +314,12 @@
   "director_name_required": "Требуется указать имя директора",
   "terms_not_agreed": "Условия не приняты",
   "no_contracts_found": "Контракты не найдены",
-  "no_contract_found": "Контракт не найден."
-
-
-
-
-
-
-
-
+  "no_contract_found": "Контракт не найден.",
+  "search_for_tenders" : "Поиск тендеров...",
+  "no_tenders_found" : "Тендеры не найдены.",
+  "category" : "Категория",
+  "verified_company" : "Проверенная компания",
+  "companies_passed_moderation"  : "Компании прошедшие модерацию"
 
 
 

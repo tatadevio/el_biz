@@ -25,6 +25,7 @@ import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/review/review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/bloc/search_company/search_company_bloc.dart';
+import 'package:el_biz/bloc/search_tender/search_tender_bloc.dart';
 import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
@@ -119,6 +120,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SimilarProductsBloc(Get.find())),
         BlocProvider(create: (_) => SearchCompanyBloc(Get.find())),
         BlocProvider(create: (_) => AgreementBloc(Get.find())),
+        BlocProvider(create: (_) => SearchTenderBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

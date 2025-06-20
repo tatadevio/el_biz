@@ -1,5 +1,6 @@
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
+import 'package:el_biz/bloc/search_tender/search_tender_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -22,6 +23,7 @@ class TenderGridItem extends StatelessWidget {
   final bool isPublicTender;
   final bool isSelect;
   final bool isAlreadySelect;
+  final bool isSearchTender;
   const TenderGridItem({
     super.key,
     this.isFavorite = false,
@@ -30,6 +32,7 @@ class TenderGridItem extends StatelessWidget {
     this.isPublicTender = false,
     this.isSelect = false,
     this.isAlreadySelect = false,
+    this.isSearchTender = false,
   });
 
   @override
@@ -92,7 +95,14 @@ class TenderGridItem extends StatelessWidget {
                             if (isCompanyTender) {
                               context.read<CompanyDetailBloc>().add(
                                   ToggleTenderFavorite(tender.id!, context));
-                            } else
+                            } 
+                            else if(isSearchTender) {
+                              context.read<SearchTenderBloc>().add(
+                                  ToggleSearchTenderFavorite(
+                                      tender.id!, context));
+                            }
+                            
+                            else
                             // if (isPublicTender)
                             {
                               context.read<PublicTenderBloc>().add(

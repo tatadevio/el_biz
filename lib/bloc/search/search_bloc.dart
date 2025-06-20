@@ -38,15 +38,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
 
     try {
-      print('public products status code = start try');
       final response =
           await searchRepo.searchProduct(event.search, event.currentPage);
-      print('public products status code =  ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final companyProducts = CompanyProductModel.fromJson(response.body);
-        print(
-            'public products list length =  ${companyProducts.data?.items?.length}');
 
         if (event.currentPage == 1) {
           emit(state.copyWith(

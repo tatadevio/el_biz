@@ -76,6 +76,9 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
           event.contractId, event.directorName, event.signatureFile);
       if (response.statusCode == 200) {
         // Handle successful signing
+        emit(state.copywith(isSigning: false));
+
+        Get.offAll(() => const DashboardScreen());
       } else {
         // Handle error
       }

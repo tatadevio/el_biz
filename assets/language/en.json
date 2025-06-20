@@ -314,7 +314,12 @@
   "director_name_required" : "Director name is required",
   "terms_not_agreed" : "Terms not agreed",
   "no_contracts_found" : "No contracts found.",
-  "no_contract_found" : "No contract found."
+  "no_contract_found" : "No contract found.",
+  "search_for_tenders" : "Search for tenders...",
+  "no_tenders_found" : "No tenders found.",
+  "category" : "Category",
+  "verified_company"  : "Verified Company",
+  "companies_passed_moderation" : "Companies that have passed moderation"
 
 
 
