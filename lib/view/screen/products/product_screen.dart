@@ -55,21 +55,59 @@ class _ProductScreenState extends State<ProductScreen> {
           _showScrollToTopButton = false;
         });
       }
+
+      final publicProductBloc = context.read<PublicProductBloc>();
+
+      // isShowcategories mean showCompanies
+      if (Get.find<PublicProductBloc>().state.isFilterEnable) {
+        if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent - 300 &&
+            !publicProductBloc.state.isLoading &&
+            !publicProductBloc.state.isMoreLoading) {
+          print('filter product scroll.......');
+          int pageSize = publicProductBloc.state.filterPageSize;
+          if (publicProductBloc.state.filterCurrentPage < pageSize) {
+            int nextPage = publicProductBloc.state.filterCurrentPage;
+
+            publicProductBloc.add(FilterPublicProduct(
+                productFilterValuesModel: Get.find<PublicProductBloc>()
+                    .state
+                    .productFilterValuesModel!,
+                currentPage: nextPage + 1));
+          }
+        }
+      } else {
+        if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent - 300 &&
+            !publicProductBloc.state.isLoading &&
+            !publicProductBloc.state.isMoreLoading) {
+          print('all product scroll.......');
+          int pageSize = publicProductBloc.state.pageSize;
+          if (publicProductBloc.state.currentPage < pageSize) {
+            int nextPage = publicProductBloc.state.currentPage;
+
+            publicProductBloc.add(GetPublicProduct(nextPage + 1));
+          }
+        }
+      }
     });
   }
 
   late PublicProductBloc publicBloc;
+  late PublicCompanyBloc publicCompanyBloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     publicBloc = context.read<PublicProductBloc>();
+    publicCompanyBloc = context.read<PublicCompanyBloc>();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
     publicBloc.add(UpdateFilterEnable(false));
+    publicCompanyBloc.add(UpdateCompanyFilterEnable(false));
     super.dispose();
   }
 
@@ -85,6 +123,8 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
     // double height = MediaQuery.sizeOf(context).height;
+  
+
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -234,61 +274,66 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                             );
                           }
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              context
-                                  .read<FilterFieldsBloc>()
-                                  .add(GetFilterFields());
-                              Get.to(() => const ProductsFilterScreen());
-                            },
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 40,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 14),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      12,
+                          return BlocBuilder<PublicProductBloc,
+                                  PublicProductState>(
+                              builder: (context, publicProductState) {
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                context
+                                    .read<FilterFieldsBloc>()
+                                    .add(GetFilterFields());
+                                Get.to(() => const ProductsFilterScreen());
+                              },
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 14),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        12,
+                                      ),
+                                      color: ColorResources.green,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          blurRadius: 2,
+                                          spreadRadius: 0,
+                                          offset: Offset(0, 1),
+                                          color:
+                                              Color.fromRGBO(16, 24, 40, 0.05),
+                                        ),
+                                      ],
                                     ),
-                                    color: ColorResources.green,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        blurRadius: 2,
-                                        spreadRadius: 0,
-                                        offset: Offset(0, 1),
-                                        color: Color.fromRGBO(16, 24, 40, 0.05),
-                                      ),
-                                    ],
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SvgPicture.asset(
+                                          Images.filter,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          'filter'.tr,
+                                          style: button16,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        Images.filter,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        'filter'.tr,
-                                        style: button16,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                if (publicState.isFilterEnable)
-                                  Positioned(
-                                      top: 5,
-                                      right: 6,
-                                      child: CircleAvatar(
-                                        radius: 3,
-                                        backgroundColor: ColorResources.red,
-                                      ))
-                              ],
-                            ),
-                          );
+                                  if (publicProductState.isFilterEnable)
+                                    Positioned(
+                                        top: 5,
+                                        right: 6,
+                                        child: CircleAvatar(
+                                          radius: 3,
+                                          backgroundColor: ColorResources.red,
+                                        ))
+                                ],
+                              ),
+                            );
+                          });
                         }),
                         //
                         const SizedBox(
@@ -334,7 +379,8 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                         ),
 
-                        if (!productController.isShowCategories) ...[
+                        if (!productController.isShowCategories ||
+                            widget.isSelectProduct) ...[
                           const SizedBox(width: 10),
                           InkWell(
                             borderRadius: BorderRadius.circular(12),

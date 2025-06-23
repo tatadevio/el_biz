@@ -6,7 +6,6 @@ import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/screen/category/select_category_screen.dart';
-import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:el_biz/view/screen/filter/tender_filter/tender_filter_screen.dart';
 import 'package:el_biz/view/screen/tender/new_tende2_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,9 +46,18 @@ class _TenderScreenState extends State<TenderScreen> {
     });
   }
 
+  late PublicTenderBloc publicTenderBloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    publicTenderBloc = context.read<PublicTenderBloc>();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
+    publicTenderBloc.add(UpdateTenderFilterEnable(false));
     super.dispose();
   }
 
@@ -164,49 +172,67 @@ class _TenderScreenState extends State<TenderScreen> {
                 ),
                 child: Row(
                   children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        context.read<FilterFieldsBloc>().add(GetFilterFields());
-                        Get.to(() => TenderFilterScreen());
-                        // Get.to(() =>
-                        //     const ProductsFilterScreen(isTenderFilter: true));
-                      },
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 14),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            12,
+                    BlocBuilder<PublicTenderBloc, PublicTenderState>(
+                        builder: (context, tenderState) {
+                      return Stack(
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              context
+                                  .read<FilterFieldsBloc>()
+                                  .add(GetFilterFields());
+                              Get.to(() => TenderFilterScreen());
+                              // Get.to(() =>
+                              //     const ProductsFilterScreen(isTenderFilter: true));
+                            },
+                            child: Container(
+                              height: 40,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 14),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  12,
+                                ),
+                                color: ColorResources.green,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    blurRadius: 2,
+                                    spreadRadius: 0,
+                                    offset: Offset(0, 1),
+                                    color: Color.fromRGBO(16, 24, 40, 0.05),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    Images.filter,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'filter'.tr,
+                                    style: button16,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          color: ColorResources.green,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 2,
-                              spreadRadius: 0,
-                              offset: Offset(0, 1),
-                              color: Color.fromRGBO(16, 24, 40, 0.05),
+                          if (tenderState.isFilterEnable)
+                            Positioned(
+                              top: 5,
+                              right: 6,
+                              child: CircleAvatar(
+                                radius: 3,
+                                backgroundColor: ColorResources.red,
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.asset(
-                              Images.filter,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'filter'.tr,
-                              style: button16,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                        ],
+                      );
+                    }),
                     //
                     const SizedBox(
                       width: 10,
@@ -364,11 +390,14 @@ class _TenderScreenState extends State<TenderScreen> {
                                       mainAxisSpacing: 10,
                                       crossAxisSpacing: 10,
                                       childAspectRatio: 0.65),
-                              itemCount: publicTenderState.publicTenders.length,
+                              itemCount: publicTenderState.isFilterEnable
+                                  ? publicTenderState.filterTenders.length
+                                  : publicTenderState.publicTenders.length,
                               itemBuilder: (context, index) {
                                 return TenderGridItem(
-                                  tender:
-                                      publicTenderState.publicTenders[index],
+                                  tender: publicTenderState.isFilterEnable
+                                      ? publicTenderState.filterTenders[index]
+                                      : publicTenderState.publicTenders[index],
                                   isCompanyTender: false,
                                   isPublicTender: true,
                                 );
@@ -376,11 +405,14 @@ class _TenderScreenState extends State<TenderScreen> {
                             )
                           : ListView.builder(
                               controller: _scrollController,
-                              itemCount: publicTenderState.publicTenders.length,
+                              itemCount: publicTenderState.isFilterEnable
+                                  ? publicTenderState.filterTenders.length
+                                  : publicTenderState.publicTenders.length,
                               itemBuilder: (context, index) {
                                 return TenderListItem(
-                                  tender:
-                                      publicTenderState.publicTenders[index],
+                                  tender: publicTenderState.isFilterEnable
+                                      ? publicTenderState.filterTenders[index]
+                                      : publicTenderState.publicTenders[index],
                                   isCompanyTender: false,
                                   isPublicTender: true,
                                 );

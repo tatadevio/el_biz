@@ -71,7 +71,7 @@ class ChatTile extends StatelessWidget {
               ));
         } else {
           //go to the agrement/contracts screen.
-          Get.to(() => ContractsScreen());
+          // Get.to(() => ContractsScreen());
         }
       },
       leading: CustomImage(

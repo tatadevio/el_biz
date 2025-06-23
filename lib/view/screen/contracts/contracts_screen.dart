@@ -6,38 +6,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class ContractsScreen extends StatelessWidget {
-  const ContractsScreen({super.key});
+  final bool isSale;
+  final String contractId;
+  const ContractsScreen(
+      {super.key, required this.isSale, required this.contractId});
 
-  // void _callScrolling(BuildContext context, ScrollController scrollController) {
-  //   final accountController = context.read<ContractsBloc>();
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<ContractsBloc>();
 
-  //   // scrollController.addListener(() {
-  //   //   if (scrollController.position.pixels >=
-  //   //           scrollController.position.maxScrollExtent - 300 &&
-  //   //       !accountController.state.isLoading &&
-  //   //       !accountController.state.inActiveTenderShowMore) {
-  //   //     int pageSize = accountController.state.inActiveTenderPageSize;
-  //   //     if (accountController.state.inActiveTenderCurrentPage < pageSize) {
-  //   //       int nextPage = accountController.state.inActiveTenderCurrentPage;
-  //   //       String companyId = context
-  //   //               .read<CompanyDetailBloc>()
-  //   //               .state
-  //   //               .companyDetailModel
-  //   //               ?.data
-  //   //               ?.id
-  //   //               .toString() ??
-  //   //           '';
-  //   //       accountController
-  //   //           .add(GetCompanyTenders(companyId, currentPage: nextPage + 1));
-  //   //     }
-  //   //   }
-  //   // });
-  // }
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !accountController.state.isLoading &&
+          !accountController.state.isLoadingMore) {
+        int pageSize = accountController.state.pageSize;
+        if (accountController.state.currentPage < pageSize) {
+          int nextPage = accountController.state.currentPage;
+          if (isSale) {
+            context.read<ContractsBloc>().add(GetCompanySales(
+                companyId: contractId, currentPage: nextPage + 1));
+          } else {
+            context.read<ContractsBloc>().add(
+                GetCompanyPurchases(companyId: contractId, currentPage: 1));
+          }
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final _scrollController = ScrollController();
-    // _callScrolling(context, _scrollController);
+    _callScrolling(context, _scrollController);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contracts'),

@@ -1,3 +1,4 @@
+
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,13 +31,43 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
     _scrollController.addListener(() {
       // Show the button if the user scrolls down 300 pixels or more
       if (_scrollController.offset > 300 && !_showScrollToTopButton) {
+        print('this is public companies widget scroll button show');
         setState(() {
           _showScrollToTopButton = true;
         });
       } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
+        print('this is public companies widget scroll button hide');
+
         setState(() {
           _showScrollToTopButton = false;
         });
+      }
+
+      final publicCompanies = context.read<PublicCompanyBloc>();
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !publicCompanies.state.isLoading &&
+          !publicCompanies.state.isMoreLoading) {
+        if (publicCompanies.state.isFilterEnable) {
+          int pageSize = publicCompanies.state.filterPageSize;
+          if (publicCompanies.state.filterCurrentPage < pageSize) {
+            int nextPage = publicCompanies.state.filterCurrentPage;
+
+            context.read<PublicCompanyBloc>().add(FilterPublicCompanyProduct(
+                productFilterValuesModel:
+                    publicCompanies.state.companyFilterValuesModel!,
+                currentPage: nextPage + 1));
+          }
+        } else {
+          int pageSize = publicCompanies.state.companyPageSize;
+          if (publicCompanies.state.companyCurrentPage < pageSize) {
+            int nextPage = publicCompanies.state.companyCurrentPage;
+
+            context
+                .read<PublicCompanyBloc>()
+                .add(GetPublicCompany(nextPage + 1));
+          }
+        }
       }
     });
   }

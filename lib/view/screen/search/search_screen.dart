@@ -261,82 +261,87 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: () {
-                            // productController.updateGridView(true);
+                  if (searchState.isSearchProducts)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              // productController.updateGridView(true);
 
-                            context
-                                .read<SearchBloc>()
-                                .add(const UpdateGridView(true));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: searchState.isGridView
-                                  ? ColorResources.primary
-                                  : null,
-                              border: Border.all(
-                                width: 1,
+                              context
+                                  .read<SearchBloc>()
+                                  .add(const UpdateGridView(true));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
                                 color: searchState.isGridView
                                     ? ColorResources.primary
-                                    : ColorResources.lgColor,
+                                    : null,
+                                border: Border.all(
+                                  width: 1,
+                                  color: searchState.isGridView
+                                      ? ColorResources.primary
+                                      : ColorResources.lgColor,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            alignment: Alignment.center,
-                            child: SvgPicture.asset(
-                              Images.svgCategory,
-                              color: searchState.isGridView
-                                  ? ColorResources.white
-                                  : ColorResources.gray,
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset(
+                                Images.svgCategory,
+                                color: searchState.isGridView
+                                    ? ColorResources.white
+                                    : ColorResources.gray,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: () {
-                            // productController.updateGridView(false);
-                            context
-                                .read<SearchBloc>()
-                                .add(const UpdateGridView(false));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: searchState.isGridView
-                                  ? null
-                                  : ColorResources.primary,
-                              border: Border.all(
-                                width: 1,
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              // productController.updateGridView(false);
+                              context
+                                  .read<SearchBloc>()
+                                  .add(const UpdateGridView(false));
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: searchState.isGridView
+                                    ? null
+                                    : ColorResources.primary,
+                                border: Border.all(
+                                  width: 1,
+                                  color: !searchState.isGridView
+                                      ? ColorResources.primary
+                                      : ColorResources.lgColor,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset(
+                                Images.svgList,
                                 color: !searchState.isGridView
-                                    ? ColorResources.primary
-                                    : ColorResources.lgColor,
+                                    ? ColorResources.white
+                                    : ColorResources.gray,
                               ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            alignment: Alignment.center,
-                            child: SvgPicture.asset(
-                              Images.svgList,
-                              color: !searchState.isGridView
-                                  ? ColorResources.white
-                                  : ColorResources.gray,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    )
+                  else
+                    SizedBox(
+                      height: 35,
                     ),
-                  ),
                 ],
               ),
             );

@@ -485,6 +485,9 @@ class _ChatConversationState extends State<ChatConversation> {
                                       ));
                                 }
                               : () {
+                                  context
+                                      .read<ProductBloc>()
+                                      .add(const UpdateShowCategories(false));
                                   // clearSelectedProduct();
                                   UserData? myUser = context
                                       .read<UserBloc>()

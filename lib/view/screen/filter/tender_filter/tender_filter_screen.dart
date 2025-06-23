@@ -1,6 +1,5 @@
 import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
-import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/data/model/base/tender_filter_values_model.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +52,7 @@ class _TenderFilterScreenState extends State<TenderFilterScreen> {
     });
     context.read<ProductBloc>().add(ResetSelectedKeyword());
     context.read<ProductBloc>().add(ResetSelectedMaterial());
-    context.read<PublicCompanyBloc>().add(UpdateCompanyFilterEnable(false));
+    context.read<PublicTenderBloc>().add(UpdateTenderFilterEnable(false));
     Get.back();
   }
 

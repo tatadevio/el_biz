@@ -34,7 +34,7 @@ class ContractTileWidget extends StatelessWidget {
               companyId: contractData.id.toString(), currentPage: 1));
 
         }
-        Get.to(() => ContractsScreen());
+        Get.to(() => ContractsScreen(isSale: isSales, contractId: contractData.id.toString(),));
       },
       leading: CustomImage(image: '', height: 48, width: 48, radius: 48),
       title: Row(

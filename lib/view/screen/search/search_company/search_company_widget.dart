@@ -11,7 +11,10 @@ import '../../../../utils/custom_text_style.dart';
 class SearchCompanyWidget extends StatefulWidget {
   final TextEditingController searchController;
   final ScrollController? scrollController;
-  const SearchCompanyWidget({super.key, required this.searchController, required this.scrollController});
+  const SearchCompanyWidget(
+      {super.key,
+      required this.searchController,
+      required this.scrollController});
 
   @override
   State<SearchCompanyWidget> createState() => _SearchCompanyWidgetState();
@@ -30,7 +33,8 @@ class _SearchCompanyWidgetState extends State<SearchCompanyWidget> {
         setState(() {
           _showScrollToTopButton = true;
         });
-      } else if (widget.scrollController!.offset <= 300 && _showScrollToTopButton) {
+      } else if (widget.scrollController!.offset <= 300 &&
+          _showScrollToTopButton) {
         setState(() {
           _showScrollToTopButton = false;
         });
@@ -52,8 +56,6 @@ class _SearchCompanyWidgetState extends State<SearchCompanyWidget> {
       }
     });
   }
-
-
 
   void _scrollToTop() {
     widget.scrollController!.animateTo(
@@ -89,7 +91,7 @@ class _SearchCompanyWidgetState extends State<SearchCompanyWidget> {
                 }
                 return Center(
                   child: Text(
-                    'no_product_found'.tr,
+                    'no_company_found'.tr,
                     style: body14,
                   ),
                 );

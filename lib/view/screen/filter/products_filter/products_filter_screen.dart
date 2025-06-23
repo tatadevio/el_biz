@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/product/product_bloc.dart';
+import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/data/model/base/product_filter_values_model.dart';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
