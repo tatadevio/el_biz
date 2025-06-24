@@ -8,6 +8,7 @@ import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/contracts/widgets/select_payment_method_widget.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -52,6 +53,7 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
   @override
   void initState() {
     super.initState();
+    vatController.text = '0';
     _scrollController.addListener(() {
       // Show the button if the user scrolls down 300 pixels or more
       if (_scrollController.offset > 300 && !_showScrollToTopButton) {
@@ -90,7 +92,8 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
         listener: (context, state) {
           if (state is AddAgreementSuccess) {
             // Handle success state
-            Get.back();
+            // Get.back();
+            Get.until((route) => Get.currentRoute == '/DashboardScreen');
             showShortToast(state.message);
             Get.dialog(
               CustomDialog(
@@ -250,6 +253,10 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                             lableText: 'НДС',
                             leading: '',
                             readOnly: false,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d*\.?\d{0,2}')),
+                            ],
                             onChanged: (p0) {
                               setState(() {});
                             },
@@ -260,6 +267,10 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                             inputType: TextInputType.text,
                             lableText: 'НсП',
                             leading: '',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d*\.?\d{0,2}')),
+                            ],
                             readOnly: false,
                             onChanged: (p0) {
                               setState(() {});

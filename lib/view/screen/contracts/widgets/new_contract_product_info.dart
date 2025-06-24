@@ -1,4 +1,3 @@
-import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';

@@ -602,9 +602,18 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                       // productData: productData,
                       isEdit: widget.isEdit,
                       isAddProduct: true,
+                      alreadySelected: widget.isEdit
+                          ? context
+                                  .read<ProductDetailBloc>()
+                                  .state
+                                  .productDetailModel!
+                                  .data!
+                                  .material ??
+                              ''
+                          : "",
                       onSelect: () {
                         Get.to(() => PreviewProductScreen(
-                              selectedMaterial: [],
+                              // selectedMaterial: [],
                               // selectedMaterial: selectedMaterials,
                               // productData: widget.productData,
                               isEdit: widget.isEdit,

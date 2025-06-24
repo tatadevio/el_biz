@@ -134,10 +134,10 @@ class _EditAccountInfoBottomSheetState
                             isMaxSize: false,
                             onTap: () async {
                               // delete account
+                              print("account id = ${widget.account?.id} ");
                               context.read<AccountBloc>().add(DeleteAccount(
                                     id: widget.account?.id.toString() ?? '',
                                   ));
-                          
                             },
                           ),
                         const SizedBox(

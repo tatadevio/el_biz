@@ -319,7 +319,11 @@
   "no_tenders_found" : "No tenders found.",
   "category" : "Category",
   "verified_company"  : "Verified Company",
-  "companies_passed_moderation" : "Companies that have passed moderation"
+  "companies_passed_moderation" : "Companies that have passed moderation",
+  "no_account_found" : "No account found.",
+  "all_account" : "All Account",
+  "please_accept_the_terms_and_conditions" : "Please confirm your agreement with the terms and conditions.",
+  "add_tender" : "Add Tender"
 
 
 

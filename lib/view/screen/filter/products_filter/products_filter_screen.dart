@@ -1,5 +1,4 @@
 import 'package:el_biz/bloc/product/product_bloc.dart';
-import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
 import 'package:el_biz/data/model/base/product_filter_values_model.dart';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import '../../../../bloc/category/category_bloc.dart';
 import '../../../../bloc/filter_fields/filter_fields_bloc.dart';
 import '../../../../bloc/material/material_bloc.dart' as material;
 import '../../../../data/model/base/rating_option_model.dart';
@@ -102,9 +102,53 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
   @override
   void initState() {
     super.initState();
-    // for (var dimension in dimensions) {
-    //   selectedDimensions[dimension] = false;
-    // }
+    Future.delayed(Duration.zero, () {
+      final publicTenderBloc = context.read<PublicProductBloc>();
+      if (publicTenderBloc.state.isFilterEnable) {
+        updateFilterOptions(publicTenderBloc.state);
+      }
+    });
+  }
+
+  updateFilterOptions(PublicProductState publicProductState) {
+    loadCategory(publicProductState);
+    selectedPriceOption =
+        publicProductState.productFilterValuesModel?.price ?? '';
+    selectedRating = ratingOptions.firstWhere(
+      (option) =>
+          option.value ==
+          publicProductState.productFilterValuesModel?.highRating,
+      orElse: () => ratingOptions.first,
+    );
+
+    publicProductState.productFilterValuesModel?.highRating ?? '';
+    selectedDimensions = publicProductState.productFilterValuesModel?.dimensions
+            ?.split(',')
+            .map((e) => e.trim())
+            .toList() ??
+        [];
+
+    _minController.text =
+        publicProductState.productFilterValuesModel?.priceMin ?? '';
+    _maxController.text =
+        publicProductState.productFilterValuesModel?.priceMax ?? '';
+
+    setState(() {});
+  }
+
+  loadCategory(PublicProductState publicProductState) {
+    final categoryItems = context.read<CategoryBloc>().state.categoryItem;
+    // for (var already in widget.alreadySelected!) {
+    if (publicProductState.productFilterValuesModel?.categoryId != null &&
+        publicProductState.productFilterValuesModel!.categoryId != '') {
+      for (var category in categoryItems) {
+        if (publicProductState.productFilterValuesModel?.categoryId
+                .toString() ==
+            category.id.toString()) {
+          selectedCategoryId = category;
+        }
+      }
+    }
   }
 
   void reset() {

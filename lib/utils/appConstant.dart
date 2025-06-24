@@ -58,7 +58,7 @@ class AppConstants {
   static const String myAccountsUrl = "api/accounts/my";
   static const String addAccountUrl = "api/accounts/store";
   static const String updateAccountUrl = "api/accounts/update";
-  static const String deleteAccountUrl = "api/users/delete";
+  static const String deleteAccountUrl = "api/accounts/delete";
 
   /// Add Product
   static const String addProductUrl = "api/products/store";

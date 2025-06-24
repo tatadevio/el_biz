@@ -123,7 +123,6 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
     // double height = MediaQuery.sizeOf(context).height;
-  
 
     return Scaffold(
       appBar: AppBar(
@@ -135,27 +134,28 @@ class _ProductScreenState extends State<ProductScreen> {
                   style: h16.copyWith(color: ColorResources.blackText),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  context
-                      .read<search.SearchBloc>()
-                      .add(search.ChangeStatusSearch(true));
-                  Get.to(() => SearchScreen());
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: ColorResources.lgColor,
+              if (!widget.isSelectProduct)
+                GestureDetector(
+                  onTap: () {
+                    context
+                        .read<search.SearchBloc>()
+                        .add(search.ChangeStatusSearch(true));
+                    Get.to(() => SearchScreen());
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: ColorResources.lgColor,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(Images.svgSearch),
                   ),
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(Images.svgSearch),
                 ),
-              ),
               const SizedBox(
                 width: 10,
               ),

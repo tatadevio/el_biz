@@ -13,7 +13,6 @@ import '../../../data/model/response/bank_model.dart';
 import '../../../utils/color_resources.dart';
 import '../account/account_screen.dart';
 import 'widgets/custom_add_company_appbar.dart';
-import 'widgets/select_currency_widget.dart';
 
 class CompanyAccountInfoScreen extends StatefulWidget {
   final bool isEdit;
@@ -71,12 +70,17 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
 
     companyModel.bankData = allBanks;
 
-    Get.bottomSheet(
-      backgroundColor: Colors.white,
-      SelectCurrencyWidget(
-        isEdit: widget.isEdit,
-      ),
-    );
+    // still no option to select main account
+    // Get.bottomSheet(
+    //   backgroundColor: Colors.white,
+    //   SelectCurrencyWidget(
+    //     isEdit: widget.isEdit,
+    //   ),
+    // );
+    // hide bottom sheet to select the main account
+    Get.to(() => AddCompanyDocumentScreen(
+          isEdit: widget.isEdit,
+        ));
   }
 
   @override

@@ -590,7 +590,26 @@ class ProductDetailScreen extends StatelessWidget {
                             print('this is my user id = $myUserId ');
                             Get.to(() => ChatConversation(
                                   isSeller: false,
-                                  product: ProductListItem(),
+                                  product: ProductListItem(
+                                    id: state.productDetailModel?.data?.id,
+                                    name: state.productDetailModel?.data?.name,
+                                    price:
+                                        state.productDetailModel?.data?.price,
+                                    description: state
+                                        .productDetailModel?.data?.description,
+                                    slug: state.productDetailModel?.data?.slug,
+                                    quantity: state
+                                        .productDetailModel?.data?.quantity,
+                                    image: state.productDetailModel?.data
+                                                ?.images?.isNotEmpty ==
+                                            true
+                                        ? state.productDetailModel?.data
+                                            ?.images![0].thumb
+                                        : '',
+                                    isFavorite: state.productDetailModel?.data
+                                            ?.isFavorite ??
+                                        false,
+                                  ),
                                   receiverId: productUserId,
                                   // getReceiverId(userState, state),
                                   senderId: myUserId,

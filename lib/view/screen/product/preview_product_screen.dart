@@ -18,12 +18,12 @@ import '../../base/custom_button.dart';
 import './widgets/add_product_images_preview.dart';
 
 class PreviewProductScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> selectedMaterial;
+  // final List<Map<String, dynamic>> selectedMaterial;
   // final AddProductModel productData;
   final bool isEdit;
   const PreviewProductScreen(
       {super.key,
-      required this.selectedMaterial,
+      // required this.selectedMaterial,
       // required this.productData,
       required this.isEdit});
 
@@ -302,10 +302,24 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                             'characteristics'.tr,
                             style: h16.copyWith(color: ColorResources.darkGray),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           characteristicsItem(
                               title: 'Материал',
-                              value: materialItemsToString(
-                                  widget.selectedMaterial)),
+                              value: context
+                                      .read<AddProductBloc>()
+                                      .state
+                                      .productData
+                                      ?.material!
+                                      .name ??
+                                  ''
+                              //  materialItemsToString(
+                              //   [
+
+                              //   ],
+                              // ),
+                              ),
                           const Divider(),
                           characteristicsItem(
                               title: 'Средний вес',
@@ -346,7 +360,7 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
               height: Get.height,
               onTap: () {
                 if (widget.isEdit) {
-                  showCustomSnackBar('Product Updated....');
+                  // showCustomSnackBar('Product Updated....');
                   // Get.offAll(() => const DashboardScreen());
                   log('this is product data ${context.read<AddProductBloc>().state.productData}');
                   context.read<AddProductBloc>().add(UpdateProduct(

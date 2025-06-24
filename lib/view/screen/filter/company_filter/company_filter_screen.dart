@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import '../../../../bloc/category/category_bloc.dart';
 import '../../../../data/model/response/category/categories_list_model.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
@@ -76,6 +77,42 @@ class _CompanyFilterScreenState extends State<CompanyFilterScreen> {
     context.read<ProductBloc>().add(ResetSelectedMaterial());
     context.read<PublicCompanyBloc>().add(UpdateCompanyFilterEnable(false));
     Get.back();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      final publicTenderBloc = context.read<PublicCompanyBloc>();
+      if (publicTenderBloc.state.isFilterEnable) {
+        updateFilterOptions(publicTenderBloc.state);
+      }
+    });
+  }
+
+  updateFilterOptions(PublicCompanyState publicProductState) {
+    loadCategory(publicProductState);
+
+    selectedRating =
+        publicProductState.companyFilterValuesModel?.highRating ?? '';
+    isVerifiedCompany =
+        publicProductState.companyFilterValuesModel?.isVerified ?? false;
+
+    setState(() {});
+  }
+
+  loadCategory(PublicCompanyState publicProductState) {
+    final categoryItems = context.read<CategoryBloc>().state.categoryItem;
+    if (publicProductState.companyFilterValuesModel?.categoryId != null &&
+        publicProductState.companyFilterValuesModel!.categoryId != '') {
+      for (var category in categoryItems) {
+        if (publicProductState.companyFilterValuesModel?.categoryId
+                .toString() ==
+            category.id.toString()) {
+          selectedCategory = category;
+        }
+      }
+    }
   }
 
   @override

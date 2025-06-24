@@ -39,6 +39,7 @@ class AddCompanyDocumentScreen extends StatelessWidget {
       } else {
         context.read<CompanyBloc>().add(AddNewCompany(companyData, context));
       }
+      // context.read<CompanyBloc>().add(ClearAddCompanyModel());
     } else {
       showShortToast('add_certificate'.tr);
     }

@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import '../../../../bloc/category/category_bloc.dart';
 import '../../../../bloc/public_tender/public_tender_bloc.dart';
 import '../../../../data/model/response/category/categories_list_model.dart';
 import '../../../../utils/Images.dart';
@@ -54,6 +55,48 @@ class _TenderFilterScreenState extends State<TenderFilterScreen> {
     context.read<ProductBloc>().add(ResetSelectedMaterial());
     context.read<PublicTenderBloc>().add(UpdateTenderFilterEnable(false));
     Get.back();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      final publicTenderBloc = context.read<PublicTenderBloc>();
+      if (publicTenderBloc.state.isFilterEnable) {
+        updateFilterOptions(publicTenderBloc.state);
+      }
+    });
+  }
+
+  updateFilterOptions(PublicTenderState publicTenderState) {
+    loadCategory(publicTenderState);
+    _minController.text =
+        publicTenderState.tenderFilterValuesModel?.minBudget ?? '1';
+    _maxController.text =
+        publicTenderState.tenderFilterValuesModel?.maxBudget ?? '20000';
+
+    startingQuantityController.text =
+        publicTenderState.tenderFilterValuesModel?.minQuantity ?? '';
+    endingQuantityController.text =
+        publicTenderState.tenderFilterValuesModel?.maxQuantity ?? '';
+
+    selectedProfileType =
+        publicTenderState.tenderFilterValuesModel?.profileType ?? '';
+    setState(() {});
+  }
+
+  loadCategory(PublicTenderState publicTenderState) {
+    final categoryItems = context.read<CategoryBloc>().state.categoryItem;
+    // for (var already in widget.alreadySelected!) {
+    if (publicTenderState.tenderFilterValuesModel?.categoryId != null &&
+        publicTenderState.tenderFilterValuesModel!.categoryId != '') {
+      for (var category in categoryItems) {
+        if (publicTenderState.tenderFilterValuesModel?.categoryId.toString() ==
+            category.id.toString()) {
+          selectedCategory = category;
+        }
+      }
+    }
   }
 
   @override

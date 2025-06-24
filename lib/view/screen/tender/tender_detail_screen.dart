@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/user/user_bloc.dart';
+import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -429,6 +430,23 @@ class TenderDetailScreen extends StatelessWidget {
                       Get.to(() => ChatConversation(
                             isSeller: false,
                             product: ProductListItem(),
+                            tender: TenderItem(
+                              id: state.tenderDetailModel!.data!.id,
+                              title: state.tenderDetailModel!.data!.title,
+                              description:
+                                  state.tenderDetailModel!.data!.description,
+                              budgetFrom:
+                                  state.tenderDetailModel!.data!.budgetFrom,
+                              budgetTo: state.tenderDetailModel!.data!.budgetTo,
+                              quantity: state.tenderDetailModel!.data!.quantity
+                                  .toString(),
+                              status: state.tenderDetailModel!.data!.status,
+                              image: state.tenderDetailModel!.data!.media
+                                          ?.isNotEmpty ==
+                                      true
+                                  ? state.tenderDetailModel!.data!.media![0].url
+                                  : '',
+                            ),
                             tenderId: tenderDetail.data!.id.toString(),
                             type: 'tender',
                             // tender: tenderDetail.data!,

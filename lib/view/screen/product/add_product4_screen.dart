@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:el_biz/bloc/add_product/add_product_bloc.dart';
+import 'package:el_biz/data/model/response/materials_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
@@ -8,15 +11,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/material/material_bloc.dart' as material;
+import '../../../bloc/product/product_bloc.dart';
+import '../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../base/custom_button.dart';
+import '../dashboard/dashboard.dart';
+import '../home/home_screen.dart';
 
 class AddProduct4Screen extends StatefulWidget {
   // final AddProductModel productData;
   final bool isEdit;
   final Function()? onSelect;
   final bool? isAddProduct;
+  final String alreadySelected;
   const AddProduct4Screen(
-      {super.key, required this.isEdit, this.onSelect, this.isAddProduct});
+      {super.key,
+      required this.isEdit,
+      this.onSelect,
+      this.isAddProduct,
+      required this.alreadySelected});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -36,109 +48,134 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
 
   // List<Map<String, dynamic>> selectedMaterials = [];
 
+  //
+
+  //
+
   @override
   void initState() {
     super.initState();
-    if (widget.isEdit) {
+    if (widget.isEdit || widget.alreadySelected.isNotEmpty) {
       updateProductData();
     }
   }
 
-  updateProductData() {}
+  updateProductData() {
+    if (widget.alreadySelected.isNotEmpty) {
+      MaterialItem materialSelected = context
+          .read<material.MaterialBloc>()
+          .state
+          .materialItems
+          .firstWhere((e) =>
+              e.name?.trim().toString() == widget.alreadySelected.toString());
+      context.read<AddProductBloc>().add(SelectMaterial(materialSelected));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('new_product'.tr),
+        title: Text('material'.tr),
       ),
-      body: BlocListener<material.MaterialBloc, material.MaterialState>(
-        listener: (context, stateListen) {
-          if (stateListen is material.MaterialError) {
-            showShortToast(stateListen.error);
+      body: BlocListener<AddProductBloc, AddProductState>(
+        listener: (context, state) {
+          if (state is AddProductSuccess) {
+            HomeScreen().loadData(context);
+            Get.offAll(() => const DashboardScreen());
+            context.read<ProductBloc>().add(EmptyPickedLogo());
+          } else if (state is AddProductFailure) {
+            showCustomSnackBar(state.message);
           }
         },
-        child: BlocBuilder<AddProductBloc, AddProductState>(
-            builder: (context, addProductState) {
-          return BlocBuilder<material.MaterialBloc, material.MaterialState>(
-              builder: (context, materialState) {
-            if (materialState.isLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+        child: BlocListener<material.MaterialBloc, material.MaterialState>(
+          listener: (context, stateListen) {
+            if (stateListen is material.MaterialError) {
+              showShortToast(stateListen.error);
             }
-            final materialList = materialState.materialItems;
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'select_material'.tr,
-                          style: h16.copyWith(color: ColorResources.darkGray),
-                        ),
-                      ),
-                      Text(
-                        materialList.length.toString(),
-                        // '${"selected".tr}: ${materialData.where((item) => item['isChecked'] == true).length} ${"from".tr} ${materialData.length}',
-                        style: body14,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: materialList.length,
-                      separatorBuilder: (context, index) => const Divider(
-                        height: 0,
-                      ),
-                      itemBuilder: (context, index) {
-                        final materialItem = materialList[index];
-                        return CheckboxListTile(
-                          dense: false,
-                          contentPadding: const EdgeInsets.all(0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          activeColor: ColorResources.primary,
-                          title: Text(materialItem.name ?? ''),
-                          value: materialItem ==
-                              addProductState.productData?.material,
-                          onChanged: (val) {
-                            if (widget.isAddProduct!) {
-                              context
-                                  .read<AddProductBloc>()
-                                  .add(SelectMaterial(materialItem));
-                            }
-                          },
-                          // onChanged: (bool? value) {
-                          //   for (var item in materialData) {
-                          //     item['isChecked'] = false;
-                          //   }
-                          //   setState(() {
-                          //     materialData[index]['isChecked'] = true;
-                          //   });
-
-                          //   context
-                          //       .read<AddProductBloc>()
-                          //       .state
-                          //       .productData
-                          //       ?.material = materialData[index]['title'];
-                          // },
-                        );
-                      },
+          },
+          child: BlocBuilder<AddProductBloc, AddProductState>(
+              builder: (context, addProductState) {
+            return BlocBuilder<material.MaterialBloc, material.MaterialState>(
+                builder: (context, materialState) {
+              if (materialState.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              final materialList = materialState.materialItems;
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                ],
-              ),
-            );
-          });
-        }),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'select_material'.tr,
+                            style: h16.copyWith(color: ColorResources.darkGray),
+                          ),
+                        ),
+                        Text(
+                          materialList.length.toString(),
+                          // '${"selected".tr}: ${materialData.where((item) => item['isChecked'] == true).length} ${"from".tr} ${materialData.length}',
+                          style: body14,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: materialList.length,
+                        separatorBuilder: (context, index) => const Divider(
+                          height: 0,
+                        ),
+                        itemBuilder: (context, index) {
+                          final materialItem = materialList[index];
+                          return CheckboxListTile(
+                            dense: false,
+                            contentPadding: const EdgeInsets.all(0),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            activeColor: ColorResources.primary,
+                            title: Text(materialItem.name ?? ''),
+                            value: materialItem ==
+                                addProductState.productData?.material,
+                            onChanged: (val) {
+                              if (widget.isAddProduct!) {
+                                context
+                                    .read<AddProductBloc>()
+                                    .add(SelectMaterial(materialItem));
+                              }
+                            },
+                            // onChanged: (bool? value) {
+                            //   for (var item in materialData) {
+                            //     item['isChecked'] = false;
+                            //   }
+                            //   setState(() {
+                            //     materialData[index]['isChecked'] = true;
+                            //   });
+
+                            //   context
+                            //       .read<AddProductBloc>()
+                            //       .state
+                            //       .productData
+                            //       ?.material = materialData[index]['title'];
+                            // },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+          }),
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -158,6 +195,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                   style: textMd.copyWith(color: ColorResources.blue),
                 ),
                 onTap: () {
+                  widget.onSelect!();
                   // selectedMaterials = [];
                   // selectedMaterials = materialData
                   //     .where((item) => item['isChecked'] == false)
@@ -169,17 +207,58 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
               width: 10,
             ),
             Expanded(
-              child: CustomButton(
-                  width: Get.width,
-                  height: Get.height,
-                  onTap: () {
-                    widget.onSelect!();
-                    // selectedMaterials = [];
-                    // selectedMaterials = materialData
-                    //     .where((item) => item['isChecked'] == false)
-                    //     .toList();
-                  },
-                  title: 'save'.tr),
+              child: BlocBuilder<AddProductBloc, AddProductState>(
+                  builder: (context, addProductState) {
+                if (addProductState is AddProductLoading) {
+                  return CustomButtonLoader(
+                      width: Get.width, height: Get.height);
+                }
+                return CustomButton(
+                    width: Get.width,
+                    height: Get.height,
+                    onTap: () {
+                      if (context
+                              .read<AddProductBloc>()
+                              .state
+                              .productData
+                              ?.material ==
+                          null) {
+                        showCustomSnackBar('select_material'.tr);
+                        return;
+                      }
+
+                      if (widget.isEdit) {
+                        // showCustomSnackBar('Product Updated....');
+                        // Get.offAll(() => const DashboardScreen());
+                        log('this is product data ${context.read<AddProductBloc>().state.productData}');
+                        context.read<AddProductBloc>().add(UpdateProduct(
+                            context.read<AddProductBloc>().state.productData!,
+                            context
+                                .read<ProductDetailBloc>()
+                                .state
+                                .productDetailModel!
+                                .data!
+                                .id
+                                .toString()));
+                      } else {
+                        // showCustomSnackBar('Product Added');
+
+                        log('this is product data ${context.read<AddProductBloc>().state.productData}');
+                        context.read<AddProductBloc>().add(AddProduct(
+                            addProductModel: context
+                                .read<AddProductBloc>()
+                                .state
+                                .productData!));
+                        // Get.offAll(() => const DashboardScreen());
+                      }
+                      // widget.onSelect!();
+                      // selectedMaterials = [];
+                      // selectedMaterials = materialData
+                      //     .where((item) => item['isChecked'] == false)
+                      //     .toList();
+                    },
+                    title: 'save'.tr);
+              }),
             ),
           ],
         ),

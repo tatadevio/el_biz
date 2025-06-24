@@ -14,6 +14,7 @@ import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/chat/widgets/new_message_widget.dart';
+import 'package:el_biz/view/screen/contracts/conditions_creating_contract_screen.dart';
 import 'package:el_biz/view/screen/contracts/new_contract_screen.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -578,8 +579,8 @@ class _ChatConversationState extends State<ChatConversation> {
                               context
                                   .read<AgreementBloc>()
                                   .add(GetPaymentMethod(currentPage: 1));
-                              Get.to(() => NewContractScreen(
-                                    product: widget.product,
+                                  Get.to(() => ConditionsCreatingContractScreen(
+                                     product: widget.product,
                                     tenderItem: widget.tender ?? TenderItem(),
                                     buyerId: widget.receiverId,
                                     type: widget.type,
@@ -588,6 +589,7 @@ class _ChatConversationState extends State<ChatConversation> {
                                     // productId: widget.productId,
                                     companyId: widget.companyId,
                                   ));
+                              
                               // there have to send the company id
                             },
                             child: Container(

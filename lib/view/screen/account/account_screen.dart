@@ -62,8 +62,18 @@ class _AccountScreenState extends State<AccountScreen> {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
+
             print('current page: ${state.currentPage}');
             print('page size: ${state.pageSize}');
+
+            if (state.accountItems.isEmpty) {
+              return Center(
+                child: Text(
+                  'no_account_found'.tr,
+                  style: body14.copyWith(color: ColorResources.darkGray),
+                ),
+              );
+            }
             return SingleChildScrollView(
               controller: _controller,
               physics: const AlwaysScrollableScrollPhysics(),
@@ -87,15 +97,21 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Optima USD',
+                        Text(
+                          state.accountItems.isNotEmpty
+                              ? state.accountItems[0].accountName ?? ''
+                              : '',
+                          // 'Optima USD',
                           style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          '0202020202002',
+                          state.accountItems.isNotEmpty
+                              ? state.accountItems[0].accountNumber ?? ''
+                              : '',
+                          // '0202020202002',
                           style: body16.copyWith(color: ColorResources.gray),
                         ),
                       ],
@@ -106,7 +122,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   if (state.accountItems.isNotEmpty)
                     Text(
-                      'all_accounts'.tr,
+                      'all_account'.tr,
                       style: h16.copyWith(color: ColorResources.darkGray),
                     ),
                   ListView.builder(

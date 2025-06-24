@@ -64,7 +64,6 @@ class _SelectTenderScreenState extends State<SelectTenderScreen> {
           }
         }
       } else {
-        ;
         if (_scrollController.position.pixels >=
                 _scrollController.position.maxScrollExtent - 300 &&
             !tenderBloc.state.isLoading &&
@@ -117,19 +116,19 @@ class _SelectTenderScreenState extends State<SelectTenderScreen> {
                   style: h16.copyWith(color: ColorResources.blackText),
                 ),
               ),
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: ColorResources.lgColor,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: SvgPicture.asset(Images.svgSearch),
-              ),
+              // Container(
+              //   height: 40,
+              //   width: 40,
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       width: 1,
+              //       color: ColorResources.lgColor,
+              //     ),
+              //     borderRadius: BorderRadius.circular(12),
+              //   ),
+              //   alignment: Alignment.center,
+              //   child: SvgPicture.asset(Images.svgSearch),
+              // ),
               const SizedBox(
                 width: 10,
               ),

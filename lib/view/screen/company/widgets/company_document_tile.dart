@@ -30,7 +30,8 @@ class CompanyDocumentTile extends StatelessWidget {
     return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
       builder: (context, detailState) {
         DocumentItem? certificate;
-        if (detailState.companyDocuments != null &&
+        if (isEdit &&
+            detailState.companyDocuments != null &&
             detailState.companyDocuments!.isNotEmpty) {
           certificate = detailState.companyDocuments!.firstWhere(
             (doc) => doc.documentType == 'certificate',
@@ -165,6 +166,7 @@ class CompanyDocumentTile extends StatelessWidget {
   Widget _buildSubtitle(
       DocumentItem? certificate, bool hasLocal, dynamic localDoc) {
     String text;
+    print('this is subtitle of the certificate: ${certificate?.size}');
     if (hasLocal) {
       text = getFileSize(File(localDoc.path));
     } else {
@@ -175,7 +177,6 @@ class CompanyDocumentTile extends StatelessWidget {
       }
     }
 
-   
     return Text(text, style: textXS.copyWith(color: ColorResources.gray));
   }
 
