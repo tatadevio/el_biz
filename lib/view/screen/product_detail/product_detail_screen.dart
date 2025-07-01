@@ -609,6 +609,7 @@ class ProductDetailScreen extends StatelessWidget {
                                     isFavorite: state.productDetailModel?.data
                                             ?.isFavorite ??
                                         false,
+                                    user: state.productDetailModel?.data?.user,
                                   ),
                                   receiverId: productUserId,
                                   // getReceiverId(userState, state),

@@ -219,24 +219,26 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: height * 0.04,
                       ),
-                      homeOptions(
-                          title: 'my_companies'.tr,
-                          titleImage: Images.svgBriefcase,
-                          detail:
-                              'switch_and_manage_between_your_company_accounts'
-                                  .tr,
-                          backgroundColor: ColorResources.myCompanies,
-                          onTap: () {
-                            Get.bottomSheet(const AddCompanyBottomSheet(),
-                                backgroundColor: Colors.white,
-                                isScrollControlled: true);
-                            // Get.to(() => PublicCompaniesScreen()
-                            //     // const MyCompaniesScreen(),
-                            //     );
-                          }),
-                      SizedBox(
-                        height: height * 0.025,
-                      ),
+                      if (context.read<AuthBloc>().state.isLoggedIn) ...[
+                        homeOptions(
+                            title: 'my_companies'.tr,
+                            titleImage: Images.svgBriefcase,
+                            detail:
+                                'switch_and_manage_between_your_company_accounts'
+                                    .tr,
+                            backgroundColor: ColorResources.myCompanies,
+                            onTap: () {
+                              Get.bottomSheet(const AddCompanyBottomSheet(),
+                                  backgroundColor: Colors.white,
+                                  isScrollControlled: true);
+                              // Get.to(() => PublicCompaniesScreen()
+                              //     // const MyCompaniesScreen(),
+                              //     );
+                            }),
+                        SizedBox(
+                          height: height * 0.025,
+                        ),
+                      ],
                       homeOptions(
                           title: 'companies'.tr,
                           titleImage: Images.svgBriefcase,

@@ -6,6 +6,8 @@ import 'dart:convert';
 
 import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 
+import '../chat/chat_list_model.dart';
+
 ProductDetailModel productDetailModelFromJson(String str) =>
     ProductDetailModel.fromJson(json.decode(str));
 
@@ -278,58 +280,58 @@ class Data {
 //       };
 // }
 
-class User {
-  final int? id;
-  final String? name;
-  final String? email;
-  final String? phone;
-  final String? image;
-  final String? status;
+// class User {
+//   final int? id;
+//   final String? name;
+//   final String? email;
+//   final String? phone;
+//   final String? image;
+//   final String? status;
 
-  User({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.image,
-    this.status,
-  });
+//   User({
+//     this.id,
+//     this.name,
+//     this.email,
+//     this.phone,
+//     this.image,
+//     this.status,
+//   });
 
-  User copyWith({
-    int? id,
-    String? name,
-    String? email,
-    String? phone,
-    String? image,
-    String? status,
-  }) =>
-      User(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        image: image ?? this.image,
-        status: status ?? this.status,
-      );
+//   User copyWith({
+//     int? id,
+//     String? name,
+//     String? email,
+//     String? phone,
+//     String? image,
+//     String? status,
+//   }) =>
+//       User(
+//         id: id ?? this.id,
+//         name: name ?? this.name,
+//         email: email ?? this.email,
+//         phone: phone ?? this.phone,
+//         image: image ?? this.image,
+//         status: status ?? this.status,
+//       );
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        phone: json["phone"],
-        image: json["image"],
-        status: json["status"],
-      );
+//   factory User.fromJson(Map<String, dynamic> json) => User(
+//         id: json["id"],
+//         name: json["name"],
+//         email: json["email"],
+//         phone: json["phone"],
+//         image: json["image"],
+//         status: json["status"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "image": image,
-        "status": status,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "email": email,
+//         "phone": phone,
+//         "image": image,
+//         "status": status,
+//       };
+// }
 
 class ProductDetailImages {
   final int? id;
