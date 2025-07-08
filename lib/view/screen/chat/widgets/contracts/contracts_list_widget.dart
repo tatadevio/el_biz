@@ -16,8 +16,18 @@ class ContractsListWidget extends StatelessWidget {
           child: CircularProgressIndicator(),
         );
       }
-      final userId =
-          context.read<UserBloc>().state.userInfo!.data!.id.toString();
+
+      // Add null checks for userInfo and userInfo.data
+      final userInfo = context.read<UserBloc>().state.userInfo;
+      final userData = userInfo?.data;
+
+      if (userData == null) {
+        return Center(
+          child: Text('Loading user data...'),
+        );
+      }
+
+      final userId = userData.id.toString();
 
       if (chatState.isShowMySales) {
         return MySalesWidget(currentUserId: userId);

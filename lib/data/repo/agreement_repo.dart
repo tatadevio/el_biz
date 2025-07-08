@@ -29,4 +29,16 @@ class AgreementRepo {
       '${AppConstants.myPurchasesCompaniesUrl}?page=$currentPage',
     );
   }
+
+  Future<Response> searchMySales(String search, int currentPage) async {
+    return await apiClient.getData(
+      '${AppConstants.mySalesCompaniesUrl}?search=$search&page=$currentPage',
+    );
+  }
+
+  Future<Response> searchMyPurchases(String search, int currentPage) async {
+    return await apiClient.getData(
+      '${AppConstants.myPurchasesCompaniesUrl}?search=$search&page=$currentPage',
+    );
+  }
 }

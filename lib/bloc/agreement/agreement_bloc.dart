@@ -18,6 +18,9 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
     on<AddAgreement>(_onAddAgreement);
     on<GetMySales>(_onGetMySales);
     on<GetMyPurchases>(_onGetMyPurchases);
+    on<SearchMySales>(_onSearchMySales);
+    on<SearchMyPurchases>(_onSearchMyPurchases);
+    on<ClearContractSearch>(_onClearContractSearch);
   }
 
   Future<void> _onGetPaymentMethod(
@@ -115,5 +118,173 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
       // Handle exception
     }
     emit(state.copyWith(isLoading: false, isLoadingMore: false));
+  }
+
+  Future<void> _onSearchMySales(
+      SearchMySales event, Emitter<AgreementState> emit) async {
+    final query = event.query;
+
+    if (event.currentPage == 1) {
+      emit(state.copyWith(
+        salesSearchQuery: query,
+        isSearchingSales: true,
+        filteredMySales: const [],
+        salesSearchCurrentPage: 1,
+      ));
+    } else {
+      emit(state.copyWith(isLoadingSalesSearchMore: true));
+    }
+
+    try {
+      if (query.isEmpty) {
+        // If search is empty, load normal sales list
+        final response = await agreementRepo.getMySales(event.currentPage);
+        if (response.statusCode == 200) {
+          final sales = MySalesModel.fromJson(response.body);
+          if (event.currentPage == 1) {
+            emit(state.copyWith(
+              filteredMySales: List<CompanyItem>.from(sales.data?.items ?? []),
+              salesSearchCurrentPage: sales.data?.currentPage ?? 1,
+              salesSearchPageSize: sales.data?.totalPages ?? 1,
+            ));
+          } else {
+            List<CompanyItem> newItems = [
+              ...state.filteredMySales,
+              ...sales.data?.items ?? [],
+            ];
+            emit(state.copyWith(
+              filteredMySales: newItems,
+              salesSearchCurrentPage: sales.data?.currentPage ?? 1,
+              salesSearchPageSize: sales.data?.totalPages ?? 1,
+            ));
+          }
+        }
+      } else {
+        // Use search API
+        final response =
+            await agreementRepo.searchMySales(query, event.currentPage);
+        if (response.statusCode == 200) {
+          final sales = MySalesModel.fromJson(response.body);
+          if (event.currentPage == 1) {
+            emit(state.copyWith(
+              filteredMySales: List<CompanyItem>.from(sales.data?.items ?? []),
+              salesSearchCurrentPage: sales.data?.currentPage ?? 1,
+              salesSearchPageSize: sales.data?.totalPages ?? 1,
+            ));
+          } else {
+            List<CompanyItem> newItems = [
+              ...state.filteredMySales,
+              ...sales.data?.items ?? [],
+            ];
+            emit(state.copyWith(
+              filteredMySales: newItems,
+              salesSearchCurrentPage: sales.data?.currentPage ?? 1,
+              salesSearchPageSize: sales.data?.totalPages ?? 1,
+            ));
+          }
+        }
+      }
+    } catch (e) {
+      print('Search sales error: $e');
+    }
+
+    emit(state.copyWith(
+      isSearchingSales: false,
+      isLoadingSalesSearchMore: false,
+    ));
+  }
+
+  Future<void> _onSearchMyPurchases(
+      SearchMyPurchases event, Emitter<AgreementState> emit) async {
+    final query = event.query;
+
+    if (event.currentPage == 1) {
+      emit(state.copyWith(
+        purchasesSearchQuery: query,
+        isSearchingPurchases: true,
+        filteredMyPurchases: const [],
+        purchasesSearchCurrentPage: 1,
+      ));
+    } else {
+      emit(state.copyWith(isLoadingPurchasesSearchMore: true));
+    }
+
+    try {
+      if (query.isEmpty) {
+        // If search is empty, load normal purchases list
+        final response = await agreementRepo.getMyPurchases(event.currentPage);
+        if (response.statusCode == 200) {
+          final purchases = MySalesModel.fromJson(response.body);
+          if (event.currentPage == 1) {
+            emit(state.copyWith(
+              filteredMyPurchases:
+                  List<CompanyItem>.from(purchases.data?.items ?? []),
+              purchasesSearchCurrentPage: purchases.data?.currentPage ?? 1,
+              purchasesSearchPageSize: purchases.data?.totalPages ?? 1,
+            ));
+          } else {
+            List<CompanyItem> newItems = [
+              ...state.filteredMyPurchases,
+              ...purchases.data?.items ?? [],
+            ];
+            emit(state.copyWith(
+              filteredMyPurchases: newItems,
+              purchasesSearchCurrentPage: purchases.data?.currentPage ?? 1,
+              purchasesSearchPageSize: purchases.data?.totalPages ?? 1,
+            ));
+          }
+        }
+      } else {
+        // Use search API
+        final response =
+            await agreementRepo.searchMyPurchases(query, event.currentPage);
+        if (response.statusCode == 200) {
+          final purchases = MySalesModel.fromJson(response.body);
+          if (event.currentPage == 1) {
+            emit(state.copyWith(
+              filteredMyPurchases:
+                  List<CompanyItem>.from(purchases.data?.items ?? []),
+              purchasesSearchCurrentPage: purchases.data?.currentPage ?? 1,
+              purchasesSearchPageSize: purchases.data?.totalPages ?? 1,
+            ));
+          } else {
+            List<CompanyItem> newItems = [
+              ...state.filteredMyPurchases,
+              ...purchases.data?.items ?? [],
+            ];
+            emit(state.copyWith(
+              filteredMyPurchases: newItems,
+              purchasesSearchCurrentPage: purchases.data?.currentPage ?? 1,
+              purchasesSearchPageSize: purchases.data?.totalPages ?? 1,
+            ));
+          }
+        }
+      }
+    } catch (e) {
+      print('Search purchases error: $e');
+    }
+
+    emit(state.copyWith(
+      isSearchingPurchases: false,
+      isLoadingPurchasesSearchMore: false,
+    ));
+  }
+
+  Future<void> _onClearContractSearch(
+      ClearContractSearch event, Emitter<AgreementState> emit) async {
+    emit(state.copyWith(
+      salesSearchQuery: '',
+      purchasesSearchQuery: '',
+      filteredMySales: state.mySales,
+      filteredMyPurchases: state.myPurchases,
+      salesSearchCurrentPage: 1,
+      purchasesSearchCurrentPage: 1,
+      salesSearchPageSize: 1,
+      purchasesSearchPageSize: 1,
+      isSearchingSales: false,
+      isSearchingPurchases: false,
+      isLoadingSalesSearchMore: false,
+      isLoadingPurchasesSearchMore: false,
+    ));
   }
 }

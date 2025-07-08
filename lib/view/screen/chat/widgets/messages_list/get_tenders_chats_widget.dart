@@ -10,23 +10,42 @@ class GetTendersChatsWidget extends StatelessWidget {
   const GetTendersChatsWidget({super.key, required this.currentUserId});
 
   reloadAllMessages(BuildContext context) async {
-    context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
+    final chatState = context.read<ChatBloc>().state;
+    if (chatState.tenderSearchQuery.isNotEmpty) {
+      context.read<ChatBloc>().add(SearchChatTenders(
+          query: chatState.tenderSearchQuery, currentPage: 1));
+    } else {
+      context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
+    }
   }
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
-    final accountController = context.read<ChatBloc>();
+    final chatBloc = context.read<ChatBloc>();
 
     scrollController.addListener(() {
+      final chatState = chatBloc.state;
+
       if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 300 &&
-          !accountController.state.isLoading &&
-          !accountController.state.isLoadingTenderMore) {
-        print('this is scroll view page ended....');
-        int pageSize = accountController.state.pageTenderSize;
-        if (accountController.state.currentTenderPage < pageSize) {
-          int nextPage = accountController.state.currentTenderPage;
-
-          accountController.add(GetChatTenderList(currentPage: nextPage + 1));
+          !chatState.isLoading &&
+          !chatState.isLoadingTenderMore &&
+          !chatState.isSearchingTenders &&
+          !chatState.isLoadingTenderSearchMore) {
+        if (chatState.tenderSearchQuery.isNotEmpty) {
+          // Search pagination
+          if (chatState.tenderSearchCurrentPage <
+              chatState.tenderSearchPageSize) {
+            chatBloc.add(SearchChatTenders(
+              query: chatState.tenderSearchQuery,
+              currentPage: chatState.tenderSearchCurrentPage + 1,
+            ));
+          }
+        } else {
+          // Normal pagination
+          if (chatState.currentTenderPage < chatState.pageTenderSize) {
+            chatBloc.add(GetChatTenderList(
+                currentPage: chatState.currentTenderPage + 1));
+          }
         }
       }
     });
@@ -40,19 +59,40 @@ class GetTendersChatsWidget extends StatelessWidget {
       onRefresh: () async => reloadAllMessages(context),
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, chatState) {
-          if (chatState.isLoading) {
+          if (chatState.isLoading || chatState.isSearchingTenders) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (chatState.chatTenderList.isEmpty) {
-            return Center(child: Text('no_chats_found'.tr));
+          // Use filtered results if search is active, otherwise use original list
+          final displayList = chatState.tenderSearchQuery.isNotEmpty
+              ? chatState.filteredChatTenderList
+              : chatState.chatTenderList;
+
+          if (displayList.isEmpty) {
+            if (chatState.tenderSearchQuery.isNotEmpty) {
+              return Center(child: Text('no_search_results'.tr));
+            } else {
+              return Center(child: Text('no_chats_found'.tr));
+            }
           }
 
           return ListView.builder(
             controller: scrollController,
-            itemCount: chatState.chatTenderList.length,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: displayList.length +
+                (chatState.isLoadingTenderSearchMore ? 1 : 0),
             itemBuilder: (context, index) {
-              final chat = chatState.chatTenderList[index];
+              if (index == displayList.length &&
+                  chatState.isLoadingTenderSearchMore) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+
+              final chat = displayList[index];
               return ChatTile(
                 isMessage: true,
                 chatData: chat,

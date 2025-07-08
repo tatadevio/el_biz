@@ -23,7 +23,6 @@ class GetNewPublicCompany extends PublicCompanyEvent {
   List<Object> get props => [currentPage];
 }
 
-
 class UpdateCompanyFilterEnable extends PublicCompanyEvent {
   final bool isEnable;
   const UpdateCompanyFilterEnable(this.isEnable);
@@ -46,3 +45,5 @@ class FilterPublicCompanyProduct extends PublicCompanyEvent {
         currentPage,
       ];
 }
+
+class ClearPublicCompanyState extends PublicCompanyEvent {}

@@ -28,6 +28,8 @@ class NewContactListScreen extends StatefulWidget {
   final String tenderId;
   final String contractName;
   final int companyId;
+  final bool isEditing;
+  final int? contractId;
   const NewContactListScreen({
     super.key,
     required this.selectedProductsList,
@@ -37,6 +39,8 @@ class NewContactListScreen extends StatefulWidget {
     required this.tenderId,
     required this.contractName,
     required this.companyId,
+    this.isEditing = false,
+    this.contractId,
   });
 
   @override
@@ -136,22 +140,23 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                                     textMd.copyWith(color: ColorResources.blue),
                               ),
                               onTap: () {
-                                // Get.back();
-                                Get.offAll(() => DashboardScreen());
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomButton(
-                              width: Get.width,
-                              height: 44,
-                              onTap: () {
                                 Get.back();
-                                Get.to(() => ContractConditionsScreen());
+                                // Get.offAll(() => DashboardScreen());
                               },
-                              title: 'look'.tr,
                             ),
                           ),
+                          // Expanded(
+                          //   child: CustomButton(
+                          //     width: Get.width,
+                          //     height: 44,
+                          //     onTap: () {
+
+                          //       // Get.back();
+                          //       // Get.to(() => ContractConditionsScreen());
+                          //     },
+                          //     title: 'look'.tr,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],
@@ -371,11 +376,18 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                 'seller_company_id': widget.companyId.toString(),
               };
 
+              // Add contract ID if editing
+              if (widget.isEditing && widget.contractId != null) {
+                agreementData['contract_id'] = widget.contractId.toString();
+              }
+
+              // For now, use AddAgreement for both creating and updating
+              // The backend should handle the difference based on contract_id presence
               context
                   .read<AgreementBloc>()
                   .add(AddAgreement(data: agreementData));
             },
-            title: 'continue'.tr,
+            title: widget.isEditing ? 'save_changes'.tr : 'continue'.tr,
           );
         }),
       ),

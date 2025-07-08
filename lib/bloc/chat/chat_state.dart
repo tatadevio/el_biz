@@ -13,6 +13,18 @@ class ChatState extends Equatable {
   final bool isLoadingTenderMore;
   final int currentTenderPage;
   final int pageTenderSize;
+  final String productSearchQuery;
+  final String tenderSearchQuery;
+  final List<ChatItem> filteredChatProductList;
+  final List<ChatItem> filteredChatTenderList;
+  final bool isSearchingProducts;
+  final bool isSearchingTenders;
+  final bool isLoadingProductSearchMore;
+  final bool isLoadingTenderSearchMore;
+  final int productSearchCurrentPage;
+  final int tenderSearchCurrentPage;
+  final int productSearchPageSize;
+  final int tenderSearchPageSize;
   const ChatState({
     this.isShowChat = true,
     this.isShowAllMessage = true,
@@ -26,6 +38,18 @@ class ChatState extends Equatable {
     this.isLoadingTenderMore = false,
     this.currentTenderPage = 1,
     this.pageTenderSize = 1,
+    this.productSearchQuery = '',
+    this.tenderSearchQuery = '',
+    this.filteredChatProductList = const [],
+    this.filteredChatTenderList = const [],
+    this.isSearchingProducts = false,
+    this.isSearchingTenders = false,
+    this.isLoadingProductSearchMore = false,
+    this.isLoadingTenderSearchMore = false,
+    this.productSearchCurrentPage = 1,
+    this.tenderSearchCurrentPage = 1,
+    this.productSearchPageSize = 1,
+    this.tenderSearchPageSize = 1,
   });
 
   ChatState copyWith({
@@ -41,6 +65,18 @@ class ChatState extends Equatable {
     bool? isLoadingTenderMore,
     int? currentTenderPage,
     int? pageTenderSize,
+    String? productSearchQuery,
+    String? tenderSearchQuery,
+    List<ChatItem>? filteredChatProductList,
+    List<ChatItem>? filteredChatTenderList,
+    bool? isSearchingProducts,
+    bool? isSearchingTenders,
+    bool? isLoadingProductSearchMore,
+    bool? isLoadingTenderSearchMore,
+    int? productSearchCurrentPage,
+    int? tenderSearchCurrentPage,
+    int? productSearchPageSize,
+    int? tenderSearchPageSize,
   }) {
     return ChatState(
       isShowChat: isShowChat ?? this.isShowChat,
@@ -55,6 +91,25 @@ class ChatState extends Equatable {
       isLoadingTenderMore: isLoadingTenderMore ?? this.isLoadingTenderMore,
       currentTenderPage: currentTenderPage ?? this.currentTenderPage,
       pageTenderSize: pageTenderSize ?? this.pageTenderSize,
+      productSearchQuery: productSearchQuery ?? this.productSearchQuery,
+      tenderSearchQuery: tenderSearchQuery ?? this.tenderSearchQuery,
+      filteredChatProductList:
+          filteredChatProductList ?? this.filteredChatProductList,
+      filteredChatTenderList:
+          filteredChatTenderList ?? this.filteredChatTenderList,
+      isSearchingProducts: isSearchingProducts ?? this.isSearchingProducts,
+      isSearchingTenders: isSearchingTenders ?? this.isSearchingTenders,
+      isLoadingProductSearchMore:
+          isLoadingProductSearchMore ?? this.isLoadingProductSearchMore,
+      isLoadingTenderSearchMore:
+          isLoadingTenderSearchMore ?? this.isLoadingTenderSearchMore,
+      productSearchCurrentPage:
+          productSearchCurrentPage ?? this.productSearchCurrentPage,
+      tenderSearchCurrentPage:
+          tenderSearchCurrentPage ?? this.tenderSearchCurrentPage,
+      productSearchPageSize:
+          productSearchPageSize ?? this.productSearchPageSize,
+      tenderSearchPageSize: tenderSearchPageSize ?? this.tenderSearchPageSize,
     );
   }
 
@@ -72,6 +127,18 @@ class ChatState extends Equatable {
         isLoadingTenderMore,
         currentTenderPage,
         pageTenderSize,
+        productSearchQuery,
+        tenderSearchQuery,
+        filteredChatProductList,
+        filteredChatTenderList,
+        isSearchingProducts,
+        isSearchingTenders,
+        isLoadingProductSearchMore,
+        isLoadingTenderSearchMore,
+        productSearchCurrentPage,
+        tenderSearchCurrentPage,
+        productSearchPageSize,
+        tenderSearchPageSize,
       ];
 }
 

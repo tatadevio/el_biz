@@ -1,4 +1,3 @@
-
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/view/screen/chat/widgets/messages_list/get_products_chats_widget.dart';
@@ -17,8 +16,29 @@ class ChatListWidget extends StatelessWidget {
           child: CircularProgressIndicator(),
         );
       }
-      final userId =
-          context.read<UserBloc>().state.userInfo!.data!.id.toString();
+
+      // Add null checks for userInfo and userInfo.data
+      // final userInfo = context.read<UserBloc>().state.userInfo;
+      // final userData = userInfo?.data;
+      String userId = '';
+
+      var userData = context.read<UserBloc>().state.selectedAccountModel;
+      if (userData == null || userData.userId == 0) {
+        final userInfo = context.read<UserBloc>().state.userInfo?.data;
+        userId = userInfo?.id.toString() ?? '';
+        print("userId in chat list widget if part: $userId");
+      } else {
+        userId = userData.userId.toString();
+        print("userId in chat list widget else: $userId");
+      }
+
+      print("userId in chat list widget: $userId");
+
+      if (userId == "") {
+        return Center(
+          child: Text('Loading user data...'),
+        );
+      }
 
       if (chatState.isShowAllMessage) {
         //showing all messages

@@ -114,3 +114,23 @@ class UpdateUnReadCount extends ChatEvent {
   @override
   List<Object> get props => [chatId, userCount, ownerCount];
 }
+
+class SearchChatProducts extends ChatEvent {
+  final String query;
+  final int currentPage;
+  const SearchChatProducts({required this.query, this.currentPage = 1});
+
+  @override
+  List<Object> get props => [query, currentPage];
+}
+
+class SearchChatTenders extends ChatEvent {
+  final String query;
+  final int currentPage;
+  const SearchChatTenders({required this.query, this.currentPage = 1});
+
+  @override
+  List<Object> get props => [query, currentPage];
+}
+
+class ClearChatSearch extends ChatEvent {}

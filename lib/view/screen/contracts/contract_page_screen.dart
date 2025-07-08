@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/user/user_bloc.dart';
+import 'package:el_biz/data/model/response/product/product_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -11,7 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/agreement/agreement_bloc.dart';
 import '../../../data/model/response/agreement/company_sales_model.dart';
+import '../../../data/model/response/company/company_product_model.dart';
+import '../../../data/model/response/tender/tender_item_model.dart';
+import 'conditions_creating_contract_screen.dart';
+import 'contract_conditions_screen.dart';
+import 'edit_contract_screen.dart';
+import 'new_contract_screen.dart';
 import 'widgets/show_contract_files.dart';
 
 class ContractPageScreen extends StatelessWidget {
@@ -39,7 +47,7 @@ class ContractPageScreen extends StatelessWidget {
               height: 5,
             ),
             dataItem(
-              'Номер договора',
+              'contract_number'.tr,
               Text(
                 contractModel.id.toString(),
                 // contractModel.id,
@@ -47,28 +55,28 @@ class ContractPageScreen extends StatelessWidget {
               ),
             ),
             dataItem(
-              'Название договора',
+              'contract_title'.tr,
               Text(
                 contractModel.contractName ?? '',
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
-              'Количество товаров(ед)',
+              'product_quantity_units'.tr,
               Text(
                 contractModel.contractProducts?.length.toString() ?? '0',
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
-              'Стоимость заказа',
+              'order_cost'.tr,
               Text(
                 contractModel.totalAmount.toString(),
                 style: body16.copyWith(color: ColorResources.titleColor),
               ),
             ),
             dataItem(
-              'Дата заказа',
+              'order_date'.tr,
               Text(
                 contractModel.createdAt != null
                     ? formatDateInRu(contractModel.createdAt.toString())
@@ -77,7 +85,7 @@ class ContractPageScreen extends StatelessWidget {
               ),
             ),
             dataItem(
-              'Статус согласования:',
+              'approval_status'.tr,
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
@@ -107,7 +115,7 @@ class ContractPageScreen extends StatelessWidget {
               ),
             ),
             dataItem(
-              'Статус оплаты',
+              'documents'.tr,
               InkWell(
                 onTap: () {
                   Get.bottomSheet(const ShowContractFiles(),
@@ -124,7 +132,7 @@ class ContractPageScreen extends StatelessWidget {
                     boxShadow: const [ColorResources.shadow1],
                   ),
                   child: Text(
-                    'document',
+                    'documents'.tr,
                     // contractModel.document,
                     style: body16.copyWith(color: ColorResources.white),
                   ),
@@ -198,7 +206,26 @@ class ContractPageScreen extends StatelessWidget {
                     'edit'.tr,
                     style: textMd.copyWith(color: ColorResources.blue),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    // Navigate to edit contract screen
+                    // Get.to(() => EditContractScreen(
+                    //       contractModel: contractModel,
+                    //     ));
+                    for (var contractProduct
+                        in contractModel.contractProducts!) {
+                      print(contractProduct.unitPrice);
+                      print(contractProduct.quantity);
+                    }
+                    Get.to(() => NewContractScreen(
+                          product: ProductListItem(),
+                          tenderItem: TenderItem(),
+                          contractModel: contractModel,
+                          buyerId: contractModel.buyer?.id.toString() ?? '',
+                          type: contractModel.contractType ?? 'product',
+                          companyId: 13,
+                          isEditing: true,
+                        ));
+                  },
                 ),
               ),
             const SizedBox(

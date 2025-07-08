@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/public_company/public_company_bloc.dart';
+import '../../../bloc/search_company/search_company_bloc.dart';
 import '../../../bloc/tin_number/tin_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../utils/Images.dart';
@@ -331,6 +333,17 @@ class MenuScreen extends StatelessWidget {
                                                 context.read<UserBloc>().add(
                                                     ClearSelectedAccount());
                                                 context
+                                                    .read<CompanyBloc>()
+                                                    .add(ClearCompanyState());
+                                                context
+                                                    .read<SearchCompanyBloc>()
+                                                    .add(
+                                                        ClearSearchCompanyList());
+                                                context
+                                                    .read<PublicCompanyBloc>()
+                                                    .add(
+                                                        ClearPublicCompanyState());
+                                                context
                                                     .read<AuthBloc>()
                                                     .add(Logout());
 
@@ -454,6 +467,17 @@ class MenuScreen extends StatelessWidget {
                                                     .add(DeleteAccount());
                                                 context.read<UserBloc>().add(
                                                     ClearSelectedAccount());
+                                                context
+                                                    .read<CompanyBloc>()
+                                                    .add(ClearCompanyState());
+                                                context
+                                                    .read<SearchCompanyBloc>()
+                                                    .add(
+                                                        ClearSearchCompanyList());
+                                                context
+                                                    .read<PublicCompanyBloc>()
+                                                    .add(
+                                                        ClearPublicCompanyState());
 
                                                 Get.back();
                                                 Get.offAll(

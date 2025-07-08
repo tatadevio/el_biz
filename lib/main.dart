@@ -31,6 +31,7 @@ import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/bloc/tenders/tenders_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get/get.dart';
@@ -57,8 +58,20 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initializeDateFormatting('ru_RU', null);
-  // await Firebase.initializeApp();
-  // HttpOverrides.global = MyHttpOverrides();
+
+  // Set global system UI style with more explicit settings
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.white,
+    systemNavigationBarContrastEnforced: true,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  ));
+
+  // Also set system UI mode to ensure proper behavior
+  // SystemChrome.setEnabledSystemUIMode(
+  //   SystemUiMode.manual,
+  //   overlays: [SystemUiOverlay.bottom],
+  // );
 
   Map<String, Map<String, String>> _languages = await di.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -124,49 +137,53 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {
-        return GetMaterialApp(
-          localizationsDelegates: const [
-            FormBuilderLocalizations.delegate,
-            //GlobalMaterialLocalizations.delegate,
-            //GlobalWidgetsLocalizations.delegate,
-          ],
-          locale: localizationController.locale,
-          translations: Messages(languages: languages),
-          fallbackLocale: Locale(AppConstants.languages[0].languageCode,
-              AppConstants.languages[0].countryCode),
-          builder: BotToastInit(),
-          title: AppConstants.appName,
-          debugShowCheckedModeBanner: false,
-          navigatorKey: Get.key,
-          theme: light(
-            color: ColorResources.primary,
-          ).copyWith(
-            unselectedWidgetColor: ColorResources.lgColor,
-            progressIndicatorTheme: const ProgressIndicatorThemeData(
+        return SafeArea(
+          bottom: Platform.isAndroid ? true : false,
+          top: false,
+          child: GetMaterialApp(
+            localizationsDelegates: const [
+              FormBuilderLocalizations.delegate,
+              //GlobalMaterialLocalizations.delegate,
+              //GlobalWidgetsLocalizations.delegate,
+            ],
+            locale: localizationController.locale,
+            translations: Messages(languages: languages),
+            fallbackLocale: Locale(AppConstants.languages[0].languageCode,
+                AppConstants.languages[0].countryCode),
+            builder: BotToastInit(),
+            title: AppConstants.appName,
+            debugShowCheckedModeBanner: false,
+            navigatorKey: Get.key,
+            theme: light(
               color: ColorResources.primary,
-            ),
-            scaffoldBackgroundColor: ColorResources.backgroundColor,
-            radioTheme: RadioThemeData(
-              // fillColor: WidgetStateProperty.all(ColorResources.primary),
-              fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-                if (states.contains(WidgetState.selected)) {
-                  return ColorResources.primary;
-                }
-                return ColorResources.lgColor;
-              }),
-            ),
-            checkboxTheme: const CheckboxThemeData(
+            ).copyWith(
+              unselectedWidgetColor: ColorResources.lgColor,
+              progressIndicatorTheme: const ProgressIndicatorThemeData(
+                color: ColorResources.primary,
+              ),
+              scaffoldBackgroundColor: ColorResources.backgroundColor,
+              radioTheme: RadioThemeData(
                 // fillColor: WidgetStateProperty.all(ColorResources.primary),
-                // checkColor: WidgetStateProperty.all(ColorResources.blue),
-                ),
-            appBarTheme: AppBarTheme(
-              backgroundColor: Colors.white,
-              surfaceTintColor: Colors.white,
-              scrolledUnderElevation: 0,
+                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return ColorResources.primary;
+                  }
+                  return ColorResources.lgColor;
+                }),
+              ),
+              checkboxTheme: const CheckboxThemeData(
+                  // fillColor: WidgetStateProperty.all(ColorResources.primary),
+                  // checkColor: WidgetStateProperty.all(ColorResources.blue),
+                  ),
+              appBarTheme: AppBarTheme(
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
+                scrolledUnderElevation: 0,
+              ),
             ),
+            initialRoute: RouteHelper.getSplashRoute(),
+            getPages: RouteHelper.routes,
           ),
-          initialRoute: RouteHelper.getSplashRoute(),
-          getPages: RouteHelper.routes,
         );
       }),
     );

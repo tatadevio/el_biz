@@ -38,3 +38,22 @@ class GetMyPurchases extends AgreementEvent {
   List<Object> get props => [currentPage];
 }
 
+class SearchMySales extends AgreementEvent {
+  final String query;
+  final int currentPage;
+  const SearchMySales({required this.query, this.currentPage = 1});
+
+  @override
+  List<Object> get props => [query, currentPage];
+}
+
+class SearchMyPurchases extends AgreementEvent {
+  final String query;
+  final int currentPage;
+  const SearchMyPurchases({required this.query, this.currentPage = 1});
+
+  @override
+  List<Object> get props => [query, currentPage];
+}
+
+class ClearContractSearch extends AgreementEvent {}

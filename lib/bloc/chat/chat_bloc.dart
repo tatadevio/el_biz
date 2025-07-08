@@ -77,6 +77,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendChatMedia>(_onSendChatMedia);
     on<UpdateLastMessage>(_onUpdateLastMessage);
     on<UpdateUnReadCount>(_onUpdateUnReadCount);
+    on<SearchChatProducts>(_onSearchChatProducts);
+    on<SearchChatTenders>(_onSearchChatTenders);
+    on<ClearChatSearch>(_onClearChatSearch);
   }
 
   Future<void> _onGetChatProductList(
@@ -92,7 +95,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ChatListModel chatData = ChatListModel.fromJson(res.body);
       if (event.currentPage == 1) {
         final newList = chatData.data?.items ?? [];
-        emit(state.copyWith(chatProductList: newList));
+        emit(state.copyWith(
+          chatProductList: newList,
+          filteredChatProductList: newList,
+        ));
       } else {
         List<ChatItem> newItems = [
           ...state.chatProductList,
@@ -122,7 +128,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ChatListModel chatData = ChatListModel.fromJson(res.body);
       if (event.currentPage == 1) {
         final newList = chatData.data?.items ?? [];
-        emit(state.copyWith(chatTenderList: newList));
+        emit(state.copyWith(
+          chatTenderList: newList,
+          filteredChatTenderList: newList,
+        ));
       } else {
         List<ChatItem> newItems = [
           ...state.chatTenderList,
@@ -244,5 +253,171 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<void> _onSearchChatProducts(
+      SearchChatProducts event, Emitter<ChatState> emit) async {
+    final query = event.query;
+
+    if (event.currentPage == 1) {
+      emit(state.copyWith(
+        productSearchQuery: query,
+        isSearchingProducts: true,
+        filteredChatProductList: const [],
+        productSearchCurrentPage: 1,
+      ));
+    } else {
+      emit(state.copyWith(isLoadingProductSearchMore: true));
+    }
+
+    try {
+      if (query.isEmpty) {
+        // If search is empty, load normal chat list
+        final res = await chatRepo.getChatList('product', event.currentPage);
+        ChatListModel chatData = ChatListModel.fromJson(res.body);
+
+        if (event.currentPage == 1) {
+          final newList = chatData.data?.items ?? [];
+          emit(state.copyWith(
+            filteredChatProductList: newList,
+            productSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            productSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        } else {
+          List<ChatItem> newItems = [
+            ...state.filteredChatProductList,
+            ...chatData.data?.items ?? [],
+          ];
+          emit(state.copyWith(
+            filteredChatProductList: newItems,
+            productSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            productSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        }
+      } else {
+        // Use search API
+        final res = await chatRepo.getSearchChatList(
+            'product', query, event.currentPage);
+        ChatListModel chatData = ChatListModel.fromJson(res.body);
+
+        if (event.currentPage == 1) {
+          final newList = chatData.data?.items ?? [];
+          emit(state.copyWith(
+            filteredChatProductList: newList,
+            productSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            productSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        } else {
+          List<ChatItem> newItems = [
+            ...state.filteredChatProductList,
+            ...chatData.data?.items ?? [],
+          ];
+          emit(state.copyWith(
+            filteredChatProductList: newItems,
+            productSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            productSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        }
+      }
+    } catch (e) {
+      print('Search products error: $e');
+    }
+
+    emit(state.copyWith(
+      isSearchingProducts: false,
+      isLoadingProductSearchMore: false,
+    ));
+  }
+
+  Future<void> _onSearchChatTenders(
+      SearchChatTenders event, Emitter<ChatState> emit) async {
+    final query = event.query;
+
+    if (event.currentPage == 1) {
+      emit(state.copyWith(
+        tenderSearchQuery: query,
+        isSearchingTenders: true,
+        filteredChatTenderList: const [],
+        tenderSearchCurrentPage: 1,
+      ));
+    } else {
+      emit(state.copyWith(isLoadingTenderSearchMore: true));
+    }
+
+    try {
+      if (query.isEmpty) {
+        // If search is empty, load normal chat list
+        final res = await chatRepo.getChatList('tender', event.currentPage);
+        ChatListModel chatData = ChatListModel.fromJson(res.body);
+
+        if (event.currentPage == 1) {
+          final newList = chatData.data?.items ?? [];
+          emit(state.copyWith(
+            filteredChatTenderList: newList,
+            tenderSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            tenderSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        } else {
+          List<ChatItem> newItems = [
+            ...state.filteredChatTenderList,
+            ...chatData.data?.items ?? [],
+          ];
+          emit(state.copyWith(
+            filteredChatTenderList: newItems,
+            tenderSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            tenderSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        }
+      } else {
+        // Use search API
+        final res = await chatRepo.getSearchChatList(
+            'tender', query, event.currentPage);
+        ChatListModel chatData = ChatListModel.fromJson(res.body);
+
+        if (event.currentPage == 1) {
+          final newList = chatData.data?.items ?? [];
+          emit(state.copyWith(
+            filteredChatTenderList: newList,
+            tenderSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            tenderSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        } else {
+          List<ChatItem> newItems = [
+            ...state.filteredChatTenderList,
+            ...chatData.data?.items ?? [],
+          ];
+          emit(state.copyWith(
+            filteredChatTenderList: newItems,
+            tenderSearchCurrentPage: chatData.data?.currentPage ?? 1,
+            tenderSearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        }
+      }
+    } catch (e) {
+      print('Search tenders error: $e');
+    }
+
+    emit(state.copyWith(
+      isSearchingTenders: false,
+      isLoadingTenderSearchMore: false,
+    ));
+  }
+
+  Future<void> _onClearChatSearch(
+      ClearChatSearch event, Emitter<ChatState> emit) async {
+    emit(state.copyWith(
+      productSearchQuery: '',
+      tenderSearchQuery: '',
+      filteredChatProductList: state.chatProductList,
+      filteredChatTenderList: state.chatTenderList,
+      productSearchCurrentPage: 1,
+      tenderSearchCurrentPage: 1,
+      productSearchPageSize: 1,
+      tenderSearchPageSize: 1,
+      isSearchingProducts: false,
+      isSearchingTenders: false,
+      isLoadingProductSearchMore: false,
+      isLoadingTenderSearchMore: false,
+    ));
   }
 }

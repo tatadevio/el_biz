@@ -53,6 +53,7 @@ class HomeScreen extends StatelessWidget {
     context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
     context.read<AuthBloc>().add(CheckLoginStatus());
     // context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
+    
   }
 
   loadCompanyData(BuildContext context) {

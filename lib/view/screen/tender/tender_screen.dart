@@ -378,46 +378,58 @@ class _TenderScreenState extends State<TenderScreen> {
                 }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child:
-                      // SizedBox(),
-                      // there tender list and tender grid have to update
-                      tendersController.isGridView
-                          ? GridView.builder(
-                              controller: _scrollController,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10,
-                                      childAspectRatio: 0.65),
-                              itemCount: publicTenderState.isFilterEnable
-                                  ? publicTenderState.filterTenders.length
-                                  : publicTenderState.publicTenders.length,
-                              itemBuilder: (context, index) {
-                                return TenderGridItem(
-                                  tender: publicTenderState.isFilterEnable
-                                      ? publicTenderState.filterTenders[index]
-                                      : publicTenderState.publicTenders[index],
-                                  isCompanyTender: false,
-                                  isPublicTender: true,
-                                );
-                              },
-                            )
-                          : ListView.builder(
-                              controller: _scrollController,
-                              itemCount: publicTenderState.isFilterEnable
-                                  ? publicTenderState.filterTenders.length
-                                  : publicTenderState.publicTenders.length,
-                              itemBuilder: (context, index) {
-                                return TenderListItem(
-                                  tender: publicTenderState.isFilterEnable
-                                      ? publicTenderState.filterTenders[index]
-                                      : publicTenderState.publicTenders[index],
-                                  isCompanyTender: false,
-                                  isPublicTender: true,
-                                );
-                              },
-                            ),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      if (publicTenderState.isFilterEnable) {
+                        context.read<PublicTenderBloc>().add(
+                            FilterPublicTenderProduct(
+                                productFilterValuesModel:
+                                    publicTenderState.tenderFilterValuesModel!,
+                                currentPage: 1));
+                      } else {
+                        context
+                            .read<PublicTenderBloc>()
+                            .add(GetPublicTender(1, direction: direction));
+                      }
+                    },
+                    child: tendersController.isGridView
+                        ? GridView.builder(
+                            controller: _scrollController,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 10,
+                                    childAspectRatio: 0.65),
+                            itemCount: publicTenderState.isFilterEnable
+                                ? publicTenderState.filterTenders.length
+                                : publicTenderState.publicTenders.length,
+                            itemBuilder: (context, index) {
+                              return TenderGridItem(
+                                tender: publicTenderState.isFilterEnable
+                                    ? publicTenderState.filterTenders[index]
+                                    : publicTenderState.publicTenders[index],
+                                isCompanyTender: false,
+                                isPublicTender: true,
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: publicTenderState.isFilterEnable
+                                ? publicTenderState.filterTenders.length
+                                : publicTenderState.publicTenders.length,
+                            itemBuilder: (context, index) {
+                              return TenderListItem(
+                                tender: publicTenderState.isFilterEnable
+                                    ? publicTenderState.filterTenders[index]
+                                    : publicTenderState.publicTenders[index],
+                                isCompanyTender: false,
+                                isPublicTender: true,
+                              );
+                            },
+                          ),
+                  ),
                 );
               });
             },

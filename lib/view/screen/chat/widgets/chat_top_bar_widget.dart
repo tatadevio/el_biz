@@ -2,6 +2,7 @@ import 'package:el_biz/bloc/chat/chat_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
@@ -16,7 +17,48 @@ class ChatTopBarWidget extends StatefulWidget {
 }
 
 class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
-  final TextEditingController searchController = TextEditingController();
+  final TextEditingController productSearchController = TextEditingController();
+  final TextEditingController tenderSearchController = TextEditingController();
+  Timer? _productSearchTimer;
+  Timer? _tenderSearchTimer;
+
+  @override
+  void dispose() {
+    _productSearchTimer?.cancel();
+    _tenderSearchTimer?.cancel();
+    productSearchController.dispose();
+    tenderSearchController.dispose();
+    super.dispose();
+  }
+
+  void _onProductSearchChanged(String query) {
+    _productSearchTimer?.cancel();
+    _productSearchTimer = Timer(const Duration(milliseconds: 300), () {
+      context
+          .read<ChatBloc>()
+          .add(SearchChatProducts(query: query, currentPage: 1));
+    });
+  }
+
+  void _onTenderSearchChanged(String query) {
+    _tenderSearchTimer?.cancel();
+    _tenderSearchTimer = Timer(const Duration(milliseconds: 300), () {
+      context
+          .read<ChatBloc>()
+          .add(SearchChatTenders(query: query, currentPage: 1));
+    });
+  }
+
+  void _clearProductSearch() {
+    productSearchController.clear();
+    context.read<ChatBloc>().add(SearchChatProducts(query: '', currentPage: 1));
+  }
+
+  void _clearTenderSearch() {
+    tenderSearchController.clear();
+    context.read<ChatBloc>().add(SearchChatTenders(query: '', currentPage: 1));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatBloc, ChatState>(builder: (context, chatState) {
@@ -89,21 +131,33 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
             ],
           ),
           const SizedBox(height: 10),
-          CustomTextField(
-            controller: searchController,
-            hintColor: 'search_in_chats'.tr,
-            inputType: TextInputType.text,
-            leading: Images.svgSearch,
-            readOnly: false,
-            suffix: IconButton(
-              onPressed: () {
-                if (searchController.text.isNotEmpty) {
-                  searchController.clear();
-                }
-              },
-              icon: const Icon(Icons.close),
+          if (chatState.isShowAllMessage)
+            CustomTextField(
+              controller: productSearchController,
+              hintColor: 'search_in_chats'.tr,
+              inputType: TextInputType.text,
+              leading: Images.svgSearch,
+              readOnly: false,
+              onChanged: _onProductSearchChanged,
+              suffix: IconButton(
+                onPressed: _clearProductSearch,
+                icon: const Icon(Icons.close),
+              ),
             ),
-          ),
+          if (!chatState.isShowAllMessage) ...[
+            CustomTextField(
+              controller: tenderSearchController,
+              hintColor: 'search_in_tenders'.tr,
+              inputType: TextInputType.text,
+              leading: Images.svgSearch,
+              readOnly: false,
+              onChanged: _onTenderSearchChanged,
+              suffix: IconButton(
+                onPressed: _clearTenderSearch,
+                icon: const Icon(Icons.close),
+              ),
+            ),
+          ]
         ],
       );
     });

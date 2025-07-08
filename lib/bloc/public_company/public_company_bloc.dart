@@ -18,6 +18,7 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
     on<GetNewPublicCompany>(_onGetNewPublicCompany);
     on<UpdateCompanyFilterEnable>(_onUpdateCompanyFilterEnable);
     on<FilterPublicCompanyProduct>(_onFilterPublicCompanyProduct);
+    on<ClearPublicCompanyState>(_onClearPublicCompanyState);
   }
 
   Future<void> _onGetPublicCompany(
@@ -138,5 +139,12 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
       print(e.toString());
     }
     emit(state.copyWith(isLoading: false, isMoreLoading: false));
+  }
+
+  Future<void> _onClearPublicCompanyState(
+    ClearPublicCompanyState event,
+    Emitter<PublicCompanyState> emit,
+  ) async {
+    emit(PublicCompanyInitial());
   }
 }

@@ -25,6 +25,13 @@ class ChatRepo {
     );
   }
 
+  Future<Response> getSearchChatList(
+      String type, String search, int page) async {
+    return await apiClient.getData(
+      "${AppConstants.chatListUrl}?type=$type&search=$search&page=$page",
+    );
+  }
+
   Future<Response> deleteChat(String chatId) async {
     return await apiClient.deleteData(
       "${AppConstants.deleteChaturl}/$chatId",

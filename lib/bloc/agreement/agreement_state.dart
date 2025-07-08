@@ -13,6 +13,18 @@ class AgreementState extends Equatable {
   final int myPurchasesCurrentPage;
   final int mySalesPageSize;
   final int myPurchasesPageSize;
+  final String salesSearchQuery;
+  final String purchasesSearchQuery;
+  final List<CompanyItem> filteredMySales;
+  final List<CompanyItem> filteredMyPurchases;
+  final bool isSearchingSales;
+  final bool isSearchingPurchases;
+  final bool isLoadingSalesSearchMore;
+  final bool isLoadingPurchasesSearchMore;
+  final int salesSearchCurrentPage;
+  final int purchasesSearchCurrentPage;
+  final int salesSearchPageSize;
+  final int purchasesSearchPageSize;
 
   const AgreementState({
     this.isLoading = false,
@@ -26,6 +38,18 @@ class AgreementState extends Equatable {
     this.myPurchasesCurrentPage = 1,
     this.mySalesPageSize = 1,
     this.myPurchasesPageSize = 1,
+    this.salesSearchQuery = '',
+    this.purchasesSearchQuery = '',
+    this.filteredMySales = const [],
+    this.filteredMyPurchases = const [],
+    this.isSearchingSales = false,
+    this.isSearchingPurchases = false,
+    this.isLoadingSalesSearchMore = false,
+    this.isLoadingPurchasesSearchMore = false,
+    this.salesSearchCurrentPage = 1,
+    this.purchasesSearchCurrentPage = 1,
+    this.salesSearchPageSize = 1,
+    this.purchasesSearchPageSize = 1,
   });
 
   AgreementState copyWith(
@@ -39,7 +63,19 @@ class AgreementState extends Equatable {
       int? mySalesCurrentPage,
       int? myPurchasesCurrentPage,
       int? mySalesPageSize,
-      int? myPurchasesPageSize}) {
+      int? myPurchasesPageSize,
+      String? salesSearchQuery,
+      String? purchasesSearchQuery,
+      List<CompanyItem>? filteredMySales,
+      List<CompanyItem>? filteredMyPurchases,
+      bool? isSearchingSales,
+      bool? isSearchingPurchases,
+      bool? isLoadingSalesSearchMore,
+      bool? isLoadingPurchasesSearchMore,
+      int? salesSearchCurrentPage,
+      int? purchasesSearchCurrentPage,
+      int? salesSearchPageSize,
+      int? purchasesSearchPageSize}) {
     return AgreementState(
       isLoading: isLoading ?? this.isLoading,
       paymentMethods: paymentMethods ?? this.paymentMethods,
@@ -53,6 +89,23 @@ class AgreementState extends Equatable {
           myPurchasesCurrentPage ?? this.myPurchasesCurrentPage,
       mySalesPageSize: mySalesPageSize ?? this.mySalesPageSize,
       myPurchasesPageSize: myPurchasesPageSize ?? this.myPurchasesPageSize,
+      salesSearchQuery: salesSearchQuery ?? this.salesSearchQuery,
+      purchasesSearchQuery: purchasesSearchQuery ?? this.purchasesSearchQuery,
+      filteredMySales: filteredMySales ?? this.filteredMySales,
+      filteredMyPurchases: filteredMyPurchases ?? this.filteredMyPurchases,
+      isSearchingSales: isSearchingSales ?? this.isSearchingSales,
+      isSearchingPurchases: isSearchingPurchases ?? this.isSearchingPurchases,
+      isLoadingSalesSearchMore:
+          isLoadingSalesSearchMore ?? this.isLoadingSalesSearchMore,
+      isLoadingPurchasesSearchMore:
+          isLoadingPurchasesSearchMore ?? this.isLoadingPurchasesSearchMore,
+      salesSearchCurrentPage:
+          salesSearchCurrentPage ?? this.salesSearchCurrentPage,
+      purchasesSearchCurrentPage:
+          purchasesSearchCurrentPage ?? this.purchasesSearchCurrentPage,
+      salesSearchPageSize: salesSearchPageSize ?? this.salesSearchPageSize,
+      purchasesSearchPageSize:
+          purchasesSearchPageSize ?? this.purchasesSearchPageSize,
     );
   }
 
@@ -69,6 +122,18 @@ class AgreementState extends Equatable {
         myPurchasesCurrentPage,
         mySalesPageSize,
         myPurchasesPageSize,
+        salesSearchQuery,
+        purchasesSearchQuery,
+        filteredMySales,
+        filteredMyPurchases,
+        isSearchingSales,
+        isSearchingPurchases,
+        isLoadingSalesSearchMore,
+        isLoadingPurchasesSearchMore,
+        salesSearchCurrentPage,
+        purchasesSearchCurrentPage,
+        salesSearchPageSize,
+        purchasesSearchPageSize,
       ];
 }
 

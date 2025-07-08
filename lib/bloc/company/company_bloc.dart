@@ -81,6 +81,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
 
     on<AddNewCompany>(_onAddNewCompany);
     on<UpdateCompany>(_onUpdateCompany);
+    on<ClearCompanyState>(_onClearCompanyState);
   }
 
   // void _onGetMyCompanies(GetMyCompanies event, Emitter<CompanyState> emit) {}
@@ -306,5 +307,10 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     } catch (e) {
       showShortToast(e.toString());
     }
+  }
+
+  void _onClearCompanyState(
+      ClearCompanyState event, Emitter<CompanyState> emit) {
+    emit(CompanyState(addCompanyModel: AddCompanyModel()));
   }
 }

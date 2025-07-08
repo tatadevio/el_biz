@@ -29,6 +29,10 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
   void initState() {
     super.initState();
     updateSelectedOption();
+    // Load my companies when bottom sheet is opened (only if user is logged in)
+    if (context.read<AuthBloc>().state.isLoggedIn) {
+      context.read<CompanyBloc>().add(GetMyCompanies(currentPage: 1));
+    }
   }
 
   updateSelectedOption() async {

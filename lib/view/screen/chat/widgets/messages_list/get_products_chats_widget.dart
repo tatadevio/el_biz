@@ -10,23 +10,42 @@ class GetProductsChatsWidget extends StatelessWidget {
   const GetProductsChatsWidget({super.key, required this.currentUserId});
 
   reloadAllMessages(BuildContext context) async {
-    context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
+    final chatState = context.read<ChatBloc>().state;
+    if (chatState.productSearchQuery.isNotEmpty) {
+      context.read<ChatBloc>().add(SearchChatProducts(
+          query: chatState.productSearchQuery, currentPage: 1));
+    } else {
+      context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
+    }
   }
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
-    final accountController = context.read<ChatBloc>();
+    final chatBloc = context.read<ChatBloc>();
 
     scrollController.addListener(() {
+      final chatState = chatBloc.state;
+
       if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 300 &&
-          !accountController.state.isLoading &&
-          !accountController.state.isLoadingMore) {
-        print('this is scroll view page ended....');
-        int pageSize = accountController.state.pageSize;
-        if (accountController.state.currentPage < pageSize) {
-          int nextPage = accountController.state.currentPage;
-
-          accountController.add(GetChatProductList(currentPage: nextPage + 1));
+          !chatState.isLoading &&
+          !chatState.isLoadingMore &&
+          !chatState.isSearchingProducts &&
+          !chatState.isLoadingProductSearchMore) {
+        if (chatState.productSearchQuery.isNotEmpty) {
+          // Search pagination
+          if (chatState.productSearchCurrentPage <
+              chatState.productSearchPageSize) {
+            chatBloc.add(SearchChatProducts(
+              query: chatState.productSearchQuery,
+              currentPage: chatState.productSearchCurrentPage + 1,
+            ));
+          }
+        } else {
+          // Normal pagination
+          if (chatState.currentPage < chatState.pageSize) {
+            chatBloc.add(
+                GetChatProductList(currentPage: chatState.currentPage + 1));
+          }
         }
       }
     });
@@ -40,19 +59,40 @@ class GetProductsChatsWidget extends StatelessWidget {
       onRefresh: () async => reloadAllMessages(context),
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, chatState) {
-          if (chatState.isLoading) {
+          if (chatState.isLoading || chatState.isSearchingProducts) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (chatState.chatProductList.isEmpty) {
-            return Center(child: Text('no_chats_found'.tr));
+          // Use filtered results if search is active, otherwise use original list
+          final displayList = chatState.productSearchQuery.isNotEmpty
+              ? chatState.filteredChatProductList
+              : chatState.chatProductList;
+
+          if (displayList.isEmpty) {
+            if (chatState.productSearchQuery.isNotEmpty) {
+              return Center(child: Text('no_search_results'.tr));
+            } else {
+              return Center(child: Text('no_chats_found'.tr));
+            }
           }
 
           return ListView.builder(
             controller: scrollController,
-            itemCount: chatState.chatProductList.length,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: displayList.length +
+                (chatState.isLoadingProductSearchMore ? 1 : 0),
             itemBuilder: (context, index) {
-              final chat = chatState.chatProductList[index];
+              if (index == displayList.length &&
+                  chatState.isLoadingProductSearchMore) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+
+              final chat = displayList[index];
               return ChatTile(
                 isMessage: true,
                 chatData: chat,

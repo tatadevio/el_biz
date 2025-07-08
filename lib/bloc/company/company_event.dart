@@ -126,3 +126,5 @@ class UpdateCompany extends CompanyEvent {
   @override
   List<Object> get props => [addCompanyModel, companyId, context];
 }
+
+class ClearCompanyState extends CompanyEvent {}

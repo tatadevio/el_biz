@@ -62,14 +62,26 @@ class ContractsScreen extends StatelessWidget {
               child: Text('no_contracts_found'.tr),
             );
           }
-          return ListView.builder(
-            controller: _scrollController,
-            itemCount: contractState.salesContractItems.length,
-            // contractState.contracts.length,
-            itemBuilder: (context, index) {
-              return ContractItem(
-                  contractModel: contractState.salesContractItems[index]);
+          return RefreshIndicator(
+            onRefresh: () async {
+              if (isSale) {
+                context.read<ContractsBloc>().add(
+                    GetCompanySales(companyId: contractId, currentPage: 1));
+              } else {
+                context.read<ContractsBloc>().add(
+                    GetCompanyPurchases(companyId: contractId, currentPage: 1));
+              }
             },
+            child: ListView.builder(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: contractState.salesContractItems.length,
+              // contractState.contracts.length,
+              itemBuilder: (context, index) {
+                return ContractItem(
+                    contractModel: contractState.salesContractItems[index]);
+              },
+            ),
           );
         }),
       ),

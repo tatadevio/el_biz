@@ -112,8 +112,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<Login>((event, emit) async {
       emit(state.copywith(isLoading: true));
       final res = await authRepo.login(event.phoneNumber, event.password);
+      print("this is res: ${res.statusCode} and ${res.body}");
       print(res.body);
       emit(state.copywith(isLoading: false));
+      print("this is res.body['status_code']: ${res.body['status_code']}");
       if (res.body['status_code'] == 200) {
         await _saveToken(res.body['data']['token']);
         add(CheckLoginStatus());

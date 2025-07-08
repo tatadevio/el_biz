@@ -1,4 +1,3 @@
-
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,16 +91,50 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
       children: [
         BlocBuilder<PublicCompanyBloc, PublicCompanyState>(
             builder: (context, companyState) {
-          return ListView.builder(
-            controller: _scrollController,
-            itemCount: companyState.isFilterEnable
-                ? companyState.filterCompanies.length
-                : companyState.publicCompanies.length,
-            itemBuilder: (context, index) {
-              // print(
-              //     'there i have call the company bloc in compnay list : ${companyState.publicCompanies.length}');
-              return myCompanyWidget(companyState.publicCompanies[index]);
+          if (companyState.isLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (companyState.publicCompanies.isEmpty &&
+              !companyState.isFilterEnable) {
+            return Center(
+              child: Text('no_companies_found'.tr),
+            );
+          }
+
+          if (companyState.filterCompanies.isEmpty &&
+              companyState.isFilterEnable) {
+            return Center(
+              child: Text('no_companies_found'.tr),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              if (companyState.isFilterEnable) {
+                context.read<PublicCompanyBloc>().add(
+                    FilterPublicCompanyProduct(
+                        productFilterValuesModel:
+                            companyState.companyFilterValuesModel!,
+                        currentPage: 1));
+              } else {
+                context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
+              }
             },
+            child: ListView.builder(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: companyState.isFilterEnable
+                  ? companyState.filterCompanies.length
+                  : companyState.publicCompanies.length,
+              itemBuilder: (context, index) {
+                return myCompanyWidget(companyState.isFilterEnable
+                    ? companyState.filterCompanies[index]
+                    : companyState.publicCompanies[index]);
+              },
+            ),
           );
         }),
         if (_showScrollToTopButton)

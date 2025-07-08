@@ -10,22 +10,43 @@ class MyPurchasesWidget extends StatelessWidget {
   const MyPurchasesWidget({super.key, required this.currentUserId});
 
   reloadAllMessages(BuildContext context) async {
-    context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
+    final agreementState = context.read<AgreementBloc>().state;
+    if (agreementState.purchasesSearchQuery.isNotEmpty) {
+      context.read<AgreementBloc>().add(SearchMyPurchases(
+          query: agreementState.purchasesSearchQuery, currentPage: 1));
+    } else {
+      context.read<AgreementBloc>().add(GetMyPurchases(currentPage: 1));
+    }
   }
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
-    final accountController = context.read<AgreementBloc>();
+    final agreementBloc = context.read<AgreementBloc>();
 
     scrollController.addListener(() {
+      final agreementState = agreementBloc.state;
+
       if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 300 &&
-          !accountController.state.isLoading &&
-          !accountController.state.isLoadingMore) {
-        int pageSize = accountController.state.myPurchasesPageSize;
-        if (accountController.state.myPurchasesCurrentPage < pageSize) {
-          int nextPage = accountController.state.myPurchasesCurrentPage;
-
-          accountController.add(GetMyPurchases(currentPage: nextPage + 1));
+          !agreementState.isLoading &&
+          !agreementState.isLoadingMore &&
+          !agreementState.isSearchingPurchases &&
+          !agreementState.isLoadingPurchasesSearchMore) {
+        if (agreementState.purchasesSearchQuery.isNotEmpty) {
+          // Search pagination
+          if (agreementState.purchasesSearchCurrentPage <
+              agreementState.purchasesSearchPageSize) {
+            agreementBloc.add(SearchMyPurchases(
+              query: agreementState.purchasesSearchQuery,
+              currentPage: agreementState.purchasesSearchCurrentPage + 1,
+            ));
+          }
+        } else {
+          // Normal pagination
+          if (agreementState.myPurchasesCurrentPage <
+              agreementState.myPurchasesPageSize) {
+            agreementBloc.add(GetMyPurchases(
+                currentPage: agreementState.myPurchasesCurrentPage + 1));
+          }
         }
       }
     });
@@ -39,19 +60,40 @@ class MyPurchasesWidget extends StatelessWidget {
       onRefresh: () async => reloadAllMessages(context),
       child: BlocBuilder<AgreementBloc, AgreementState>(
         builder: (context, agreement) {
-          if (agreement.isLoading) {
+          if (agreement.isLoading || agreement.isSearchingPurchases) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (agreement.myPurchases.isEmpty) {
-            return Center(child: Text('no_contract_found'.tr));
+          // Use filtered results if search is active, otherwise use original list
+          final displayList = agreement.purchasesSearchQuery.isNotEmpty
+              ? agreement.filteredMyPurchases
+              : agreement.myPurchases;
+
+          if (displayList.isEmpty) {
+            if (agreement.purchasesSearchQuery.isNotEmpty) {
+              return Center(child: Text('no_search_results'.tr));
+            } else {
+              return Center(child: Text('no_contract_found'.tr));
+            }
           }
 
           return ListView.builder(
             controller: scrollController,
-            itemCount: agreement.myPurchases.length,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: displayList.length +
+                (agreement.isLoadingPurchasesSearchMore ? 1 : 0),
             itemBuilder: (context, index) {
-              final chat = agreement.myPurchases[index];
+              if (index == displayList.length &&
+                  agreement.isLoadingPurchasesSearchMore) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+
+              final chat = displayList[index];
               return ContractTileWidget(
                 contractData: chat,
                 isSales: false,

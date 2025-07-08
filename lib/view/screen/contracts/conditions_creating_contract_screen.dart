@@ -36,50 +36,38 @@ class _ConditionsCreatingContractScreenState
   final List<Section> point1And2 = [
     Section(
       number: '1',
-      title: 'Предмет договора',
+      title: 'contract_subject'.tr,
       subSections: [
-        SubSection(
-            number: '1.1',
-            title:
-                'Поставщик обязуется предоставить товар/услугу в соответствии с описанием, размещённым в приложении.'),
-        SubSection(
-            number: '1.2',
-            title:
-                'Покупатель обязуется принять и оплатить товар/услугу в соответствии с условиями договора.'),
+        SubSection(number: '1.1', title: 'supplier_obligation'.tr),
+        SubSection(number: '1.2', title: 'buyer_obligation'.tr),
       ],
     ),
     Section(
       number: '2',
-      title: 'Оформление договора',
+      title: 'contract_execution'.tr,
       subSections: [
-        SubSection(
-            number: '2.1',
-            title:
-                'Договор считается заключённым с момента подтверждения обеими сторонами условий, согласованных в приложении.'),
-        SubSection(
-            number: '2.2',
-            title:
-                'Электронная форма договора, созданная в приложении, имеет юридическую силу.'),
+        SubSection(number: '2.1', title: 'contract_concluded'.tr),
+        SubSection(number: '2.2', title: 'electronic_form_valid'.tr),
       ],
     ),
   ];
 
   final pint3 = Section(
     number: '3',
-    title: 'Обязательства сторон',
+    title: 'parties_obligations'.tr,
     subSections: [
       SubSection(
-        title: 'Поставщик обязуется:',
+        title: 'supplier_obligations'.tr,
         bulletPoints: [
-          'Предоставить товар/услугу в заявленные сроки.',
-          'Обеспечить качество товара/услуги в соответствии с описанием.',
+          'provide_goods_services_timely'.tr,
+          'ensure_quality'.tr,
         ],
       ),
       SubSection(
-        title: 'Покупатель обязуется:',
+        title: 'buyer_obligations'.tr,
         bulletPoints: [
-          'Оплатить товар/услугу в указанные сроки.',
-          'Принять товар/услугу при выполнении всех условий договора.',
+          'pay_goods_services_timely'.tr,
+          'accept_goods_services'.tr,
         ],
       ),
     ],
@@ -87,71 +75,42 @@ class _ConditionsCreatingContractScreenState
   final point4To8 = [
     Section(
       number: '4',
-      title: 'Условия оплаты',
+      title: 'payment_terms'.tr,
       subSections: [
-        SubSection(
-            number: '4.1',
-            title:
-                'Оплата осуществляется в порядке, согласованном сторонами (предоплата, частичная оплата или постоплата).'),
-        SubSection(
-            number: '4.2',
-            title:
-                'В случае задержки оплаты покупатель обязан уведомить поставщика через приложение.'),
+        SubSection(number: '4.1', title: 'payment_procedure'.tr),
+        SubSection(number: '4.2', title: 'payment_delay_notification'.tr),
       ],
     ),
     Section(
       number: '5',
-      title: 'Сроки поставки',
+      title: 'delivery_terms'.tr,
       subSections: [
-        SubSection(
-            number: '5.1',
-            title:
-                'Поставщик обязуется выполнить поставку в сроки, указанные в договоре.'),
-        SubSection(
-            number: '5.2',
-            title:
-                'Нарушение сроков поставки регулируется условиями возврата и компенсации, согласованными сторонами.'),
+        SubSection(number: '5.1', title: 'supplier_delivery_obligation'.tr),
+        SubSection(number: '5.2', title: 'delivery_violation'.tr),
       ],
     ),
     Section(
       number: '6',
-      title: 'Возврат и гарантия',
+      title: 'return_and_warranty'.tr,
       subSections: [
-        SubSection(
-            number: '6.1',
-            title:
-                'Покупатель имеет право на возврат товара в течение установленного времени, если он не соответствует условиям договора.'),
-        SubSection(
-            number: '6.2',
-            title:
-                'Гарантия на предоставленные услуги/товары согласовывается отдельно.'),
+        SubSection(number: '6.1', title: 'buyer_return_right'.tr),
+        SubSection(number: '6.2', title: 'warranty_agreement'.tr),
       ],
     ),
     Section(
       number: '7',
-      title: 'Разрешение споров',
+      title: 'dispute_resolution'.tr,
       subSections: [
-        SubSection(
-            number: '7.1',
-            title:
-                'В случае возникновения споров стороны обязуются урегулировать их через переговоры.'),
-        SubSection(
-            number: '7.2',
-            title:
-                'Если спор не может быть разрешён, стороны обращаются в суд в соответствии с законодательством.'),
+        SubSection(number: '7.1', title: 'negotiation_obligation'.tr),
+        SubSection(number: '7.2', title: 'court_appeal'.tr),
       ],
     ),
     Section(
       number: '8',
-      title: 'Прекращение договора',
+      title: 'contract_termination'.tr,
       subSections: [
-        SubSection(
-            number: '8.1',
-            title:
-                'Договор может быть расторгнут по соглашению сторон или в случае нарушения одной из сторон своих обязательств.'),
-        SubSection(
-            number: '8.2',
-            title: 'Условия расторжения фиксируются в приложении.'),
+        SubSection(number: '8.1', title: 'contract_termination_conditions'.tr),
+        SubSection(number: '8.2', title: 'termination_conditions_recorded'.tr),
       ],
     ),
   ];
@@ -164,19 +123,20 @@ class _ConditionsCreatingContractScreenState
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
             child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Условия создания нового договора и политика конфиденциальности',
+              'contract_conditions_and_privacy_policy'.tr,
               style: h24,
             ),
             const SizedBox(
               height: 15,
             ),
             Text(
-              'Прочитайте внимательно условия создания договора. ',
+              'read_contract_conditions_carefully'.tr,
               style: body14.copyWith(color: ColorResources.darkGray),
             ),
             const SizedBox(
@@ -193,7 +153,7 @@ class _ConditionsCreatingContractScreenState
               contentPadding: EdgeInsets.zero,
               dense: true,
               title: Text(
-                'Я ознакомлен и соглашаюсь с условиями создания договора.',
+                'i_agree_to_contract_conditions'.tr,
                 style: body14.copyWith(color: ColorResources.darkGray),
               ),
               value: _terms,
@@ -216,7 +176,7 @@ class _ConditionsCreatingContractScreenState
             height: Get.height,
             onTap: () {
               if (_terms == false) {
-                showShortToast('please_accept_the_terms_and_conditions'.tr);
+                showShortToast('please_accept_terms_and_conditions'.tr);
                 return;
               }
               Get.to(() => NewContractScreen(
