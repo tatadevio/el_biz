@@ -50,4 +50,25 @@ class ContractRepo {
       {'status': status},
     );
   }
+
+  Future<Response> updatePaymentStatus(String contractId, String status) async {
+    return await apiClient
+        .postData("${AppConstants.contractUrl}/$contractId/payment-status", {
+      "payment_status": status,
+    });
+  }
+
+  Future<Response> addPaymentData(
+      String contractId, String note, String imagePath) async {
+    List<http.MultipartFile> files = [];
+    files.add(await http.MultipartFile.fromPath('payment_slip', imagePath));
+
+    return await apiClient.postMultipartData(
+      "${AppConstants.contractUrl}/$contractId/upload-payment-slip",
+      files: files,
+      fields: {
+        'note': note,
+      },
+    );
+  }
 }

@@ -18,6 +18,15 @@ class AgreementRepo {
     return await apiClient.postData(AppConstants.storeContractUrl, agreement);
   }
 
+  Future<Response> updateAgreement(
+      Map<String, dynamic> agreement, String contractId) async {
+    print('this is my url = ${AppConstants.updateContractUrl}/$contractId');
+    return await apiClient.postData(
+      '${AppConstants.updateContractUrl}/$contractId',
+      agreement,
+    );
+  }
+
   Future<Response> getMySales(int currentPage) async {
     return await apiClient.getData(
       '${AppConstants.mySalesCompaniesUrl}?page=$currentPage',

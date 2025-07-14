@@ -55,43 +55,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).cardColor,
-        bottomNavigationBar: BlocBuilder<ConfigBloc, ConfigState>(
-            builder: (context, configState) {
-          return BottomNavigationBar(
-            selectedItemColor: ColorResources.primary,
-            unselectedItemColor: Color(0xff646F7F),
-            backgroundColor: ColorResources.white,
-            showUnselectedLabels: true,
-            currentIndex: configState.selectedIndex,
-            type: BottomNavigationBarType.fixed,
-            items: _getBottomWidget(singleVendor, configState),
-            onTap: (int index) {
-              _setPage(index);
-              if (index == 0) {
-                // setState(() {
-                isCanPop = true;
-                // });
-              } else {
-                isCanPop = false;
-              }
-            },
-          );
-        }),
-        body: BlocBuilder<ConfigBloc, ConfigState>(
-            builder: (context, configState) {
-          return PageView.builder(
-            controller: configState.pageController,
-            itemCount: _screens.length,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return _screens[configState.selectedIndex];
-            },
-          );
-        }),
-      ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).cardColor,
+      bottomNavigationBar:
+          BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configState) {
+        return BottomNavigationBar(
+          selectedItemColor: ColorResources.primary,
+          unselectedItemColor: Color(0xff646F7F),
+          backgroundColor: ColorResources.white,
+          showUnselectedLabels: true,
+          currentIndex: configState.selectedIndex,
+          type: BottomNavigationBarType.fixed,
+          items: _getBottomWidget(singleVendor, configState),
+          onTap: (int index) {
+            _setPage(index);
+            if (index == 0) {
+              // setState(() {
+              isCanPop = true;
+              // });
+            } else {
+              isCanPop = false;
+            }
+          },
+        );
+      }),
+      body:
+          BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configState) {
+        return PageView.builder(
+          controller: configState.pageController,
+          itemCount: _screens.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return _screens[configState.selectedIndex];
+          },
+        );
+      }),
     );
   }
 

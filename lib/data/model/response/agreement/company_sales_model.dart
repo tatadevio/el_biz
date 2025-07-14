@@ -132,12 +132,14 @@ class CompanyContractItem {
   final String? subtotal;
   final String? totalAmount;
   final String? status;
+  final String? paymentStatus;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final Buyer? buyer;
   final Buyer? seller;
   final List<ContractProduct>? contractProducts;
   final List<dynamic>? documents;
+  final List<PaymentSlip>? paymentSlips;
 
   CompanyContractItem({
     this.id,
@@ -155,12 +157,14 @@ class CompanyContractItem {
     this.subtotal,
     this.totalAmount,
     this.status,
+    this.paymentStatus,
     this.createdAt,
     this.updatedAt,
     this.buyer,
     this.seller,
     this.contractProducts,
     this.documents,
+    this.paymentSlips,
   });
 
   CompanyContractItem copyWith({
@@ -179,12 +183,14 @@ class CompanyContractItem {
     String? subtotal,
     String? totalAmount,
     String? status,
+    String? paymentStatus,
     DateTime? createdAt,
     DateTime? updatedAt,
     Buyer? buyer,
     Buyer? seller,
     List<ContractProduct>? contractProducts,
     List<dynamic>? documents,
+    List<PaymentSlip>? paymentSlips,
   }) =>
       CompanyContractItem(
         id: id ?? this.id,
@@ -202,15 +208,18 @@ class CompanyContractItem {
         subtotal: subtotal ?? this.subtotal,
         totalAmount: totalAmount ?? this.totalAmount,
         status: status ?? this.status,
+        paymentStatus: paymentStatus ?? this.paymentStatus,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
         buyer: buyer ?? this.buyer,
         seller: seller ?? this.seller,
         contractProducts: contractProducts ?? this.contractProducts,
         documents: documents ?? this.documents,
+        paymentSlips: paymentSlips ?? this.paymentSlips,
       );
 
-  factory CompanyContractItem.fromJson(Map<String, dynamic> json) => CompanyContractItem(
+  factory CompanyContractItem.fromJson(Map<String, dynamic> json) =>
+      CompanyContractItem(
         id: json["id"],
         contractType: json["contract_type"],
         paymentMethod: json["payment_method"],
@@ -226,6 +235,7 @@ class CompanyContractItem {
         subtotal: json["subtotal"],
         totalAmount: json["total_amount"],
         status: json["status"],
+        paymentStatus: json["payment_status"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -241,6 +251,10 @@ class CompanyContractItem {
         documents: json["documents"] == null
             ? []
             : List<dynamic>.from(json["documents"]!.map((x) => x)),
+        paymentSlips: json["payment_slips"] == null
+            ? []
+            : List<PaymentSlip>.from(
+                json["payment_slips"]!.map((x) => PaymentSlip.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -259,6 +273,7 @@ class CompanyContractItem {
         "subtotal": subtotal,
         "total_amount": totalAmount,
         "status": status,
+        "payment_status": paymentStatus,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "buyer": buyer?.toJson(),
@@ -269,6 +284,9 @@ class CompanyContractItem {
         "documents": documents == null
             ? []
             : List<dynamic>.from(documents!.map((x) => x)),
+        "payment_slips": paymentSlips == null
+            ? []
+            : List<dynamic>.from(paymentSlips!.map((x) => x.toJson())),
       };
 }
 
@@ -375,30 +393,32 @@ class Buyer {
 
 class ContractProduct {
   final int? id;
+  final int? tenderId;
   final int? productId;
   final String? productName;
   final int? quantity;
   final String? unitPrice;
   final String? totalAmount;
-  final String? vatRate;
-  final String? vatAmount;
-  final String? npsRate;
-  final String? npsAmount;
+  // final String? vatRate;
+  // final String? vatAmount;
+  // final String? npsRate;
+  // final String? npsAmount;
   final String? subtotal;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   ContractProduct({
     this.id,
+    this.tenderId,
     this.productId,
     this.productName,
     this.quantity,
     this.unitPrice,
     this.totalAmount,
-    this.vatRate,
-    this.vatAmount,
-    this.npsRate,
-    this.npsAmount,
+    // this.vatRate,
+    // this.vatAmount,
+    // this.npsRate,
+    // this.npsAmount,
     this.subtotal,
     this.createdAt,
     this.updatedAt,
@@ -406,30 +426,32 @@ class ContractProduct {
 
   ContractProduct copyWith({
     int? id,
+    int? tenderId,
     int? productId,
     String? productName,
     int? quantity,
     String? unitPrice,
     String? totalAmount,
-    String? vatRate,
-    String? vatAmount,
-    String? npsRate,
-    String? npsAmount,
+    // String? vatRate,
+    // String? vatAmount,
+    // String? npsRate,
+    // String? npsAmount,
     String? subtotal,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) =>
       ContractProduct(
         id: id ?? this.id,
+        tenderId: tenderId ?? this.tenderId,
         productId: productId ?? this.productId,
         productName: productName ?? this.productName,
         quantity: quantity ?? this.quantity,
         unitPrice: unitPrice ?? this.unitPrice,
         totalAmount: totalAmount ?? this.totalAmount,
-        vatRate: vatRate ?? this.vatRate,
-        vatAmount: vatAmount ?? this.vatAmount,
-        npsRate: npsRate ?? this.npsRate,
-        npsAmount: npsAmount ?? this.npsAmount,
+        // vatRate: vatRate ?? this.vatRate,
+        // vatAmount: vatAmount ?? this.vatAmount,
+        // npsRate: npsRate ?? this.npsRate,
+        // npsAmount: npsAmount ?? this.npsAmount,
         subtotal: subtotal ?? this.subtotal,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
@@ -443,10 +465,10 @@ class ContractProduct {
         quantity: json["quantity"],
         unitPrice: json["unit_price"],
         totalAmount: json["total_amount"],
-        vatRate: json["vat_rate"],
-        vatAmount: json["vat_amount"],
-        npsRate: json["nps_rate"],
-        npsAmount: json["nps_amount"],
+        // vatRate: json["vat_rate"],
+        // vatAmount: json["vat_amount"],
+        // npsRate: json["nps_rate"],
+        // npsAmount: json["nps_amount"],
         subtotal: json["subtotal"],
         createdAt: json["created_at"] == null
             ? null
@@ -463,12 +485,61 @@ class ContractProduct {
         "quantity": quantity,
         "unit_price": unitPrice,
         "total_amount": totalAmount,
-        "vat_rate": vatRate,
-        "vat_amount": vatAmount,
-        "nps_rate": npsRate,
-        "nps_amount": npsAmount,
+        // "vat_rate": vatRate,
+        // "vat_amount": vatAmount,
+        // "nps_rate": npsRate,
+        // "nps_amount": npsAmount,
         "subtotal": subtotal,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class PaymentSlip {
+  final int? id;
+  final String? name;
+  final String? fileName;
+  final String? url;
+  final DateTime? createdAt;
+
+  PaymentSlip({
+    this.id,
+    this.name,
+    this.fileName,
+    this.url,
+    this.createdAt,
+  });
+
+  PaymentSlip copyWith({
+    int? id,
+    String? name,
+    String? fileName,
+    String? url,
+    DateTime? createdAt,
+  }) =>
+      PaymentSlip(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        fileName: fileName ?? this.fileName,
+        url: url ?? this.url,
+        createdAt: createdAt ?? this.createdAt,
+      );
+
+  factory PaymentSlip.fromJson(Map<String, dynamic> json) => PaymentSlip(
+        id: json["id"],
+        name: json["name"],
+        fileName: json["file_name"],
+        url: json["url"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "file_name": fileName,
+        "url": url,
+        "created_at": createdAt?.toIso8601String(),
       };
 }

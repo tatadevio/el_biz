@@ -9,6 +9,7 @@ class ContractsState extends Equatable {
   final int pageSize;
   final bool isSigning;
   final bool isUpdating;
+  final bool isAddingPayment;
   const ContractsState({
     this.isLoading = false,
     // this.contracts = const [],
@@ -18,6 +19,7 @@ class ContractsState extends Equatable {
     this.pageSize = 1,
     this.isSigning = false,
     this.isUpdating = false,
+    this.isAddingPayment = false,
   });
 
   ContractsState copywith({
@@ -29,6 +31,7 @@ class ContractsState extends Equatable {
     int? pageSize,
     bool? isSigning,
     bool? isUpdating,
+    bool? isAddingPayment,
   }) {
     return ContractsState(
       isLoading: isLoading ?? this.isLoading,
@@ -39,6 +42,7 @@ class ContractsState extends Equatable {
       pageSize: pageSize ?? this.pageSize,
       isSigning: isSigning ?? this.isSigning,
       isUpdating: isUpdating ?? this.isUpdating,
+      isAddingPayment: isAddingPayment ?? this.isAddingPayment,
     );
   }
 
@@ -50,7 +54,8 @@ class ContractsState extends Equatable {
         currentPage,
         pageSize,
         isSigning,
-        isUpdating
+        isUpdating,
+        isAddingPayment,
       ];
 }
 

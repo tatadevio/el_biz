@@ -47,3 +47,22 @@ class UpdateContractStatus extends ContractsEvent {
   @override
   List<Object> get props => [contractId, status];
 }
+
+class UpdatePaymentStatus extends ContractsEvent {
+  final String contractId;
+  final String status;
+  const UpdatePaymentStatus({required this.contractId, required this.status});
+  @override
+  List<Object> get props => [contractId, status];
+}
+
+class AddPaymentData extends ContractsEvent {
+  final String contractId;
+  final String note;
+  final XFile image;
+  const AddPaymentData(
+      {required this.contractId, required this.note, required this.image});
+
+  @override
+  List<Object> get props => [contractId, note, image];
+}

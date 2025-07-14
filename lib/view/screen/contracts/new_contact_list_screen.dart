@@ -13,12 +13,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../data/model/response/agreement/company_sales_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/custom_border_button.dart';
 import '../../base/custom_dialog.dart';
-import 'contract_conditions_screen.dart';
 
 class NewContactListScreen extends StatefulWidget {
   final List<SelectedProductInfo> selectedProductsList;
@@ -30,6 +30,7 @@ class NewContactListScreen extends StatefulWidget {
   final int companyId;
   final bool isEditing;
   final int? contractId;
+  final CompanyContractItem? contractModel;
   const NewContactListScreen({
     super.key,
     required this.selectedProductsList,
@@ -41,6 +42,7 @@ class NewContactListScreen extends StatefulWidget {
     required this.companyId,
     this.isEditing = false,
     this.contractId,
+    this.contractModel,
   });
 
   @override
@@ -70,6 +72,10 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
         });
       }
     });
+    if (widget.isEditing) {
+      vatController.text = widget.contractModel?.vatRate.toString() ?? '0';
+      nspController.text = widget.contractModel?.npsRate.toString() ?? '0';
+    }
   }
 
   void _scrollToTop() {
@@ -346,8 +352,16 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
               Map<String, dynamic> agreementData = {
                 'contract_type': widget.type,
                 'buyer_id': widget.buyerId,
-                'product_id': widget.productId,
-                'tender_id': widget.tenderId,
+                'product_id': widget.contractModel == null
+                    ? widget.productId
+                    : widget.contractModel?.productId.toString() == "0"
+                        ? ""
+                        : widget.contractModel?.productId.toString(),
+                'tender_id': widget.contractModel == null
+                    ? widget.tenderId
+                    : widget.contractModel?.tenderId.toString() == "0"
+                        ? ""
+                        : widget.contractModel?.tenderId.toString(),
                 // widget.tenderId,
                 'contract_name': widget.contractName,
                 'vat_rate': vatController.text.trim(),
@@ -381,13 +395,23 @@ class _NewContactListScreenState extends State<NewContactListScreen> {
                 agreementData['contract_id'] = widget.contractId.toString();
               }
 
-              // For now, use AddAgreement for both creating and updating
-              // The backend should handle the difference based on contract_id presence
-              context
-                  .read<AgreementBloc>()
-                  .add(AddAgreement(data: agreementData));
+              if (widget.contractModel != null) {
+                // update contract...
+
+                context.read<AgreementBloc>().add(UpdateAgreement(
+                    data: agreementData,
+                    contractId: widget.contractModel?.id.toString() ?? ''));
+              } else {
+                // add new contract
+
+                context
+                    .read<AgreementBloc>()
+                    .add(AddAgreement(data: agreementData));
+              }
             },
-            title: widget.isEditing ? 'save_changes'.tr : 'continue'.tr,
+            title: widget.contractModel != null
+                ? 'save_changes'.tr
+                : 'continue'.tr,
           );
         }),
       ),

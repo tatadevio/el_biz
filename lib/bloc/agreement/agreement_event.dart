@@ -22,6 +22,15 @@ class AddAgreement extends AgreementEvent {
   List<Object> get props => [data];
 }
 
+class UpdateAgreement extends AgreementEvent {
+  final Map<String, dynamic> data;
+  final String contractId;
+  const UpdateAgreement({required this.data, required this.contractId});
+
+  @override
+  List<Object> get props => [data, contractId];
+}
+
 class GetMySales extends AgreementEvent {
   final int currentPage;
   const GetMySales({required this.currentPage});

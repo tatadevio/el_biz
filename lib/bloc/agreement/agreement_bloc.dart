@@ -16,6 +16,7 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
 
     on<GetPaymentMethod>(_onGetPaymentMethod);
     on<AddAgreement>(_onAddAgreement);
+    on<UpdateAgreement>(_onUpdateAgreement);
     on<GetMySales>(_onGetMySales);
     on<GetMyPurchases>(_onGetMyPurchases);
     on<SearchMySales>(_onSearchMySales);
@@ -58,6 +59,28 @@ class AgreementBloc extends Bloc<AgreementEvent, AgreementState> {
       } else {
         emit(AddAgreementError(
             'Failed to add agreement: ${response.body['message'] ?? 'Unknown error'}'));
+      }
+    } catch (e) {
+      emit(AddAgreementError('Exception occurred: $e'));
+    }
+    emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> _onUpdateAgreement(
+      UpdateAgreement event, Emitter<AgreementState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    print('event.data: ${event.data}');
+    print('event.contractId: ${event.contractId}');
+    try {
+      final response =
+          await agreementRepo.updateAgreement(event.data, event.contractId);
+
+      if (response.statusCode == 200) {
+        emit(AddAgreementSuccess(
+            response.body['message'] ?? 'Agreement updated successfully'));
+      } else {
+        emit(AddAgreementError(
+            'Failed to update agreement: ${response.body['message'] ?? 'Unknown error'}'));
       }
     } catch (e) {
       emit(AddAgreementError('Exception occurred: $e'));

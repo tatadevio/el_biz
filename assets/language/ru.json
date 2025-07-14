@@ -367,5 +367,6 @@
   "no_account_found" : "Аккаунт не найден.",
   "all_account" : "Все счета",
   "please_accept_the_terms_and_conditions" : "Пожалуйста, подтвердите согласие с условиями.",
-  "add_tender" : "Добавить тендер"
+  "add_tender" : "Добавить тендер",
+  "contract_is" : "Договор"
 }

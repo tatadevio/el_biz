@@ -18,6 +18,8 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
     on<GetCompanyPurchases>(_onGetCompanyPurchases);
     on<SignContract>(_onSignContract);
     on<UpdateContractStatus>(_onUpdateContractStatus);
+    on<UpdatePaymentStatus>(_onUpdatePaymentStatus);
+    on<AddPaymentData>(_onAddPaymentData);
   }
 
   Future<void> _onGetCompanySales(
@@ -105,6 +107,55 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
       // Handle exception
     }
     emit(state.copywith(isUpdating: false));
+  }
+
+  Future<void> _onUpdatePaymentStatus(
+      UpdatePaymentStatus event, Emitter<ContractsState> emit) async {
+    emit(state.copywith(isUpdating: true));
+    try {
+      final response = await contractRepo.updatePaymentStatus(
+          event.contractId, event.status);
+      if (response.statusCode == 200) {
+        // Get.back();
+        List<CompanyContractItem> updatedSalesContracts =
+            state.salesContractItems.map((item) {
+          if (item.id.toString() == event.contractId) {
+            return item.copyWith(paymentStatus: event.status);
+          }
+          return item;
+        }).toList();
+
+        emit(state.copywith(salesContractItems: updatedSalesContracts));
+        // Handle successful status update
+        // updateSalesContractStatus(event.contractId, event.status, emit);
+        // Get.offAll(() => const DashboardScreen());
+      } else {
+        // Handle error
+      }
+    } catch (e) {
+      // Handle exception
+    }
+    emit(state.copywith(isUpdating: false));
+  }
+
+  Future<void> _onAddPaymentData(
+      AddPaymentData event, Emitter<ContractsState> emit) async {
+    emit(state.copywith(isAddingPayment: true));
+    try {
+      final response = await contractRepo.addPaymentData(
+          event.contractId, event.note, event.image.path);
+      if (response.statusCode == 200) {
+        // Handle successful status update
+        // updateSalesContractStatus(event.contractId, event.status, emit);
+        // Get.offAll(() => const DashboardScreen());
+        Get.back();
+      } else {
+        // Handle error
+      }
+    } catch (e) {
+      // Handle exception
+    }
+    emit(state.copywith(isAddingPayment: false, isUpdating: false));
   }
 
   // updateSalesContractStatus(

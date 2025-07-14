@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
+import '../../../../bloc/contracts/contracts_bloc.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
@@ -13,15 +16,17 @@ import '../../../base/custom_border_button.dart';
 import '../../../base/custom_button.dart';
 
 class BillPayDialog extends StatefulWidget {
-  const BillPayDialog({super.key});
+  final String contractId;
+  const BillPayDialog({super.key, required this.contractId});
 
   @override
   State<BillPayDialog> createState() => _BillPayDialogState();
 }
 
 class _BillPayDialogState extends State<BillPayDialog> {
-  String? selectedFilePath;
+  // String? selectedFilePath;
   String? fileSize;
+  XFile? xFile;
 
   Future<void> _pickPDF() async {
     try {
@@ -30,14 +35,16 @@ class _BillPayDialogState extends State<BillPayDialog> {
         allowedExtensions: ['pdf'],
       );
 
-      if (result != null) {
-        String? path = result.files.single.path;
+      if (result != null && result.files.isNotEmpty) {
+        final platformFile = result.files.single;
+        final filePath = platformFile.path;
 
-        if (path != null) {
-          final file = File(path);
+        if (filePath != null) {
+          xFile = XFile(filePath);
+          final file = File(filePath);
           final fileBytes = await file.length();
           setState(() {
-            selectedFilePath = path;
+            xFile = xFile;
             fileSize = _formatFileSize(fileBytes);
           });
         }
@@ -78,7 +85,7 @@ class _BillPayDialogState extends State<BillPayDialog> {
           'please_attach_your_payment_receipt'.tr,
           style: h16.copyWith(color: ColorResources.titleColor),
         ),
-        if (selectedFilePath != null) ...[
+        if (xFile != null) ...[
           const SizedBox(
             height: 10,
           ),
@@ -87,7 +94,7 @@ class _BillPayDialogState extends State<BillPayDialog> {
               _pickPDF();
             },
             leading: const Icon(Icons.file_copy_sharp),
-            title: Text(path.basename(selectedFilePath!)),
+            title: Text(path.basename(xFile!.path)),
             subtitle: Text(fileSize.toString()),
           ),
         ],
@@ -122,13 +129,19 @@ class _BillPayDialogState extends State<BillPayDialog> {
                   width: Get.width,
                   height: 44,
                   onTap: () {
-                    if (selectedFilePath != null) {
-                      Get.back();
+                    if (xFile != null) {
+                      // Get.back();
+
+                      context.read<ContractsBloc>().add(AddPaymentData(
+                            contractId: widget.contractId,
+                            note: '',
+                            image: xFile!,
+                          ));
                     } else {
                       _pickPDF();
                     }
                   },
-                  title: selectedFilePath == null ? 'download'.tr : 'send'.tr),
+                  title: xFile == null ? 'upload'.tr : 'send'.tr),
             ),
           ],
         ),

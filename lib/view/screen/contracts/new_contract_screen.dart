@@ -14,13 +14,13 @@ import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/contracts/new_contact_list_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/new_contract_product_info.dart';
-import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:el_biz/view/screen/select_tender/select_company_product.dart';
 import 'package:el_biz/view/screen/select_tender/select_company_tender_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/agreement/agreement_bloc.dart';
 import '../../../bloc/product/product_bloc.dart';
 
 class NewContractScreen extends StatefulWidget {
@@ -30,8 +30,6 @@ class NewContractScreen extends StatefulWidget {
   final String type;
   final CompanyContractItem? contractModel;
   final bool isEditing;
-  // final String productId;
-  // final String tenderId;
   final int companyId;
 
   const NewContractScreen({
@@ -40,8 +38,6 @@ class NewContractScreen extends StatefulWidget {
     required this.tenderItem,
     required this.buyerId,
     required this.type,
-    // required this.productId,
-    // required this.tenderId,
     required this.companyId,
     this.contractModel,
     this.isEditing = false,
@@ -62,25 +58,38 @@ class _NewContractScreenState extends State<NewContractScreen> {
     super.initState();
 
     if (widget.isEditing) {
+      contractNameController.text = widget.contractModel?.contractName ?? '';
       if (widget.type == 'tender') {
         for (var contractProduct in widget.contractModel!.contractProducts!) {
-          // selectedProductInfoList.add(SelectedProductInfo(
-          //     product: ProductListItem(),
-          //     tenderItem: TenderItem(
-          //       id: contractProduct.id,
-          //       title: contractProduct.productName,
-          //       quantity: contractProduct.quantity.toString(),
-          //       budgetFrom: int.tryParse(contractProduct.unitPrice ?? '0'),
-          //       budgetTo: int.tryParse(contractProduct.unitPrice ?? '0'),
-          //       // budgetType: 'tender',
-          //       // budgetUnit: 'tender',
-          //       image: "",
-          //     ),
-          //     totalQuantity:
-          //         int.tryParse(contractProduct.quantity ?? '0') ?? 0,
-          //     unitPrice: int.parse(contractProduct.budgetFrom.toString()),
-          //     subtotal: int.parse(widget.tenderItem.budgetFrom.toString()) *
-          //         (int.tryParse(widget.tenderItem.quantity ?? '0') ?? 0)));
+          int unitPrice =
+              double.parse(contractProduct.unitPrice ?? '0').toInt();
+          int quantity = contractProduct.quantity ?? 0;
+
+          // ProductListItem product = ProductListItem(
+          //   id: contractProduct.productId,
+          //   name: contractProduct.productName,
+          //   price: unitPrice,
+          //   quantity: quantity.toString(),
+          //   image: "",
+          // );
+
+          TenderItem tenderItem = TenderItem(
+            id: contractProduct.tenderId,
+            title: contractProduct.productName,
+            quantity: quantity.toString(),
+            budgetFrom: unitPrice,
+            image: '',
+          );
+
+          selectedProductInfoList.add(SelectedProductInfo(
+              product: ProductListItem(),
+              tenderItem: tenderItem,
+              totalQuantity: contractProduct.quantity ?? 0,
+              unitPrice: unitPrice,
+              subtotal: unitPrice * quantity));
+
+          // print("UNIT PRICE 2 ${unitPrice}");
+          // context.read<ProductBloc>().add(ChangeSlectedProduct(tenderItem));
         }
 
         context.read<CompanyDetailBloc>().add(
@@ -113,6 +122,8 @@ class _NewContractScreenState extends State<NewContractScreen> {
         context.read<CompanyDetailBloc>().add(
             GetCompanyProducts(widget.companyId.toString(), currentPage: 1));
       }
+
+      context.read<AgreementBloc>().add(GetPaymentMethod(currentPage: 1));
     } else {
       if (widget.type == 'tender') {
         selectedProductInfoList.add(SelectedProductInfo(
@@ -557,6 +568,7 @@ class _NewContractScreenState extends State<NewContractScreen> {
                               : '0',
                           contractName: contractNameController.text.trim(),
                           companyId: widget.companyId,
+                          contractModel: widget.contractModel,
                         ));
                   },
             title: 'continue'.tr),

@@ -67,12 +67,6 @@ void main() async {
     statusBarBrightness: Brightness.light,
   ));
 
-  // Also set system UI mode to ensure proper behavior
-  // SystemChrome.setEnabledSystemUIMode(
-  //   SystemUiMode.manual,
-  //   overlays: [SystemUiOverlay.bottom],
-  // );
-
   Map<String, Map<String, String>> _languages = await di.init();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(MyApp(

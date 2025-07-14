@@ -1,3 +1,5 @@
+import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
+import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/product/product_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
@@ -12,241 +14,376 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../../bloc/agreement/agreement_bloc.dart';
 import '../../../data/model/response/agreement/company_sales_model.dart';
 import '../../../data/model/response/company/company_product_model.dart';
 import '../../../data/model/response/tender/tender_item_model.dart';
-import 'conditions_creating_contract_screen.dart';
-import 'contract_conditions_screen.dart';
-import 'edit_contract_screen.dart';
+import '../../base/custom_toast.dart';
 import 'new_contract_screen.dart';
 import 'widgets/show_contract_files.dart';
 
 class ContractPageScreen extends StatelessWidget {
-  final CompanyContractItem contractModel;
-  const ContractPageScreen({super.key, required this.contractModel});
+  // final CompanyContractItem contractModel;
+  final int contractId;
+  const ContractPageScreen({super.key, required this.contractId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              contractModel.contractName ?? '',
-              // contractModel.title,
-              style: body16.copyWith(color: ColorResources.blue),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            dataItem(
-              'contract_number'.tr,
-              Text(
-                contractModel.id.toString(),
-                // contractModel.id,
-                style: body16.copyWith(color: ColorResources.titleColor),
+      body:
+          BlocBuilder<ContractsBloc, ContractsState>(builder: (context, state) {
+        final contractModel = state.salesContractItems
+            .firstWhere((element) => element.id == contractId);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
               ),
-            ),
-            dataItem(
-              'contract_title'.tr,
               Text(
                 contractModel.contractName ?? '',
-                style: body16.copyWith(color: ColorResources.titleColor),
+                // contractModel.title,
+                style: body16.copyWith(color: ColorResources.blue),
               ),
-            ),
-            dataItem(
-              'product_quantity_units'.tr,
-              Text(
-                contractModel.contractProducts?.length.toString() ?? '0',
-                style: body16.copyWith(color: ColorResources.titleColor),
+              const SizedBox(
+                height: 5,
               ),
-            ),
-            dataItem(
-              'order_cost'.tr,
-              Text(
-                contractModel.totalAmount.toString(),
-                style: body16.copyWith(color: ColorResources.titleColor),
-              ),
-            ),
-            dataItem(
-              'order_date'.tr,
-              Text(
-                contractModel.createdAt != null
-                    ? formatDateInRu(contractModel.createdAt.toString())
-                    : '',
-                style: body16.copyWith(color: ColorResources.titleColor),
-              ),
-            ),
-            dataItem(
-              'approval_status'.tr,
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: contractModel.status == "Подписан"
-                      ? ColorResources.green
-                      : contractModel.status == "Отклонён"
-                          ? ColorResources.errorInput
-                          : ColorResources.orange,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  contractModel.status ?? '',
-                  style: body14.copyWith(color: ColorResources.white),
+              dataItem(
+                'contract_number'.tr,
+                Text(
+                  contractModel.id.toString(),
+                  // contractModel.id,
+                  style: body16.copyWith(color: ColorResources.titleColor),
                 ),
               ),
-            ),
-            dataItem(
-              'payment_status'.tr,
-              Text(
-                contractModel.status ?? '',
-                style: body16.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: contractModel.status == "Оплачен"
-                        ? ColorResources.green
-                        : ColorResources.red),
+              dataItem(
+                'contract_title'.tr,
+                Text(
+                  contractModel.contractName ?? '',
+                  style: body16.copyWith(color: ColorResources.titleColor),
+                ),
               ),
-            ),
-            dataItem(
-              'documents'.tr,
-              InkWell(
-                onTap: () {
-                  Get.bottomSheet(const ShowContractFiles(),
-                      backgroundColor: Colors.white, isScrollControlled: true);
-                },
-                child: Container(
-                  // height: 40,
+              dataItem(
+                'product_quantity_units'.tr,
+                Text(
+                  contractModel.contractProducts?.length.toString() ?? '0',
+                  style: body16.copyWith(color: ColorResources.titleColor),
+                ),
+              ),
+              dataItem(
+                'order_cost'.tr,
+                Text(
+                  contractModel.totalAmount.toString(),
+                  style: body16.copyWith(color: ColorResources.titleColor),
+                ),
+              ),
+              dataItem(
+                'order_date'.tr,
+                Text(
+                  contractModel.createdAt != null
+                      ? formatDateInRu(contractModel.createdAt.toString())
+                      : '',
+                  style: body16.copyWith(color: ColorResources.titleColor),
+                ),
+              ),
+              dataItem(
+                'approval_status'.tr,
+                Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
                   decoration: BoxDecoration(
-                    color: ColorResources.blue,
-                    border: Border.all(width: 1, color: ColorResources.blue),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [ColorResources.shadow1],
+                    color: contractModel.status == "Подписан"
+                        ? ColorResources.green
+                        : contractModel.status == "Отклонён"
+                            ? ColorResources.errorInput
+                            : ColorResources.orange,
+                    borderRadius: BorderRadius.circular(15),
                   ),
                   child: Text(
-                    'documents'.tr,
-                    // contractModel.document,
-                    style: body16.copyWith(color: ColorResources.white),
+                    contractModel.status ?? '',
+                    style: body14.copyWith(color: ColorResources.white),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'has_the_bill_been_paid'.tr,
-              style: h16.copyWith(color: ColorResources.blue),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    width: Get.width,
-                    height: 44,
-                    onTap: () {},
-                    title: 'not_paid'.tr,
-                    color: ColorResources.red,
+              dataItem(
+                'payment_status'.tr,
+                Text(
+                  contractModel.paymentStatus ?? '',
+                  style: body16.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: contractModel.paymentStatus == "paid"
+                          ? ColorResources.green
+                          : ColorResources.red),
+                ),
+              ),
+              dataItem(
+                'documents'.tr,
+                InkWell(
+                  onTap: () {
+                    Get.bottomSheet(const ShowContractFiles(),
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true);
+                  },
+                  child: Container(
+                    // height: 40,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: ColorResources.blue,
+                      border: Border.all(width: 1, color: ColorResources.blue),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [ColorResources.shadow1],
+                    ),
+                    child: Text(
+                      'documents'.tr,
+                      // contractModel.document,
+                      style: body16.copyWith(color: ColorResources.white),
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: CustomButton(
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'has_the_bill_been_paid'.tr,
+                style: h16.copyWith(color: ColorResources.blue),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
+                  contractModel.seller?.id ==
+                      context.read<UserBloc>().state.userInfo!.data?.id) ...[
+                if (contractModel.paymentStatus == 'processing')
+                  CustomButton(
                     width: Get.width,
                     height: 44,
                     onTap: () {
+                      print(contractModel.paymentStatus);
+                      String newValue =
+                          contractModel.paymentStatus ?? 'processing';
                       Get.dialog(
-                        const CustomDialog(
-                          widget: AlertDialog(
-                              backgroundColor: Colors.white,
-                              content: BillPayDialog()),
+                        AlertDialog(
+                          title: Text('update_payment_status'.tr),
+                          content: DropdownButtonFormField<String>(
+                            value: contractModel.paymentStatus ?? 'unpaid',
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            items: [
+                              // DropdownMenuItem(
+                              //   value: 'unpaid',
+                              //   child: Text('unpaid'.tr),
+                              // ),
+                              DropdownMenuItem(
+                                value: 'processing',
+                                child: Text('processing'.tr),
+                              ),
+                              DropdownMenuItem(
+                                value: 'paid',
+                                child: Text('paid'.tr),
+                              ),
+                              DropdownMenuItem(
+                                value: 'rejected',
+                                child: Text('rejected'.tr),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              // Handle payment status change
+                              if (value != null) {
+                                newValue = value;
+                              }
+                            },
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    ColorResources.red.withOpacity(0.1),
+                              ),
+                              child: Text(
+                                'cancel'.tr,
+                                style: TextStyle(
+                                  color: ColorResources.red,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                // Handle save
+                                context.read<ContractsBloc>().add(
+                                    UpdatePaymentStatus(
+                                        contractId: contractModel.id.toString(),
+                                        status: newValue));
+                                Get.back();
+                              },
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    ColorResources.blue.withOpacity(0.1),
+                              ),
+                              child: Text(
+                                'save'.tr,
+                                style: TextStyle(
+                                  color: ColorResources.blue,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
-                    title: 'paid'.tr,
-                    color: ColorResources.green,
+                    title: 'update_payment_status'.tr,
+                    color: ColorResources.blue,
                   ),
+                if (contractModel.paymentSlips != null &&
+                    contractModel.paymentSlips!.isNotEmpty)
+                  for (var paymentSlip in contractModel.paymentSlips!)
+                    ListTile(
+                        contentPadding: const EdgeInsets.all(0),
+                        leading: paymentSlip.url != null
+                            ? paymentSlip.url!.toLowerCase().endsWith('.pdf')
+                                ? const Icon(Icons.picture_as_pdf)
+                                : (paymentSlip.url!
+                                            .toLowerCase()
+                                            .endsWith('.png') ||
+                                        paymentSlip.url!
+                                            .toLowerCase()
+                                            .endsWith('.jpg') ||
+                                        paymentSlip.url!
+                                            .toLowerCase()
+                                            .endsWith('.jpeg'))
+                                    ? Image.network(paymentSlip.url!,
+                                        width: 40, height: 40)
+                                    : const Icon(Icons.broken_image)
+                            : null,
+                        title: Text(paymentSlip.name ?? ''),
+                        subtitle: Text(paymentSlip.createdAt?.toString() ?? ''),
+                        trailing: IconButton(
+                            onPressed: () {
+                              ShowContractFiles()
+                                  .downloadFileWithScopedPermission(
+                                      paymentSlip.url ?? '', context);
+                            },
+                            icon: Icon(Icons.download))),
+              ] else ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        width: Get.width,
+                        height: 44,
+                        onTap: () {},
+                        title: 'not_paid'.tr,
+                        color: ColorResources.red,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: CustomButton(
+                        width: Get.width,
+                        height: 44,
+                        onTap: () {
+                          Get.dialog(
+                            CustomDialog(
+                              widget: AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  content: BillPayDialog(
+                                    contractId: contractModel.id.toString(),
+                                  )),
+                            ),
+                          );
+                        },
+                        title: 'paid'.tr,
+                        color: ColorResources.green,
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      }),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         color: Colors.white,
-        child: Row(
-          children: [
-            if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
-                contractModel.seller?.id ==
-                    context.read<UserBloc>().state.userInfo!.data?.id)
-              Expanded(
-                child: CustomBorderButton(
-                  height: 44,
-                  width: Get.width,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  border: Border.all(width: 1, color: ColorResources.blue),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShaow: const [ColorResources.shadow1],
-                  child: Text(
-                    'edit'.tr,
-                    style: textMd.copyWith(color: ColorResources.blue),
-                  ),
-                  onTap: () {
-                    // Navigate to edit contract screen
-                    // Get.to(() => EditContractScreen(
-                    //       contractModel: contractModel,
-                    //     ));
-                    for (var contractProduct
-                        in contractModel.contractProducts!) {
-                      print(contractProduct.unitPrice);
-                      print(contractProduct.quantity);
-                    }
-                    Get.to(() => NewContractScreen(
-                          product: ProductListItem(),
-                          tenderItem: TenderItem(),
-                          contractModel: contractModel,
-                          buyerId: contractModel.buyer?.id.toString() ?? '',
-                          type: contractModel.contractType ?? 'product',
-                          companyId: 13,
-                          isEditing: true,
-                        ));
-                  },
-                ),
-              ),
-            const SizedBox(
-              width: 10,
-            ),
-            if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
-                contractModel.seller?.id !=
-                    context.read<UserBloc>().state.userInfo!.data?.id)
-              Expanded(
-                child: CustomButton(
-                    width: Get.width,
+        child: BlocBuilder<ContractsBloc, ContractsState>(
+            builder: (context, state) {
+          final contractModel = state.salesContractItems
+              .firstWhere((element) => element.id == contractId);
+          return Row(
+            children: [
+              if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
+                  contractModel.seller?.id ==
+                      context.read<UserBloc>().state.userInfo!.data?.id)
+                Expanded(
+                  child: CustomBorderButton(
                     height: 44,
+                    width: Get.width,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 12),
+                    border: Border.all(width: 1, color: ColorResources.blue),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShaow: const [ColorResources.shadow1],
+                    child: Text(
+                      'edit'.tr,
+                      style: textMd.copyWith(color: ColorResources.blue),
+                    ),
                     onTap: () {
-                      Get.to(() => SignContractScreen(
-                            contractData: contractModel,
+                      // Navigate to edit contract screen
+                      // Get.to(() => EditContractScreen(
+                      //       contractModel: contractModel,
+                      //     ));
+                      for (var contractProduct
+                          in contractModel.contractProducts!) {
+                        print(contractProduct.unitPrice);
+                        print(contractProduct.quantity);
+                      }
+                      Get.to(() => NewContractScreen(
+                            product: ProductListItem(),
+                            tenderItem: TenderItem(),
+                            contractModel: contractModel,
+                            buyerId: contractModel.buyer?.id.toString() ?? '',
+                            type: contractModel.contractType ?? 'product',
+                            companyId: 13,
+                            isEditing: true,
                           ));
                     },
-                    title: 'signing'.tr),
+                  ),
+                ),
+              const SizedBox(
+                width: 10,
               ),
-          ],
-        ),
+              if (context.read<UserBloc>().state.userInfo!.data?.id != null &&
+                  contractModel.seller?.id !=
+                      context.read<UserBloc>().state.userInfo!.data?.id)
+                Expanded(
+                  child: CustomButton(
+                      width: Get.width,
+                      height: 44,
+                      onTap: () {
+                        if (contractModel.status?.toLowerCase() == "pending") {
+                          Get.to(() => SignContractScreen(
+                                contractData: contractModel,
+                              ));
+                        } else {
+                          showShortToast(
+                              '${'contract_is'.tr} ${contractModel.status ?? ''}');
+                        }
+                      },
+                      title: 'signing'.tr),
+                ),
+            ],
+          );
+        }),
       ),
     );
   }

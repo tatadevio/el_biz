@@ -20,7 +20,7 @@ class ContractItem extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          Get.to(() => ContractPageScreen(contractModel: contractModel));
+          Get.to(() => ContractPageScreen(contractId: contractModel.id!));
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),

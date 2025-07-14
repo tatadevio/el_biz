@@ -374,5 +374,6 @@
   "no_account_found" : "No account found.",
   "all_account" : "All Account",
   "please_accept_the_terms_and_conditions" : "Please confirm your agreement with the terms and conditions.",
-  "add_tender" : "Add Tender"
+  "add_tender" : "Add Tender",
+  "contract_is" : "Contract is"
 }

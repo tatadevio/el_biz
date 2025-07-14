@@ -107,8 +107,10 @@ class AppConstants {
   static const String updateReadCountUrl = "api/messages/read";
 
   // payment method
+  static const String contractUrl = "api/contracts";
   static const String paymentMethodUrl = "api/paymentmethods";
   static const String storeContractUrl = "api/contracts/store";
+  static const String updateContractUrl = "api/contracts/update";
   static const String mySalesCompaniesUrl = "api/contracts/my-sales-companies";
   static const String contractCompanyUrl = "api/contracts/company";
   static const String myPurchasesCompaniesUrl =
