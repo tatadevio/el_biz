@@ -375,5 +375,11 @@
   "all_account" : "All Account",
   "please_accept_the_terms_and_conditions" : "Please confirm your agreement with the terms and conditions.",
   "add_tender" : "Add Tender",
-  "contract_is" : "Contract is"
+  "contract_is" : "Contract is",
+  "select_file_type" : "Select File Type",
+  "choose_your_preferred_method" : "Choose your preferred method to upload your payment receipt",
+  "take_a_photo" : "Take a photo with camera",
+  "choose_from_gallery" : "Select from your photo gallery",
+  "select_pdf_file" : "Choose a PDF file from storage",
+  "update_payment_status" : "Update Payment Status"
 }

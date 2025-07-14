@@ -368,5 +368,11 @@
   "all_account" : "Все счета",
   "please_accept_the_terms_and_conditions" : "Пожалуйста, подтвердите согласие с условиями.",
   "add_tender" : "Добавить тендер",
-  "contract_is" : "Договор"
+  "contract_is" : "Договор",
+  "select_file_type" : "Выберите тип файла",
+  "choose_your_preferred_method" : "Выберите предпочтительный способ загрузки квитанции об оплате",
+  "take_a_photo" : "Сделать фото с камеры",
+  "choose_from_gallery" : "Выбрать из галереи фотографий",
+  "select_pdf_file" : "Выбрать PDF файл из хранилища",
+  "update_payment_status" : "Обновить статус оплаты"
 }

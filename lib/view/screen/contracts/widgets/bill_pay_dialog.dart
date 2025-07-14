@@ -71,6 +71,84 @@ class _BillPayDialogState extends State<BillPayDialog> {
     }
   }
 
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+
+      if (image != null) {
+        final file = File(image.path);
+        final fileBytes = await file.length();
+        setState(() {
+          xFile = image;
+          fileSize = _formatFileSize(fileBytes);
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No image selected.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error selecting image: $e')),
+      );
+    }
+  }
+
+  Widget _buildOptionTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: ColorResources.blue.withOpacity(0.1),
+                    // borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    color: ColorResources.blue,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: textMd.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: ColorResources.titleColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -138,7 +216,87 @@ class _BillPayDialogState extends State<BillPayDialog> {
                             image: xFile!,
                           ));
                     } else {
-                      _pickPDF();
+                      showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (BuildContext context) {
+                          return Container(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Handle bar
+                                Container(
+                                  width: 40,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+
+                                // Title
+                                Text(
+                                  'select_file_type'.tr,
+                                  style: h16.copyWith(
+                                    color: ColorResources.titleColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: const Icon(Icons.camera_alt),
+                                  title: Text('camera'.tr),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    _pickImage(ImageSource.camera);
+                                  },
+                                ),
+                                const SizedBox(height: 12),
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: const Icon(Icons.photo_library),
+                                  title: Text('gallery'.tr),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    _pickImage(ImageSource.gallery);
+                                  },
+                                ),
+                                const SizedBox(height: 12),
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: const Icon(Icons.picture_as_pdf),
+                                  title: Text('pdf'.tr),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    _pickPDF();
+                                  },
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                // Cancel button
+                                CustomButton(
+                                  width: Get.width,
+                                  title: 'cancel'.tr,
+                                  height: 44,
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     }
                   },
                   title: xFile == null ? 'upload'.tr : 'send'.tr),
