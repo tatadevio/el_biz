@@ -482,6 +482,8 @@ class _ChatConversationState extends State<ChatConversation> {
                                           }
                                         },
                                       ));
+                                      // send notification to the receiver
+                                      // sendNotification(widget.receiverId, widget.senderId, widget.type);
                                 }
                               : () {
                                   context
@@ -548,6 +550,8 @@ class _ChatConversationState extends State<ChatConversation> {
                                       },
                                     ),
                                   );
+                                  // send notification to the receiver
+                                  // sendNotification(widget.receiverId, widget.senderId, widget.type);
                                 },
                           child: Text(
                             widget.type == 'tender'

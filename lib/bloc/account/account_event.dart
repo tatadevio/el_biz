@@ -50,3 +50,11 @@ class DeleteAccount extends AccountEvent {
   @override
   List<Object> get props => [id];
 }
+
+class MakePrimaryAccount extends AccountEvent {
+  final int id;
+  const MakePrimaryAccount({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}

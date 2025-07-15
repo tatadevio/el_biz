@@ -9,10 +9,11 @@ sealed class UserEvent extends Equatable {
 
 class GetUserInfo extends UserEvent {
   final BuildContext context;
-  const GetUserInfo({required this.context});
+  final bool isUpdateToken;
+  const GetUserInfo({required this.context, this.isUpdateToken = false});
 
   @override
-  List<Object> get props => [context];
+  List<Object> get props => [context, isUpdateToken];
 }
 
 class UpdateUserData extends UserEvent {

@@ -98,20 +98,28 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          state.accountItems.isNotEmpty
-                              ? state.accountItems[0].accountName ?? ''
+                          state.accountItems
+                                  .any((account) => account.primaryAccount == 1)
+                              ? state.accountItems
+                                      .firstWhere((account) =>
+                                          account.primaryAccount == 1)
+                                      .accountName ??
+                                  ''
                               : '',
-                          // 'Optima USD',
                           style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          state.accountItems.isNotEmpty
-                              ? state.accountItems[0].accountNumber ?? ''
+                          state.accountItems
+                                  .any((account) => account.primaryAccount == 1)
+                              ? state.accountItems
+                                      .firstWhere((account) =>
+                                          account.primaryAccount == 1)
+                                      .accountNumber ??
+                                  ''
                               : '',
-                          // '0202020202002',
                           style: body16.copyWith(color: ColorResources.gray),
                         ),
                       ],
@@ -241,11 +249,52 @@ class _AccountScreenState extends State<AccountScreen> {
                 ],
               ),
               value: account.accountNumber ?? '',
-              groupValue: _selectedOption,
+              groupValue: account.primaryAccount == 1
+                  ? account.accountNumber
+                  : _selectedOption,
               onChanged: (value) {
-                setState(() {
-                  _selectedOption = value!;
-                });
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Confirm'),
+                      content: Text(
+                          'Are you sure to add this account as primary account?'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                          ),
+                          child: Text('Cancel'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: ColorResources.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                          ),
+                          child: Text('Yes'),
+                          onPressed: () {
+                            print('Selected Account ID: ${account.id}');
+                            context.read<AccountBloc>().add(MakePrimaryAccount(
+                                  id: account.id ?? 0,
+                                ));
+                            setState(() {
+                              _selectedOption = value!;
+                            });
+
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
             Row(

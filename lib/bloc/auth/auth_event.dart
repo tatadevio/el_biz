@@ -44,7 +44,13 @@ class Login extends AuthEvent {
   List<Object> get props => [phoneNumber, password];
 }
 
-class UpdateUserFirebaseData extends AuthEvent {}
+// class UpdateUserFirebaseData extends AuthEvent {
+//   final String userId;
+//   const UpdateUserFirebaseData(this.userId);
+
+//   @override
+//   List<Object> get props => [userId];
+// }
 
 class SendOtp extends AuthEvent {
   final String phoneNumber;
@@ -78,3 +84,11 @@ class ChangePassword extends AuthEvent {
 class Logout extends AuthEvent {}
 
 class DeleteAccount extends AuthEvent {}
+
+class UpdateFirebaseToken extends AuthEvent {
+  final String userId;
+  const UpdateFirebaseToken(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}

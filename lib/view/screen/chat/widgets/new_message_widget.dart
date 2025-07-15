@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../data/model/response/chat/attachment_model.dart';
+import '../../../../helper/send_notification.dart';
 import '../image_preview_screen.dart';
 
 class NewMessageWidget extends StatefulWidget {
@@ -228,6 +229,14 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
     context.read<UserBloc>().state.selectedAccountModel;
   }
 
+  Future<String> getFcmToken() async {
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.receiverId)
+        .get();
+    return userDoc.data()?['fcmToken'] ?? '';
+  }
+
   void _sendOrUpdateMessage(
       {String? message,
       String? link,
@@ -301,6 +310,16 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
     } else if (type == 'pdf') {
       lastMessage = "📄 $message $message $message";
     }
+    print("this is my user name = ${myUser?.name}");
+
+    sendNotificationToToken(
+        title: myUser?.name ?? '',
+        // "New Message",
+        message: lastMessage,
+        fcmToken: await getFcmToken(),
+        chatId: widget.chatId,
+        senderId: widget.senderId,
+        type: widget.type);
 
     context.read<ChatBloc>().add(UpdateLastMessage(
         chatId: widget.chatId,

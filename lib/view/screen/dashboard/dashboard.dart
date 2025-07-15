@@ -1,4 +1,5 @@
 import 'package:el_biz/bloc/config/config_bloc.dart';
+import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
 import 'package:el_biz/view/screen/tender/tender_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../../../bloc/auth/auth_bloc.dart';
 import '../../../helper/my_notification.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -43,6 +45,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
       const MenuScreen(),
     ];
     initNotify();
+    updateFcmToken();
+  }
+
+  updateFcmToken() async {
+    if (context.read<AuthBloc>().state.isLoggedIn) {
+      context
+          .read<UserBloc>()
+          .add(GetUserInfo(context: context, isUpdateToken: true));
+      //  context.read<UserBloc>().add(GetSelectedAccount(context: context));
+      // context.read<AuthBloc>().add(UpdateFirebaseToken(
+      //       context.read<UserBloc>().state.user?.id ?? "",
+      //     ));
+    }
   }
 
   initNotify() async {

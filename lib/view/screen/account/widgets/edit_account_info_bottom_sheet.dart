@@ -42,12 +42,15 @@ class _EditAccountInfoBottomSheetState
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(builder: (context, state) {
       return Container(
-        height: Get.height * 0.60,
+        constraints: BoxConstraints(
+          maxHeight: Get.height * 0.8, // Maximum 80% of screen height
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
             key: formKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min, // Make column size to content
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -64,7 +67,7 @@ class _EditAccountInfoBottomSheetState
                     ],
                   ),
                 ),
-                Expanded(
+                Flexible(
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,6 +187,9 @@ class _EditAccountInfoBottomSheetState
                       ],
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             ),

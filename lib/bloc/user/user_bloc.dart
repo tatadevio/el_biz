@@ -18,31 +18,55 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepo userRepo;
   UserBloc(this.userRepo) : super(UserInitial()) {
-    on<GetUserInfo>((event, emit) async {
-      try {
-        final res = await userRepo.getUserInfo();
-        print('====> User Info: ${res.body}');
-        if (res.statusCode == 200) {
-          UserInfoModel userInfo = UserInfoModel.fromJson(res.body);
-          emit(state.copyWith(userInfo: userInfo));
-          // ignore: use_build_context_synchronously
-          add(GetSelectedAccount(context: event.context));
-        } else {
-          showShortToast(res.body['message']);
-        }
-      } catch (e) {
-        showShortToast(e.toString());
-      }
-    });
+    // on<GetUserInfo>((event, emit) async {
+    //   try {
+    //     final res = await userRepo.getUserInfo();
+    //     print('====> User Info: ${res.body}');
+    //     if (res.statusCode == 200) {
+    //       UserInfoModel userInfo = UserInfoModel.fromJson(res.body);
+    //       emit(state.copyWith(userInfo: userInfo));
+    //       // ignore: use_build_context_synchronously
+    //       add(GetSelectedAccount(context: event.context));
+    //     } else {
+    //       showShortToast(res.body['message']);
+    //     }
+    //   } catch (e) {
+    //     showShortToast(e.toString());
+    //   }
+    // });
 
     // on<UserEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
-
+    on<GetUserInfo>(_onGetUserInfo);
     on<UpdateUserData>(_onUpdateUserData);
     on<SwitchSelectedAccount>(_onSwichSelectedAccount);
     on<GetSelectedAccount>(_onGetSelectedAccount);
     on<ClearSelectedAccount>(_onClearSelectedAccount);
+  }
+
+  Future<void> _onGetUserInfo(
+      GetUserInfo event, Emitter<UserState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final res = await userRepo.getUserInfo();
+      print('====> User Info: ${res.body}');
+      if (res.statusCode == 200) {
+        UserInfoModel userInfo = UserInfoModel.fromJson(res.body);
+        emit(state.copyWith(userInfo: userInfo));
+        // ignore: use_build_context_synchronously
+        if (event.isUpdateToken) {
+          event.context.read<AuthBloc>().add(UpdateFirebaseToken(
+                state.userInfo?.data?.id.toString() ?? "",
+              ));
+        }
+        add(GetSelectedAccount(context: event.context));
+      } else {
+        showShortToast(res.body['message']);
+      }
+    } catch (e) {
+      showShortToast(e.toString());
+    }
   }
 
   Future<void> _onUpdateUserData(

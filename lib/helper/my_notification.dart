@@ -30,46 +30,49 @@ class MyNotification {
       initializationsSettings,
       onDidReceiveNotificationResponse: (NotificationResponse details) {},
       onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse details) {},
-      //     onSelectNotification: (String? payload) async {
-      //   try {
-      //     if (payload != null && payload.isNotEmpty) {
-      //       print('payload is : $payload');
-      //       List<String> result = payload.split(',');
-      //       String id = result[0];
-      //       String type = result[1];
-      //       String receiverid = result[2];
-      //       print("payload is $id  and $type");
-      //       if (type == "chat") {
-      //         // if (Get.find<AuthController>().isLoggedIn()) {
-      //         // Get.find<ChatController>().getTicket(true);
-      //         // Get.find<ChatController>().getChatList(id, 0, true);
-      //         // print('going to check the routes');
-      //         // if (Get.currentRoute == "/ChatConversation") {
-      //         //   Get.off(
-      //         //       () => ChatConversation(
-      //         //             productId: id,
-      //         //             receivedId: receiverid,
-      //         //           ),
-      //         //       preventDuplicates: false);
-      //         // } else {
-      //         //   Get.to(
-      //         //       () => ChatConversation(
-      //         //             productId: id,
-      //         //             receivedId: receiverid,
-      //         //           ),
-      //         //       preventDuplicates: false);
-      //         // }
-      //         // }
-      //       } else if (type == "normal") {}
+          (NotificationResponse details) async {
+        String? payload = details.payload;
+        try {
+          if (payload != null && payload.isNotEmpty) {
+            print('payload is : $payload');
+            List<String> result = payload.split(',');
+            String id = result[0];
+            String type = result[1];
+            String receiverid = result[2];
+            print("payload is $id  and $type");
+            if (type == "chat") {
+              // if (Get.find<AuthController>().isLoggedIn()) {
+              // Get.find<ChatController>().getTicket(true);
+              // Get.find<ChatController>().getChatList(id, 0, true);
+              // print('going to check the routes');
+              // if (Get.currentRoute == "/ChatConversation") {
+              //   Get.off(
+              //       () => ChatConversation(
+              //             productId: id,
+              //             receivedId: receiverid,
+              //           ),
+              //       preventDuplicates: false);
+              // } else {
+              //   Get.to(
+              //       () => ChatConversation(
+              //             productId: id,
+              //             receivedId: receiverid,
+              //           ),
+              //       preventDuplicates: false);
+              // }
+              // }
+            } else if (type == "normal") {}
 
-      //       /*Get.find<BooksDetailController>().bookDetail(payload.toString());
-      //       Get.to(BooksDetails());*/
-      //       //Get.toNamed(RouteHelper.getOrderDetailsRoute(int.parse(payload)));
-      //     } else {}
-      //   } catch (e) {}
-      //   return;
-      // }
+            /*Get.find<BooksDetailController>().bookDetail(payload.toString());
+            Get.to(BooksDetails());*/
+            //Get.toNamed(RouteHelper.getOrderDetailsRoute(int.parse(payload)));
+          } else {}
+        } catch (e) {
+          debugPrint("error is $e");
+        }
+        return;
+      },
+      //     onSelectNotification: (String? payload) async {
     );
 
     FirebaseMessaging.instance.getInitialMessage().then((message) {
@@ -77,46 +80,12 @@ class MyNotification {
       print("initial message  i am coming = ${message?.data}");
       if (message?.data != null) {
         print(message?.data);
-
-        // String type = message?.data['notification_type'];
-
-        // if (type == "chat") {
-        //   String id = message!.data['chatId'];
-        //   String receiverId = message.data['receiverId'];
-        //   if (Get.find<AuthController>().isLoggedIn()) {
-        //     print('calling in message get ticket get initial message');
-
-        //     Get.find<ChatController>().getTicket(true);
-        //     print('calling in message get chat list get initial message');
-
-        //     Get.find<ChatController>().getChatList(id, 0, true);
-
-        //     Get.to(() => ChatConversation(
-        //           productId: id,
-        //           receivedId: receiverId,
-        //         ));
-        //   }
-        // }
-
-        // String id = message?.data['notification_id'];
       }
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage: ${message.data}");
       print("onMessage: ${message.notification}");
-
-      // String id = message.data['chat_id'] ?? message.data['chatId'];
-      // String type = message.data['notification_type'];
-      // print('id = $id , type = $type');
-      // if (type == "chat") {
-      //   if (Get.currentRoute != "/ChatConversation") {
-      //     print('calling show notification..........');
-      //     MyNotification.showNotification(
-      //         message, flutterLocalNotificationsPlugin, true);
-      //   }
-      //   Get.find<ChatController>().getTicket(false);
-      // }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -124,25 +93,6 @@ class MyNotification {
       print("onMessage open app: ${message.notification}");
 
       // String id = message.data['chatId'] ?? message.data['chat_id'];
-      // String type = message.data['notification_type'];
-      // if (type == "chat") {
-      //   String id = message.data['chatId'];
-      //   String receiverId = message.data['receiverId'];
-      //   // if (Get.find<AuthController>().isLoggedIn()) {
-      //   // print('calling in message get config');
-      //   // print('calling in message get ticket');
-
-      //   // Get.find<ChatController>().getTicket(true);
-      //   print('calling in message get chat list');
-
-      //   Get.find<ChatController>().getChatList(id, 0, true);
-
-      //   Get.to(() => ChatConversation(
-      //         productId: id,
-      //         receivedId: receiverId,
-      //       ));
-      //   print('after navigating to the chat conversation screen ...........');
-      // }
     });
   }
 

@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/appConstant.dart';
@@ -156,4 +160,85 @@ class AuthRepo {
   //     "country_code": countryCode,
   //   });
   // }
+
+  Future<void> updateToken(String id) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setBool("new", false);
+    String? _deviceToken;
+    if (GetPlatform.isIOS) {
+      NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        _deviceToken = await _saveDeviceToken();
+      }
+    } else {
+      _deviceToken = await _saveDeviceToken();
+    }
+
+    String uID = sharedPreferences.getString("UID") ?? "";
+    print("uid is $uID");
+    if (uID == "") {
+      uID = FirebaseAuth.instance.currentUser?.uid ?? "";
+    }
+
+    // FirebaseMessaging.instance.subscribeToTopic('all_users').then((value) => print("Subscribed to all_users"));
+    await apiClient.postData(AppConstants.updateFcmTokenUrl,
+        {"fcm_token": _deviceToken, "firebase_id": uID});
+
+    FirebaseFirestore.instance.collection('users').doc(id).set({
+      'user_id': id,
+      'fcmToken': _deviceToken,
+    }, SetOptions(merge: true));
+    // subscribeToTopic(AppConstants.newsLetterTopic);
+  }
+
+  // Future<void> updateFirebaseIdAndToken(
+  //     String userId, String userFirebaseId) async {
+  //   final SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   preferences.setBool("new", false);
+  //   String? _deviceToken;
+
+  //   _deviceToken = await _saveDeviceToken();
+
+  //   // FirebaseMessaging.instance.subscribeToTopic('all_users').then((value) => print("Subscribed to all_users"));
+  //   await apiClient.postData(AppConstants.updateFcmTokenUrl,
+  //       {"fcm_token": _deviceToken, "firebase_id": userFirebaseId});
+
+  //   FirebaseFirestore.instance.collection('users').doc(userId).set({
+  //     'user_id': userId,
+  //     'fcmToken': _deviceToken,
+  //   }, SetOptions(merge: true));
+  //   // subscribeToTopic(AppConstants.newsLetterTopic);
+  // }
+
+  Future<String?> _saveDeviceToken() async {
+    String? _deviceToken = '@';
+    if (GetPlatform.isIOS) {
+      try {
+        _deviceToken = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        print("Error while fcm");
+        print(e);
+      }
+    } else {
+      try {
+        _deviceToken = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        print(e);
+      }
+    }
+    if (_deviceToken != null) {
+      print('--------Device Token---------- ' + _deviceToken);
+    }
+    return _deviceToken;
+  }
 }

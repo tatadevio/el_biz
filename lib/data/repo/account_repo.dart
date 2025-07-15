@@ -11,7 +11,7 @@ class AccountRepo {
 
   Future<Response> getMyAccounts(int page) async {
     return await apiClient
-        .getData("${AppConstants.myAccountsUrl}?page=$page&perPage=4");
+        .getData("${AppConstants.myAccountsUrl}?page=$page&perPage=20");
   }
 
   Future<Response> addAccount(
@@ -36,5 +36,10 @@ class AccountRepo {
     return await apiClient.deleteData(
       "${AppConstants.deleteAccountUrl}/$id",
     );
+  }
+
+  Future<Response> makePrimaryAccount(int id) async {
+    return await apiClient
+        .postData("${AppConstants.makePrimaryAccountUrl}/$id", {});
   }
 }

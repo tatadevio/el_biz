@@ -93,12 +93,14 @@ class AccountItem {
   final String? accountName;
   final String? accountNumber;
   final String? bic;
+  final int? primaryAccount;
 
   AccountItem({
     this.id,
     this.accountName,
     this.accountNumber,
     this.bic,
+    this.primaryAccount,
   });
 
   factory AccountItem.fromJson(Map<String, dynamic> json) => AccountItem(
@@ -106,6 +108,7 @@ class AccountItem {
         accountName: json["account_name"],
         accountNumber: json["account_number"],
         bic: json["bic"],
+        primaryAccount: json["primary_account"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -113,5 +116,22 @@ class AccountItem {
         "account_name": accountName,
         "account_number": accountNumber,
         "bic": bic,
+        "primary_account": primaryAccount,
       };
+
+  AccountItem copyWith({
+    int? id,
+    String? accountName,
+    String? accountNumber,
+    String? bic,
+    int? primaryAccount,
+  }) {
+    return AccountItem(
+      id: id ?? this.id,
+      accountName: accountName ?? this.accountName,
+      accountNumber: accountNumber ?? this.accountNumber,
+      bic: bic ?? this.bic,
+      primaryAccount: primaryAccount ?? this.primaryAccount,
+    );
+  }
 }

@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Get.offAllNamed(RouteHelper.getLoginRoute());
       }
-      context.read<AuthBloc>().add(UpdateUserFirebaseData());
+      // context.read<AuthBloc>().add(UpdateUserFirebaseData());
     });
   }
 

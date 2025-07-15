@@ -24,6 +24,7 @@ class AppConstants {
   /// User
   static const String userInfoUrl = "api/users/info";
   static const String updateUserUrl = "api/users/update";
+  static const String updateFcmTokenUrl = "api/users/fcm-update";
 
   /// Tenders
   static const String tendersUrl = "api/tenders";
@@ -59,6 +60,7 @@ class AppConstants {
   static const String addAccountUrl = "api/accounts/store";
   static const String updateAccountUrl = "api/accounts/update";
   static const String deleteAccountUrl = "api/accounts/delete";
+  static const String makePrimaryAccountUrl = "api/accounts/primary-account";
 
   /// Add Product
   static const String addProductUrl = "api/products/store";

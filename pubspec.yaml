@@ -75,6 +75,7 @@ dependencies:
   syncfusion_flutter_signaturepad: ^29.1.40
   open_filex: ^4.7.0
   syncfusion_flutter_pdfviewer: ^29.2.8
+  googleapis_auth: ^2.0.0
   
 
 

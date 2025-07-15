@@ -179,7 +179,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _auth.signInWithCredential(credential);
         Get.offAll(() => DashboardScreen());
         // emit(AuthVerified());
-        add(UpdateUserFirebaseData());
         emit(state.copywith(isLoading: false));
       } catch (e) {
         showCustomSnackBar(e.toString());
@@ -188,7 +187,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    on<UpdateUserFirebaseData>(_updateUserDataOnFirebase);
+    // on<UpdateUserFirebaseData>(_updateUserDataOnFirebase);
 
     on<Logout>((event, emit) async {
       await authRepo.logout();
@@ -197,35 +196,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<DeleteAccount>(_onDeleteAccount);
+    on<UpdateFirebaseToken>(_updateFirebaseToken);
   }
 
-  void _updateUserDataOnFirebase(
-      UpdateUserFirebaseData event, Emitter<AuthState> state) async {
-    String userId = 'userId';
-    if (_auth.currentUser != null) {
-      userId = FirebaseAuth.instance.currentUser!.uid;
-    }
-
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    String fcmToken = '@';
-
-    try {
-      String? token = await messaging.getToken();
-      if (token != null) {
-        print('FCM Token: $token');
-        fcmToken = token;
-      }
-    } catch (e) {
-      print('Error getting FCM token: $e');
-    }
-
-    Map<String, dynamic> userData = {
-      "userId": userId,
-      "fcmToken": fcmToken,
-      "time": DateTime.now(),
-    };
-    FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
+  Future<void> _updateFirebaseToken(
+      UpdateFirebaseToken event, Emitter<AuthState> emit) async {
+    print('this is updating firebase token: ${event.userId}');
+    await authRepo.updateToken(event.userId);
   }
+
+  // void _updateUserDataOnFirebase(
+  //     UpdateUserFirebaseData event, Emitter<AuthState> state) async {
+  //   String userId = event.userId;
+  //   if (_auth.currentUser != null) {
+  //     userId = FirebaseAuth.instance.currentUser!.uid;
+  //   }
+
+  //   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  //   String fcmToken = '@';
+
+  //   try {
+  //     String? token = await messaging.getToken();
+  //     if (token != null) {
+  //       print('FCM Token: $token');
+  //       fcmToken = token;
+  //     }
+  //   } catch (e) {
+  //     print('Error getting FCM token: $e');
+  //   }
+
+  //   Map<String, dynamic> userData = {
+  //     "userId": userId,
+  //     "fcmToken": fcmToken,
+  //     "time": DateTime.now(),
+  //   };
+  //   FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
+  //   authRepo.updateToken(userId);
+  // }
 
   Future<void> _onDeleteAccount(
       DeleteAccount event, Emitter<AuthState> emit) async {

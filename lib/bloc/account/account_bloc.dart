@@ -20,6 +20,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     on<AddAccount>(_onAddAccount);
     on<UpdateAccount>(_onUpdateAccount);
     on<DeleteAccount>(_onDeleteAccount);
+    on<MakePrimaryAccount>(_onMakePrimaryAccount);
   }
 
   void _onGetMyAccounts(GetMyAccounts event, Emitter<AccountState> emit) async {
@@ -85,6 +86,29 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       add(GetMyAccounts());
     } else {
       emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  void _onMakePrimaryAccount(
+      MakePrimaryAccount event, Emitter<AccountState> emit) async {
+    // emit(state.copyWith(isLoading: true));
+    final response = await accountRepo.makePrimaryAccount(event.id);
+    showShortToast(response.body['message']);
+    if (response.statusCode == 200) {
+      // emit(state.copyWith(isLoading: false));
+      final updatedAccountItems = state.accountItems.map((account) {
+        if (account.id == event.id) {
+          return account.copyWith(primaryAccount: 1);
+        } else {
+          return account.copyWith(primaryAccount: 0);
+        }
+      }).toList();
+      emit(state.copyWith(accountItems: updatedAccountItems));
+
+      // Get.back();
+      // add(GetMyAccounts());
+    } else {
+      // emit(state.copyWith(isLoading: false));
     }
   }
 }
