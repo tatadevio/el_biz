@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import '../company/company_product_model.dart';
+import '../company/my_companies_model.dart';
 import '../tender/tender_item_model.dart';
 
 ChatListModel chatListModelFromJson(String str) =>
@@ -116,7 +117,7 @@ class ChatItem {
   final String? firebaseChatId;
   final ProductListItem? product;
   final User? user;
-  final Company? company;
+  final CompanyItem? company;
   final String? lastMessage;
   final DateTime? lastMessageDate;
   final int? userUnreadCount;
@@ -147,7 +148,7 @@ class ChatItem {
     String? firebaseChatId,
     ProductListItem? product,
     User? user,
-    Company? company,
+    CompanyItem? company,
     String? lastMessage,
     DateTime? lastMessageDate,
     int? userUnreadCount,
@@ -181,8 +182,9 @@ class ChatItem {
             ? null
             : ProductListItem.fromJson(json["product"]),
         user: json["user"] == null ? null : User.fromJson(json["user"]),
-        company:
-            json["company"] == null ? null : Company.fromJson(json["company"]),
+        company: json["company"] == null
+            ? null
+            : CompanyItem.fromJson(json["company"]),
         lastMessage: json["last_message"],
         lastMessageDate: json["last_message_date"] == null
             ? null
@@ -217,64 +219,64 @@ class ChatItem {
       };
 }
 
-class Company {
-  final int? id;
-  final String? name;
-  final String? email;
-  final String? phone;
-  final String? logo;
-  final String? verificationStatus;
-  final User? owner;
+// class Company {
+//   final int? id;
+//   final String? name;
+//   final String? email;
+//   final String? phone;
+//   final String? logo;
+//   final String? verificationStatus;
+//   final User? owner;
 
-  Company({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.logo,
-    this.verificationStatus,
-    this.owner,
-  });
+//   Company({
+//     this.id,
+//     this.name,
+//     this.email,
+//     this.phone,
+//     this.logo,
+//     this.verificationStatus,
+//     this.owner,
+//   });
 
-  Company copyWith({
-    int? id,
-    String? name,
-    String? email,
-    String? phone,
-    String? logo,
-    String? verificationStatus,
-    User? owner,
-  }) =>
-      Company(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        logo: logo ?? this.logo,
-        verificationStatus: verificationStatus ?? this.verificationStatus,
-        owner: owner ?? this.owner,
-      );
+//   Company copyWith({
+//     int? id,
+//     String? name,
+//     String? email,
+//     String? phone,
+//     String? logo,
+//     String? verificationStatus,
+//     User? owner,
+//   }) =>
+//       Company(
+//         id: id ?? this.id,
+//         name: name ?? this.name,
+//         email: email ?? this.email,
+//         phone: phone ?? this.phone,
+//         logo: logo ?? this.logo,
+//         verificationStatus: verificationStatus ?? this.verificationStatus,
+//         owner: owner ?? this.owner,
+//       );
 
-  factory Company.fromJson(Map<String, dynamic> json) => Company(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        phone: json["phone"],
-        logo: json["logo"],
-        verificationStatus: json["verification_status"],
-        owner: json["owner"] == null ? null : User.fromJson(json["owner"]),
-      );
+//   factory Company.fromJson(Map<String, dynamic> json) => Company(
+//         id: json["id"],
+//         name: json["name"],
+//         email: json["email"],
+//         phone: json["phone"],
+//         logo: json["logo"],
+//         verificationStatus: json["verification_status"],
+//         owner: json["owner"] == null ? null : User.fromJson(json["owner"]),
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "logo": logo,
-        "verification_status": verificationStatus,
-        "owner": owner?.toJson(),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "email": email,
+//         "phone": phone,
+//         "logo": logo,
+//         "verification_status": verificationStatus,
+//         "owner": owner?.toJson(),
+//       };
+// }
 
 class User {
   final int? id;

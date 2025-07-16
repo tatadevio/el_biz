@@ -50,20 +50,22 @@ class SendMessage extends ChatEvent {
 
 class GetChatProductList extends ChatEvent {
   final int currentPage;
+  final bool reload;
 
-  const GetChatProductList({required this.currentPage});
+  const GetChatProductList({required this.currentPage, this.reload = true});
 
   @override
-  List<Object> get props => [currentPage];
+  List<Object> get props => [currentPage, reload];
 }
 
 class GetChatTenderList extends ChatEvent {
   final int currentPage;
+  final bool reload;
 
-  const GetChatTenderList({required this.currentPage});
+  const GetChatTenderList({required this.currentPage, this.reload = true});
 
   @override
-  List<Object> get props => [currentPage];
+  List<Object> get props => [currentPage, reload];
 }
 
 class DeleteChat extends ChatEvent {
@@ -134,3 +136,14 @@ class SearchChatTenders extends ChatEvent {
 }
 
 class ClearChatSearch extends ChatEvent {}
+
+class FetchChatItemFromChatId extends ChatEvent {
+  final String chatId;
+  final Completer<ChatItem> completer;
+
+  const FetchChatItemFromChatId(
+      {required this.chatId, required this.completer});
+
+  @override
+  List<Object> get props => [chatId, completer];
+}

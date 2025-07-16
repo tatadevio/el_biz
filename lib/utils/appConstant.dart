@@ -24,7 +24,7 @@ class AppConstants {
   /// User
   static const String userInfoUrl = "api/users/info";
   static const String updateUserUrl = "api/users/update";
-  static const String updateFcmTokenUrl = "api/users/fcm-update";
+  static const String updateFcmTokenUrl = "api/users/fcm-token-update";
 
   /// Tenders
   static const String tendersUrl = "api/tenders";

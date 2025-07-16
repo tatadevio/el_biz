@@ -67,6 +67,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } catch (e) {
       showShortToast(e.toString());
     }
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> _onUpdateUserData(

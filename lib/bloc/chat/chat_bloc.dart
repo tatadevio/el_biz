@@ -80,12 +80,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SearchChatProducts>(_onSearchChatProducts);
     on<SearchChatTenders>(_onSearchChatTenders);
     on<ClearChatSearch>(_onClearChatSearch);
+    on<FetchChatItemFromChatId>(_onFetchChatItemFromChatId);
   }
 
   Future<void> _onGetChatProductList(
       GetChatProductList event, Emitter<ChatState> emit) async {
     if (event.currentPage == 1) {
-      emit(state.copyWith(isLoading: true));
+      if (event.reload) {
+        emit(state.copyWith(isLoading: true));
+      }
     } else {
       emit(state.copyWith(isLoadingMore: true));
     }
@@ -118,7 +121,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _onGetChatTenderList(
       GetChatTenderList event, Emitter<ChatState> emit) async {
     if (event.currentPage == 1) {
-      emit(state.copyWith(isLoading: true));
+      if (event.reload) {
+        emit(state.copyWith(isLoading: true));
+      }
     } else {
       emit(state.copyWith(isLoadingTenderMore: true));
     }
@@ -419,5 +424,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       isLoadingProductSearchMore: false,
       isLoadingTenderSearchMore: false,
     ));
+  }
+
+  Future<void> _onFetchChatItemFromChatId(
+      FetchChatItemFromChatId event, Emitter<ChatState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    final response = await chatRepo.getChatDetail(event.chatId);
+    ChatItem chatItem = ChatItem.fromJson(response.body['data']);
+    event.completer.complete(chatItem);
+    emit(state.copyWith(isLoading: false));
   }
 }

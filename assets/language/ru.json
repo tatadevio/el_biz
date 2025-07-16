@@ -366,6 +366,7 @@
   "companies_passed_moderation"  : "Компании прошедшие модерацию",
   "no_account_found" : "Аккаунт не найден.",
   "all_account" : "Все счета",
+  "no_company_found" : "Компания не найдена.",
   "please_accept_the_terms_and_conditions" : "Пожалуйста, подтвердите согласие с условиями.",
   "add_tender" : "Добавить тендер",
   "contract_is" : "Договор",
@@ -374,5 +375,6 @@
   "take_a_photo" : "Сделать фото с камеры",
   "choose_from_gallery" : "Выбрать из галереи фотографий",
   "select_pdf_file" : "Выбрать PDF файл из хранилища",
-  "update_payment_status" : "Обновить статус оплаты"
+  "update_payment_status" : "Обновить статус оплаты",
+  "add_a_caption": "Добавить подпись"
 }

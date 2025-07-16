@@ -29,6 +29,7 @@ class NewMessageWidget extends StatefulWidget {
   final int ownerUnread;
   final int productUserId;
   final String type;
+  final String? receiverFcmToken;
   const NewMessageWidget({
     super.key,
     required this.chatId,
@@ -41,6 +42,7 @@ class NewMessageWidget extends StatefulWidget {
     required this.ownerUnread,
     required this.productUserId,
     required this.type,
+    this.receiverFcmToken,
   });
 
   @override
@@ -316,10 +318,12 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
         title: myUser?.name ?? '',
         // "New Message",
         message: lastMessage,
-        fcmToken: await getFcmToken(),
+        fcmToken: 
+        widget.receiverFcmToken ??
+        await getFcmToken(),
         chatId: widget.chatId,
         senderId: widget.senderId,
-        type: widget.type);
+        type: "chat-${widget.type}");
 
     context.read<ChatBloc>().add(UpdateLastMessage(
         chatId: widget.chatId,

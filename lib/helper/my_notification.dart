@@ -1,13 +1,14 @@
 import 'dart:io';
 
+import 'package:el_biz/view/screen/chat/chat_conversation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
-
+import '../bloc/chat/chat_bloc.dart';
 import '../utils/appConstant.dart';
 
 class MyNotification {
@@ -16,7 +17,6 @@ class MyNotification {
       BuildContext context) async {
     var androidInitialize =
         const AndroidInitializationSettings('@drawable/notification_icon');
-
     var iOSInitialize = const DarwinInitializationSettings(
         requestBadgePermission: true,
         requestAlertPermission: true,
@@ -28,10 +28,9 @@ class MyNotification {
         InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
     flutterLocalNotificationsPlugin.initialize(
       initializationsSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse details) {},
-      onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse details) async {
-        String? payload = details.payload;
+      onDidReceiveNotificationResponse:
+          (NotificationResponse? notificationResponse) async {
+        final payload = notificationResponse?.payload;
         try {
           if (payload != null && payload.isNotEmpty) {
             print('payload is : $payload');
@@ -40,59 +39,261 @@ class MyNotification {
             String type = result[1];
             String receiverid = result[2];
             print("payload is $id  and $type");
+            if (type == 'chat-product') {
+              // add api to get chat detail
+              Get.to(() => ChatConversation(
+                    chatId: id,
+                    // isSeller: true,
+                    isFirstMessage: false,
+                    chatItem: null,
+                  ));
+            } else if (type == 'chat-tender') {
+              Get.to(() => ChatConversation(
+                    chatId: id,
+                    // isSeller: true,
+                    isFirstMessage: false,
+                    chatItem: null,
+                  ));
+            }
             if (type == "chat") {
               // if (Get.find<AuthController>().isLoggedIn()) {
               // Get.find<ChatController>().getTicket(true);
               // Get.find<ChatController>().getChatList(id, 0, true);
               // print('going to check the routes');
-              // if (Get.currentRoute == "/ChatConversation") {
-              //   Get.off(
-              //       () => ChatConversation(
-              //             productId: id,
-              //             receivedId: receiverid,
-              //           ),
+              // if (Get.currentRoute == RouteHelper.chatConversatonRoute) {
+              //   Get.to(
+              //       () =>
+              //           ChatConversation(productId: id, receivedId: receiverid),
               //       preventDuplicates: false);
               // } else {
               //   Get.to(
-              //       () => ChatConversation(
-              //             productId: id,
-              //             receivedId: receiverid,
-              //           ),
+              //       () =>
+              //           ChatConversation(productId: id, receivedId: receiverid),
               //       preventDuplicates: false);
-              // }
               // }
             } else if (type == "normal") {}
 
             /*Get.find<BooksDetailController>().bookDetail(payload.toString());
-            Get.to(BooksDetails());*/
+          Get.to(BooksDetails());*/
             //Get.toNamed(RouteHelper.getOrderDetailsRoute(int.parse(payload)));
           } else {}
-        } catch (e) {
-          debugPrint("error is $e");
-        }
+        } catch (e) {}
         return;
       },
-      //     onSelectNotification: (String? payload) async {
+      onDidReceiveBackgroundNotificationResponse:
+          (NotificationResponse? notificationResponse) async {
+        final payload = notificationResponse?.payload;
+        try {
+          if (payload != null && payload.isNotEmpty) {
+            print('payload is : $payload');
+            List<String> result = payload.split(',');
+            String id = result[0];
+            String type = result[1];
+            String receiverid = result[2];
+            print("payload is $id  and $type");
+
+            // print("payload is $id  and $type");
+            if (type == 'chat-product') {
+              // add api to get chat detail
+              Get.to(() => ChatConversation(
+                    chatId: id,
+                    // isSeller: true,
+                    isFirstMessage: false,
+                    chatItem: null,
+                  ));
+            } else if (type == 'chat-tender') {
+              Get.to(() => ChatConversation(
+                    chatId: id,
+                    // isSeller: true,
+                    isFirstMessage: false,
+                    chatItem: null,
+                  ));
+            }
+            // if (type == "chat") {
+            //   // if (Get.find<AuthController>().isLoggedIn()) {
+            //   Get.find<ChatController>().getTicket(true);
+            //   Get.find<ChatController>().getChatList(id, 0, true);
+            //   print('going to check the routes');
+            //   if (Get.currentRoute == RouteHelper.chatConversatonRoute) {
+            //     Get.to(
+            //         () =>
+            //             ChatConversation(productId: id, receivedId: receiverid),
+            //         preventDuplicates: false);
+            //   } else {
+            //     Get.to(
+            //         () =>
+            //             ChatConversation(productId: id, receivedId: receiverid),
+            //         preventDuplicates: false);
+            //   }
+            // }
+
+            if (type == "normal") {}
+
+            /*Get.find<BooksDetailController>().bookDetail(payload.toString());
+          Get.to(BooksDetails());*/
+            //Get.toNamed(RouteHelper.getOrderDetailsRoute(int.parse(payload)));
+          } else {}
+        } catch (e) {}
+        return;
+      },
     );
 
-    FirebaseMessaging.instance.getInitialMessage().then((message) {
+    FirebaseMessaging.instance.getInitialMessage().then((message) async {
       //showShortToast("Background message ${message?.data}");
       print("initial message  i am coming = ${message?.data}");
       if (message?.data != null) {
         print(message?.data);
+
+        String type = message?.data['notification_type'];
+        String id = message?.data['chatId'];
+        if (type == 'chat-product') {
+          // add api to get chat detail
+          print('this is the product chat id = $id');
+          Get.to(() => ChatConversation(
+                chatId: id,
+                // isSeller: true,
+                isFirstMessage: false,
+                chatItem: null,
+              ));
+        } else if (type == 'chat-tender') {
+          print('this is the tender chat id = $id');
+          Get.to(() => ChatConversation(
+                chatId: id,
+                // isSeller: true,
+                isFirstMessage: false,
+                chatItem: null,
+              ));
+        }
+
+        // if (type == "chat") {
+        //   String id = message!.data['chatId'];
+        //   String receiverId = message.data['receiverId'];
+        //   if (Get.find<AuthController>().isLoggedIn()) {
+        //     Get.find<ChatController>().getTicket(true);
+
+        //     Get.find<ChatController>().getChatList(id, 0, true);
+        //     Get.to(
+        //         () => ChatConversation(productId: id, receivedId: receiverId),
+        //         preventDuplicates: false);
+        //   }
+        // }
+        // if (type == 'order') {
+        //   String id = message!.data['notification_id'];
+        //   Get.find<MarketOrderController>().getOrders(true, 1);
+        //   Get.find<MarketOrderController>().getOrderDetail(id);
+        // }
+        // if (type == 'shorts_live_story') {
+        //   String shortsType = message!.data['shorts_type'];
+        //   if (shortsType == 'shorts') {
+        //     final shortsController = Get.find<ShortsController>();
+        //     await shortsController
+        //         .getSharedShort(message.data['notification_id']);
+        //     if (shortsController.sharedShort != null) {
+        //       Get.to(() => const SharedShortScreen());
+        //     }
+        //   } else if (shortsType == 'home_story') {
+        //   } else if (shortsType == 'cat_story') {
+        //   } else if (shortsType == 'live') {
+        //     if (Get.currentRoute != 'StoryViewScreenNew') {
+        //       Get.find<HomeController>().getNewHomePageStories();
+        //     }
+        //   }
+        // }
+
+        // String id = message?.data['notification_id'];
       }
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print("onMessage: ${message.data}");
       print("onMessage: ${message.notification}");
+
+      String type = message.data['notification_type'];
+      print('on message listentype is $type');
+      if (type == 'chat-product') {
+        context
+            .read<ChatBloc>()
+            .add(GetChatProductList(currentPage: 1, reload: false));
+      } else if (type == 'chat-tender') {
+        context
+            .read<ChatBloc>()
+            .add(GetChatTenderList(currentPage: 1, reload: false));
+      }
+      MyNotification.showNotification(
+          message, flutterLocalNotificationsPlugin, true);
+
+      // if (type == "video_call" ||
+      //     type == "audio_call" ||
+      //     type == "video" ||
+      //     type == "audio") {
+      //   print('user is calling');
+      //   if (Get.currentRoute != "/DashboardScreen") {
+      //     MyNotification.showNotification(
+      //         message, flutterLocalNotificationsPlugin, true);
+      //   }
+      // } else {
+      //   if (Get.currentRoute != RouteHelper.getChatConversationRoute()) {
+      //     MyNotification.showNotification(
+      //         message, flutterLocalNotificationsPlugin, true);
+      //   }
+
+      //   if (type == "chat") {
+      //     // String id = message.data['chat_id'] ?? message.data['chatId'];
+      //     Get.find<ChatController>().getTicket(false);
+      //     // Get.find<ChatController>().getChatList(id, 0, true);
+      //     // Get.to(() => ChatConversation(
+      //     //       productId: id,
+      //     //       receivedId: '',
+      //     //     ));
+      //   }
+      //   if (type == 'order') {
+      //     String id = message.data['notification_id'];
+      //     Get.find<MarketOrderController>().getOrders(true, 1);
+      //     Get.find<MarketOrderController>().getOrderDetail(id);
+      //   }
+
+      //   await audioPlayer.play(AssetSource('audio/success.mp3'));
+      // }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print("onMessage openapp: ${message.data}");
       print("onMessage open app: ${message.notification}");
+      //Get.to(NotificationScreen());
 
       // String id = message.data['chatId'] ?? message.data['chat_id'];
+      String type = message.data['notification_type'];
+      String id = message.data['chatId'];
+      if (type == 'chat-product') {
+        // add api to get chat detail
+        print('this is the product open app chat id = $id');
+        Get.to(() => ChatConversation(
+              chatId: id,
+              // isSeller: true,
+              isFirstMessage: false,
+              chatItem: null,
+            ));
+      } else if (type == 'chat-tender') {
+        print('this is the tender open app chat id = $id');
+        Get.to(() => ChatConversation(
+              chatId: id,
+              // isSeller: true,
+              isFirstMessage: false,
+              chatItem: null,
+            ));
+      }
+      if (type == "chat") {
+        String id = message.data['chatId'];
+        String receiverId = message.data['receiverId'];
+        // if (Get.find<AuthController>().isLoggedIn()) {
+
+        // Get.find<ChatController>().getTicket(true);
+        print('calling in message get chat list');
+
+        // Get.find<ChatController>().getChatList(id, 0, true);
+        // Get.to(() => ChatConversation(productId: id, receivedId: receiverId),
+        //     preventDuplicates: false);
+      }
     });
   }
 
@@ -106,8 +307,8 @@ class MyNotification {
       String? _type;
       String? _reciverId;
       if (data) {
-        _title = message.data['title'];
-        _body = message.data['body'];
+        _title = message.data['title'] ?? '';
+        _body = message.data['body'] ?? '';
         _orderID = message.data['chatId'];
         _reciverId =
             message.data['senderId']; // replace there receiverId with senderId
@@ -119,10 +320,17 @@ class MyNotification {
                     ? message.data['image']
                     : '${message.data['image']}'
                 : null;
+        if (_type == 'order' || _type == 'shorts_live_story') {
+          _orderID = message.data['notification_id'];
+          if (_type == 'shorts_live_story') {
+            _reciverId = message.data['shorts_type'];
+          }
+        }
       } else {
-        _title = message.notification?.title;
-        _body = message.notification?.body;
-        _orderID = message.notification?.titleLocKey;
+        _title = message.notification?.title ?? '';
+        _body = message.notification?.body ?? '';
+        _orderID = message.data['notification_id'] ??
+            message.notification?.titleLocKey;
         if (GetPlatform.isAndroid) {
           _image = (message.notification?.android?.imageUrl != null)
               ? message.notification?.android?.imageUrl
@@ -149,7 +357,20 @@ class MyNotification {
               _reciverId ?? "",
               fln);
         }
-      } else {
+      }
+      // else if (_type == "video_call" || _type == "audio_call" || _type == "video" || _type == "audio") {
+      //   await showIncomingCall(
+      //     callerName: _title ?? '',
+      //     callId: _orderID ?? '',
+      //     isVideo: _type == 'video_call' || _type == 'video',
+      //     // title: _title ?? '',
+      //     // body: _body ?? '',
+      //     // callType: 'audio / video call',
+      //     // callerId: _reciverId ?? '',
+      //     // fln: fln,
+      //   );
+      // }
+      else {
         await showBigTextNotification(
             _title,
             _body,
@@ -178,14 +399,14 @@ class MyNotification {
         AndroidNotificationDetails(
       "default_channel",
       AppConstants.appName,
-      importance: Importance.max,
+      importance: Importance.high,
       styleInformation: bigTextStyleInformation,
-      priority: Priority.max,
+      priority: Priority.high,
       fullScreenIntent:
           true, // Important for showing notifications in locked screen
       playSound: true,
       icon: '@drawable/notification_icon',
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      // sound: const RawResourceAndroidNotificationSound('notification'),
     );
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -201,10 +422,10 @@ class MyNotification {
     String _type = message['notification_type'];
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      icon: '@drawable/notification_icon',
       'default_channel',
-      'your channel name',
-      sound: RawResourceAndroidNotificationSound('notification'),
+      AppConstants.appName,
+      icon: '@drawable/notification_icon',
+      // sound: RawResourceAndroidNotificationSound('notification'),
       importance: Importance.high,
       priority: Priority.high,
     );
@@ -239,12 +460,12 @@ class MyNotification {
       "default_channel",
       AppConstants.appName,
       largeIcon: FilePathAndroidBitmap(largeIconPath),
-      priority: Priority.max,
+      priority: Priority.high,
       playSound: true,
       styleInformation: bigPictureStyleInformation,
-      importance: Importance.max,
+      importance: Importance.high,
       icon: '@drawable/notification_icon',
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      // sound: const RawResourceAndroidNotificationSound('notification'),
     );
     final NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -263,21 +484,27 @@ class MyNotification {
   }
 }
 
-Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
-  var androidInitialize =
-      const AndroidInitializationSettings('@drawable/notification_icon');
-  var iOSInitialize = const DarwinInitializationSettings(
+@pragma('vm:entry-point')
+Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  // Initialize the plugin (required in background)
+  const androidInit =
+      AndroidInitializationSettings('@drawable/notification_icon');
+  const iOSInit = DarwinInitializationSettings(
       requestBadgePermission: true,
       requestAlertPermission: true,
       requestSoundPermission: true,
       defaultPresentAlert: true,
       defaultPresentBadge: true,
       defaultPresentSound: true);
-  var initializationsSettings =
-      InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin.initialize(initializationsSettings);
-  //MyNotification.showNotification(message.data, flutterLocalNotificationsPlugin);
-  // MyNotification.showNotification(message, flutterLocalNotificationsPlugin, true);
+  const initSettings = InitializationSettings(
+    android: androidInit,
+    iOS: iOSInit,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
+
+  final type = message.data['notification_type'] ?? '';
+  print('🔔 Received background FCM of type: $type');
 }

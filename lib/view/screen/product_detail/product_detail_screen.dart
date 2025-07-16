@@ -2,6 +2,7 @@ import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
+import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../data/model/response/chat/chat_list_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
 import '../../base/custom_favorite_button.dart';
@@ -588,54 +590,103 @@ class ProductDetailScreen extends StatelessWidget {
                                 .selectedAccountModel!.userId
                                 .toString();
                             print('this is my user id = $myUserId ');
+                            final myUser = userState.userInfo?.data;
+                            final chatItem = ChatItem(
+                              chatId: 0,
+                              // int.parse(getChatId(userState, state)),
+                              firebaseChatId:
+                                  "product_${state.productDetailModel?.data?.id}_user_$myUserId",
+                              type: 'product',
+                              product: ProductListItem(
+                                id: state.productDetailModel?.data?.id,
+                                name: state.productDetailModel?.data?.name,
+                                price: state.productDetailModel?.data?.price,
+                                description:
+                                    state.productDetailModel?.data?.description,
+                                slug: state.productDetailModel?.data?.slug,
+                                quantity:
+                                    state.productDetailModel?.data?.quantity,
+                                image: state.productDetailModel?.data?.images
+                                            ?.isNotEmpty ==
+                                        true
+                                    ? state.productDetailModel?.data?.images![0]
+                                        .thumb
+                                    : '',
+                                isFavorite: state
+                                        .productDetailModel?.data?.isFavorite ??
+                                    false,
+                                user: state.productDetailModel?.data?.user,
+                              ),
+                              tender: TenderItem(),
+                              user: User(
+                                id: myUser?.id,
+                                name: myUser?.name,
+                                image: myUser?.image,
+                                phone: myUser?.phone,
+                                email:
+                                    state.productDetailModel?.data?.user?.email,
+                                fcmToken: myUser?.fcmToken,
+                              ),
+                              company: state.productDetailModel?.data?.company,
+                              lastMessage: state.productDetailModel?.data?.name,
+                              lastMessageDate:
+                                  state.productDetailModel?.data?.createdAt,
+                              userUnreadCount: 0,
+                              productOwnerUnreadCount: 0,
+                              createdAt:
+                                  state.productDetailModel?.data?.createdAt,
+                            );
                             Get.to(() => ChatConversation(
-                                  isSeller: false,
-                                  product: ProductListItem(
-                                    id: state.productDetailModel?.data?.id,
-                                    name: state.productDetailModel?.data?.name,
-                                    price:
-                                        state.productDetailModel?.data?.price,
-                                    description: state
-                                        .productDetailModel?.data?.description,
-                                    slug: state.productDetailModel?.data?.slug,
-                                    quantity: state
-                                        .productDetailModel?.data?.quantity,
-                                    image: state.productDetailModel?.data
-                                                ?.images?.isNotEmpty ==
-                                            true
-                                        ? state.productDetailModel?.data
-                                            ?.images![0].thumb
-                                        : '',
-                                    isFavorite: state.productDetailModel?.data
-                                            ?.isFavorite ??
-                                        false,
-                                    user: state.productDetailModel?.data?.user,
-                                  ),
-                                  receiverId: productUserId,
-                                  // getReceiverId(userState, state),
-                                  senderId: myUserId,
+                                  chatItem: chatItem,
                                   isFirstMessage: true,
+                                  // isSeller: false,
+
+                                  // product: ProductListItem(
+                                  //   id: state.productDetailModel?.data?.id,
+                                  //   name: state.productDetailModel?.data?.name,
+                                  //   price:
+                                  //       state.productDetailModel?.data?.price,
+                                  //   description: state
+                                  //       .productDetailModel?.data?.description,
+                                  //   slug: state.productDetailModel?.data?.slug,
+                                  //   quantity: state
+                                  //       .productDetailModel?.data?.quantity,
+                                  //   image: state.productDetailModel?.data
+                                  //               ?.images?.isNotEmpty ==
+                                  //           true
+                                  //       ? state.productDetailModel?.data
+                                  //           ?.images![0].thumb
+                                  //       : '',
+                                  //   isFavorite: state.productDetailModel?.data
+                                  //           ?.isFavorite ??
+                                  //       false,
+                                  //   user: state.productDetailModel?.data?.user,
+                                  // ),
+                                  // receiverId: productUserId,
+                                  // // getReceiverId(userState, state),
+                                  // senderId: myUserId,
+                                  // isFirstMessage: true,
+                                  // // productId: state.productDetailModel?.data?.id
+                                  // //         .toString() ??
+                                  // //     '',
+                                  // firebaseChatId:
+                                  //     "product_${state.productDetailModel?.data?.id}_user_$myUserId",
+                                  // productName:
+                                  //     state.productDetailModel?.data?.name ??
+                                  //         '',
                                   // productId: state.productDetailModel?.data?.id
                                   //         .toString() ??
                                   //     '',
-                                  firebaseChatId:
-                                      "product_${state.productDetailModel?.data?.id}_user_$myUserId",
-                                  productName:
-                                      state.productDetailModel?.data?.name ??
-                                          '',
-                                  productId: state.productDetailModel?.data?.id
-                                          .toString() ??
-                                      '',
-                                  productPrice: state
-                                          .productDetailModel?.data?.price
-                                          .toString() ??
-                                      '0',
-                                  productUserId: state
-                                          .productDetailModel?.data?.user?.id ??
-                                      0,
-                                  companyId: state.productDetailModel?.data
-                                          ?.company?.id ??
-                                      0,
+                                  // productPrice: state
+                                  //         .productDetailModel?.data?.price
+                                  //         .toString() ??
+                                  //     '0',
+                                  // productUserId: state
+                                  //         .productDetailModel?.data?.user?.id ??
+                                  //     0,
+                                  // companyId: state.productDetailModel?.data
+                                  //         ?.company?.id ??
+                                  //     0,
                                 ));
                           },
                           title: 'Чат с продавцом'),

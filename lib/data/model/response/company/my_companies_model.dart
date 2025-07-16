@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:el_biz/data/model/response/chat/chat_list_model.dart';
+
 MyCompaniesModel myCompaniesModelFromJson(String str) =>
     MyCompaniesModel.fromJson(json.decode(str));
 
@@ -100,7 +102,7 @@ class CompanyItem {
   final String? verificationStatus;
   final String? tinNumber;
   final DateTime? createdAt;
-  final Owner? owner;
+  final User? owner;
   final String? reviewsAverageRating;
 
   CompanyItem({
@@ -133,7 +135,7 @@ class CompanyItem {
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        owner: json["owner"] == null ? null : User.fromJson(json["owner"]),
         reviewsAverageRating: json["reviews_avg_rating"],
       );
 
@@ -154,38 +156,38 @@ class CompanyItem {
       };
 }
 
-class Owner {
-  final int? id;
-  final String? name;
-  final String? email;
-  final String? phone;
-  final String? image;
-  final String? status;
+// class Owner {
+//   final int? id;
+//   final String? name;
+//   final String? email;
+//   final String? phone;
+//   final String? image;
+//   final String? status;
 
-  Owner({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.image,
-    this.status,
-  });
+//   Owner({
+//     this.id,
+//     this.name,
+//     this.email,
+//     this.phone,
+//     this.image,
+//     this.status,
+//   });
 
-  factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        phone: json["phone"],
-        image: json["image"],
-        status: json["status"],
-      );
+//   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
+//         id: json["id"],
+//         name: json["name"],
+//         email: json["email"],
+//         phone: json["phone"],
+//         image: json["image"],
+//         status: json["status"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "image": image,
-        "status": status,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "email": email,
+//         "phone": phone,
+//         "image": image,
+//         "status": status,
+//       };
+// }

@@ -5,6 +5,7 @@ import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/auth/otp_screen.dart';
 import 'package:el_biz/view/screen/auth/password_changed_screen.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
+import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -125,6 +126,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               .read<UserBloc>()
               // ignore: use_build_context_synchronously
               .add(GetUserInfo(context: event.context));
+
+          HomeScreen().loadData(event.context);
 
           Get.offAll(() => DashboardScreen());
           // ignore: use_build_context_synchronously

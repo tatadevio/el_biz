@@ -21,53 +21,62 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/product/product_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
+import '../../../data/model/response/chat/chat_list_model.dart';
+import '../../../data/model/response/chat/chat_list_model.dart' as user;
 import '../../../data/model/response/tender/tender_item_model.dart';
+import '../../../helper/send_notification.dart';
+import '../auth/login.dart';
 import '../select_tender/select_tender_screen.dart';
 import 'widgets/message_item.dart';
 
 class ChatConversation extends StatefulWidget {
-  final bool isSeller;
-  final String receiverId;
-  final String senderId;
+  final ChatItem? chatItem;
   final bool isFirstMessage;
-  final String firebaseChatId;
-  final String chatId;
-  final int userUnread;
-  final int productUserId;
-  final int ownerUnread;
-  final String productName;
-  final String productPrice;
-  final ProductListItem product;
-  final String type;
-  final String
-      productId; // getting to init chat only coming form the product detail screen
-  // final String tenderId;
-  final String
-      tenderId; // getting to init tender chat from tender detail screen
-  final TenderItem? tender;
-  final int companyId;
+  // final bool isSeller;
+  final String? chatId;
+  // final String receiverId;
+  // final String senderId;
+  // final String firebaseChatId;
+  // final String chatId;
+  // final int userUnread;
+  // final int productUserId;
+  // final int ownerUnread;
+  // final String productName;
+  // final String productPrice;
+  // final ProductListItem product;
+  // final String type;
+  // final String
+  //     productId; // getting to init chat only coming form the product detail screen
+  // // final String tenderId;
+  // final String
+  //     tenderId; // getting to init tender chat from tender detail screen
+  // final TenderItem? tender;
+  // final int companyId;
   const ChatConversation({
     super.key,
-    required this.isSeller,
-    this.receiverId = '',
-    required this.senderId,
+    required this.chatItem,
+    // required this.isSeller,
     required this.isFirstMessage,
-    // required this.productId,
-    this.firebaseChatId = '',
-    this.chatId = '',
-    this.userUnread = 0,
-    this.ownerUnread = 0,
-    this.productUserId = 0,
-    required this.productName,
-    required this.productPrice,
-    required this.product,
-    this.type = 'product',
-    this.tenderId = '0',
-    this.tender,
-    required this.companyId,
-    this.productId = '0',
+    this.chatId,
+    // this.receiverId = '',
+    // required this.senderId,
+    // // required this.productId,
+    // this.firebaseChatId = '',
+    // this.chatId = '',
+    // this.userUnread = 0,
+    // this.ownerUnread = 0,
+    // this.productUserId = 0,
+    // required this.productName,
+    // required this.productPrice,
+    // required this.product,
+    // this.type = 'product',
+    // this.tenderId = '0',
+    // this.tender,
+    // required this.companyId,
+    // this.productId = '0',
   });
 
   @override
@@ -84,70 +93,171 @@ class _ChatConversationState extends State<ChatConversation> {
   final ScrollController _scrollController = ScrollController();
   String? _latestFetchedMessageId;
   bool showScrollToBottomButton = false;
+  user.User? senderUser;
+  user.User? receiverUser;
 
   String chatId = '';
+  ChatItem? chatItem;
   @override
   void initState() {
     // _messagesStream = _createOptimizedMessageStream();
+    if (!context.read<AuthBloc>().state.isLoggedIn) {
+      Get.offAll(() => LoginScreen());
+    }
+    if (widget.chatItem == null) {
+      getAllDataWithChatItem();
+    } else {
+      chatItem = widget.chatItem;
 
-    _fetchMessages().then((_) {
-      _listenToNewMessages(); // Start listening only after first fetch
-    });
+      _fetchMessages().then((_) {
+        _listenToNewMessages(); // Start listening only after first fetch
+      });
 
-    _scrollController.addListener(() {
-      // Since reverse: true, pixels == minScrollExtent is bottom (latest messages)
-      bool isAtBottom = _scrollController.position.pixels <=
-          _scrollController.position.minScrollExtent + 300;
+      _scrollController.addListener(() {
+        // Since reverse: true, pixels == minScrollExtent is bottom (latest messages)
+        bool isAtBottom = _scrollController.position.pixels <=
+            _scrollController.position.minScrollExtent + 300;
 
-      if (isAtBottom && showScrollToBottomButton) {
-        setState(() {
-          showScrollToBottomButton = false;
-        });
-      } else if (!isAtBottom && !showScrollToBottomButton) {
-        setState(() {
-          showScrollToBottomButton = true;
-        });
-      }
-      // get more messages
-      if (_scrollController.position.pixels >
-              _scrollController.position.maxScrollExtent - 300 &&
-          !isLoading &&
-          hasMore) {
-        _fetchMessages();
-      }
-    });
+        if (isAtBottom && showScrollToBottomButton) {
+          setState(() {
+            showScrollToBottomButton = false;
+          });
+        } else if (!isAtBottom && !showScrollToBottomButton) {
+          setState(() {
+            showScrollToBottomButton = true;
+          });
+        }
+        // get more messages
+        if (_scrollController.position.pixels >
+                _scrollController.position.maxScrollExtent - 300 &&
+            !isLoading &&
+            hasMore) {
+          _fetchMessages();
+        }
+      });
 
-    Future.delayed(Duration.zero, () {
-      _listenToReceiverSeenStatus();
-      updateChatId();
-    });
+      Future.delayed(Duration.zero, () {
+        _listenToReceiverSeenStatus();
+        updateChatId();
+        updateUser();
+      });
+    }
+
     super.initState();
+  }
+
+  void getAllDataWithChatItem() async {
+    final completer = Completer<ChatItem>();
+
+    context.read<ChatBloc>().add(FetchChatItemFromChatId(
+          chatId: widget.chatId!,
+          completer: completer,
+        ));
+
+    try {
+      final newChatItem = await completer.future;
+      // Do something with chatItem
+      // _initializeChat(chatItem);
+      chatItem = newChatItem;
+      ;
+
+      _fetchMessages().then((_) {
+        _listenToNewMessages(); // Start listening only after first fetch
+      });
+
+      _scrollController.addListener(() {
+        // Since reverse: true, pixels == minScrollExtent is bottom (latest messages)
+        bool isAtBottom = _scrollController.position.pixels <=
+            _scrollController.position.minScrollExtent + 300;
+
+        if (isAtBottom && showScrollToBottomButton) {
+          setState(() {
+            showScrollToBottomButton = false;
+          });
+        } else if (!isAtBottom && !showScrollToBottomButton) {
+          setState(() {
+            showScrollToBottomButton = true;
+          });
+        }
+        // get more messages
+        if (_scrollController.position.pixels >
+                _scrollController.position.maxScrollExtent - 300 &&
+            !isLoading &&
+            hasMore) {
+          _fetchMessages();
+        }
+      });
+
+      Future.delayed(Duration.zero, () {
+        _listenToReceiverSeenStatus();
+        updateChatId();
+        updateUser();
+      });
+    } catch (e) {
+      print("Error fetching chat item: $e");
+      Get.back();
+    }
+  }
+
+  updateUser() {
+    if (chatItem?.user?.id ==
+        context.read<UserBloc>().state.userInfo?.data?.id) {
+      senderUser = chatItem?.user;
+      receiverUser = chatItem?.company?.owner;
+    } else {
+      senderUser = chatItem?.company?.owner;
+      receiverUser = chatItem?.user;
+    }
+    // if (chatItem?.type == 'product') {
+    //   if (chatItem?.user?.id ==
+    //       context.read<UserBloc>().state.userInfo?.data?.id) {
+    //     senderUser = chatItem?.user;
+    //     receiverUser = chatItem?.product?.user;
+    //   } else {
+    //     senderUser = chatItem?.product?.user;
+    //     receiverUser = chatItem?.user;
+    //   }
+    // } else {
+    //   if (chatItem?.user?.id ==
+    //       context.read<UserBloc>().state.userInfo?.data?.id) {
+    //     senderUser = chatItem?.user;
+    //     receiverUser = chatItem?.tender?.company?.owner;
+    //   } else {
+    //     senderUser = chatItem?.tender?.company?.owner;
+    //     receiverUser = chatItem?.user;
+    //   }
+    // }
   }
 
   updateChatId() async {
     int myUserId = context.read<UserBloc>().state.userInfo!.data!.id!;
-    if (widget.chatId != '' && widget.isFirstMessage == false) {
+    if (chatItem?.chatId != '' && widget.isFirstMessage == false) {
       setState(() {
-        chatId = widget.chatId;
+        chatId = chatItem?.chatId.toString() ?? '';
       });
 
       context.read<ChatBloc>().add(UpdateUnReadCount(
-          chatId: widget.chatId,
-          userCount: widget.productUserId != myUserId ? 0 : widget.userUnread,
-          ownerCount:
-              widget.productUserId == myUserId ? 0 : widget.ownerUnread));
+          chatId: chatItem?.chatId.toString() ?? '',
+          userCount: chatItem?.product?.user?.id != myUserId
+              ? 0
+              : chatItem?.userUnreadCount ?? 0,
+          ownerCount: chatItem?.company?.owner?.id == myUserId
+              ? 0
+              : chatItem?.productOwnerUnreadCount ?? 0));
     } else {
       final completer = Completer<String>();
 
       context.read<ChatBloc>().add(
             SendMessage(
-                productId:
-                    widget.type == 'tender' ? '0' : widget.productId.toString(),
+                productId: chatItem?.type == 'tender'
+                    ? '0'
+                    : chatItem?.product?.id.toString() ?? '0',
 
                 // widget.productId,
-                type: widget.type,
-                tenderId:
-                    widget.type == 'tender' ? widget.tenderId.toString() : '0',
+                type: chatItem?.type ?? '',
+                tenderId: chatItem?.type == 'tender'
+                    ? chatItem?.tender?.id.toString() ?? '0'
+                    : '0',
                 // widget.tenderId,
                 completer: completer),
           );
@@ -173,7 +283,7 @@ class _ChatConversationState extends State<ChatConversation> {
 
     Query query = FirebaseFirestore.instance
         .collection('chat')
-        .doc(widget.firebaseChatId)
+        .doc(chatItem?.firebaseChatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .limit(10);
@@ -207,46 +317,10 @@ class _ChatConversationState extends State<ChatConversation> {
     }
   }
 
-  // Update your _fetchMessages function
-  // Future<void> _fetchMessages() async {
-  //   if (isLoading) return;
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-
-  //   Query query = FirebaseFirestore.instance
-  //       .collection('chat')
-  //       .doc(widget.firebaseChatId)
-  //       .collection('messages')
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(10);
-
-  //   if (lastDocument != null) {
-  //     query = query.startAfterDocument(lastDocument!);
-  //   }
-
-  //   QuerySnapshot snapshot = await query.get();
-
-  //   if (snapshot.docs.isNotEmpty) {
-  //     if (lastDocument == null) {
-  //       _latestFetchedMessageId = snapshot.docs.first.id;
-  //     }
-
-  //     lastDocument = snapshot.docs.last;
-  //     messages.addAll(snapshot.docs);
-  //   } else {
-  //     hasMore = false;
-  //   }
-
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
-
   void _listenToNewMessages() {
     FirebaseFirestore.instance
         .collection('chat')
-        .doc(widget.firebaseChatId)
+        .doc(chatItem?.firebaseChatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .limit(1)
@@ -277,7 +351,7 @@ class _ChatConversationState extends State<ChatConversation> {
 
     await FirebaseFirestore.instance
         .collection('chat')
-        .doc(widget.firebaseChatId)
+        .doc(chatItem?.firebaseChatId)
         .collection('messages')
         .doc(messageId)
         .update({
@@ -287,7 +361,7 @@ class _ChatConversationState extends State<ChatConversation> {
     });
     await FirebaseFirestore.instance
         .collection('chat')
-        .doc(widget.firebaseChatId)
+        .doc(chatItem?.firebaseChatId)
         .update({
       'read': true,
       'seen_at': FieldValue.serverTimestamp(),
@@ -298,7 +372,7 @@ class _ChatConversationState extends State<ChatConversation> {
   void _listenToReceiverSeenStatus() {
     FirebaseFirestore.instance
         .collection('chat')
-        .doc(widget.firebaseChatId)
+        .doc(chatItem?.firebaseChatId)
         .collection('messages')
         .where('sender_type', isEqualTo: "user")
         .where('read', isEqualTo: true)
@@ -330,19 +404,19 @@ class _ChatConversationState extends State<ChatConversation> {
     try {
       if (selectedProduct != null) {
         context.read<ChatBloc>().add(UpdateLastMessage(
-              chatId: widget.chatId,
+              chatId: chatItem?.chatId.toString() ?? '',
               message: '🛍 ${selectedProduct.name}',
               userCount: 0,
               ownerCount: 0,
-              type: widget.type,
+              type: chatItem?.type ?? '',
             ));
       } else {
         context.read<ChatBloc>().add(UpdateLastMessage(
-              chatId: widget.chatId,
+              chatId: chatItem?.chatId.toString() ?? '',
               message: '🛍 ${selectedTender?.title}',
               userCount: 0,
               ownerCount: 0,
-              type: widget.type,
+              type: chatItem?.type ?? '',
             ));
       }
     } catch (e) {
@@ -373,24 +447,24 @@ class _ChatConversationState extends State<ChatConversation> {
           dense: true,
           contentPadding: const EdgeInsets.all(0),
           leading: CustomImage(
-              image: widget.type == 'product'
-                  ? widget.product.image ?? ''
-                  : widget.tender?.image ?? '',
+              image: chatItem?.type == 'product'
+                  ? chatItem?.product?.image ?? ''
+                  : chatItem?.tender?.image ?? '',
               height: 32,
               width: 32,
               radius: 5.3),
           title: Text(
-            widget.type == 'product'
-                ? widget.product.name ?? ''
-                : widget.tender?.title ?? '',
+            chatItem?.type == 'product'
+                ? chatItem?.product?.name ?? ''
+                : chatItem?.tender?.title ?? '',
             // widget.productName,
             // 'Садовая мебель Loft',
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           subtitle: Text(
-            widget.type == 'product'
-                ? '${widget.productPrice} сом/шт'
-                : "${widget.tender?.budgetFrom} - ${widget.tender?.budgetTo} сом",
+            chatItem?.type == 'product'
+                ? '${chatItem?.product?.price} сом/шт'
+                : "${chatItem?.tender?.budgetFrom} - ${chatItem?.tender?.budgetTo} сом",
             style: body14.copyWith(color: ColorResources.blue),
           ),
         ),
@@ -408,7 +482,8 @@ class _ChatConversationState extends State<ChatConversation> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      if (!widget.isSeller) ...[
+                      if (context.read<UserBloc>().state.userInfo?.data?.id ==
+                          chatItem?.user?.id) ...[
                         const Expanded(child: SizedBox()),
                         const SizedBox(
                           width: 10,
@@ -423,7 +498,7 @@ class _ChatConversationState extends State<ChatConversation> {
                               Border.all(width: 1, color: ColorResources.blue),
                           borderRadius: BorderRadius.circular(8),
                           boxShaow: const [ColorResources.shadow1],
-                          onTap: widget.type == 'tender'
+                          onTap: chatItem?.type == 'tender'
                               ? () {
                                   Get.to(() => SelectTenderScreen(
                                         alreadySelectedItems: [],
@@ -436,7 +511,13 @@ class _ChatConversationState extends State<ChatConversation> {
                                           if (selectedTender != null) {
                                             Map<String, dynamic> sendMessage = {
                                               "read": false,
-                                              "sender_type": widget.isSeller
+                                              "sender_type": context
+                                                          .read<UserBloc>()
+                                                          .state
+                                                          .userInfo
+                                                          ?.data
+                                                          ?.id !=
+                                                      chatItem?.user?.id
                                                   ? 'seller'
                                                   : 'user',
 
@@ -452,24 +533,26 @@ class _ChatConversationState extends State<ChatConversation> {
                                               'last_fcm': '',
                                               // userModel.fcmToken ?? '',
                                               "sender": {
-                                                "id": widget.senderId,
+                                                "id": senderUser?.id,
                                                 "name": myUser?.name ?? '',
                                                 "image": myUser?.image ?? '',
                                                 "phone": myUser?.phone ?? '',
                                                 "email": myUser?.email ?? '',
                                               },
                                               "receiver": {
-                                                "id": widget.receiverId,
+                                                "id": receiverUser?.id,
                                               },
                                             };
                                             await FirebaseFirestore.instance
                                                 .collection('chat')
-                                                .doc(widget.firebaseChatId)
+                                                .doc(widget
+                                                    .chatItem?.firebaseChatId)
                                                 .collection('messages')
                                                 .add(sendMessage);
                                             await FirebaseFirestore.instance
                                                 .collection('chat')
-                                                .doc(widget.firebaseChatId)
+                                                .doc(widget
+                                                    .chatItem?.firebaseChatId)
                                                 .set(sendMessage);
                                             updateLastMessage(
                                                 null, selectedTender);
@@ -477,13 +560,27 @@ class _ChatConversationState extends State<ChatConversation> {
                                             context
                                                 .read<TendersBloc>()
                                                 .add(ClearSelectedTender());
+                                            sendNotificationToToken(
+                                                title: myUser?.name ?? '',
+                                                // "New Message",
+                                                message:
+                                                    '🛍 ${selectedTender.title}',
+                                                fcmToken:
+                                                    receiverUser?.fcmToken ??
+                                                        await getFcmToken(),
+                                                chatId: widget.chatId,
+                                                senderId:
+                                                    senderUser?.id.toString() ??
+                                                        '',
+                                                type:
+                                                    "chat-${widget.chatItem?.type}");
 
                                             Get.back();
                                           }
                                         },
                                       ));
-                                      // send notification to the receiver
-                                      // sendNotification(widget.receiverId, widget.senderId, widget.type);
+                                  // send notification to the receiver
+                                  // sendNotification(widget.receiverId, widget.senderId, widget.type);
                                 }
                               : () {
                                   context
@@ -506,7 +603,13 @@ class _ChatConversationState extends State<ChatConversation> {
                                                 .selectedProduct;
                                         Map<String, dynamic> sendMessage = {
                                           "read": false,
-                                          "sender_type": widget.isSeller
+                                          "sender_type": context
+                                                      .read<UserBloc>()
+                                                      .state
+                                                      .userInfo
+                                                      ?.data
+                                                      ?.id !=
+                                                  chatItem?.user?.id
                                               ? 'seller'
                                               : 'user',
 
@@ -522,27 +625,39 @@ class _ChatConversationState extends State<ChatConversation> {
                                           'last_fcm': '',
                                           // userModel.fcmToken ?? '',
                                           "sender": {
-                                            "id": widget.senderId,
+                                            "id": senderUser?.id,
                                             "name": myUser?.name ?? '',
                                             "image": myUser?.image ?? '',
                                             "phone": myUser?.phone ?? '',
                                             "email": myUser?.email ?? '',
                                           },
                                           "receiver": {
-                                            "id": widget.receiverId,
+                                            "id": receiverUser?.id,
                                           },
                                         };
                                         await FirebaseFirestore.instance
                                             .collection('chat')
-                                            .doc(widget.firebaseChatId)
+                                            .doc(chatItem?.firebaseChatId)
                                             .collection('messages')
                                             .add(sendMessage);
                                         await FirebaseFirestore.instance
                                             .collection('chat')
-                                            .doc(widget.firebaseChatId)
+                                            .doc(chatItem?.firebaseChatId)
                                             .set(sendMessage);
                                         updateLastMessage(
                                             selectedProduct, null);
+                                        sendNotificationToToken(
+                                            title: myUser?.name ?? '',
+                                            // "New Message",
+                                            message:
+                                                '🛍 ${selectedProduct?.name ?? ''}',
+                                            fcmToken: receiverUser?.fcmToken ??
+                                                await getFcmToken(),
+                                            chatId: widget.chatId,
+                                            senderId:
+                                                senderUser?.id.toString() ?? '',
+                                            type:
+                                                "chat-${widget.chatItem?.type}");
                                         clearSelectedProduct();
 
                                         Get.back();
@@ -554,14 +669,15 @@ class _ChatConversationState extends State<ChatConversation> {
                                   // sendNotification(widget.receiverId, widget.senderId, widget.type);
                                 },
                           child: Text(
-                            widget.type == 'tender'
+                            chatItem?.type == 'tender'
                                 ? 'select_tender'.tr
                                 : 'select_products'.tr,
                             style: textSm.copyWith(color: ColorResources.blue),
                           ),
                         ),
                       ),
-                      if (widget.isSeller) ...[
+                      if (context.read<UserBloc>().state.userInfo?.data?.id !=
+                          chatItem?.user?.id) ...[
                         const SizedBox(
                           width: 10,
                         ),
@@ -577,21 +693,23 @@ class _ChatConversationState extends State<ChatConversation> {
                                 //     :
 
                                 () {
-                              print("this is buyer id = ${widget.receiverId}");
+                              print("this is buyer id = ${receiverUser?.id}");
                               context
                                   .read<AgreementBloc>()
                                   .add(GetPaymentMethod(currentPage: 1));
-                                  Get.to(() => ConditionsCreatingContractScreen(
-                                     product: widget.product,
-                                    tenderItem: widget.tender ?? TenderItem(),
-                                    buyerId: widget.receiverId,
-                                    type: widget.type,
+                              Get.to(() => ConditionsCreatingContractScreen(
+                                    product:
+                                        chatItem?.product ?? ProductListItem(),
+                                    tenderItem:
+                                        chatItem?.tender ?? TenderItem(),
+                                    buyerId: receiverUser?.id.toString() ?? '',
+                                    type: chatItem?.type ?? '',
                                     // tenderId:
                                     //     widget.tender?.id.toString() ?? '0',
                                     // productId: widget.productId,
-                                    companyId: widget.companyId,
+                                    companyId: chatItem?.company?.id ?? 0,
                                   ));
-                              
+
                               // there have to send the company id
                             },
                             child: Container(
@@ -635,93 +753,108 @@ class _ChatConversationState extends State<ChatConversation> {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: messages.isEmpty && !isLoading
-                ? Center(
-                    child: Text(
-                      'no_messages'.tr,
-                      style: body14.copyWith(color: ColorResources.gray),
-                    ),
-                  )
-                : messages.isEmpty && isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : Stack(
-                        children: [
-                          ListView.builder(
-                            controller: _scrollController,
-                            reverse: true,
-                            itemCount: messages.length + (isLoading ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              if (index == messages.length) {
-                                // Show loading indicator at the bottom
-                                return const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
-                                );
-                              }
-
-                              var messageData = messages[index];
-                              bool isMe =
-                                  messageData['sender']['id'].toString() ==
-                                      widget.senderId;
-
-                              if (!isMe && !messageData['read']) {
-                                _markMessageAsSeen(messageData.id);
-                              }
-
-                              return ChatMessageWidget1(
-                                data: messageData as QueryDocumentSnapshot,
-                                isMe: isMe,
-                              );
-                            },
-                          ),
-                          if (showScrollToBottomButton)
-                            Positioned(
-                              bottom: 20,
-                              right: 20,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _scrollController.animateTo(
-                                    _scrollController.position
-                                        .minScrollExtent, // This is the bottom in reverse mode
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeOut,
+          BlocBuilder<ChatBloc, ChatState>(builder: (context, chatState) {
+            if (chatState.isLoading) {
+              return Expanded(
+                  child: const Center(child: CircularProgressIndicator()));
+            }
+            return Expanded(
+              child: messages.isEmpty && !isLoading
+                  ? Center(
+                      child: Text(
+                        'no_messages'.tr,
+                        style: body14.copyWith(color: ColorResources.gray),
+                      ),
+                    )
+                  : messages.isEmpty && isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Stack(
+                          children: [
+                            ListView.builder(
+                              controller: _scrollController,
+                              reverse: true,
+                              itemCount: messages.length + (isLoading ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (index == messages.length) {
+                                  // Show loading indicator at the bottom
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
                                   );
-                                },
-                                child: Container(
-                                  height: 32,
-                                  width: 32,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: ColorResources.primary,
-                                  ),
-                                  child: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colors.white,
+                                }
+
+                                var messageData = messages[index];
+                                bool isMe =
+                                    messageData['sender']['id'].toString() ==
+                                        senderUser?.id.toString();
+
+                                if (!isMe && !messageData['read']) {
+                                  _markMessageAsSeen(messageData.id);
+                                }
+
+                                return ChatMessageWidget1(
+                                  data: messageData as QueryDocumentSnapshot,
+                                  isMe: isMe,
+                                );
+                              },
+                            ),
+                            if (showScrollToBottomButton)
+                              Positioned(
+                                bottom: 20,
+                                right: 20,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _scrollController.animateTo(
+                                      _scrollController.position
+                                          .minScrollExtent, // This is the bottom in reverse mode
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut,
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 32,
+                                    width: 32,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: ColorResources.primary,
+                                    ),
+                                    child: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
-          ),
+                          ],
+                        ),
+            );
+          }),
           NewMessageWidget(
-            firebaseChatId: widget.firebaseChatId,
+            firebaseChatId: chatItem?.firebaseChatId ?? '',
             chatId: chatId,
-            receiverId: widget.receiverId,
-            senderId: widget.senderId,
-            productId: widget.type == 'tender'
-                ? widget.tender?.id.toString() ?? '0'
-                : widget.product.id.toString(),
+            receiverId: receiverUser?.id.toString() ?? '',
+            senderId: senderUser?.id.toString() ?? '',
+            productId: chatItem?.type == 'tender'
+                ? chatItem?.tender?.id.toString() ?? '0'
+                : chatItem?.product?.id.toString() ?? '0',
             isFirstMessage: widget.isFirstMessage,
-            userUnread: widget.userUnread,
-            ownerUnread: widget.ownerUnread,
-            productUserId: widget.productUserId,
-            type: widget.type,
+            userUnread: chatItem?.userUnreadCount ?? 0,
+            ownerUnread: chatItem?.productOwnerUnreadCount ?? 0,
+            productUserId: chatItem?.product?.user?.id ?? 0,
+            type: chatItem?.type ?? '',
+            receiverFcmToken: receiverUser?.fcmToken,
           ),
         ],
       ),
     );
+  }
+
+  Future<String> getFcmToken() async {
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverUser?.id.toString() ?? '')
+        .get();
+    return userDoc.data()?['fcmToken'] ?? '';
   }
 }

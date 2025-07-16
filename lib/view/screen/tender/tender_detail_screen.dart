@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../bloc/tender_detail/tender_detail_bloc.dart';
+import '../../../data/model/response/chat/chat_list_model.dart';
 import '../../../data/model/response/company/company_product_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -427,47 +428,89 @@ class TenderDetailScreen extends StatelessWidget {
                           .toString();
 
                       String myUserId = userState.userInfo!.data!.id.toString();
+                      final myUser = userState.userInfo?.data;
+                      ChatItem chatItem = ChatItem(
+                        chatId: 0,
+                        // int.parse(getChatId(userState, state)),
+                        firebaseChatId:
+                            "tender_${state.tenderDetailModel?.data?.id}_user_$myUserId",
+                        type: 'tender',
+                        product: ProductListItem(),
+                        tender: TenderItem(
+                          id: state.tenderDetailModel!.data!.id,
+                          title: state.tenderDetailModel!.data!.title,
+                          description:
+                              state.tenderDetailModel!.data!.description,
+                          budgetFrom: state.tenderDetailModel!.data!.budgetFrom,
+                          budgetTo: state.tenderDetailModel!.data!.budgetTo,
+                          quantity: state.tenderDetailModel!.data!.quantity
+                              .toString(),
+                          status: state.tenderDetailModel!.data!.status,
+                          image: state.tenderDetailModel!.data!.media
+                                      ?.isNotEmpty ==
+                                  true
+                              ? state.tenderDetailModel!.data!.media![0].url
+                              : '',
+                        ),
+                        user: User(
+                          id: myUser?.id,
+                          name: myUser?.name,
+                          image: myUser?.image,
+                          phone: myUser?.phone,
+                          email: myUser?.email,
+                          fcmToken: myUser?.fcmToken,
+                        ),
+                        company: state.tenderDetailModel!.data!.company,
+                        lastMessage: state.tenderDetailModel!.data!.title,
+                        lastMessageDate:
+                            state.tenderDetailModel!.data!.createdAt,
+                        userUnreadCount: 0,
+                        productOwnerUnreadCount: 0,
+                        createdAt: state.tenderDetailModel!.data!.createdAt,
+                      );
                       Get.to(() => ChatConversation(
-                            isSeller: false,
-                            product: ProductListItem(),
-                            tender: TenderItem(
-                              id: state.tenderDetailModel!.data!.id,
-                              title: state.tenderDetailModel!.data!.title,
-                              description:
-                                  state.tenderDetailModel!.data!.description,
-                              budgetFrom:
-                                  state.tenderDetailModel!.data!.budgetFrom,
-                              budgetTo: state.tenderDetailModel!.data!.budgetTo,
-                              quantity: state.tenderDetailModel!.data!.quantity
-                                  .toString(),
-                              status: state.tenderDetailModel!.data!.status,
-                              image: state.tenderDetailModel!.data!.media
-                                          ?.isNotEmpty ==
-                                      true
-                                  ? state.tenderDetailModel!.data!.media![0].url
-                                  : '',
-                            ),
-                            tenderId: tenderDetail.data!.id.toString(),
-                            type: 'tender',
-                            // tender: tenderDetail.data!,
-                            // tenderName: tenderDetail.data!.title ?? '',
-                            receiverId: tenderUserId,
-                            // getReceiverId(userState, state),
-                            senderId: myUserId,
+                            chatItem: chatItem,
                             isFirstMessage: true,
-                            // productId: '0',
-                            firebaseChatId:
-                                "tender_${state.tenderDetailModel?.data?.id}_user_$myUserId",
-                            productName:
-                                state.tenderDetailModel?.data?.title ?? '',
-                            productPrice:
-                                "${state.tenderDetailModel?.data?.budgetFrom}-${state.tenderDetailModel?.data?.budgetTo}",
+                            // isSeller: false,
+                            // product: ProductListItem(),
+                            // tender: TenderItem(
+                            //   id: state.tenderDetailModel!.data!.id,
+                            //   title: state.tenderDetailModel!.data!.title,
+                            //   description:
+                            //       state.tenderDetailModel!.data!.description,
+                            //   budgetFrom:
+                            //       state.tenderDetailModel!.data!.budgetFrom,
+                            //   budgetTo: state.tenderDetailModel!.data!.budgetTo,
+                            //   quantity: state.tenderDetailModel!.data!.quantity
+                            //       .toString(),
+                            //   status: state.tenderDetailModel!.data!.status,
+                            //   image: state.tenderDetailModel!.data!.media
+                            //               ?.isNotEmpty ==
+                            //           true
+                            //       ? state.tenderDetailModel!.data!.media![0].url
+                            //       : '',
+                            // ),
+                            // tenderId: tenderDetail.data!.id.toString(),
+                            // type: 'tender',
+                            // // tender: tenderDetail.data!,
+                            // // tenderName: tenderDetail.data!.title ?? '',
+                            // receiverId: tenderUserId,
+                            // // getReceiverId(userState, state),
+                            // senderId: myUserId,
+                            // isFirstMessage: true,
+                            // // productId: '0',
+                            // firebaseChatId:
+                            //     "tender_${state.tenderDetailModel?.data?.id}_user_$myUserId",
+                            // productName:
+                            //     state.tenderDetailModel?.data?.title ?? '',
+                            // productPrice:
+                            //     "${state.tenderDetailModel?.data?.budgetFrom}-${state.tenderDetailModel?.data?.budgetTo}",
 
-                            productUserId: state.tenderDetailModel?.data
-                                    ?.company?.owner?.id ??
-                                0,
-                            companyId:
-                                state.tenderDetailModel?.data?.company?.id ?? 0,
+                            // productUserId: state.tenderDetailModel?.data
+                            //         ?.company?.owner?.id ??
+                            //     0,
+                            // companyId:
+                            //     state.tenderDetailModel?.data?.company?.id ?? 0,
                           ));
                     },
                     title: 'Чат с продавцом'),

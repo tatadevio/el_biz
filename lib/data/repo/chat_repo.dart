@@ -67,4 +67,10 @@ class ChatRepo {
       "product_owner_unread_count": ownerCount
     });
   }
+
+  Future<Response> getChatDetail(String chatId) async {
+    return await apiClient.getData(
+      "${AppConstants.chatListUrl}/$chatId",
+    );
+  }
 }

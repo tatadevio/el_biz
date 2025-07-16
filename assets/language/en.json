@@ -373,6 +373,7 @@
   "companies_passed_moderation" : "Companies that have passed moderation",
   "no_account_found" : "No account found.",
   "all_account" : "All Account",
+  "no_company_found" : "No company found.",
   "please_accept_the_terms_and_conditions" : "Please confirm your agreement with the terms and conditions.",
   "add_tender" : "Add Tender",
   "contract_is" : "Contract is",
@@ -381,5 +382,6 @@
   "take_a_photo" : "Take a photo with camera",
   "choose_from_gallery" : "Select from your photo gallery",
   "select_pdf_file" : "Choose a PDF file from storage",
-  "update_payment_status" : "Update Payment Status"
+  "update_payment_status" : "Update Payment Status",
+  "add_a_caption": "Add a caption"
 }
