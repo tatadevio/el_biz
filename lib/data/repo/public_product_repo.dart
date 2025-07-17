@@ -10,9 +10,9 @@ class PublicProductRepo {
 
   PublicProductRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> getPublicProducts(int page) async {
+  Future<Response> getPublicProducts(int page, String orderBy, String direction) async {
     return await apiClient
-        .getData("${AppConstants.publicProductUrl}?page=$page");
+        .getData("${AppConstants.publicProductUrl}?page=$page&order_by=$orderBy&order_direction=$direction");
   }
 
   Future<Response> getPublicFilterProducts(

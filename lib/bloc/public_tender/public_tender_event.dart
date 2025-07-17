@@ -10,11 +10,14 @@ sealed class PublicTenderEvent extends Equatable {
 class GetPublicTender extends PublicTenderEvent {
   final int currentPage;
   final String? direction;
+  final String? orderBy;
 
-  const GetPublicTender(this.currentPage, {required this.direction});
+  const GetPublicTender(this.currentPage,
+      {required this.direction, this.orderBy});
 
   @override
-  List<Object> get props => [currentPage, direction ?? 'asc'];
+  List<Object> get props =>
+      [currentPage, direction ?? 'asc', orderBy ?? 'created_at'];
 }
 
 class TogglePublicTenderFavorite extends PublicTenderEvent {
@@ -33,7 +36,6 @@ class ToggleFavoritePublicTenderInList extends PublicTenderEvent {
   @override
   List<Object> get props => [tenderId];
 }
-
 
 class UpdateTenderFilterEnable extends PublicTenderEvent {
   final bool isEnable;

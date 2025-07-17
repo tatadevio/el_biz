@@ -31,9 +31,10 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
     }
 
     try {
-      print('public products status code = start try');
-      final response =
-          await publicProductRepo.getPublicProducts(event.currentPage);
+      final response = await publicProductRepo.getPublicProducts(
+          event.currentPage,
+          event.orderBy ?? 'created_at',
+          event.direction ?? 'asc');
       print('public products status code =  ${response.statusCode}');
 
       if (response.statusCode == 200) {

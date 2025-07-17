@@ -141,6 +141,8 @@
   "material": "Material",
   "high_rating": "High rating",
   "reset": "Reset",
+  "rated_4_5_stars": "Rated 4 & 5 Stars",
+  "rated_2_3_stars": "Rated 2 & 3 Stars",
   "price_including_VAT": "Price including VAT",
   "price_excuding_taxes": "Price excluding taxes",
   "companies_rated_4_and_5": "Companies rated 4 and 5",
@@ -383,5 +385,12 @@
   "choose_from_gallery" : "Select from your photo gallery",
   "select_pdf_file" : "Choose a PDF file from storage",
   "update_payment_status" : "Update Payment Status",
-  "add_a_caption": "Add a caption"
+  "add_a_caption": "Add a caption",
+  "profile_type": "Profile type",
+  "profile_type_all": "All profiles",
+  "profile_type_individual": "Individuals",
+  "profile_type_legal_entity": "Legal entities",
+  "no_internet_connection": "No Internet Connection",
+  "back_online": "Back Online",
+  "search_for_companies": "Search for companies..."
 }

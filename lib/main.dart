@@ -51,6 +51,7 @@ import 'utils/appConstant.dart';
 import 'utils/color_resources.dart';
 import 'helper/get_di.dart' as di;
 import 'utils/messages.dart';
+import 'view/base/connectivity_banner.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -131,53 +132,57 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {
-        return SafeArea(
-          bottom: Platform.isAndroid ? true : false,
-          top: false,
-          child: GetMaterialApp(
-            localizationsDelegates: const [
-              FormBuilderLocalizations.delegate,
-              //GlobalMaterialLocalizations.delegate,
-              //GlobalWidgetsLocalizations.delegate,
-            ],
-            locale: localizationController.locale,
-            translations: Messages(languages: languages),
-            fallbackLocale: Locale(AppConstants.languages[0].languageCode,
-                AppConstants.languages[0].countryCode),
-            builder: BotToastInit(),
-            title: AppConstants.appName,
-            debugShowCheckedModeBanner: false,
-            navigatorKey: Get.key,
-            theme: light(
-              color: ColorResources.primary,
-            ).copyWith(
-              unselectedWidgetColor: ColorResources.lgColor,
-              progressIndicatorTheme: const ProgressIndicatorThemeData(
-                color: ColorResources.primary,
-              ),
-              scaffoldBackgroundColor: ColorResources.backgroundColor,
-              radioTheme: RadioThemeData(
-                // fillColor: WidgetStateProperty.all(ColorResources.primary),
-                fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return ColorResources.primary;
-                  }
-                  return ColorResources.lgColor;
-                }),
-              ),
-              checkboxTheme: const CheckboxThemeData(
-                  // fillColor: WidgetStateProperty.all(ColorResources.primary),
-                  // checkColor: WidgetStateProperty.all(ColorResources.blue),
+        return GetMaterialApp(
+          localizationsDelegates: const [
+            FormBuilderLocalizations.delegate,
+            //GlobalMaterialLocalizations.delegate,
+            //GlobalWidgetsLocalizations.delegate,
+          ],
+          locale: localizationController.locale,
+          translations: Messages(languages: languages),
+          fallbackLocale: Locale(AppConstants.languages[0].languageCode,
+              AppConstants.languages[0].countryCode),
+          builder: (context, child) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  child!,
+                  const Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ConnectivityBanner(),
                   ),
-              appBarTheme: AppBarTheme(
-                backgroundColor: Colors.white,
-                surfaceTintColor: Colors.white,
-                scrolledUnderElevation: 0,
+                ],
               ),
+            );
+          },
+          title: AppConstants.appName,
+          debugShowCheckedModeBanner: false,
+          navigatorKey: Get.key,
+          theme: light(
+            color: ColorResources.primary,
+          ).copyWith(
+            unselectedWidgetColor: ColorResources.lgColor,
+            progressIndicatorTheme: const ProgressIndicatorThemeData(
+              color: ColorResources.primary,
             ),
-            initialRoute: RouteHelper.getSplashRoute(),
-            getPages: RouteHelper.routes,
+            scaffoldBackgroundColor: ColorResources.backgroundColor,
+            radioTheme: RadioThemeData(
+              fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return ColorResources.primary;
+                }
+                return ColorResources.lgColor;
+              }),
+            ),
+            checkboxTheme: const CheckboxThemeData(),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              scrolledUnderElevation: 0,
+            ),
           ),
+          initialRoute: RouteHelper.getSplashRoute(),
+          getPages: RouteHelper.routes,
         );
       }),
     );

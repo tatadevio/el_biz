@@ -29,6 +29,7 @@ class _TenderScreenState extends State<TenderScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
   String direction = 'asc';
+  String orderBy = 'created_at';
 
   @override
   void initState() {
@@ -240,12 +241,196 @@ class _TenderScreenState extends State<TenderScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          setState(() {
-                            direction = direction == 'asc' ? 'desc' : 'asc';
-                          });
-                          context
-                              .read<PublicTenderBloc>()
-                              .add(GetPublicTender(1, direction: direction));
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) {
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                return Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Sort by',
+                                            style: h16.copyWith(
+                                                color: ColorResources.darkGray,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          IconButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            icon: const Icon(Icons.close),
+                                            color: ColorResources.gray,
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.1),
+                                              spreadRadius: 1,
+                                              blurRadius: 5,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            RadioListTile<String>(
+                                              value: 'newest',
+                                              groupValue: direction == 'desc' &&
+                                                      orderBy == 'created_at'
+                                                  ? 'newest'
+                                                  : null,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  direction = 'desc';
+                                                  orderBy = 'created_at';
+                                                });
+                                                context
+                                                    .read<PublicTenderBloc>()
+                                                    .add(GetPublicTender(1,
+                                                        direction: direction,
+                                                        orderBy: orderBy));
+                                                Navigator.pop(context);
+                                              },
+                                              title: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                      Images.svgArrowUpDown),
+                                                  const SizedBox(width: 12),
+                                                  Text('Newest first',
+                                                      style: body14),
+                                                ],
+                                              ),
+                                              activeColor: ColorResources.green,
+                                            ),
+                                            RadioListTile<String>(
+                                              value: 'oldest',
+                                              groupValue: direction == 'asc' &&
+                                                      orderBy == 'created_at'
+                                                  ? 'oldest'
+                                                  : null,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  direction = 'asc';
+                                                  orderBy = 'created_at';
+                                                });
+                                                context
+                                                    .read<PublicTenderBloc>()
+                                                    .add(GetPublicTender(1,
+                                                        direction: direction,
+                                                        orderBy: orderBy));
+                                                Navigator.pop(context);
+                                              },
+                                              title: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                      Images.svgArrowUpDown),
+                                                  const SizedBox(width: 12),
+                                                  Text('Oldest first',
+                                                      style: body14),
+                                                ],
+                                              ),
+                                              activeColor: ColorResources.green,
+                                            ),
+                                            RadioListTile<String>(
+                                              value: 'az',
+                                              groupValue: direction == 'asc' &&
+                                                      orderBy == 'title'
+                                                  ? 'az'
+                                                  : null,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  direction = 'asc';
+                                                  orderBy = 'title';
+                                                });
+                                                context
+                                                    .read<PublicTenderBloc>()
+                                                    .add(GetPublicTender(1,
+                                                        direction: direction,
+                                                        orderBy: orderBy));
+                                                Navigator.pop(context);
+                                              },
+                                              title: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                      Images.svgArrowUpDown),
+                                                  const SizedBox(width: 12),
+                                                  Text('Title (A-Z)',
+                                                      style: body14),
+                                                ],
+                                              ),
+                                              activeColor: ColorResources.green,
+                                            ),
+                                            RadioListTile<String>(
+                                              value: 'za',
+                                              groupValue: direction == 'desc' &&
+                                                      orderBy == 'title'
+                                                  ? 'za'
+                                                  : null,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  direction = 'desc';
+                                                  orderBy = 'title';
+                                                });
+                                                context
+                                                    .read<PublicTenderBloc>()
+                                                    .add(GetPublicTender(1,
+                                                        direction: direction,
+                                                        orderBy: orderBy));
+                                                Navigator.pop(context);
+                                              },
+                                              title: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                      Images.svgArrowUpDown),
+                                                  const SizedBox(width: 12),
+                                                  Text('Title (Z-A)',
+                                                      style: body14),
+                                                ],
+                                              ),
+                                              activeColor: ColorResources.green,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                            },
+                          );
+
+                          // setState(() {
+                          //   direction = direction == 'asc' ? 'desc' : 'asc';
+                          // });
+                          // context
+                          //     .read<PublicTenderBloc>()
+                          //     .add(GetPublicTender(1, direction: direction));
                         },
                         child: Container(
                           height: 40,

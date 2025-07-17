@@ -9,10 +9,13 @@ sealed class PublicProductEvent extends Equatable {
 
 class GetPublicProduct extends PublicProductEvent {
   final int currentPage;
-  const GetPublicProduct(this.currentPage);
+  final String? orderBy;
+  final String? direction;
+  const GetPublicProduct(this.currentPage, {this.orderBy, this.direction});
 
   @override
-  List<Object> get props => [currentPage];
+  List<Object> get props =>
+      [currentPage, orderBy ?? 'created_at', direction ?? 'asc'];
 }
 
 class RemoveProductFromFavoriteList extends PublicProductEvent {

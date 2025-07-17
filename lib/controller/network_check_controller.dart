@@ -1,37 +1,34 @@
-// import 'package:connectivity_plus/connectivity_plus.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:get/get.dart';
 
-// import 'home_controller.dart';
+enum NetworkStatus { connected, disconnected, connecting }
 
+class NetworkCheckController extends GetxController {
+  final Connectivity _connectivity = Connectivity();
+  final Rx<NetworkStatus> networkStatus = NetworkStatus.connected.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _initConnectivity();
+  }
 
-// class NetworkConnectivityController extends GetxController{
-//   final Connectivity _connectivity = Connectivity();
+  Future<void> _initConnectivity() async {
+    final result = await _connectivity.checkConnectivity();
+    _updateConnectionStatus(result);
+  }
 
-
-//   @override
-//   void onInit() {
-//     super.onInit();
-//     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-//   }
-
-
-//   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-//     if(ConnectivityResult.none == result){
-//       Get.find<HomeController>().updateConnection(true);
-//       Get.rawSnackbar(
-//         backgroundColor: Colors.red,
-//         duration: const Duration(seconds: 2),
-//         messageText: Text("check_your_connection".tr)
-//       );
-//     }else{
-//       Get.find<HomeController>().updateConnection(false);
-//       if(Get.isSnackbarOpen){
-//         Get.closeCurrentSnackbar();
-//       }
-//     }
-//   }
-
-
-// }
+  void _updateConnectionStatus(ConnectivityResult result) {
+    if (result == ConnectivityResult.none) {
+      networkStatus.value = NetworkStatus.disconnected;
+    } else {
+      // Only set to connected if previously disconnected
+      if (networkStatus.value == NetworkStatus.disconnected) {
+        networkStatus.value = NetworkStatus.connected;
+      } else {
+        networkStatus.value = NetworkStatus.connected;
+      }
+    }
+  }
+}

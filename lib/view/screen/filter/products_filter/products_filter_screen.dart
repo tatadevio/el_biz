@@ -44,12 +44,11 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
   //   'all_companies',
   // ];
   List<RatingOption> ratingOptions = [
-    RatingOption(name: 'Rated 4 & 5 Stars', value: '45'),
-    RatingOption(name: 'Rated 2 & 3 Stars', value: '23'),
-    RatingOption(name: 'All Companies', value: 'all'),
+    RatingOption(name: 'rated_4_5_stars'.tr, value: '45'),
+    RatingOption(name: 'rated_2_3_stars'.tr, value: '23'),
+    RatingOption(name: 'all'.tr, value: 'all'),
   ];
-  RatingOption selectedRating =
-      RatingOption(name: 'All Companies', value: 'all');
+  RatingOption selectedRating = RatingOption(name: 'all'.tr, value: 'all');
   bool isVerifiedCompany = false;
 
   // List<String> colors = [
@@ -948,75 +947,75 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Divider(),
                         ),
-                        Text(
-                          'currency'.tr,
-                          style: h16.copyWith(color: ColorResources.darkGray),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: () {
-                                context
-                                    .read<ProductBloc>()
-                                    .add(const ChangeCurrency('KGS'));
-                              },
-                              child: Container(
-                                width: width * 0.4,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    width: 1,
-                                    color: productController.selectedCurrency ==
-                                            'KGS'
-                                        ? ColorResources.green
-                                        : ColorResources.lgColor,
-                                  ),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'KGS',
-                                  style: body16.copyWith(
-                                      color: ColorResources.gray),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: () {
-                                context
-                                    .read<ProductBloc>()
-                                    .add(const ChangeCurrency('USD'));
-                              },
-                              child: Container(
-                                width: width * 0.4,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    width: 1,
-                                    color: productController.selectedCurrency ==
-                                            'USD'
-                                        ? ColorResources.green
-                                        : ColorResources.lgColor,
-                                    //  ColorResources.green,
-                                  ),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'USD',
-                                  style: body16.copyWith(
-                                      color: ColorResources.gray),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Text(
+                        //   'currency'.tr,
+                        //   style: h16.copyWith(color: ColorResources.darkGray),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   children: [
+                        //     InkWell(
+                        //       borderRadius: BorderRadius.circular(12),
+                        //       onTap: () {
+                        //         context
+                        //             .read<ProductBloc>()
+                        //             .add(const ChangeCurrency('KGS'));
+                        //       },
+                        //       child: Container(
+                        //         width: width * 0.4,
+                        //         height: 48,
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(12),
+                        //           border: Border.all(
+                        //             width: 1,
+                        //             color: productController.selectedCurrency ==
+                        //                     'KGS'
+                        //                 ? ColorResources.green
+                        //                 : ColorResources.lgColor,
+                        //           ),
+                        //         ),
+                        //         alignment: Alignment.center,
+                        //         child: Text(
+                        //           'KGS',
+                        //           style: body16.copyWith(
+                        //               color: ColorResources.gray),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     InkWell(
+                        //       borderRadius: BorderRadius.circular(12),
+                        //       onTap: () {
+                        //         context
+                        //             .read<ProductBloc>()
+                        //             .add(const ChangeCurrency('USD'));
+                        //       },
+                        //       child: Container(
+                        //         width: width * 0.4,
+                        //         height: 48,
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(12),
+                        //           border: Border.all(
+                        //             width: 1,
+                        //             color: productController.selectedCurrency ==
+                        //                     'USD'
+                        //                 ? ColorResources.green
+                        //                 : ColorResources.lgColor,
+                        //             //  ColorResources.green,
+                        //           ),
+                        //         ),
+                        //         alignment: Alignment.center,
+                        //         child: Text(
+                        //           'USD',
+                        //           style: body16.copyWith(
+                        //               color: ColorResources.gray),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
 
                         const SizedBox(
                           height: 30,

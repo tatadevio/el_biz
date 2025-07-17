@@ -84,7 +84,7 @@ class _SearchCompanyWidgetState extends State<SearchCompanyWidget> {
                 if (widget.searchController.text.isEmpty) {
                   return Center(
                     child: Text(
-                      'search_for_products'.tr,
+                      'search_for_companies'.tr,
                       style: body14,
                     ),
                   );

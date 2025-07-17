@@ -64,9 +64,9 @@ class ShowContractFiles extends StatelessWidget {
                       onTap: () {
                         // Get.back();
                         showShortToast('download_all_documents'.tr);
-                        downloadFileWithScopedPermission(
-                            'https://hrsgmobileapp.s3.eu-north-1.amazonaws.com/Mobile/Clients/1/Claim/125979/IMG-20250701-WA0011.jpg',
-                            context);
+                        // downloadFileWithScopedPermission(
+                        //     'https://hrsgmobileapp.s3.eu-north-1.amazonaws.com/Mobile/Clients/1/Claim/125979/IMG-20250701-WA0011.jpg',
+                        //     context);
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

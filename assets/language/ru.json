@@ -141,6 +141,8 @@
   "material": "Материал",
   "high_rating": "Высокий рейтинг",
   "reset": "Сбросить",
+  "rated_4_5_stars": "Оценка 4 и 5 звёзд",
+  "rated_2_3_stars": "Оценка 2 и 3 звезды",
   "price_including_VAT": "Цена включая НДС",
   "price_excuding_taxes": "Цена без учёта налогов",
   "companies_rated_4_and_5": "Компании с рейтингом 4 и 5",
@@ -376,5 +378,12 @@
   "choose_from_gallery" : "Выбрать из галереи фотографий",
   "select_pdf_file" : "Выбрать PDF файл из хранилища",
   "update_payment_status" : "Обновить статус оплаты",
-  "add_a_caption": "Добавить подпись"
+  "add_a_caption": "Добавить подпись",
+  "profile_type": "Тип профиля",
+  "profile_type_all": "Все профили",
+  "profile_type_individual": "Физические лица",
+  "profile_type_legal_entity": "Юридические лица",
+  "no_internet_connection": "Нет подключения к интернету",
+  "back_online": "Интернет восстановлен",
+  "search_for_companies": "Поиск компаний..."
 }

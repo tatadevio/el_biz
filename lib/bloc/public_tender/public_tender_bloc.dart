@@ -31,7 +31,7 @@ class PublicTenderBloc extends Bloc<PublicTenderEvent, PublicTenderState> {
     }
     try {
       final response = await publicTenderRepo.companyTenders(
-          event.currentPage, event.direction ?? 'asc');
+          event.currentPage, event.direction ?? 'asc', event.orderBy ?? 'created_at');
       if (response.statusCode == 200) {
         final companyTenders = CompanyTendersModel.fromJson(response.body);
         emit(state.copyWith(

@@ -166,12 +166,14 @@ class ProductDetailScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  '(4.0) ',
+                                  '${productDetail.data?.reviewAvgRating} ',
+                                  // '(4.0) ',
                                   style: body14.copyWith(
                                       color: ColorResources.gray),
                                 ),
                                 RatingBar.builder(
-                                  initialRating: 4,
+                                  initialRating:
+                                      productDetail.data?.reviewAvgRating ?? 0,
                                   minRating: 0,
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,

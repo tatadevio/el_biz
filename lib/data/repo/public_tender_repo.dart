@@ -10,9 +10,12 @@ class PublicTenderRepo {
 
   PublicTenderRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> companyTenders(int page, String direction) async {
+  Future<Response> companyTenders(
+      int page, String direction, String orderBy) async {
     return await apiClient.getData(
-        "${AppConstants.publicTendersUrl}?order_by=company&order_direction=$direction&order_by=created_at&page=$page");
+        "${AppConstants.publicTendersUrl}?order_direction=$direction&order_by=$orderBy&page=$page");
+
+    // order_by = company , created_at
   }
 
   Future<Response> toggleFavorite(String id, {String type = "Tender"}) async {

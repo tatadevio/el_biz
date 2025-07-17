@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/product/product_bloc.dart';
@@ -793,9 +794,73 @@ class _ChatConversationState extends State<ChatConversation> {
                                   _markMessageAsSeen(messageData.id);
                                 }
 
-                                return ChatMessageWidget1(
-                                  data: messageData as QueryDocumentSnapshot,
-                                  isMe: isMe,
+                                // Check if we need to show a date header
+                                bool showDateHeader = false;
+                                String dateHeader = '';
+
+                                if (messageData['timestamp'] != null) {
+                                  DateTime messageDate =
+                                      (messageData['timestamp'] as Timestamp)
+                                          .toDate();
+                                  DateTime now = DateTime.now();
+                                  DateTime yesterday =
+                                      now.subtract(const Duration(days: 1));
+
+                                  // Check if this is the first message or if the date changed from previous message
+                                  if (index == messages.length - 1 ||
+                                      messages[index + 1]['timestamp'] ==
+                                          null ||
+                                      messageDate.day !=
+                                          (messages[index + 1]['timestamp']
+                                                  as Timestamp)
+                                              .toDate()
+                                              .day) {
+                                    showDateHeader = true;
+                                    if (messageDate.year == now.year &&
+                                        messageDate.month == now.month &&
+                                        messageDate.day == now.day) {
+                                      dateHeader = 'Today';
+                                    } else if (messageDate.year ==
+                                            yesterday.year &&
+                                        messageDate.month == yesterday.month &&
+                                        messageDate.day == yesterday.day) {
+                                      dateHeader = 'Yesterday';
+                                    } else {
+                                      dateHeader =
+                                          '${messageDate.day} ${DateFormat('MMMM').format(messageDate)} ${messageDate.year}';
+                                    }
+                                  }
+                                }
+
+                                return Column(
+                                  children: [
+                                    if (showDateHeader)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: ColorResources.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          child: Text(
+                                            dateHeader,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ChatMessageWidget1(
+                                      data:
+                                          messageData as QueryDocumentSnapshot,
+                                      isMe: isMe,
+                                    ),
+                                  ],
                                 );
                               },
                             ),

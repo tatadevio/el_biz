@@ -38,11 +38,11 @@ class _TenderFilterScreenState extends State<TenderFilterScreen> {
       TextEditingController();
 
   List<String> profileTypes = [
-    'Юридические лица',
-    'Физические лица',
-    'Все профили',
+    'profile_type_legal_entity'.tr,
+    'profile_type_individual'.tr,
+    'profile_type_all'.tr,
   ];
-  String selectedProfileType = 'Юридические лица';
+  String selectedProfileType = 'profile_type_legal_entity'.tr;
 
   void reset() {
     _minController.clear();
@@ -378,7 +378,8 @@ class _TenderFilterScreenState extends State<TenderFilterScreen> {
                         ),
                       ),
                       Text(
-                        'Для выбора города начните вводить название в поле ниже, или выберите из списка.',
+                        '_start_typing_the_name_in_the_field_below_or_select_from_the_list'
+                            .tr,
                         style: body14.copyWith(color: ColorResources.gray),
                       ),
                       const SizedBox(
