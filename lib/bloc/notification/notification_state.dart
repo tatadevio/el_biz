@@ -2,7 +2,7 @@ part of 'notification_bloc.dart';
 
 class NotificationState extends Equatable {
   final bool isLoading;
-  final List<NotificationData> notificationsList;
+  final List<NotificationItem> notificationsList;
   final int currentPage;
   final int pageSize;
   const NotificationState(
@@ -13,7 +13,7 @@ class NotificationState extends Equatable {
 
   NotificationState copyWith(
       {bool? isLoading,
-      List<NotificationData>? notificationsList,
+      List<NotificationItem>? notificationsList,
       int? currentPage,
       int? pageSize}) {
     return NotificationState(

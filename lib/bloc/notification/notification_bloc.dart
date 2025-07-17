@@ -25,7 +25,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       if (response.statusCode == 200) {
         NotificationsModel notificationsModel =
             NotificationsModel.fromJson(response.body);
-        emit(state.copyWith(notificationsList: notificationsModel.data));
+        print(
+            'this is the list of the notification = ${notificationsModel.data?.items?.length}');
+        emit(state.copyWith(notificationsList: notificationsModel.data?.items));
       } else {
         NotificationError(response.body['message']);
       }
@@ -43,14 +45,15 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       // print(response.statusCode);
       // print(response.body);
       if (response.statusCode == 200) {
-        List<NotificationData> allNotification =
+        List<NotificationItem> allNotification =
             List.from(state.notificationsList);
 
-        final index = allNotification.indexWhere((product) =>
-            product.id.toString() == event.notificationId.toString());
+        final index = allNotification.indexWhere((notification) =>
+            notification.id.toString() == event.notificationId.toString());
 
         if (index != -1) {
-          allNotification[index].readAt = DateTime.now().toString();
+          allNotification[index] =
+              allNotification[index].copyWith(isRead: true);
           // .removeAt(index);
           emit(state.copyWith(notificationsList: allNotification));
         }

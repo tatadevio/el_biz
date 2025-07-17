@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class NotificationItem extends StatelessWidget {
-  final NotificationData notification;
+class NotificationItemWidget extends StatelessWidget {
+  final NotificationItem notification;
   final int index;
 
-  const NotificationItem(
+  const NotificationItemWidget(
       {super.key, required this.notification, required this.index});
 
   @override
@@ -87,7 +87,7 @@ class NotificationItem extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      notification.description ?? '',
+                      notification.body ?? '',
                       // 'Садовая мебель Loft добавил вашу закупку',
                       style: body14.copyWith(color: ColorResources.gray),
                       maxLines: 1,

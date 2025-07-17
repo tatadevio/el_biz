@@ -342,6 +342,13 @@ class _ChatConversationState extends State<ChatConversation> {
           setState(() {
             messages.insert(0, newMessage); // Add new incoming message
           });
+
+          // Force rebuild to update date headers
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {});
+            }
+          });
         }
       }
     });

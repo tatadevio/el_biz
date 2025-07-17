@@ -11,263 +11,225 @@ String notificationsModelToJson(NotificationsModel data) =>
     json.encode(data.toJson());
 
 class NotificationsModel {
-  final List<NotificationData>? data;
-  final Links? links;
-  final Meta? meta;
+  final String? message;
+  final NotificationsModelData? data;
+  final int? statusCode;
+  final String? status;
 
   NotificationsModel({
+    this.message,
     this.data,
-    this.links,
-    this.meta,
+    this.statusCode,
+    this.status,
   });
 
   NotificationsModel copyWith({
-    List<NotificationData>? data,
-    Links? links,
-    Meta? meta,
+    String? message,
+    NotificationsModelData? data,
+    int? statusCode,
+    String? status,
   }) =>
       NotificationsModel(
+        message: message ?? this.message,
         data: data ?? this.data,
-        links: links ?? this.links,
-        meta: meta ?? this.meta,
+        statusCode: statusCode ?? this.statusCode,
+        status: status ?? this.status,
       );
 
   factory NotificationsModel.fromJson(Map<String, dynamic> json) =>
       NotificationsModel(
+        message: json["message"],
         data: json["data"] == null
-            ? []
-            : List<NotificationData>.from(
-                json["data"]!.map((x) => NotificationData.fromJson(x))),
-        links: json["links"] == null ? null : Links.fromJson(json["links"]),
-        meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
+            ? null
+            : NotificationsModelData.fromJson(json["data"]),
+        statusCode: json["status_code"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-        "links": links?.toJson(),
-        "meta": meta?.toJson(),
+        "message": message,
+        "data": data?.toJson(),
+        "status_code": statusCode,
+        "status": status,
       };
 }
 
-class NotificationData {
-  final String? id;
-  final String? title;
-  final String? description;
-  final String? image;
-  final String? actionUrl;
-  final String? type;
-  String? readAt;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+class NotificationsModelData {
+  final List<NotificationItem>? items;
+  final int? totalPages;
+  final int? currentPage;
+  final int? total;
+  final int? perPage;
+  final int? count;
 
-  NotificationData({
-    this.id,
-    this.title,
-    this.description,
-    this.image,
-    this.actionUrl,
-    this.type,
-    this.readAt,
-    this.createdAt,
-    this.updatedAt,
+  NotificationsModelData({
+    this.items,
+    this.totalPages,
+    this.currentPage,
+    this.total,
+    this.perPage,
+    this.count,
   });
 
-  NotificationData copyWith({
-    String? id,
-    String? title,
-    String? description,
-    String? image,
-    String? actionUrl,
-    String? type,
-    String? readAt,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+  NotificationsModelData copyWith({
+    List<NotificationItem>? items,
+    int? totalPages,
+    int? currentPage,
+    int? total,
+    int? perPage,
+    int? count,
   }) =>
-      NotificationData(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        image: image ?? this.image,
-        actionUrl: actionUrl ?? this.actionUrl,
-        type: type ?? this.type,
-        readAt: readAt ?? this.readAt,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
+      NotificationsModelData(
+        items: items ?? this.items,
+        totalPages: totalPages ?? this.totalPages,
+        currentPage: currentPage ?? this.currentPage,
+        total: total ?? this.total,
+        perPage: perPage ?? this.perPage,
+        count: count ?? this.count,
       );
 
-  factory NotificationData.fromJson(Map<String, dynamic> json) =>
-      NotificationData(
+  factory NotificationsModelData.fromJson(Map<String, dynamic> json) =>
+      NotificationsModelData(
+        items: json["items"] == null
+            ? []
+            : List<NotificationItem>.from(json["items"]!.map((x) => NotificationItem.fromJson(x))),
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        total: json["total"],
+        perPage: json["perPage"],
+        count: json["count"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "items": items == null
+            ? []
+            : List<dynamic>.from(items!.map((x) => x.toJson())),
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "total": total,
+        "perPage": perPage,
+        "count": count,
+      };
+}
+
+class NotificationItem {
+  final int? id;
+  final String? title;
+  final String? body;
+  final String? type;
+  final ItemData? data;
+  final bool? isRead;
+  final String? readAt;
+  final int? userId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? timeAgo;
+
+  NotificationItem({
+    this.id,
+    this.title,
+    this.body,
+    this.type,
+    this.data,
+    this.isRead,
+    this.readAt,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
+    this.timeAgo,
+  });
+
+  NotificationItem copyWith({
+    int? id,
+    String? title,
+    String? body,
+    String? type,
+    ItemData? data,
+    bool? isRead,
+    String? readAt,
+    int? userId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? timeAgo,
+  }) =>
+      NotificationItem(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        body: body ?? this.body,
+        type: type ?? this.type,
+        data: data ?? this.data,
+        isRead: isRead ?? this.isRead,
+        readAt: readAt ?? this.readAt,
+        userId: userId ?? this.userId,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        timeAgo: timeAgo ?? this.timeAgo,
+      );
+
+  factory NotificationItem.fromJson(Map<String, dynamic> json) => NotificationItem(
         id: json["id"],
         title: json["title"],
-        description: json["description"],
-        image: json["image"],
-        actionUrl: json["action_url"],
+        body: json["body"],
         type: json["type"],
+        data: json["data"] == null ? null : ItemData.fromJson(json["data"]),
+        isRead: json["is_read"],
         readAt: json["read_at"],
+        userId: json["user_id"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        timeAgo: json["time_ago"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
-        "description": description,
-        "image": image,
-        "action_url": actionUrl,
+        "body": body,
         "type": type,
+        "data": data?.toJson(),
+        "is_read": isRead,
         "read_at": readAt,
+        "user_id": userId,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "time_ago": timeAgo,
       };
 }
 
-class Links {
-  final String? first;
-  final String? last;
-  final dynamic prev;
-  final dynamic next;
+class ItemData {
+  final int? contractId;
+  final dynamic contractNumber;
+  final String? directorName;
 
-  Links({
-    this.first,
-    this.last,
-    this.prev,
-    this.next,
+  ItemData({
+    this.contractId,
+    this.contractNumber,
+    this.directorName,
   });
 
-  Links copyWith({
-    String? first,
-    String? last,
-    dynamic prev,
-    dynamic next,
+  ItemData copyWith({
+    int? contractId,
+    dynamic contractNumber,
+    String? directorName,
   }) =>
-      Links(
-        first: first ?? this.first,
-        last: last ?? this.last,
-        prev: prev ?? this.prev,
-        next: next ?? this.next,
+      ItemData(
+        contractId: contractId ?? this.contractId,
+        contractNumber: contractNumber ?? this.contractNumber,
+        directorName: directorName ?? this.directorName,
       );
 
-  factory Links.fromJson(Map<String, dynamic> json) => Links(
-        first: json["first"],
-        last: json["last"],
-        prev: json["prev"],
-        next: json["next"],
+  factory ItemData.fromJson(Map<String, dynamic> json) => ItemData(
+        contractId: json["contract_id"],
+        contractNumber: json["contract_number"],
+        directorName: json["director_name"],
       );
 
   Map<String, dynamic> toJson() => {
-        "first": first,
-        "last": last,
-        "prev": prev,
-        "next": next,
-      };
-}
-
-class Meta {
-  final int? currentPage;
-  final int? from;
-  final int? lastPage;
-  final List<Link>? links;
-  final String? path;
-  final int? perPage;
-  final int? to;
-  final int? total;
-
-  Meta({
-    this.currentPage,
-    this.from,
-    this.lastPage,
-    this.links,
-    this.path,
-    this.perPage,
-    this.to,
-    this.total,
-  });
-
-  Meta copyWith({
-    int? currentPage,
-    int? from,
-    int? lastPage,
-    List<Link>? links,
-    String? path,
-    int? perPage,
-    int? to,
-    int? total,
-  }) =>
-      Meta(
-        currentPage: currentPage ?? this.currentPage,
-        from: from ?? this.from,
-        lastPage: lastPage ?? this.lastPage,
-        links: links ?? this.links,
-        path: path ?? this.path,
-        perPage: perPage ?? this.perPage,
-        to: to ?? this.to,
-        total: total ?? this.total,
-      );
-
-  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        currentPage: json["current_page"],
-        from: json["from"],
-        lastPage: json["last_page"],
-        links: json["links"] == null
-            ? []
-            : List<Link>.from(json["links"]!.map((x) => Link.fromJson(x))),
-        path: json["path"],
-        perPage: json["per_page"],
-        to: json["to"],
-        total: json["total"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "current_page": currentPage,
-        "from": from,
-        "last_page": lastPage,
-        "links": links == null
-            ? []
-            : List<dynamic>.from(links!.map((x) => x.toJson())),
-        "path": path,
-        "per_page": perPage,
-        "to": to,
-        "total": total,
-      };
-}
-
-class Link {
-  final String? url;
-  final String? label;
-  final bool? active;
-
-  Link({
-    this.url,
-    this.label,
-    this.active,
-  });
-
-  Link copyWith({
-    String? url,
-    String? label,
-    bool? active,
-  }) =>
-      Link(
-        url: url ?? this.url,
-        label: label ?? this.label,
-        active: active ?? this.active,
-      );
-
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-        url: json["url"],
-        label: json["label"],
-        active: json["active"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "url": url,
-        "label": label,
-        "active": active,
+        "contract_id": contractId,
+        "contract_number": contractNumber,
+        "director_name": directorName,
       };
 }
