@@ -4,6 +4,7 @@ class ContractsState extends Equatable {
   final bool isLoading;
   // final List<ContractModel> contracts;
   final List<CompanyContractItem> salesContractItems;
+  final CompanyContractItem? contractDetail;
   final bool isLoadingMore;
   final int currentPage;
   final int pageSize;
@@ -14,6 +15,7 @@ class ContractsState extends Equatable {
     this.isLoading = false,
     // this.contracts = const [],
     this.salesContractItems = const [],
+    this.contractDetail,
     this.isLoadingMore = false,
     this.currentPage = 1,
     this.pageSize = 1,
@@ -26,6 +28,7 @@ class ContractsState extends Equatable {
     bool? isLoading,
     // List<ContractModel>? contracts,
     List<CompanyContractItem>? salesContractItems,
+    CompanyContractItem? contractDetail,
     bool? isLoadingMore,
     int? currentPage,
     int? pageSize,
@@ -37,6 +40,7 @@ class ContractsState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       // contracts: contracts ?? this.contracts,
       salesContractItems: salesContractItems ?? this.salesContractItems,
+      contractDetail: contractDetail ?? this.contractDetail,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       currentPage: currentPage ?? this.currentPage,
       pageSize: pageSize ?? this.pageSize,
@@ -47,9 +51,10 @@ class ContractsState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         isLoading,
         salesContractItems,
+        contractDetail,
         isLoadingMore,
         currentPage,
         pageSize,

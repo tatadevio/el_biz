@@ -25,6 +25,12 @@ class ContractRepo {
     );
   }
 
+  Future<Response> getContractDetail(String contractId) async {
+    return await apiClient.getData(
+      '${AppConstants.contractDetailUrl}/$contractId',
+    );
+  }
+
   Future<Response> signContract(
       String contractId, String directorName, XFile signatureFile) async {
     Map<String, String> fields = {

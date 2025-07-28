@@ -20,6 +20,7 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
     on<UpdateContractStatus>(_onUpdateContractStatus);
     on<UpdatePaymentStatus>(_onUpdatePaymentStatus);
     on<AddPaymentData>(_onAddPaymentData);
+    on<GetContractDetail>(_onGetContractDetail);
   }
 
   Future<void> _onGetCompanySales(
@@ -170,4 +171,27 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
 
   //   emit(state.copywith(salesContractItems: updatedSalesContracts));
   // }
+
+  Future<void> _onGetContractDetail(
+      GetContractDetail event, Emitter<ContractsState> emit) async {
+    try {
+      emit(state.copywith(isLoading: true));
+
+      final response = await contractRepo.getContractDetail(event.contractId);
+
+      if (response.statusCode == 200) {
+        final contractData =
+            CompanyContractItem.fromJson(response.body['data']);
+        emit(state.copywith(
+          isLoading: false,
+          contractDetail: contractData,
+        ));
+      } else {
+        emit(state.copywith(isLoading: false));
+      }
+    } catch (e) {
+      emit(state.copywith(isLoading: false));
+      print(e.toString());
+    }
+  }
 }

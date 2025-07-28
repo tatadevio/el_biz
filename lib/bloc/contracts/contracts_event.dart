@@ -66,3 +66,11 @@ class AddPaymentData extends ContractsEvent {
   @override
   List<Object> get props => [contractId, note, image];
 }
+
+class GetContractDetail extends ContractsEvent {
+  final String contractId;
+  const GetContractDetail({required this.contractId});
+
+  @override
+  List<Object> get props => [contractId];
+}

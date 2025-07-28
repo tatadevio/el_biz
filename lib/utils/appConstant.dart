@@ -87,6 +87,7 @@ class AppConstants {
 
   // notification
   static const String notificationUrl = "api/notifications";
+  static const String notificationReadUrl = "api/notifications/mark-read";
 
   // Common
   static const String citiesUrl = "api/cities";

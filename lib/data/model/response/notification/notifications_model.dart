@@ -92,7 +92,8 @@ class NotificationsModelData {
       NotificationsModelData(
         items: json["items"] == null
             ? []
-            : List<NotificationItem>.from(json["items"]!.map((x) => NotificationItem.fromJson(x))),
+            : List<NotificationItem>.from(
+                json["items"]!.map((x) => NotificationItem.fromJson(x))),
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         total: json["total"],
@@ -166,7 +167,8 @@ class NotificationItem {
         timeAgo: timeAgo ?? this.timeAgo,
       );
 
-  factory NotificationItem.fromJson(Map<String, dynamic> json) => NotificationItem(
+  factory NotificationItem.fromJson(Map<String, dynamic> json) =>
+      NotificationItem(
         id: json["id"],
         title: json["title"],
         body: json["body"],
@@ -200,34 +202,76 @@ class NotificationItem {
 }
 
 class ItemData {
+  final int? tenderId;
+  final String? tenderTitle;
+  final String? companyId;
+  final String? companyName;
+  final int? productId;
+  final String? productName;
+  final String? price;
   final int? contractId;
   final dynamic contractNumber;
   final String? directorName;
 
   ItemData({
+    this.tenderId,
+    this.tenderTitle,
+    this.companyId,
+    this.companyName,
+    this.productId,
+    this.productName,
+    this.price,
     this.contractId,
     this.contractNumber,
     this.directorName,
   });
 
   ItemData copyWith({
+    int? tenderId,
+    String? tenderTitle,
+    String? companyId,
+    String? companyName,
+    int? productId,
+    String? productName,
+    String? price,
     int? contractId,
     dynamic contractNumber,
     String? directorName,
   }) =>
       ItemData(
+        tenderId: tenderId ?? this.tenderId,
+        tenderTitle: tenderTitle ?? this.tenderTitle,
+        companyId: companyId ?? this.companyId,
+        companyName: companyName ?? this.companyName,
+        productId: productId ?? this.productId,
+        productName: productName ?? this.productName,
+        price: price ?? this.price,
         contractId: contractId ?? this.contractId,
         contractNumber: contractNumber ?? this.contractNumber,
         directorName: directorName ?? this.directorName,
       );
 
   factory ItemData.fromJson(Map<String, dynamic> json) => ItemData(
+        tenderId: json["tender_id"],
+        tenderTitle: json["tender_title"],
+        companyId: json["company_id"],
+        companyName: json["company_name"],
+        productId: json["product_id"],
+        productName: json["product_name"],
+        price: json["price"],
         contractId: json["contract_id"],
         contractNumber: json["contract_number"],
         directorName: json["director_name"],
       );
 
   Map<String, dynamic> toJson() => {
+        "tender_id": tenderId,
+        "tender_title": tenderTitle,
+        "company_id": companyId,
+        "company_name": companyName,
+        "product_id": productId,
+        "product_name": productName,
+        "price": price,
         "contract_id": contractId,
         "contract_number": contractNumber,
         "director_name": directorName,

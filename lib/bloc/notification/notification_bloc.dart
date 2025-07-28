@@ -45,17 +45,21 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       // print(response.statusCode);
       // print(response.body);
       if (response.statusCode == 200) {
-        List<NotificationItem> allNotification =
-            List.from(state.notificationsList);
+        // Check if the API response indicates success
+        if (response.body['success'] == true) {
+          List<NotificationItem> allNotification =
+              List.from(state.notificationsList);
 
-        final index = allNotification.indexWhere((notification) =>
-            notification.id.toString() == event.notificationId.toString());
+          final index = allNotification.indexWhere((notification) =>
+              notification.id.toString() == event.notificationId.toString());
 
-        if (index != -1) {
-          allNotification[index] =
-              allNotification[index].copyWith(isRead: true);
-          // .removeAt(index);
-          emit(state.copyWith(notificationsList: allNotification));
+          if (index != -1) {
+            allNotification[index] =
+                allNotification[index].copyWith(isRead: true);
+            // .removeAt(index);
+
+            emit(state.copyWith(notificationsList: allNotification));
+          }
         }
       }
     } catch (e) {

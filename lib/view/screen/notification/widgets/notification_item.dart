@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
 import 'package:el_biz/data/model/response/notification/notifications_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
@@ -7,6 +10,13 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../../../../bloc/product_detail/product_detail_bloc.dart';
+import '../../../../bloc/tender_detail/tender_detail_bloc.dart';
+import '../../contracts/contract_page_screen.dart';
+import '../../product_detail/product_detail_screen.dart';
+import '../../tender/tender_detail_screen.dart';
 
 class NotificationItemWidget extends StatelessWidget {
   final NotificationItem notification;
@@ -18,17 +28,44 @@ class NotificationItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context
-            .read<NotificationBloc>()
-            .add(ReadNotification(notification.id.toString()));
+      onTap: () async {
+        // SharedPreferences sharedPreferences =
+        //     await SharedPreferences.getInstance();
+        // String token = sharedPreferences.getString(AppConstants.token) ?? "";
+        // log('Token: $token');
+        if (notification.isRead == false) {
+          context
+              .read<NotificationBloc>()
+              .add(ReadNotification(notification.id.toString()));
+        }
+
+        print('notification.type: ${notification.type}');
+
+        // now check the notificaiton type and open
+        if (notification.type == 'product') {
+          context.read<ProductDetailBloc>().add(
+              GetProductDetail(notification.data?.productId.toString() ?? ''));
+          Get.to(() => ProductDetailScreen(isProduct: true));
+        } else if (notification.type == 'tender') {
+          context.read<TenderDetailBloc>().add(GetTenderDetail(
+              tenderId: notification.data?.tenderId.toString() ?? ''));
+          Get.to(() => TenderDetailScreen(
+              tenderName: notification.data?.tenderTitle.toString() ?? ''));
+        } else if (notification.type == 'contract_creation' ||
+            notification.type == 'contract_signing' ||
+            notification.type == "payment") {
+          context.read<ContractsBloc>().add(GetContractDetail(
+              contractId: notification.data?.contractId.toString() ?? ''));
+          Get.to(() => ContractPageScreen(
+              contractId: notification.data?.contractId ?? 0));
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: notification.readAt == '' ? Colors.white12 : Colors.white,
+            color: notification.isRead == false ? Colors.white12 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(

@@ -16,7 +16,8 @@ class NotificationRepo {
   }
 
   Future<Response> readNotification(String notificationId) async {
-    return await apiClient
-        .patchData("${AppConstants.notificationUrl}/$notificationId/read", {});
+    return await apiClient.patchData(AppConstants.notificationReadUrl, {
+      "notification_ids": [notificationId]
+    });
   }
 }
