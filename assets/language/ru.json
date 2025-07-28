@@ -385,5 +385,8 @@
   "profile_type_legal_entity": "Юридические лица",
   "no_internet_connection": "Нет подключения к интернету",
   "back_online": "Интернет восстановлен",
-  "search_for_companies": "Поиск компаний..."
+  "search_for_companies": "Поиск компаний...",
+  "select_account": "Выберите аккаунт",
+  "primary_account_prefilled": "Информация основного счета была предварительно заполнена. Вы можете изменить или добавить больше счетов.",
+  "logo_and_banner_is_requried": "Логотип и баннер обязательны"
 }

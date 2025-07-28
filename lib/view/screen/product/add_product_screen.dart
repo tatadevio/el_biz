@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/add_product/add_product_bloc.dart';
+import '../../../bloc/auth/auth_bloc.dart';
+import '../../../bloc/company/company_bloc.dart';
 import 'add_product3_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -45,6 +47,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     weightUnitController = TextEditingController(text: 'кг');
     if (widget.isEdit) {
       loadProductData();
+    }
+
+    if (context.read<AuthBloc>().state.isLoggedIn) {
+      context.read<CompanyBloc>().add(GetMyCompanies(currentPage: 1));
     }
   }
 

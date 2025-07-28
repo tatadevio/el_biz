@@ -3,6 +3,7 @@ import 'package:el_biz/view/base/custom_button_with_icon.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/company/company_account_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -231,10 +232,15 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                                           const SizedBox(width: 5),
                                           Expanded(
                                             child: TextFormField(
-                                              maxLength: 10,
+                                              // maxLength:
+                                              //     10, // Remove this line to allow unlimited length
                                               controller:
                                                   phoneControllers[index],
                                               keyboardType: TextInputType.phone,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]')),
+                                              ],
                                               decoration: const InputDecoration(
                                                 counterText: "",
                                                 isDense: true,

@@ -11,6 +11,14 @@ import 'package:http/http.dart' as http;
 import '../bloc/chat/chat_bloc.dart';
 import '../utils/appConstant.dart';
 
+// Top-level function for background notification handling
+@pragma('vm:entry-point')
+void onDidReceiveBackgroundNotificationResponse(
+    NotificationResponse notificationResponse) async {
+  // Handle background notification response here if needed
+  print('Background notification received: ${notificationResponse.payload}');
+}
+
 class MyNotification {
   static Future<void> initialize(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
@@ -81,61 +89,7 @@ class MyNotification {
         return;
       },
       onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse? notificationResponse) async {
-        final payload = notificationResponse?.payload;
-        try {
-          if (payload != null && payload.isNotEmpty) {
-            print('payload is : $payload');
-            List<String> result = payload.split(',');
-            String id = result[0];
-            String type = result[1];
-            String receiverid = result[2];
-            print("payload is $id  and $type");
-
-            // print("payload is $id  and $type");
-            if (type == 'chat-product') {
-              // add api to get chat detail
-              Get.to(() => ChatConversation(
-                    chatId: id,
-                    // isSeller: true,
-                    isFirstMessage: false,
-                    chatItem: null,
-                  ));
-            } else if (type == 'chat-tender') {
-              Get.to(() => ChatConversation(
-                    chatId: id,
-                    // isSeller: true,
-                    isFirstMessage: false,
-                    chatItem: null,
-                  ));
-            }
-            // if (type == "chat") {
-            //   // if (Get.find<AuthController>().isLoggedIn()) {
-            //   Get.find<ChatController>().getTicket(true);
-            //   Get.find<ChatController>().getChatList(id, 0, true);
-            //   print('going to check the routes');
-            //   if (Get.currentRoute == RouteHelper.chatConversatonRoute) {
-            //     Get.to(
-            //         () =>
-            //             ChatConversation(productId: id, receivedId: receiverid),
-            //         preventDuplicates: false);
-            //   } else {
-            //     Get.to(
-            //         () =>
-            //             ChatConversation(productId: id, receivedId: receiverid),
-            //         preventDuplicates: false);
-            //   }
-            // }
-
-            if (type == "normal") {}
-
-            /*Get.find<BooksDetailController>().bookDetail(payload.toString());
-          Get.to(BooksDetails());*/
-            //Get.toNamed(RouteHelper.getOrderDetailsRoute(int.parse(payload)));
-          } else {}
-        } catch (e) {}
-        return;
-      },
+          onDidReceiveBackgroundNotificationResponse,
     );
 
     FirebaseMessaging.instance.getInitialMessage().then((message) async {

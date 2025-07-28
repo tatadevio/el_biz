@@ -142,16 +142,20 @@ class MyApp extends StatelessWidget {
           translations: Messages(languages: languages),
           fallbackLocale: Locale(AppConstants.languages[0].languageCode,
               AppConstants.languages[0].countryCode),
+          navigatorObservers: [BotToastNavigatorObserver()],
           builder: (context, child) {
-            return Scaffold(
-              body: Stack(
-                children: [
-                  child!,
-                  const Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ConnectivityBanner(),
-                  ),
-                ],
+            return BotToastInit()(
+              context,
+              Scaffold(
+                body: Stack(
+                  children: [
+                    child!,
+                    const Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ConnectivityBanner(),
+                    ),
+                  ],
+                ),
               ),
             );
           },

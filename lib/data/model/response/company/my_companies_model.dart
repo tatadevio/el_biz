@@ -154,6 +154,15 @@ class CompanyItem {
         "owner": owner?.toJson(),
         "reviews_avg_rating": reviewsAverageRating,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CompanyItem && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 // class Owner {

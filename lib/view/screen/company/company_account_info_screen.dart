@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/custom_text_style.dart';
+import '../../../bloc/account/account_bloc.dart';
 import '../../../bloc/company/company_bloc.dart';
 import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../data/model/response/bank_model.dart';
@@ -31,6 +32,8 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
   List<TextEditingController> accountNumberControllers = [
     TextEditingController()
   ];
+
+  bool _hasPrimaryAccountLoaded = false;
 
   void addNewAccount() {
     accountNameControllers.add(TextEditingController());
@@ -86,9 +89,46 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
   @override
   void initState() {
     super.initState();
+    // Load accounts first to check for primary account
+    context.read<AccountBloc>().add(GetMyAccounts(currentPage: 1));
+
     if (widget.isEdit) {
       loadData();
+    } else {
+      // For new company, check if there's a primary account to pre-fill
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _checkAndLoadPrimaryAccount();
+      });
     }
+  }
+
+  void _checkAndLoadPrimaryAccount() {
+    if (_hasPrimaryAccountLoaded) return; // Prevent multiple calls
+
+    final accountState = context.read<AccountBloc>().state;
+
+    // Check if there's a primary account
+    final primaryAccounts = accountState.accountItems
+        .where((account) => account.primaryAccount == 1)
+        .toList();
+
+    if (primaryAccounts.isNotEmpty) {
+      final primaryAccount = primaryAccounts.first;
+      // Pre-fill with primary account data
+      setState(() {
+        accountNameControllers[0].text = primaryAccount.accountName ?? '';
+        bikControllers[0].text = primaryAccount.bic ?? '';
+        accountNumberControllers[0].text = primaryAccount.accountNumber ?? '';
+        _hasPrimaryAccountLoaded = true;
+      });
+    }
+    // If no primary account exists, fields remain empty for manual entry
+  }
+
+  void _refreshAccountsOnReturn() {
+    // Refresh accounts and reload primary account when returning from AccountScreen
+    context.read<AccountBloc>().add(GetMyAccounts(currentPage: 1));
+    _hasPrimaryAccountLoaded = false; // Reset flag to allow reloading
   }
 
   void loadData() {
@@ -145,206 +185,228 @@ class _CompanyAccountInfoScreenState extends State<CompanyAccountInfoScreen> {
   @override
   Widget build(BuildContext context) {
     // var size = MediaQuery.sizeOf(context);
-    return Scaffold(
-      appBar: customAddCompanyAppbar(title: ''),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "details".tr,
-                    style: h16.copyWith(color: ColorResources.darkGray),
+    return BlocListener<AccountBloc, AccountState>(
+      listener: (context, state) {
+        // When accounts are loaded and this is not an edit screen, check for primary account
+        if (!widget.isEdit &&
+            state.accountItems.isNotEmpty &&
+            !state.isLoading &&
+            !_hasPrimaryAccountLoaded) {
+          _checkAndLoadPrimaryAccount();
+        }
+      },
+      child: Scaffold(
+        appBar: customAddCompanyAppbar(title: ''),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "details".tr,
+                      style: h16.copyWith(color: ColorResources.darkGray),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await Get.to(() => AccountScreen(
+                              isAddNewCompany: true,
+                              isEdit: widget.isEdit,
+                            ));
+                        // Refresh accounts when returning from AccountScreen
+                        _refreshAccountsOnReturn();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'view_banks'.tr,
+                            style:
+                                button16.copyWith(color: ColorResources.blue),
+                          ),
+                          const SizedBox(width: 5),
+                          SvgPicture.asset(Images.svgArrowForwardIcon),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                if (_hasPrimaryAccountLoaded && !widget.isEdit)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      'primary_account_prefilled'.tr,
+                      style: body12.copyWith(color: ColorResources.gray),
+                    ),
                   ),
-                  GestureDetector(
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: accountNameControllers.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "${'account_no'.tr} ${index + 1}",
+                                  style: h16.copyWith(
+                                      color: ColorResources.darkGray),
+                                ),
+                              ),
+                              if (index > 0)
+                                IconButton(
+                                  onPressed: () {
+                                    removeAccount(index);
+                                  },
+                                  icon: Icon(
+                                    Icons.remove_circle,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          CustomTextField1(
+                              controller: accountNameControllers[index],
+                              hintColor: '',
+                              inputType: TextInputType.name,
+                              lableText: 'give_a_name_for_your_account'.tr,
+                              leading: '',
+                              readOnly: false),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomTextField1(
+                              controller: bikControllers[index],
+                              hintColor: '',
+                              inputType: TextInputType.text,
+                              lableText: 'БИК',
+                              leading: '',
+                              readOnly: false),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomTextField1(
+                              controller: accountNumberControllers[index],
+                              hintColor: '',
+                              inputType: TextInputType.number,
+                              lableText: 'account_number'.tr,
+                              leading: '',
+                              readOnly: false),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Divider(),
+                        ],
+                      );
+                    }),
+                const SizedBox(
+                  height: 5,
+                ),
+                CustomButtonWithIcon(
+                  onTap: addNewAccount,
+                  title: 'add_props'.tr,
+                  svgIcon: Images.svgPlus,
+                  isMaxSize: false,
+                  textColor: ColorResources.gray,
+                  buttonColor: ColorResources.lgColor,
+                  borderColor: ColorResources.lgColor,
+                  svgIconColor: ColorResources.gray,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.white,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
                     onTap: () {
-                      Get.to(() => AccountScreen(
-                            isAddNewCompany: true,
+                      Get.to(() => AddCompanyDocumentScreen(
                             isEdit: widget.isEdit,
                           ));
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'view_banks'.tr,
-                          style: button16.copyWith(color: ColorResources.blue),
+                    child: Container(
+                      // height: 48,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: ColorResources.primary,
                         ),
-                        const SizedBox(width: 5),
-                        SvgPicture.asset(Images.svgArrowForwardIcon),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: accountNameControllers.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "${'account_no'.tr} ${index + 1}",
-                                style: h16.copyWith(
-                                    color: ColorResources.darkGray),
-                              ),
-                            ),
-                            if (index > 0)
-                              IconButton(
-                                onPressed: () {
-                                  removeAccount(index);
-                                },
-                                icon: Icon(
-                                  Icons.remove_circle,
-                                  color: Colors.red,
-                                ),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextField1(
-                            controller: accountNameControllers[index],
-                            hintColor: '',
-                            inputType: TextInputType.name,
-                            lableText: 'give_a_name_for_your_account'.tr,
-                            leading: '',
-                            readOnly: false),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        CustomTextField1(
-                            controller: bikControllers[index],
-                            hintColor: '',
-                            inputType: TextInputType.text,
-                            lableText: 'БИК',
-                            leading: '',
-                            readOnly: false),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        CustomTextField1(
-                            controller: accountNumberControllers[index],
-                            hintColor: '',
-                            inputType: TextInputType.number,
-                            lableText: 'account_number'.tr,
-                            leading: '',
-                            readOnly: false),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const Divider(),
-                      ],
-                    );
-                  }),
-              const SizedBox(
-                height: 5,
-              ),
-              CustomButtonWithIcon(
-                onTap: addNewAccount,
-                title: 'add_props'.tr,
-                svgIcon: Images.svgPlus,
-                isMaxSize: false,
-                textColor: ColorResources.gray,
-                buttonColor: ColorResources.lgColor,
-                borderColor: ColorResources.lgColor,
-                svgIconColor: ColorResources.gray,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(() => AddCompanyDocumentScreen(
-                          isEdit: widget.isEdit,
-                        ));
-                  },
-                  child: Container(
-                    // height: 48,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: ColorResources.primary,
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 2,
+                            spreadRadius: 0,
+                            offset: Offset(0, 1),
+                            color: Color.fromRGBO(16, 24, 40, 0.05),
+                          ),
+                        ],
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 2,
-                          spreadRadius: 0,
-                          offset: Offset(0, 1),
-                          color: Color.fromRGBO(16, 24, 40, 0.05),
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'skip'.tr,
-                      style: textMd.copyWith(color: ColorResources.blue),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'skip'.tr,
+                        style: textMd.copyWith(color: ColorResources.blue),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    _submitForm();
-                  },
-                  child: Container(
-                    // height: 48,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: ColorResources.primary,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                      color: ColorResources.primary,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 2,
-                          spreadRadius: 0,
-                          offset: Offset(0, 1),
-                          color: Color.fromRGBO(16, 24, 40, 0.05),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      _submitForm();
+                    },
+                    child: Container(
+                      // height: 48,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: ColorResources.primary,
                         ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'continue'.tr,
-                      style: textMd.copyWith(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                        color: ColorResources.primary,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 2,
+                            spreadRadius: 0,
+                            offset: Offset(0, 1),
+                            color: Color.fromRGBO(16, 24, 40, 0.05),
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'continue'.tr,
+                        style: textMd.copyWith(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

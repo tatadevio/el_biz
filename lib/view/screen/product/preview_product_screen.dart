@@ -54,10 +54,14 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.productData == null) {
-              return SizedBox();
-              // Get.offAll(() => DashboardScreen());
+              return const SizedBox();
             }
-            final productData = state.productData!;
+            final productData = state.productData;
+            if (productData == null) {
+              return const Center(
+                child: Text('No product data available'),
+              );
+            }
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -95,27 +99,27 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                                     color: ColorResources.darkGray),
                               ),
                             ),
-                            Container(
-                              height: 40,
-                              width: 40,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    width: 1, color: ColorResources.lgColor),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 2,
-                                    spreadRadius: 0,
-                                    offset: Offset(0, 1),
-                                    color: Color.fromRGBO(16, 24, 40, 0.05),
-                                  ),
-                                ],
-                              ),
-                              alignment: Alignment.center,
-                              child: SvgPicture.asset(Images.svgHeartBorder),
-                            ),
+                            // Container(
+                            //   height: 40,
+                            //   width: 40,
+                            //   padding: const EdgeInsets.all(10),
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.white,
+                            //     border: Border.all(
+                            //         width: 1, color: ColorResources.lgColor),
+                            //     borderRadius: BorderRadius.circular(12),
+                            //     boxShadow: const [
+                            //       BoxShadow(
+                            //         blurRadius: 2,
+                            //         spreadRadius: 0,
+                            //         offset: Offset(0, 1),
+                            //         color: Color.fromRGBO(16, 24, 40, 0.05),
+                            //       ),
+                            //     ],
+                            //   ),
+                            //   alignment: Alignment.center,
+                            //   child: SvgPicture.asset(Images.svgHeartBorder),
+                            // ),
                           ],
                         ),
                         const SizedBox(
@@ -215,12 +219,8 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                                 style: h16.copyWith(
                                     color: ColorResources.darkGray),
                               ),
-                              Text(
-                                "${productData.availability}",
-                                // 'Уточнять наличие',
-                                style:
-                                    body16.copyWith(color: ColorResources.gray),
-                              ),
+                              const SizedBox(width: 8),
+                              _getAvailabilityIcon(productData.availability),
                             ],
                           ),
                         ),
@@ -305,21 +305,27 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          characteristicsItem(
-                              title: 'Материал',
-                              value: context
-                                      .read<AddProductBloc>()
-                                      .state
-                                      .productData
-                                      ?.material!
-                                      .name ??
-                                  ''
-                              //  materialItemsToString(
-                              //   [
+                          if (context
+                                  .read<AddProductBloc>()
+                                  .state
+                                  .productData
+                                  ?.material !=
+                              null)
+                            characteristicsItem(
+                                title: 'Материал',
+                                value: context
+                                        .read<AddProductBloc>()
+                                        .state
+                                        .productData
+                                        ?.material!
+                                        .name ??
+                                    ''
+                                //  materialItemsToString(
+                                //   [
 
-                              //   ],
-                              // ),
-                              ),
+                                //   ],
+                                // ),
+                                ),
                           const Divider(),
                           characteristicsItem(
                               title: 'Средний вес',
@@ -359,27 +365,31 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
               width: Get.width,
               height: Get.height,
               onTap: () {
-                if (widget.isEdit) {
-                  // showCustomSnackBar('Product Updated....');
-                  // Get.offAll(() => const DashboardScreen());
-                  log('this is product data ${context.read<AddProductBloc>().state.productData}');
-                  context.read<AddProductBloc>().add(UpdateProduct(
-                      context.read<AddProductBloc>().state.productData!,
-                      context
-                          .read<ProductDetailBloc>()
-                          .state
-                          .productDetailModel!
-                          .data!
-                          .id
-                          .toString()));
-                } else {
-                  // showCustomSnackBar('Product Added');
+                final currentProductData =
+                    context.read<AddProductBloc>().state.productData;
+                if (currentProductData == null) {
+                  showCustomSnackBar('Product data is not available');
+                  return;
+                }
 
-                  log('this is product data ${context.read<AddProductBloc>().state.productData}');
-                  context.read<AddProductBloc>().add(AddProduct(
-                      addProductModel:
-                          context.read<AddProductBloc>().state.productData!));
-                  // Get.offAll(() => const DashboardScreen());
+                if (widget.isEdit) {
+                  final productDetailState =
+                      context.read<ProductDetailBloc>().state;
+                  final productId =
+                      productDetailState.productDetailModel?.data?.id;
+                  if (productId == null) {
+                    showCustomSnackBar('Product ID is not available');
+                    return;
+                  }
+
+                  log('this is product data $currentProductData');
+                  context.read<AddProductBloc>().add(
+                      UpdateProduct(currentProductData, productId.toString()));
+                } else {
+                  log('this is product data $currentProductData');
+                  context
+                      .read<AddProductBloc>()
+                      .add(AddProduct(addProductModel: currentProductData));
                 }
               },
               title: 'save'.tr);
@@ -426,5 +436,23 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
         ],
       ),
     );
+  }
+
+  Widget _getAvailabilityIcon(String? availability) {
+    if (availability == '1') {
+      // Available - show green check
+      return Icon(
+        Icons.check_circle,
+        color: Colors.green,
+        size: 20,
+      );
+    } else {
+      // Not available (0 or null) - show red cross
+      return Icon(
+        Icons.cancel,
+        color: Colors.red,
+        size: 20,
+      );
+    }
   }
 }

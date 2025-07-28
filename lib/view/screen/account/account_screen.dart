@@ -163,57 +163,125 @@ class _AccountScreenState extends State<AccountScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: CustomButton(
-            width: Get.width,
-            height: Get.height,
-            onTap: () {
-              if (widget.isAddNewCompany) {
-                if (_selectedOption == "") {
-                  showShortToast('select_account'.tr);
+        child:
+            BlocBuilder<AccountBloc, AccountState>(builder: (context, state) {
+          // Determine button properties based on conditions
+          bool hasAccounts = state.accountItems.isNotEmpty;
+
+          // Check if there's a selection: either _selectedOption is set OR there's a primary account
+          bool hasPrimaryAccount =
+              state.accountItems.any((account) => account.primaryAccount == 1);
+          bool hasSelection = _selectedOption.isNotEmpty || hasPrimaryAccount;
+
+          bool isButtonActive = true;
+          String buttonText = 'add_account'.tr;
+          Color buttonColor = ColorResources.primary;
+          Color textColor = Colors.white;
+
+          if (widget.isAddNewCompany) {
+            if (hasAccounts) {
+              // If there are accounts, button should be "continue" and require selection
+              buttonText = widget.isEdit ? 'add_account'.tr : 'continue'.tr;
+              isButtonActive =
+                  hasSelection; // Active if account is selected OR there's a primary account
+              if (!isButtonActive) {
+                buttonColor = ColorResources.gray;
+                textColor = ColorResources.darkGray;
+              }
+            } else {
+              // If no accounts, button should be "add_account"
+              buttonText = 'add_account'.tr;
+              isButtonActive = true;
+            }
+          } else {
+            // Normal case - always show add_account
+            buttonText = 'add_account'.tr;
+            isButtonActive = true;
+          }
+
+          return CustomButton(
+              width: Get.width,
+              height: Get.height,
+              onTap: () {
+                if (!isButtonActive) {
+                  // Button is disabled, do nothing but could show a toast
+                  if (widget.isAddNewCompany && hasAccounts && !hasSelection) {
+                    showShortToast('select_account'.tr);
+                  }
                   return;
                 }
-                final accountState = context.read<AccountBloc>().state;
-                List<BankItem> allBanks = [];
 
-                for (int i = 0; i < accountState.accountItems.length; i++) {
-                  if (accountState.accountItems[i].accountNumber ==
-                      _selectedOption) {
-                    String accountName =
-                        accountState.accountItems[i].accountName ?? '';
-                    String accountNumber =
-                        accountState.accountItems[i].accountNumber ?? '';
-                    String bik = accountState.accountItems[i].bic ?? '';
-                    allBanks.add(
-                      BankItem(
-                        id: DateTime.now().millisecondsSinceEpoch + i,
-                        bankName: bik,
-                        accountName: accountName,
-                        accountNumber: accountNumber,
-                        image: '',
-                      ),
-                    );
+                if (widget.isAddNewCompany) {
+                  if (hasAccounts && !hasSelection) {
+                    showShortToast('select_account'.tr);
+                    return;
                   }
-                }
-                final companyModel =
-                    context.read<CompanyBloc>().state.addCompanyModel;
 
-                companyModel.bankData = allBanks;
-                Get.to(() => AddCompanyDocumentScreen(
-                      isEdit: widget.isEdit,
-                    ));
-              } else {
-                Get.bottomSheet(
-                    const EditAccountInfoBottomSheet(
-                      isAddNew: true,
-                    ),
-                    backgroundColor: Colors.white,
-                    isScrollControlled: true);
-              }
-            },
-            title: 'add_account'.tr,
-            color: ColorResources.primary,
-            textColor: Colors.white,
-            radius: 10),
+                  if (hasAccounts) {
+                    // Navigate to next screen with selected account
+                    final accountState = context.read<AccountBloc>().state;
+                    List<BankItem> allBanks = [];
+
+                    // Find the selected account (either from _selectedOption or primary account)
+                    String selectedAccountNumber = _selectedOption.isNotEmpty
+                        ? _selectedOption
+                        : accountState.accountItems
+                                .firstWhere(
+                                    (account) => account.primaryAccount == 1)
+                                .accountNumber ??
+                            '';
+
+                    for (int i = 0; i < accountState.accountItems.length; i++) {
+                      if (accountState.accountItems[i].accountNumber ==
+                          selectedAccountNumber) {
+                        String accountName =
+                            accountState.accountItems[i].accountName ?? '';
+                        String accountNumber =
+                            accountState.accountItems[i].accountNumber ?? '';
+                        String bik = accountState.accountItems[i].bic ?? '';
+                        allBanks.add(
+                          BankItem(
+                            id: DateTime.now().millisecondsSinceEpoch + i,
+                            bankName: bik,
+                            accountName: accountName,
+                            accountNumber: accountNumber,
+                            image: '',
+                          ),
+                        );
+                        break; // Found the account, no need to continue
+                      }
+                    }
+
+                    final companyModel =
+                        context.read<CompanyBloc>().state.addCompanyModel;
+                    companyModel.bankData = allBanks;
+                    Get.to(() => AddCompanyDocumentScreen(
+                          isEdit: widget.isEdit,
+                        ));
+                  } else {
+                    // No accounts, show add account bottom sheet
+                    Get.bottomSheet(
+                        const EditAccountInfoBottomSheet(
+                          isAddNew: true,
+                        ),
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true);
+                  }
+                } else {
+                  // Normal add account behavior
+                  Get.bottomSheet(
+                      const EditAccountInfoBottomSheet(
+                        isAddNew: true,
+                      ),
+                      backgroundColor: Colors.white,
+                      isScrollControlled: true);
+                }
+              },
+              title: buttonText,
+              color: buttonColor,
+              textColor: textColor,
+              radius: 10);
+        }),
       ),
     );
   }

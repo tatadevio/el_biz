@@ -392,5 +392,8 @@
   "profile_type_legal_entity": "Legal entities",
   "no_internet_connection": "No Internet Connection",
   "back_online": "Back Online",
-  "search_for_companies": "Search for companies..."
+  "search_for_companies": "Search for companies...",
+  "select_account": "Select Account",
+  "primary_account_prefilled": "Primary account information has been pre-filled. You can modify or add more accounts.",
+  "logo_and_banner_is_requried": "Logo and banner are required"
 }

@@ -17,7 +17,7 @@ class CompnayRepo {
   Future<Response> getMyCompanies() async {
     // missing pagination
 
-    return await apiClient.getData(AppConstants.myCompaniesUrl);
+    return await apiClient.getData("${AppConstants.myCompaniesUrl}?perPage=30");
   }
 
   Future<Response> deleteCompany(String id) async {

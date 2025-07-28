@@ -36,10 +36,8 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       }
       try {
         final res = await compnayRepo.getMyCompanies();
-        print('get my company status code =  ${res.statusCode}');
 
         MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
-        print('get my company response =  ${myCompanies.toJson()}');
         List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
         emit(state.copywith(
             myCompanies: myCompaniesList)); // emits updated state
