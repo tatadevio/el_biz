@@ -193,12 +193,15 @@ class NewCompaniesWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              '(4,8)',
+                              company.reviewsAverageRating ?? '',
+                              // '(4,8)',
                               style:
                                   body14.copyWith(color: ColorResources.gray),
                             ),
                             RatingBar.builder(
-                              initialRating: 3,
+                              initialRating: double.tryParse(
+                                      company.reviewsAverageRating ?? '0') ??
+                                  0,
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,

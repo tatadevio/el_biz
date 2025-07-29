@@ -97,6 +97,10 @@ class _ChatConversationState extends State<ChatConversation> {
   user.User? senderUser;
   user.User? receiverUser;
 
+  // Stream subscriptions to properly dispose
+  StreamSubscription<QuerySnapshot>? _messagesSubscription;
+  StreamSubscription<QuerySnapshot>? _seenStatusSubscription;
+
   String chatId = '';
   ChatItem? chatItem;
   @override
@@ -319,7 +323,7 @@ class _ChatConversationState extends State<ChatConversation> {
   }
 
   void _listenToNewMessages() {
-    FirebaseFirestore.instance
+    _messagesSubscription = FirebaseFirestore.instance
         .collection('chat')
         .doc(chatItem?.firebaseChatId)
         .collection('messages')
@@ -327,6 +331,8 @@ class _ChatConversationState extends State<ChatConversation> {
         .limit(1)
         .snapshots()
         .listen((snapshot) {
+      if (!mounted) return; // Check if widget is still mounted
+
       if (snapshot.docs.isNotEmpty) {
         final newMessage = snapshot.docs.first;
 
@@ -378,7 +384,7 @@ class _ChatConversationState extends State<ChatConversation> {
   }
 
   void _listenToReceiverSeenStatus() {
-    FirebaseFirestore.instance
+    _seenStatusSubscription = FirebaseFirestore.instance
         .collection('chat')
         .doc(chatItem?.firebaseChatId)
         .collection('messages')
@@ -386,6 +392,8 @@ class _ChatConversationState extends State<ChatConversation> {
         .where('read', isEqualTo: true)
         .snapshots()
         .listen((snapshot) {
+      if (!mounted) return; // Check if widget is still mounted
+
       for (var doc in snapshot.docs) {
         final messageId = doc.id;
         final alreadyUpdated =
@@ -928,5 +936,17 @@ class _ChatConversationState extends State<ChatConversation> {
         .doc(receiverUser?.id.toString() ?? '')
         .get();
     return userDoc.data()?['fcmToken'] ?? '';
+  }
+
+  @override
+  void dispose() {
+    // Cancel stream subscriptions
+    _messagesSubscription?.cancel();
+    _seenStatusSubscription?.cancel();
+
+    // Dispose scroll controller
+    _scrollController.dispose();
+
+    super.dispose();
   }
 }

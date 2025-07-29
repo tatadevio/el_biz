@@ -388,5 +388,12 @@
   "search_for_companies": "Поиск компаний...",
   "select_account": "Выберите аккаунт",
   "primary_account_prefilled": "Информация основного счета была предварительно заполнена. Вы можете изменить или добавить больше счетов.",
-  "logo_and_banner_is_requried": "Логотип и баннер обязательны"
+  "logo_and_banner_is_requried": "Логотип и баннер обязательны",
+  "storage_permission_required": "Требуется разрешение на доступ к хранилищу для загрузки файлов",
+  "downloading_file": "Загрузка файла...",
+  "file_downloaded_successfully": "Файл успешно загружен",
+  "file_downloaded_but_cannot_open": "Файл загружен, но не может быть открыт",
+  "download_failed": "Загрузка не удалась",
+  "download_error": "Произошла ошибка загрузки",
+  "download_all_documents": "Скачать все документы"
 }

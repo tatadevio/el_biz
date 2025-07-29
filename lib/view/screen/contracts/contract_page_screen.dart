@@ -271,6 +271,7 @@ class _ContractPageScreenState extends State<ContractPageScreen> {
                                             contractId:
                                                 contractModel.id.toString(),
                                             status: newValue));
+
                                     Get.back();
                                   },
                                   style: TextButton.styleFrom(

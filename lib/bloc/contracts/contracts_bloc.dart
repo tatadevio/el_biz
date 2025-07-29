@@ -126,7 +126,16 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
           return item;
         }).toList();
 
-        emit(state.copywith(salesContractItems: updatedSalesContracts));
+        // Update payment status in contractDetail if it matches the contract ID
+        CompanyContractItem? updatedContractDetail;
+        if (state.contractDetail?.id.toString() == event.contractId) {
+          updatedContractDetail =
+              state.contractDetail?.copyWith(paymentStatus: event.status);
+        }
+
+        emit(state.copywith(
+            salesContractItems: updatedSalesContracts,
+            contractDetail: updatedContractDetail));
         // Handle successful status update
         // updateSalesContractStatus(event.contractId, event.status, emit);
         // Get.offAll(() => const DashboardScreen());
@@ -149,6 +158,13 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
         // Handle successful status update
         // updateSalesContractStatus(event.contractId, event.status, emit);
         // Get.offAll(() => const DashboardScreen());
+        // here ad to update payment status in contractDetail
+        CompanyContractItem? updatedContractDetail;
+        if (state.contractDetail?.id.toString() == event.contractId) {
+          updatedContractDetail =
+              state.contractDetail?.copyWith(paymentStatus: 'processing');
+        }
+        emit(state.copywith(contractDetail: updatedContractDetail));
         Get.back();
       } else {
         // Handle error

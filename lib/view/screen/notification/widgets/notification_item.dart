@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
 import 'package:el_biz/bloc/notification/notification_bloc.dart';
 import 'package:el_biz/data/model/response/notification/notifications_model.dart';
@@ -7,11 +8,13 @@ import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/company/company_bloc.dart';
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../contracts/contract_page_screen.dart';
@@ -42,7 +45,13 @@ class NotificationItemWidget extends StatelessWidget {
         print('notification.type: ${notification.type}');
 
         // now check the notificaiton type and open
-        if (notification.type == 'product') {
+        if (notification.type == 'company') {
+          context.read<CompanyDetailBloc>().add(
+              GetCompanyDetail(notification.data?.companyId.toString() ?? ''));
+          Get.to(() => CompanyPageScreen(
+                isCompany: true,
+              ));
+        } else if (notification.type == 'product') {
           context.read<ProductDetailBloc>().add(
               GetProductDetail(notification.data?.productId.toString() ?? ''));
           Get.to(() => ProductDetailScreen(isProduct: true));
@@ -53,12 +62,24 @@ class NotificationItemWidget extends StatelessWidget {
               tenderName: notification.data?.tenderTitle.toString() ?? ''));
         } else if (notification.type == 'contract_creation' ||
             notification.type == 'contract_signing' ||
-            notification.type == "payment") {
+            notification.type == "payment" ||
+            notification.type == "contract_status") {
           context.read<ContractsBloc>().add(GetContractDetail(
               contractId: notification.data?.contractId.toString() ?? ''));
           Get.to(() => ContractPageScreen(
               contractId: notification.data?.contractId ?? 0));
         }
+
+        // const TYPE_CONTRACT_STATUS = 'contract_status';
+        // const TYPE_CONTRACT_SIGNING = 'contract_signing';
+        // const TYPE_CONTRACT_CREATION = 'contract_creation';
+        // const TYPE_PRODUCT = 'product';
+        // const TYPE_TENDER = 'tender';
+        // const TYPE_PAYMENT = 'payment';
+        // const TYPE_REVIEW = 'review';
+        // const TYPE_CHAT = 'chat';
+        // const TYPE_SYSTEM = 'system';
+        // const TYPE_COMPANY = 'company';
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -84,13 +105,18 @@ class NotificationItemWidget extends StatelessWidget {
                 width: 32,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: index % 2 == 0
-                      ? ColorResources.blue
-                      : ColorResources.green,
+                  color:
+                      // index % 2 == 0
+                      notification.type == 'payment'
+                          ? ColorResources.blue
+                          : ColorResources.green,
                 ),
                 alignment: Alignment.center,
                 child: SvgPicture.asset(
-                  index % 2 == 0 ? Images.svgWallet : Images.svgShoppingBag,
+                  // index % 2 == 0 ? Images.svgWallet : Images.svgShoppingBag,
+                  notification.type == 'payment'
+                      ? Images.svgWallet
+                      : Images.svgShoppingBag,
                   height: 16,
                   width: 16,
                 ),
