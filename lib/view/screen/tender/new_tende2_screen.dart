@@ -213,7 +213,9 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
         listener: (context, stateListner) async {
           if (stateListner is AddTenderSuccess) {
             // showShortToast('new tended added');
-            context.read<PublicTenderBloc>().add(GetPublicTender(1, direction: 'asc'));
+            context
+                .read<PublicTenderBloc>()
+                .add(GetPublicTender(1, direction: 'asc'));
             await Get.dialog(CustomDialog(
                 widget: AlertDialog(
               title:
@@ -526,7 +528,7 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
                                     ),
                                     CustomTextField1(
                                       controller: productNameController[index],
-                                      hintColor: 'product_name',
+                                      hintColor: 'product_name'.tr,
                                       lableText: 'Например: Стулья',
                                       inputType: TextInputType.text,
                                       leading: '',

@@ -9,7 +9,117 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import '../bloc/chat/chat_bloc.dart';
+import '../bloc/company_detail/company_detail_bloc.dart';
+import '../bloc/contracts/contracts_bloc.dart';
+import '../bloc/notification/notification_bloc.dart';
+import '../bloc/product_detail/product_detail_bloc.dart';
+import '../bloc/tender_detail/tender_detail_bloc.dart';
 import '../utils/appConstant.dart';
+import '../view/screen/company/company_page_screen.dart';
+import '../view/screen/contracts/contract_page_screen.dart';
+import '../view/screen/product_detail/product_detail_screen.dart';
+import '../view/screen/tender/tender_detail_screen.dart';
+
+// Global notification service to handle notification clicks safely
+class NotificationService {
+  static void handleNotificationClick(
+      String status, String id, String notificationId,
+      [BuildContext? context]) {
+    print('🔔 Handling notification click - Type: $status, ID: $id');
+
+    // Mark notification as read if context is available and valid
+    if (context != null) {
+      try {
+        context.read<NotificationBloc>().add(ReadNotification(notificationId));
+      } catch (e) {
+        print('⚠️ Error marking notification as read: $e');
+      }
+    }
+
+    // Handle navigation based on notification type
+    try {
+      switch (status) {
+        case 'company':
+          _handleCompanyNotification(id);
+          break;
+        case 'product':
+          _handleProductNotification(id);
+          break;
+        case 'tender':
+          _handleTenderNotification(id);
+          break;
+        case 'contract_creation':
+        case 'contract_signing':
+        case 'payment':
+        case 'contract_status':
+          print(
+              '🔍 DEBUG: NotificationService handling contract notification with ID = $id');
+          _handleContractNotification(id);
+          break;
+        default:
+          print('⚠️ Unknown notification type: $status');
+      }
+    } catch (e) {
+      print('❌ Error handling notification click: $e');
+    }
+  }
+
+  static void _handleCompanyNotification(String id) {
+    try {
+      // Check if bloc is available before using it
+      if (Get.isRegistered<CompanyDetailBloc>()) {
+        Get.find<CompanyDetailBloc>().add(GetCompanyDetail(id));
+      }
+      Get.to(() => CompanyPageScreen(isCompany: true));
+    } catch (e) {
+      print('❌ Error handling company notification: $e');
+      // Fallback navigation without bloc
+      Get.to(() => CompanyPageScreen(isCompany: true));
+    }
+  }
+
+  static void _handleProductNotification(String id) {
+    try {
+      // Check if bloc is available before using it
+      if (Get.isRegistered<ProductDetailBloc>()) {
+        Get.find<ProductDetailBloc>().add(GetProductDetail(id));
+      }
+      Get.to(() => ProductDetailScreen(isProduct: true));
+    } catch (e) {
+      print('❌ Error handling product notification: $e');
+      // Fallback navigation without bloc
+      Get.to(() => ProductDetailScreen(isProduct: true));
+    }
+  }
+
+  static void _handleTenderNotification(String id) {
+    try {
+      // Check if bloc is available before using it
+      if (Get.isRegistered<TenderDetailBloc>()) {
+        Get.find<TenderDetailBloc>().add(GetTenderDetail(tenderId: id));
+      }
+      Get.to(() => TenderDetailScreen(tenderName: ''));
+    } catch (e) {
+      print('❌ Error handling tender notification: $e');
+      // Fallback navigation without bloc
+      Get.to(() => TenderDetailScreen(tenderName: ''));
+    }
+  }
+
+  static void _handleContractNotification(String id) {
+    try {
+      // Check if bloc is available before using it
+      if (Get.isRegistered<ContractsBloc>()) {
+        Get.find<ContractsBloc>().add(GetContractDetail(contractId: id));
+      }
+      Get.to(() => ContractPageScreen(contractId: int.parse(id)));
+    } catch (e) {
+      print('❌ Error handling contract notification: $e');
+      // Fallback navigation without bloc
+      Get.to(() => ContractPageScreen(contractId: int.parse(id)));
+    }
+  }
+}
 
 // Top-level function for background notification handling
 @pragma('vm:entry-point')
@@ -45,7 +155,9 @@ class MyNotification {
             List<String> result = payload.split(',');
             String id = result[0];
             String type = result[1];
-            String receiverid = result[2];
+            // String receiverid = result[2];
+            String contractId = result[3];
+            String notificationId = result[4];
             print("payload is $id  and $type");
             if (type == 'chat-product') {
               // add api to get chat detail
@@ -62,24 +174,10 @@ class MyNotification {
                     isFirstMessage: false,
                     chatItem: null,
                   ));
+            } else {
+              NotificationService.handleNotificationClick(
+                  type, contractId, notificationId, context);
             }
-            if (type == "chat") {
-              // if (Get.find<AuthController>().isLoggedIn()) {
-              // Get.find<ChatController>().getTicket(true);
-              // Get.find<ChatController>().getChatList(id, 0, true);
-              // print('going to check the routes');
-              // if (Get.currentRoute == RouteHelper.chatConversatonRoute) {
-              //   Get.to(
-              //       () =>
-              //           ChatConversation(productId: id, receivedId: receiverid),
-              //       preventDuplicates: false);
-              // } else {
-              //   Get.to(
-              //       () =>
-              //           ChatConversation(productId: id, receivedId: receiverid),
-              //       preventDuplicates: false);
-              // }
-            } else if (type == "normal") {}
 
             /*Get.find<BooksDetailController>().bookDetail(payload.toString());
           Get.to(BooksDetails());*/
@@ -117,44 +215,14 @@ class MyNotification {
                 isFirstMessage: false,
                 chatItem: null,
               ));
+        } else {
+          String notificationId = message?.data['notification_id'];
+          String contractId = message?.data['contract_id'] ??
+              message?.data['product_id'] ??
+              message?.data['tender_id'];
+          NotificationService.handleNotificationClick(
+              type, contractId, notificationId, context);
         }
-
-        // if (type == "chat") {
-        //   String id = message!.data['chatId'];
-        //   String receiverId = message.data['receiverId'];
-        //   if (Get.find<AuthController>().isLoggedIn()) {
-        //     Get.find<ChatController>().getTicket(true);
-
-        //     Get.find<ChatController>().getChatList(id, 0, true);
-        //     Get.to(
-        //         () => ChatConversation(productId: id, receivedId: receiverId),
-        //         preventDuplicates: false);
-        //   }
-        // }
-        // if (type == 'order') {
-        //   String id = message!.data['notification_id'];
-        //   Get.find<MarketOrderController>().getOrders(true, 1);
-        //   Get.find<MarketOrderController>().getOrderDetail(id);
-        // }
-        // if (type == 'shorts_live_story') {
-        //   String shortsType = message!.data['shorts_type'];
-        //   if (shortsType == 'shorts') {
-        //     final shortsController = Get.find<ShortsController>();
-        //     await shortsController
-        //         .getSharedShort(message.data['notification_id']);
-        //     if (shortsController.sharedShort != null) {
-        //       Get.to(() => const SharedShortScreen());
-        //     }
-        //   } else if (shortsType == 'home_story') {
-        //   } else if (shortsType == 'cat_story') {
-        //   } else if (shortsType == 'live') {
-        //     if (Get.currentRoute != 'StoryViewScreenNew') {
-        //       Get.find<HomeController>().getNewHomePageStories();
-        //     }
-        //   }
-        // }
-
-        // String id = message?.data['notification_id'];
       }
     });
 
@@ -172,6 +240,65 @@ class MyNotification {
         context
             .read<ChatBloc>()
             .add(GetChatTenderList(currentPage: 1, reload: false));
+      } else {
+        context.read<NotificationBloc>().add(GetNotification(1));
+
+        if (type == 'contract_status' ||
+            type == 'contract_signing' ||
+            type == 'payment') {
+          String? contractId = message.data['contract_id'];
+          print('🔍 DEBUG: Notification type = $type');
+          print('🔍 DEBUG: Contract ID from notification = $contractId');
+          print('🔍 DEBUG: Full message data = ${message.data}');
+
+          if (contractId != null) {
+            // Check if user is already on ContractPageScreen
+            bool isOnContractScreen =
+                Get.currentRoute.contains('ContractPageScreen');
+            print(
+                '🔍 DEBUG: Is user on ContractPageScreen? = $isOnContractScreen');
+            print('🔍 DEBUG: Current route = ${Get.currentRoute}');
+
+            if (isOnContractScreen) {
+              // Check if the contract ID matches the current contract detail
+              final contractsState = context.read<ContractsBloc>().state;
+              final currentContractDetail = contractsState.contractDetail;
+
+              print(
+                  '🔍 DEBUG: Current contract detail = $currentContractDetail');
+              print(
+                  '🔍 DEBUG: Current contract detail ID = ${currentContractDetail?.id}');
+              print('🔍 DEBUG: Notification contract ID = $contractId');
+              print(
+                  '🔍 DEBUG: IDs match? = ${currentContractDetail?.id.toString() == contractId}');
+
+              if (currentContractDetail != null &&
+                  currentContractDetail.id.toString() == contractId) {
+                // User is already viewing the same contract, no need to call API
+                print(
+                    '🔔 User already viewing contract $contractId, skipping API call');
+                context
+                    .read<ContractsBloc>()
+                    .add(GetContractDetail(contractId: contractId));
+              } else {
+                // User is on contract screen but viewing different contract, call API
+                print(
+                    '🔔 User on contract screen but viewing different contract, calling API');
+                print(
+                    '🔍 DEBUG: Calling GetContractDetail with contractId = $contractId');
+              }
+            } else {
+              // User is not on contract screen, call API
+              print('🔔 User not on contract screen, calling API');
+              print(
+                  '🔍 DEBUG: Calling GetContractDetail with contractId = $contractId');
+            
+            }
+          } else {
+            print('❌ DEBUG: Contract ID is null from notification data');
+          }
+        }
+       
       }
       MyNotification.showNotification(
           message, flutterLocalNotificationsPlugin, true);
@@ -217,7 +344,7 @@ class MyNotification {
 
       // String id = message.data['chatId'] ?? message.data['chat_id'];
       String type = message.data['notification_type'];
-      String id = message.data['chatId'];
+      String id = message.data['chatId'] ?? '';
       if (type == 'chat-product') {
         // add api to get chat detail
         print('this is the product open app chat id = $id');
@@ -235,18 +362,14 @@ class MyNotification {
               isFirstMessage: false,
               chatItem: null,
             ));
-      }
-      if (type == "chat") {
-        String id = message.data['chatId'];
-        String receiverId = message.data['receiverId'];
-        // if (Get.find<AuthController>().isLoggedIn()) {
-
-        // Get.find<ChatController>().getTicket(true);
-        print('calling in message get chat list');
-
-        // Get.find<ChatController>().getChatList(id, 0, true);
-        // Get.to(() => ChatConversation(productId: id, receivedId: receiverId),
-        //     preventDuplicates: false);
+      } else {
+        String status = message.data['notification_type'];
+        String contractId = message.data['contract_id'] ??
+            message.data['product_id'] ??
+            message.data['tender_id'];
+        String notificationId = message.data['notification_id'];
+        NotificationService.handleNotificationClick(
+            status, contractId, notificationId, context);
       }
     });
   }
@@ -260,6 +383,8 @@ class MyNotification {
       String? _image;
       String? _type;
       String? _reciverId;
+      String? _contractId;
+      String? _notificationId;
       if (data) {
         _title = message.data['title'] ?? '';
         _body = message.data['body'] ?? '';
@@ -268,6 +393,11 @@ class MyNotification {
             message.data['senderId']; // replace there receiverId with senderId
         // message.data['notification_id'];
         _type = message.data['notification_type'];
+        _contractId = message.data['contract_id'] ??
+            message.data['product_id'] ??
+            message.data['tender_id'];
+        _notificationId = message.data['notification_id'];
+        // message.data['contract_id'];
         _image =
             (message.data['image'] != null && message.data['image'].isNotEmpty)
                 ? message.data['image'].startsWith('http')
@@ -285,6 +415,11 @@ class MyNotification {
         _body = message.notification?.body ?? '';
         _orderID = message.data['notification_id'] ??
             message.notification?.titleLocKey;
+        _contractId = message.data['contract_id'] ??
+            message.data['product_id'] ??
+            message.data['tender_id'];
+        _notificationId = message.data['notification_id'];
+        // message.data['contract_id'];
         if (GetPlatform.isAndroid) {
           _image = (message.notification?.android?.imageUrl != null)
               ? message.notification?.android?.imageUrl
@@ -301,7 +436,15 @@ class MyNotification {
       if (_image != null && _image.isNotEmpty) {
         try {
           await showBigPictureNotificationHiddenLargeIcon(
-              _title, _body, _orderID, _image, _type, _reciverId, fln);
+              _title,
+              _body,
+              _orderID,
+              _image,
+              _type,
+              _reciverId,
+              _contractId,
+              _notificationId,
+              fln);
         } catch (e) {
           await showBigTextNotification(
               _title,
@@ -309,6 +452,8 @@ class MyNotification {
               _orderID == null ? "0" : _orderID,
               _type == null ? "normal" : _type,
               _reciverId ?? "",
+              _contractId ?? '',
+              _notificationId ?? '',
               fln);
         }
       }
@@ -331,6 +476,8 @@ class MyNotification {
             _orderID == null ? "0" : _orderID,
             _type == null ? "normal" : _type,
             _reciverId ?? "",
+            _contractId ?? '',
+            _notificationId ?? '',
             fln);
       }
     }
@@ -342,6 +489,8 @@ class MyNotification {
       String orderID,
       String type,
       String receiverId,
+      String contractId,
+      String notificationId,
       FlutterLocalNotificationsPlugin fln) async {
     BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
       body!,
@@ -365,7 +514,15 @@ class MyNotification {
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await fln.show(0, title, body, platformChannelSpecifics,
-        payload: orderID + "," + type + "," + receiverId);
+        payload: orderID +
+            "," +
+            type +
+            "," +
+            receiverId +
+            "," +
+            contractId +
+            "," +
+            notificationId);
   }
 
   static Future<void> showTextNotification(
@@ -396,6 +553,8 @@ class MyNotification {
       String image,
       String? type,
       String? receiverId,
+      String? contractId,
+      String? notificationId,
       FlutterLocalNotificationsPlugin fln) async {
     final String largeIconPath = await _downloadAndSaveFile(image, 'largeIcon');
     final String bigPicturePath =
@@ -424,7 +583,15 @@ class MyNotification {
     final NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await fln.show(0, title, body, platformChannelSpecifics,
-        payload: orderID! + "," + type! + "," + receiverId!);
+        payload: orderID! +
+            "," +
+            type! +
+            "," +
+            receiverId! +
+            "," +
+            contractId! +
+            "," +
+            notificationId!);
   }
 
   static Future<String> _downloadAndSaveFile(

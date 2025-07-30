@@ -294,6 +294,7 @@
   "other_contacts": "Другие контакты",
   "contact_name": "Название контакта",
   "contacts": "Контакты",
+  "contact": "Контакт",
   "add_contacts": "Добавить контакты",
   "details": "Реквизиты",
   "view_banks": "Посмотреть банки",
@@ -395,5 +396,6 @@
   "file_downloaded_but_cannot_open": "Файл загружен, но не может быть открыт",
   "download_failed": "Загрузка не удалась",
   "download_error": "Произошла ошибка загрузки",
-  "download_all_documents": "Скачать все документы"
+  "download_all_documents": "Скачать все документы",
+  "no_companies_found": "Компании не найдены"
 }

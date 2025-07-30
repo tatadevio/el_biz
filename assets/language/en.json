@@ -301,6 +301,7 @@
   "other_contacts": "Other contacts",
   "contact_name": "Contact name",
   "contacts": "Contacts",
+  "contact": "Contact",
   "add_contacts": "Add contacts",
   "details": "Details",
   "view_banks": "View banks",
@@ -395,5 +396,6 @@
   "search_for_companies": "Search for companies...",
   "select_account": "Select Account",
   "primary_account_prefilled": "Primary account information has been pre-filled. You can modify or add more accounts.",
-  "logo_and_banner_is_requried": "Logo and banner are required"
+  "logo_and_banner_is_requried": "Logo and banner are required",
+  "no_companies_found": "No companies found"
 }

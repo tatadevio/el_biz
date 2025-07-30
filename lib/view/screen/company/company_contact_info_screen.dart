@@ -388,7 +388,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                           Expanded(
                             child: CustomTextField1(
                               controller: accountNameControllers[index],
-                              hintColor: 'Telegram',
+                              hintColor: 'contact_name'.tr,
                               inputType: TextInputType.text,
                               lableText: 'contact_name'.tr,
                               leading: '',
@@ -399,7 +399,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
                           Expanded(
                             child: CustomTextField1(
                               controller: accountControllers[index],
-                              hintColor: '@Telegram',
+                              hintColor: '@${"contact".tr}',
                               inputType: TextInputType.text,
                               lableText: 'contacts'.tr,
                               leading: '',
