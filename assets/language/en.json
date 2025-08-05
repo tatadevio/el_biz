@@ -397,5 +397,8 @@
   "select_account": "Select Account",
   "primary_account_prefilled": "Primary account information has been pre-filled. You can modify or add more accounts.",
   "logo_and_banner_is_requried": "Logo and banner are required",
-  "no_companies_found": "No companies found"
+  "no_companies_found": "No companies found",
+  "login_to_view_product": "Login to view product",
+  "login_to_view_company": "Login to view company",
+  "login_to_view_tender": "Login to view tender"
 }

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
 import '../screen/tender/tender_detail_screen.dart';
 
@@ -39,13 +40,17 @@ class TenderGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context
-            .read<TenderDetailBloc>()
-            .add(GetTenderDetail(tenderId: tender.id.toString()));
-        Get.to(() => TenderDetailScreen(
-              // isProduct: false,
-              tenderName: tender.title ?? '',
-            ));
+        if (context.read<AuthBloc>().state.isLoggedIn) {
+          context
+              .read<TenderDetailBloc>()
+              .add(GetTenderDetail(tenderId: tender.id.toString()));
+          Get.to(() => TenderDetailScreen(
+                // isProduct: false,
+                tenderName: tender.title ?? '',
+              ));
+        } else {
+          showShortToast('login_to_view_tender'.tr);
+        }
       },
       child: Container(
         decoration: const BoxDecoration(
@@ -95,14 +100,11 @@ class TenderGridItem extends StatelessWidget {
                             if (isCompanyTender) {
                               context.read<CompanyDetailBloc>().add(
                                   ToggleTenderFavorite(tender.id!, context));
-                            } 
-                            else if(isSearchTender) {
+                            } else if (isSearchTender) {
                               context.read<SearchTenderBloc>().add(
                                   ToggleSearchTenderFavorite(
                                       tender.id!, context));
-                            }
-                            
-                            else
+                            } else
                             // if (isPublicTender)
                             {
                               context.read<PublicTenderBloc>().add(

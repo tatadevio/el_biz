@@ -397,5 +397,8 @@
   "download_failed": "Загрузка не удалась",
   "download_error": "Произошла ошибка загрузки",
   "download_all_documents": "Скачать все документы",
-  "no_companies_found": "Компании не найдены"
+  "no_companies_found": "Компании не найдены",
+  "login_to_view_product": "Войдите, чтобы просмотреть товар",
+  "login_to_view_company": "Войдите, чтобы просмотреть компанию",
+  "login_to_view_tender": "Войдите, чтобы просмотреть тендер"
 }

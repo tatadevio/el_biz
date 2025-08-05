@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../bloc/product_detail/product_detail_bloc.dart';
 import '../../bloc/product_review/product_review_bloc.dart';
@@ -44,17 +45,21 @@ class ProductListItemWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
-          context
-              .read<ProductDetailBloc>()
-              .add(GetProductDetail(product?.id.toString() ?? ''));
+          if (context.read<AuthBloc>().state.isLoggedIn) {
+            context
+                .read<ProductDetailBloc>()
+                .add(GetProductDetail(product?.id.toString() ?? ''));
 
-          context
-              .read<ProductReviewBloc>()
-              .add(GetProductReviews(product?.id.toString() ?? '', 1));
+            context
+                .read<ProductReviewBloc>()
+                .add(GetProductReviews(product?.id.toString() ?? '', 1));
 
-          context.read<SimilarProductsBloc>().add(GetSimilarProducts(
-              productId: product?.id.toString() ?? '', currentPage: 1));
-          Get.to(() => const ProductDetailScreen());
+            context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+                productId: product?.id.toString() ?? '', currentPage: 1));
+            Get.to(() => const ProductDetailScreen());
+          } else {
+            showShortToast('login_to_view_product'.tr);
+          }
         },
         child: Container(
           height: 120,
@@ -103,14 +108,14 @@ class ProductListItemWidget extends StatelessWidget {
                   //       product: product,
                   //     ),
                   //   ),
-                    if (isSelectProduct && !isAlreadySelect) ...[
-                       Positioned(
-                        right: 0,
-                        top: 0,
-                        child: CheckBoxButton(
-                          product: product,
-                        ),
+                  if (isSelectProduct && !isAlreadySelect) ...[
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: CheckBoxButton(
+                        product: product,
                       ),
+                    ),
                   ],
                   if (isSelectProduct && isAlreadySelect)
                     Positioned(

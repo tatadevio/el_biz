@@ -6,16 +6,13 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 
-import '../../../../bloc/agreement/agreement_bloc.dart';
 import '../../../../bloc/company/company_bloc.dart';
 // import '../../../../data/model/base/compnay_document_model.dart';
 
@@ -122,36 +119,6 @@ class ShowContractFiles extends StatelessWidget {
   Future<void> downloadFileWithScopedPermission(
       String url, BuildContext context) async {
     try {
-      // Check if it's an image file
-      bool isImage = _isImageFile(url);
-
-      // Ask for appropriate permissions
-      if (Platform.isAndroid) {
-        PermissionStatus status;
-
-        if (isImage) {
-          // For images, request media permissions
-          status = await Permission.photos.request();
-          if (!status.isGranted) {
-            status = await Permission.storage.request();
-          }
-        } else {
-          // For other files, request storage permission
-          status = await Permission.storage.request();
-        }
-
-        // If still not granted, try manageExternalStorage for newer Android versions
-        if (!status.isGranted) {
-          status = await Permission.manageExternalStorage.request();
-        }
-
-        if (!status.isGranted) {
-          showShortToast('storage_permission_required'.tr);
-          await openAppSettings();
-          return;
-        }
-      }
-
       // Show loading indicator
       showShortToast('downloading_file'.tr);
 
@@ -161,12 +128,15 @@ class ShowContractFiles extends StatelessWidget {
       if (response.statusCode == 200) {
         String fileName = url.split('/').last;
 
+        // Check if it's an image file
+        bool isImage = _isImageFile(url);
+
         if (isImage) {
-          // Save image to device media storage
-          await _saveImageToDevice(response.bodyBytes, fileName);
+          // Save image without requiring permissions
+          await _saveImageToAppDirectory(response.bodyBytes, fileName);
         } else {
-          // Save other files to downloads
-          await _saveFileToDownloads(response.bodyBytes, fileName);
+          // Save other files to app directory
+          await _saveFileToAppDirectory(response.bodyBytes, fileName);
         }
 
         // Show success message
@@ -186,15 +156,21 @@ class ShowContractFiles extends StatelessWidget {
     return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].contains(extension);
   }
 
-  Future<void> _saveImageToDevice(List<int> imageBytes, String fileName) async {
+  Future<void> _saveImageToAppDirectory(
+      List<int> imageBytes, String fileName) async {
     try {
+      // Use app's external files directory (no permissions needed)
+      Directory? externalDir = await getExternalStorageDirectory();
       Directory dir;
 
-      if (Platform.isAndroid) {
-        // For Android, create app-specific folder in external storage
-        dir = await _getOrCreateAppFolderInExternalStorage();
+      if (externalDir != null) {
+        // Create a Downloads folder in app's external directory
+        dir = Directory('${externalDir.path}/Downloads');
+        if (!await dir.exists()) {
+          await dir.create(recursive: true);
+        }
       } else {
-        // For iOS, save to app documents directory
+        // Fallback to app documents directory
         dir = await getApplicationDocumentsDirectory();
       }
 
@@ -206,121 +182,30 @@ class ShowContractFiles extends StatelessWidget {
 
       debugPrint("Image saved to: $filePath");
 
-      // For Android, trigger media scanner to make image visible in gallery
-      if (Platform.isAndroid) {
-        await _triggerMediaScanner(filePath);
-      }
-
-      // Show success message with location info
-      if (Platform.isAndroid) {
-        showShortToast('${'file_downloaded_successfully'.tr} (Gallery)');
-      } else {
-        showShortToast('file_downloaded_successfully'.tr);
-      }
+      // Open the file after saving
+      await OpenFilex.open(filePath);
     } catch (e) {
       debugPrint("Error saving image: $e");
-      // Fallback to downloads if image save fails
-      await _saveFileToDownloads(imageBytes, fileName);
+      // Fallback to documents directory
+      await _saveFileToAppDirectory(imageBytes, fileName);
     }
   }
 
-  Future<Directory> _getOrCreateAppFolderInExternalStorage() async {
-    try {
-      // Try to go directly to external storage first
-      Directory externalDir = Directory('/storage/emulated/0');
-
-      // Create app-specific folder name
-      String appFolderName = 'ProjectName';
-
-      // Create app folder in external storage
-      Directory appFolder = Directory('${externalDir.path}/$appFolderName');
-
-      if (!await appFolder.exists()) {
-        // Create the app folder
-        await appFolder.create(recursive: true);
-        debugPrint("Created app folder: ${appFolder.path}");
-      }
-
-      return appFolder;
-    } catch (e) {
-      debugPrint("Error creating app folder in external storage: $e");
-      // Fallback to old method with folder checking
-      return await _getOrCreateAppFolderWithFallback();
-    }
-  }
-
-  Future<Directory> _getOrCreateAppFolderWithFallback() async {
-    try {
-      // Try DCIM first
-      Directory targetDir = Directory('/storage/emulated/0/DCIM');
-      if (await targetDir.exists()) {
-        return await _createAppFolderInDirectory(targetDir);
-      }
-
-      // Try Pictures if DCIM doesn't exist
-      targetDir = Directory('/storage/emulated/0/Pictures');
-      if (await targetDir.exists()) {
-        return await _createAppFolderInDirectory(targetDir);
-      }
-
-      // Try Downloads if Pictures doesn't exist
-      targetDir = Directory('/storage/emulated/0/Download');
-      if (await targetDir.exists()) {
-        return await _createAppFolderInDirectory(targetDir);
-      }
-
-      // Final fallback to app documents directory
-      debugPrint("All external directories failed, using app documents");
-      return await getApplicationDocumentsDirectory();
-    } catch (e) {
-      debugPrint("Error in fallback method: $e");
-      return await getApplicationDocumentsDirectory();
-    }
-  }
-
-  Future<Directory> _createAppFolderInDirectory(Directory parentDir) async {
-    try {
-      String appFolderName = 'ProjectName';
-      Directory appFolder = Directory('${parentDir.path}/$appFolderName');
-
-      if (!await appFolder.exists()) {
-        await appFolder.create(recursive: true);
-        debugPrint("Created app folder: ${appFolder.path}");
-      }
-
-      return appFolder;
-    } catch (e) {
-      debugPrint("Error creating app folder in ${parentDir.path}: $e");
-      rethrow;
-    }
-  }
-
-  Future<void> _triggerMediaScanner(String filePath) async {
-    try {
-      // Use native Android method channel to trigger media scanner
-      const platform = MethodChannel('media_scanner');
-      final result =
-          await platform.invokeMethod('scanFile', {'path': filePath});
-      debugPrint("Media scanner result: $result");
-    } catch (e) {
-      debugPrint("Media scanner error: $e");
-    }
-  }
-
-  Future<void> _saveFileToDownloads(
+  Future<void> _saveFileToAppDirectory(
       List<int> fileBytes, String fileName) async {
     try {
+      // Use app's external files directory (no permissions needed)
+      Directory? externalDir = await getExternalStorageDirectory();
       Directory dir;
 
-      if (Platform.isAndroid) {
-        // For Android, save to Downloads folder
-        dir = Directory('/storage/emulated/0/Download');
+      if (externalDir != null) {
+        // Create a Downloads folder in app's external directory
+        dir = Directory('${externalDir.path}/Downloads');
         if (!await dir.exists()) {
-          // Fallback to app documents directory
-          dir = await getApplicationDocumentsDirectory();
+          await dir.create(recursive: true);
         }
       } else {
-        // For iOS and other platforms
+        // Fallback to app documents directory
         dir = await getApplicationDocumentsDirectory();
       }
 
@@ -331,6 +216,9 @@ class ShowContractFiles extends StatelessWidget {
       await file.writeAsBytes(fileBytes);
 
       debugPrint("File saved to: $filePath");
+
+      // Open the file after saving
+      await OpenFilex.open(filePath);
     } catch (e) {
       debugPrint("Error saving file: $e");
       rethrow;

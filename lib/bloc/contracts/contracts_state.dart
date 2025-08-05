@@ -11,6 +11,7 @@ class ContractsState extends Equatable {
   final bool isSigning;
   final bool isUpdating;
   final bool isAddingPayment;
+
   const ContractsState({
     this.isLoading = false,
     // this.contracts = const [],

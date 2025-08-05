@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../bloc/public_tender/public_tender_bloc.dart';
 import '../../bloc/search_tender/search_tender_bloc.dart';
@@ -42,13 +43,17 @@ class TenderListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
-          context
-              .read<TenderDetailBloc>()
-              .add(GetTenderDetail(tenderId: tender.id.toString()));
-          Get.to(() => TenderDetailScreen(
-                // isProduct: false,
-                tenderName: tender.title ?? '',
-              ));
+          if (context.read<AuthBloc>().state.isLoggedIn) {
+            context
+                .read<TenderDetailBloc>()
+                .add(GetTenderDetail(tenderId: tender.id.toString()));
+            Get.to(() => TenderDetailScreen(
+                  // isProduct: false,
+                  tenderName: tender.title ?? '',
+                ));
+          } else {
+            showShortToast('login_to_view_tender'.tr);
+          }
         },
         child: SizedBox(
           height: 120,

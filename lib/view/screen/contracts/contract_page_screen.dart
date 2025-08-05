@@ -8,6 +8,8 @@ import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/screen/contracts/sign_contract_screen.dart';
 import 'package:el_biz/view/screen/contracts/widgets/bill_pay_dialog.dart';
+import 'package:el_biz/view/screen/chat/widgets/full_screen_image.dart';
+import 'package:el_biz/view/screen/pdf_viewer/pdf_viewer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -296,6 +298,26 @@ class _ContractPageScreenState extends State<ContractPageScreen> {
                         contractModel.paymentSlips!.isNotEmpty)
                       for (var paymentSlip in contractModel.paymentSlips!)
                         ListTile(
+                            onTap: () {
+                              if (paymentSlip.url != null) {
+                                final url = paymentSlip.url!;
+                                final fileName = paymentSlip.name ?? 'Document';
+
+                                // Check if it's a PDF
+                                if (url.toLowerCase().endsWith('.pdf')) {
+                                  Get.to(() => PdfViewerScreen(
+                                        name: fileName,
+                                        url: url,
+                                      ));
+                                }
+                                // Check if it's an image
+                                else if (url.toLowerCase().endsWith('.png') ||
+                                    url.toLowerCase().endsWith('.jpg') ||
+                                    url.toLowerCase().endsWith('.jpeg')) {
+                                  Get.to(() => FullScreenImage(imageUrl: url));
+                                }
+                              }
+                            },
                             contentPadding: const EdgeInsets.all(0),
                             leading: paymentSlip.url != null
                                 ? paymentSlip.url!
@@ -311,8 +333,13 @@ class _ContractPageScreenState extends State<ContractPageScreen> {
                                             paymentSlip.url!
                                                 .toLowerCase()
                                                 .endsWith('.jpeg'))
-                                        ? Image.network(paymentSlip.url!,
-                                            width: 40, height: 40)
+                                        ? Hero(
+                                            tag: paymentSlip.url!,
+                                            child: Image.network(
+                                                paymentSlip.url!,
+                                                width: 40,
+                                                height: 40),
+                                          )
                                         : const Icon(Icons.broken_image)
                                 : null,
                             title: Text(paymentSlip.name ?? ''),

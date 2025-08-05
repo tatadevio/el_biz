@@ -12,10 +12,14 @@ import 'widgets/product_review_item_widget.dart';
 
 class ProductReviewsScreen extends StatelessWidget {
   final String productId;
+  final bool isReview;
+  final String contractId;
 
   const ProductReviewsScreen({
     super.key,
     required this.productId,
+    required this.isReview,
+    required this.contractId,
   });
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
@@ -178,8 +182,7 @@ class ProductReviewsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                if (
-                    state.productReviews.isNotEmpty)
+                if (state.productReviews.isNotEmpty)
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -200,33 +203,39 @@ class ProductReviewsScreen extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar:
+      
+      (isReview && contractId.isNotEmpty)
+            ? BottomAppBar(
         color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomBorderButton(
-          onTap: () {
-            Get.bottomSheet(
-                CustomAddReviewWidget(
-                  companyId: productId,
-                  isProduct: true,
+        child:  CustomBorderButton(
+                onTap: () {
+                  Get.bottomSheet(
+                      CustomAddReviewWidget(
+                        companyId: productId,
+                        isProduct: true,
+                      ),
+                      isScrollControlled: true,
+                      backgroundColor: Colors.white);
+                },
+                height: 44,
+                width: Get.width,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                border: Border.all(width: 1, color: ColorResources.blue),
+                borderRadius: BorderRadius.circular(12),
+                boxShaow: const [
+                  ColorResources.shadow1,
+                ],
+                child: Text(
+                  'write_a_review'.tr,
+                  style: textMd.copyWith(color: ColorResources.blue),
                 ),
-                isScrollControlled: true,
-                backgroundColor: Colors.white);
-          },
-          height: 44,
-          width: Get.width,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          border: Border.all(width: 1, color: ColorResources.blue),
-          borderRadius: BorderRadius.circular(12),
-          boxShaow: const [
-            ColorResources.shadow1,
-          ],
-          child: Text(
-            'write_a_review'.tr,
-            style: textMd.copyWith(color: ColorResources.blue),
-          ),
-        ),
-      ),
+              )
+           ,
+      )
+          : SizedBox.shrink(),
     );
   }
 

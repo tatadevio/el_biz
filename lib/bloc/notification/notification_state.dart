@@ -5,28 +5,32 @@ class NotificationState extends Equatable {
   final List<NotificationItem> notificationsList;
   final int currentPage;
   final int pageSize;
+  final bool isMoreLoading;
   const NotificationState(
       {this.isLoading = false,
       this.notificationsList = const [],
       this.currentPage = 1,
-      this.pageSize = 1});
+      this.pageSize = 1,
+      this.isMoreLoading = false});
 
   NotificationState copyWith(
       {bool? isLoading,
       List<NotificationItem>? notificationsList,
       int? currentPage,
-      int? pageSize}) {
+      int? pageSize,
+      bool? isMoreLoading}) {
     return NotificationState(
       isLoading: isLoading ?? this.isLoading,
       notificationsList: notificationsList ?? this.notificationsList,
       currentPage: currentPage ?? this.currentPage,
       pageSize: pageSize ?? this.pageSize,
+      isMoreLoading: isMoreLoading ?? this.isMoreLoading,
     );
   }
 
   @override
   List<Object> get props =>
-      [isLoading, notificationsList, currentPage, pageSize];
+      [isLoading, notificationsList, currentPage, pageSize, isMoreLoading];
 }
 
 final class NotificationInitial extends NotificationState {}

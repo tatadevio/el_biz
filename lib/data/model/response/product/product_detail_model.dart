@@ -81,6 +81,8 @@ class Data {
   final DateTime? updatedAt;
   bool? isFavorite;
   final double? reviewAvgRating;
+  final bool? isReview;
+  final int? contractId;
 
   Data({
     this.id,
@@ -107,6 +109,8 @@ class Data {
     this.updatedAt,
     this.isFavorite,
     this.reviewAvgRating,
+    this.isReview,
+    this.contractId,
   });
 
   Data copyWith({
@@ -134,6 +138,8 @@ class Data {
     DateTime? updatedAt,
     bool? isFavorite,
     double? reviewAvgRating,
+    bool? isReview,
+    int? contractId,
   }) =>
       Data(
         id: id ?? this.id,
@@ -160,6 +166,8 @@ class Data {
         updatedAt: updatedAt ?? this.updatedAt,
         isFavorite: isFavorite ?? this.isFavorite,
         reviewAvgRating: reviewAvgRating ?? this.reviewAvgRating,
+        isReview: isReview ?? this.isReview,
+        contractId: contractId ?? this.contractId,
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -198,6 +206,8 @@ class Data {
         reviewAvgRating: json["reviews_avg_rating"] == null
             ? 0
             : double.tryParse(json["reviews_avg_rating"].toString()) ?? 0,
+        isReview: json["is_review"],
+        contractId: json["contract_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -227,6 +237,8 @@ class Data {
         "updated_at": updatedAt?.toIso8601String(),
         "is_favorite": isFavorite,
         "reviews_avg_rating": reviewAvgRating,
+        "is_review": isReview,
+        "contract_id": contractId,
       };
 }
 

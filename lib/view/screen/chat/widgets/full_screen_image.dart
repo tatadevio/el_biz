@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -24,7 +25,8 @@ class FullScreenImage extends StatelessWidget {
         child: Hero(
           tag: imageUrl,
           child: PhotoView(
-            imageProvider: NetworkImage(imageUrl),
+            imageProvider: CachedNetworkImageProvider(imageUrl),
+            // NetworkImage(imageUrl),
             minScale: PhotoViewComputedScale.contained,
             maxScale: PhotoViewComputedScale.covered * 2,
             initialScale: PhotoViewComputedScale.contained,
@@ -32,7 +34,7 @@ class FullScreenImage extends StatelessWidget {
               color: Colors.black,
             ),
             loadingBuilder: (context, event) => Center(
-              child: Container(
+              child: SizedBox(
                 width: 30.0,
                 height: 30.0,
                 child: const CircularProgressIndicator(

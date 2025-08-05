@@ -327,7 +327,11 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                       const Divider(),
                       if (productDetialController.showProductReviews) ...[
-                        const ProductReviewsWidget(),
+                        ProductReviewsWidget(
+                          isReview: productDetail.data?.isReview ?? false,
+                          contractId:
+                              productDetail.data?.contractId.toString() ?? '',
+                        ),
                       ] else ...[
                         const AboutProductWidget(),
                       ],

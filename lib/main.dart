@@ -55,9 +55,25 @@ import 'view/base/connectivity_banner.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  // Handle Firebase initialization for iOS development environment
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      print('✅ Firebase initialized successfully');
+    } else {
+      print('⚠️ Firebase already initialized (${Firebase.apps.length} apps)');
+    }
+  } catch (e) {
+    if (e.toString().contains('duplicate-app')) {
+      print('⚠️ Firebase duplicate app error caught and handled');
+    } else {
+      print('❌ Firebase initialization error: $e');
+      rethrow;
+    }
+  }
   await initializeDateFormatting('ru_RU', null);
 
   // Set global system UI style with more explicit settings

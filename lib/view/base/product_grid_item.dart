@@ -1,8 +1,10 @@
+import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/bloc/search/search_bloc.dart';
 import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
+import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -40,17 +42,21 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context
-            .read<ProductDetailBloc>()
-            .add(GetProductDetail(product?.id.toString() ?? ''));
-        context
-            .read<ProductReviewBloc>()
-            .add(GetProductReviews(product?.id.toString() ?? '', 1));
+        if (context.read<AuthBloc>().state.isLoggedIn) {
+          context
+              .read<ProductDetailBloc>()
+              .add(GetProductDetail(product?.id.toString() ?? ''));
+          context
+              .read<ProductReviewBloc>()
+              .add(GetProductReviews(product?.id.toString() ?? '', 1));
 
-        context.read<SimilarProductsBloc>().add(GetSimilarProducts(
-            productId: product?.id.toString() ?? '', currentPage: 1));
+          context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+              productId: product?.id.toString() ?? '', currentPage: 1));
 
-        Get.to(() => const ProductDetailScreen());
+          Get.to(() => const ProductDetailScreen());
+        } else {
+          showShortToast('login_to_view_product'.tr);
+        }
       },
       child: Container(
         decoration: const BoxDecoration(

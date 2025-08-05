@@ -5,12 +5,14 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/auth/auth_bloc.dart';
 import '../../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../../data/model/response/company/my_companies_model.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_image.dart';
+import '../../../base/custom_toast.dart';
 import '../../company/company_page_screen.dart';
 
 class PublicCompaniesWidget extends StatefulWidget {
@@ -166,15 +168,19 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
         onTap: () {
-          // context
-          //     .read<CompanyBloc>()
-          //     .add(CompanyDetailById(company.id.toString()));
-          context
-              .read<CompanyDetailBloc>()
-              .add(GetCompanyDetail(company.id.toString()));
-          Get.to(() => const CompanyPageScreen(
-                isCompany: true,
-              ));
+          if (context.read<AuthBloc>().state.isLoggedIn) {
+            // context
+            //     .read<CompanyBloc>()
+            //     .add(CompanyDetailById(company.id.toString()));
+            context
+                .read<CompanyDetailBloc>()
+                .add(GetCompanyDetail(company.id.toString()));
+            Get.to(() => const CompanyPageScreen(
+                  isCompany: true,
+                ));
+          } else {
+            showShortToast('login_to_view_company'.tr);
+          }
         },
         child: Stack(
           children: [

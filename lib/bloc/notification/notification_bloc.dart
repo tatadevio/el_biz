@@ -16,8 +16,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
   Future<void> _onGetNotification(
       GetNotification event, Emitter<NotificationState> emit) async {
+    print('call get notification with page = ${event.currentPage}');
     if (event.currentPage == 1) {
       emit(state.copyWith(isLoading: true));
+    } else {
+      emit(state.copyWith(isMoreLoading: true));
     }
     try {
       final response =
@@ -25,16 +28,25 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       if (response.statusCode == 200) {
         NotificationsModel notificationsModel =
             NotificationsModel.fromJson(response.body);
-        print(
-            'this is the list of the notification = ${notificationsModel.data?.items?.length}');
-        emit(state.copyWith(notificationsList: notificationsModel.data?.items));
+
+        if (event.currentPage == 1) {
+          emit(state.copyWith(notificationsList: []));
+        }
+        emit(state.copyWith(
+            notificationsList:
+                List<NotificationItem>.from(state.notificationsList)
+                  ..addAll(notificationsModel.data?.items ?? []),
+            isLoading: false,
+            isMoreLoading: false,
+            currentPage: notificationsModel.data?.currentPage ?? 0,
+            pageSize: notificationsModel.data?.totalPages ?? 0));
       } else {
         NotificationError(response.body['message']);
       }
     } catch (e) {
       NotificationError(e.toString());
     }
-    emit(state.copyWith(isLoading: false));
+    emit(state.copyWith(isLoading: false, isMoreLoading: false));
   }
 
   Future<void> _onReadNotification(

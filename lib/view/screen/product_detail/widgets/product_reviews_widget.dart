@@ -14,7 +14,10 @@ import '../../../base/custom_add_review_widget.dart';
 import '../../../base/custom_border_button.dart';
 
 class ProductReviewsWidget extends StatelessWidget {
-  const ProductReviewsWidget({super.key});
+  final bool isReview;
+  final String contractId;
+  const ProductReviewsWidget(
+      {super.key, required this.isReview, required this.contractId});
 
   @override
   Widget build(BuildContext context) {
@@ -43,29 +46,31 @@ class ProductReviewsWidget extends StatelessWidget {
                 ),
               ),
             ),
-            CustomBorderButton(
-              onTap: () {
-                Get.bottomSheet(
-                    CustomAddReviewWidget(
-                      companyId: '',
-                      isProduct: true,
-                    ),
-                    isScrollControlled: true,
-                    backgroundColor: Colors.white);
-              },
-              height: 44,
-              width: Get.width,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              border: Border.all(width: 1, color: ColorResources.blue),
-              borderRadius: BorderRadius.circular(12),
-              boxShaow: const [
-                ColorResources.shadow1,
-              ],
-              child: Text(
-                'Написать отзыв',
-                style: textMd.copyWith(color: ColorResources.blue),
+            if (isReview && contractId.isNotEmpty)
+              CustomBorderButton(
+                onTap: () {
+                  Get.bottomSheet(
+                      CustomAddReviewWidget(
+                        companyId: '',
+                        isProduct: true,
+                      ),
+                      isScrollControlled: true,
+                      backgroundColor: Colors.white);
+                },
+                height: 44,
+                width: Get.width,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                border: Border.all(width: 1, color: ColorResources.blue),
+                borderRadius: BorderRadius.circular(12),
+                boxShaow: const [
+                  ColorResources.shadow1,
+                ],
+                child: Text(
+                  'Написать отзыв',
+                  style: textMd.copyWith(color: ColorResources.blue),
+                ),
               ),
-            ),
           ],
         );
       }
@@ -89,15 +94,15 @@ class ProductReviewsWidget extends StatelessWidget {
           const Divider(),
           InkWell(
             onTap: () {
+              final data = context
+                  .read<ProductDetailBloc>()
+                  .state
+                  .productDetailModel
+                  ?.data;
               Get.to(() => ProductReviewsScreen(
-                    productId: context
-                            .read<ProductDetailBloc>()
-                            .state
-                            .productDetailModel
-                            ?.data
-                            ?.id
-                            .toString() ??
-                        '',
+                    productId: data?.id.toString() ?? '',
+                    isReview: data?.isReview ?? false,
+                    contractId: data?.contractId.toString() ?? '',
                   ));
             },
             child: Row(

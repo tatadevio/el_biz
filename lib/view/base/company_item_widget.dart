@@ -5,17 +5,20 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../utils/Images.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/company/company_page_screen.dart';
 import 'custom_image.dart';
+import 'custom_toast.dart';
 
 class CompanyItemWidget extends StatelessWidget {
   final CompanyItem company;
   final bool isSearchCompany;
-  const CompanyItemWidget({super.key, required this.company, this.isSearchCompany = false});
+  const CompanyItemWidget(
+      {super.key, required this.company, this.isSearchCompany = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +26,19 @@ class CompanyItemWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
         onTap: () {
-          // context
-          //     .read<CompanyBloc>()
-          //     .add(CompanyDetailById(company.id.toString()));
-          context
-              .read<CompanyDetailBloc>()
-              .add(GetCompanyDetail(company.id.toString()));
-          Get.to(() => const CompanyPageScreen(
-                isCompany: true,
-              ));
+          if (context.read<AuthBloc>().state.isLoggedIn) {
+            // context
+            //     .read<CompanyBloc>()
+            //     .add(CompanyDetailById(company.id.toString()));
+            context
+                .read<CompanyDetailBloc>()
+                .add(GetCompanyDetail(company.id.toString()));
+            Get.to(() => const CompanyPageScreen(
+                  isCompany: true,
+                ));
+          } else {
+            showShortToast('login_to_view_company'.tr);
+          }
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
