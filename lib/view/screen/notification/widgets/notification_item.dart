@@ -16,6 +16,8 @@ import 'package:get/get.dart';
 
 import '../../../../bloc/company/company_bloc.dart';
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
+import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
+import '../../../../bloc/similar_tenders/similar_tenders_bloc.dart';
 import '../../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../contracts/contract_page_screen.dart';
 import '../../product_detail/product_detail_screen.dart';
@@ -48,6 +50,8 @@ class NotificationItemWidget extends StatelessWidget {
         if (notification.type == 'company') {
           context.read<CompanyDetailBloc>().add(
               GetCompanyDetail(notification.data?.companyId.toString() ?? ''));
+                  context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+              companyId: notification.data?.companyId.toString() ?? '', currentPage: 1));
           Get.to(() => CompanyPageScreen(
                 isCompany: true,
               ));
@@ -58,6 +62,9 @@ class NotificationItemWidget extends StatelessWidget {
         } else if (notification.type == 'tender') {
           context.read<TenderDetailBloc>().add(GetTenderDetail(
               tenderId: notification.data?.tenderId.toString() ?? ''));
+          context.read<SimilarTendersBloc>().add(GetSimilarTenders(
+              tenderId: notification.data?.tenderId.toString() ?? '',
+              currentPage: 1));
           Get.to(() => TenderDetailScreen(
               tenderName: notification.data?.tenderTitle.toString() ?? ''));
         } else if (notification.type == 'contract_creation' ||

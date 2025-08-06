@@ -6,7 +6,6 @@ import 'package:el_biz/view/screen/search/search_product/search_product_widget.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';

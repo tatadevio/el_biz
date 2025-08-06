@@ -13,6 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../../data/model/response/chat/chat_list_model.dart';
 import '../../../data/model/response/company/company_product_model.dart';
@@ -21,6 +22,7 @@ import '../../../utils/color_resources.dart';
 import '../../base/custom_button.dart';
 import '../chat/chat_conversation.dart';
 import '../company/company_page_screen.dart';
+import 'widgets/similar_tender_widget.dart';
 
 class TenderDetailScreen extends StatelessWidget {
   // final bool isProduct;
@@ -226,6 +228,11 @@ class TenderDetailScreen extends StatelessWidget {
                   if (tenderDetail.data?.company != null) {
                     context.read<CompanyDetailBloc>().add(GetCompanyDetail(
                         tenderDetail.data!.company!.id.toString()));
+                    context.read<SimilarCompaniesBloc>().add(
+                        GetSimilarCompanies(
+                            companyId:
+                                tenderDetail.data!.company!.id.toString(),
+                            currentPage: 1));
                     Get.to(() => CompanyPageScreen());
                   }
                 },
@@ -303,7 +310,7 @@ class TenderDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              // const SimilarProductsWidget(),
+              SimilarTenderWidget(tenderId: tenderDetail.data!.id.toString()),
               const SizedBox(
                 height: 20,
               ),

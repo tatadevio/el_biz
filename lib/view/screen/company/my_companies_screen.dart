@@ -13,6 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../helper/date_helper.dart';
 import '../../base/custom_button_with_icon.dart';
 import '../../base/custom_image.dart';
@@ -106,6 +107,8 @@ class MyCompaniesScreen extends StatelessWidget {
           context
               .read<CompanyDetailBloc>()
               .add(GetCompanyDetail(company.id.toString()));
+                  context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+              companyId: company.id.toString(), currentPage: 1));
           Get.to(() => const CompanyPageScreen(
                 isCompany: true,
               ));

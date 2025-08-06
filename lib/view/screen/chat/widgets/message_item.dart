@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../../../bloc/product_review/product_review_bloc.dart';
 import '../../../../bloc/similar_products/similar_products_bloc.dart';
+import '../../../../bloc/similar_tenders/similar_tenders_bloc.dart';
 import '../../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/utilities.dart';
@@ -621,6 +622,8 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
         context
             .read<TenderDetailBloc>()
             .add(GetTenderDetail(tenderId: data['tender']['id'].toString()));
+        context.read<SimilarTendersBloc>().add(GetSimilarTenders(
+            tenderId: data['tender']['id'].toString(), currentPage: 1));
         Get.to(() => TenderDetailScreen(
               // isProduct: false,
               tenderName: data['tender']['title'],

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../../bloc/auth/auth_bloc.dart';
 import '../../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../../data/model/response/company/my_companies_model.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
@@ -32,13 +33,10 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
     _scrollController.addListener(() {
       // Show the button if the user scrolls down 300 pixels or more
       if (_scrollController.offset > 300 && !_showScrollToTopButton) {
-        print('this is public companies widget scroll button show');
         setState(() {
           _showScrollToTopButton = true;
         });
       } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
-        print('this is public companies widget scroll button hide');
-
         setState(() {
           _showScrollToTopButton = false;
         });
@@ -125,17 +123,30 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
                 context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
               }
             },
-            child: ListView.builder(
+            child: SingleChildScrollView(
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: companyState.isFilterEnable
-                  ? companyState.filterCompanies.length
-                  : companyState.publicCompanies.length,
-              itemBuilder: (context, index) {
-                return myCompanyWidget(companyState.isFilterEnable
-                    ? companyState.filterCompanies[index]
-                    : companyState.publicCompanies[index]);
-              },
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: companyState.isFilterEnable
+                        ? companyState.filterCompanies.length
+                        : companyState.publicCompanies.length,
+                    itemBuilder: (context, index) {
+                      return myCompanyWidget(companyState.isFilterEnable
+                          ? companyState.filterCompanies[index]
+                          : companyState.publicCompanies[index]);
+                    },
+                  ),
+                  if (companyState.isMoreLoading)
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ).paddingOnly(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
             ),
           );
         }),
@@ -175,6 +186,8 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
             context
                 .read<CompanyDetailBloc>()
                 .add(GetCompanyDetail(company.id.toString()));
+            context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+                companyId: company.id.toString(), currentPage: 1));
             Get.to(() => const CompanyPageScreen(
                   isCompany: true,
                 ));

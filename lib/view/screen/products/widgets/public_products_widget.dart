@@ -124,35 +124,65 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
                   }
                 },
                 child: productState.isGridView
-                    ? GridView.builder(
+                    ? SingleChildScrollView(
                         controller: _scrollController,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                                childAspectRatio: 0.7),
-                        itemCount: state.isFilterEnable
-                            ? state.publicFilterProducts.length
-                            : state.publicProducts.length,
-                        itemBuilder: (context, index) {
-                          return ProductGridItem(
-                            product: state.isFilterEnable
-                                ? state.publicFilterProducts[index]
-                                : state.publicProducts[index],
-                            isPublicProduct: true,
-                          );
-                        },
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 0.7),
+                              itemCount: state.isFilterEnable
+                                  ? state.publicFilterProducts.length
+                                  : state.publicProducts.length,
+                              itemBuilder: (context, index) {
+                                return ProductGridItem(
+                                  product: state.isFilterEnable
+                                      ? state.publicFilterProducts[index]
+                                      : state.publicProducts[index],
+                                  isPublicProduct: true,
+                                );
+                              },
+                            ),
+                            if (state.isMoreLoading)
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ).paddingOnly(
+                                  bottom:
+                                      MediaQuery.of(context).padding.bottom),
+                          ],
+                        ),
                       )
-                    : ListView.builder(
+                    : SingleChildScrollView(
                         controller: _scrollController,
-                        itemCount: state.publicProducts.length,
-                        itemBuilder: (context, index) {
-                          return ProductListItemWidget(
-                            product: state.publicProducts[index],
-                            isPublicProduct: true,
-                          );
-                        },
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.publicProducts.length,
+                              itemBuilder: (context, index) {
+                                return ProductListItemWidget(
+                                  product: state.publicProducts[index],
+                                  isPublicProduct: true,
+                                );
+                              },
+                            ),
+                            if (state.isMoreLoading)
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ).paddingOnly(
+                                  bottom:
+                                      MediaQuery.of(context).padding.bottom),
+                          ],
+                        ),
                       ),
               );
             },

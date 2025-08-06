@@ -42,6 +42,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'bloc/account/account_bloc.dart';
 import 'bloc/add_product/add_product_bloc.dart';
 import 'bloc/company_detail/company_detail_bloc.dart';
+import 'bloc/similar_companies/similar_companies_bloc.dart';
+import 'bloc/similar_tenders/similar_tenders_bloc.dart';
 import 'bloc/tin_number/tin_bloc.dart';
 import 'bloc/user/user_bloc.dart';
 import 'firebase_options.dart';
@@ -145,6 +147,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SearchCompanyBloc(Get.find())),
         BlocProvider(create: (_) => AgreementBloc(Get.find())),
         BlocProvider(create: (_) => SearchTenderBloc(Get.find())),
+        BlocProvider(create: (_) => SimilarCompaniesBloc(Get.find())),
+        BlocProvider(create: (_) => SimilarTendersBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

@@ -7,6 +7,7 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/company_detail/company_detail_bloc.dart';
 import '../../bloc/public_tender/public_tender_bloc.dart';
 import '../../bloc/search_tender/search_tender_bloc.dart';
+import '../../bloc/similar_tenders/similar_tenders_bloc.dart';
 import '../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../data/model/response/tender/tender_item_model.dart';
 import '../../helper/date_helper.dart';
@@ -47,6 +48,8 @@ class TenderListItem extends StatelessWidget {
             context
                 .read<TenderDetailBloc>()
                 .add(GetTenderDetail(tenderId: tender.id.toString()));
+            context.read<SimilarTendersBloc>().add(GetSimilarTenders(
+                tenderId: tender.id.toString(), currentPage: 1));
             Get.to(() => TenderDetailScreen(
                   // isProduct: false,
                   tenderName: tender.title ?? '',

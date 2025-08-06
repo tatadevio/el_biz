@@ -41,6 +41,8 @@ import '../bloc/account/account_bloc.dart';
 import '../bloc/add_product/add_product_bloc.dart';
 import '../bloc/add_tender/add_tender_bloc.dart';
 import '../bloc/company_detail/company_detail_bloc.dart';
+import '../bloc/similar_companies/similar_companies_bloc.dart';
+import '../bloc/similar_tenders/similar_tenders_bloc.dart';
 import '../bloc/tin_number/tin_bloc.dart';
 import '../data/api/api_client.dart';
 import '../data/model/base/language_model.dart';
@@ -56,6 +58,8 @@ import '../data/repo/home_repo.dart';
 import '../data/repo/post_ad_repo.dart';
 import '../data/repo/product_repo.dart';
 import '../data/repo/seller_repo.dart';
+import '../data/repo/similar_company_repo.dart';
+import '../data/repo/similar_tenders_repo.dart';
 import '../data/repo/tin_repo.dart';
 import '../data/repo/user_repo.dart';
 import '../data/repo/company_detail_repo.dart';
@@ -136,6 +140,13 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<SearchTenderRepo>(() => SearchTenderRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<SimilarCompanyRepo>(
+      () => SimilarCompanyRepo(Get.find(), Get.find()),
+      fenix: true);
+  Get.lazyPut<SimilarTendersRepo>(
+      () => SimilarTendersRepo(
+          apiClient: Get.find(), sharedPreferences: Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -165,6 +176,10 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<AgreementBloc>(() => AgreementBloc(Get.find()), fenix: true);
   Get.lazyPut<SearchTenderBloc>(() => SearchTenderBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<SimilarCompaniesBloc>(() => SimilarCompaniesBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<SimilarTendersBloc>(() => SimilarTendersBloc(Get.find()),
       fenix: true);
 
 ////////

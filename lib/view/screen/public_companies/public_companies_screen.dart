@@ -1,4 +1,3 @@
-
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -11,9 +10,31 @@ import 'package:get/get.dart';
 class PublicCompaniesScreen extends StatelessWidget {
   const PublicCompaniesScreen({super.key});
 
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final publicCompanyBloc = context.read<PublicCompanyBloc>();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !publicCompanyBloc.state.isLoading &&
+          !publicCompanyBloc.state.isMoreLoading) {
+        int pageSize = publicCompanyBloc.state.companyPageSize;
+        if (publicCompanyBloc.state.companyCurrentPage < pageSize) {
+          int nextPage = publicCompanyBloc.state.companyCurrentPage;
+
+          publicCompanyBloc.add(GetPublicCompany(nextPage + 1));
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.sizeOf(context).width;
+    final _scrollController = ScrollController();
+
+    _callScrolling(context, _scrollController);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -48,15 +69,29 @@ class PublicCompaniesScreen extends StatelessWidget {
               // return NoCompanyWidget();
             }
 
-            return ListView.builder(
-              itemCount: companyState.publicCompanies.length,
-              itemBuilder: (context, index) {
-                return CompanyItemWidget(
-                    company: companyState.publicCompanies[index]);
+            return SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: companyState.publicCompanies.length,
+                    itemBuilder: (context, index) {
+                      return CompanyItemWidget(
+                          company: companyState.publicCompanies[index]);
 
-                // myCompanyWidget(
-                //     context, companyState.myCompanies[index]);
-              },
+                      // myCompanyWidget(
+                      //     context, companyState.myCompanies[index]);
+                    },
+                  ),
+                  if (companyState.isMoreLoading)
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ).paddingOnly(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
             );
           }),
         ),
@@ -89,117 +124,4 @@ class PublicCompaniesScreen extends StatelessWidget {
       // ),
     );
   }
-
-  // Widget myCompanyWidget(BuildContext context, CompanyItem company) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 5),
-  //     child: InkWell(
-  //       onTap: () {
-  //         // print('this is created at in company : ${company.createdAt}');
-  //         // get company detail
-  //         // Get.find<CompanyDetailBloc>()
-  //         //     .add(GetCompanyDetail(company.id.toString()));
-  //         context
-  //             .read<CompanyDetailBloc>()
-  //             .add(GetCompanyDetail(company.id.toString()));
-  //         Get.to(() => const CompanyPageScreen(
-  //               isCompany: true,
-  //             ));
-  //       },
-  //       child: Container(
-  //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-  //         decoration: BoxDecoration(
-  //           color: ColorResources.lightBlue,
-  //           borderRadius: BorderRadius.circular(24),
-  //           boxShadow: const [
-  //             BoxShadow(
-  //               blurRadius: 4,
-  //               spreadRadius: -2,
-  //               offset: Offset(0, 2),
-  //               color: Color.fromRGBO(16, 24, 40, 0.05),
-  //             ),
-  //           ],
-  //         ),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Row(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 CustomImage(
-  //                     image: company.logo ?? '',
-  //                     height: 64,
-  //                     width: 64,
-  //                     radius: 64),
-  //                 const SizedBox(
-  //                   width: 5,
-  //                 ),
-  //                 Expanded(
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       Text(
-  //                         company.name ?? '',
-  //                         style: h16.copyWith(
-  //                           color: const Color.fromRGBO(16, 24, 40, 1),
-  //                         ),
-  //                       ),
-  //                       const SizedBox(
-  //                         height: 5,
-  //                       ),
-  //                       Text(
-  //                         company.email ?? '',
-  //                         style: body14.copyWith(color: ColorResources.gray),
-  //                       ),
-  //                       const SizedBox(
-  //                         height: 5,
-  //                       ),
-  //                       Row(
-  //                         children: [
-  //                           SvgPicture.asset(Images.svgVerified),
-  //                           const SizedBox(
-  //                             width: 5,
-  //                           ),
-  //                           Expanded(
-  //                             child: Text(
-  //                               company.address ?? '',
-  //                               maxLines: 1,
-  //                               overflow: TextOverflow.ellipsis,
-  //                               style:
-  //                                   body14.copyWith(color: ColorResources.gray),
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       const SizedBox(
-  //                         height: 5,
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //             const SizedBox(
-  //               height: 5,
-  //             ),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.end,
-  //               children: [
-  //                 Text(
-  //                   'В В2В: ',
-  //                   style: body14.copyWith(color: ColorResources.gray),
-  //                 ),
-  //                 Text(
-  //                   formatDateInRu(company.createdAt.toString()),
-  //                   // '12 окт. 2024',
-  //                   style: body14.copyWith(color: ColorResources.gray),
-  //                 ),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

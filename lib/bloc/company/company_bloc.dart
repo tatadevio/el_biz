@@ -35,12 +35,20 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         emit(state.copywith(myCompanyLoadMore: true));
       }
       try {
-        final res = await compnayRepo.getMyCompanies();
+        final res = await compnayRepo.getMyCompanies(event.currentPage);
+
+        if (event.currentPage == 1) {
+          emit(state.copywith(myCompanies: []));
+        }
 
         MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
         List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
         emit(state.copywith(
-            myCompanies: myCompaniesList)); // emits updated state
+          myCompanies: List<CompanyItem>.from(state.myCompanies)
+            ..addAll(myCompaniesList),
+          myCompanyCurrentPage: myCompanies.data?.currentPage ?? 1,
+          myCompanyPageSize: myCompanies.data?.totalPages ?? 1,
+        )); // emits updated state
       } catch (e) {
         print(e.toString());
       }

@@ -1,9 +1,4 @@
-import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
-import 'package:el_biz/data/model/response/company/my_companies_model.dart';
-import 'package:el_biz/utils/Images.dart';
-import 'package:el_biz/utils/color_resources.dart';
-import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/screen/company/company_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -12,27 +7,32 @@ import 'package:get/get.dart';
 
 import '../../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
-import '../../company/company_page_screen.dart';
-import '../../company/new_companies_screen.dart';
+import '../../../../data/model/response/company/my_companies_model.dart';
+import '../../../../utils/Images.dart';
+import '../../../../utils/color_resources.dart';
+import '../../../../utils/custom_text_style.dart';
+import '../../../base/custom_image.dart';
 
-class NewCompaniesWidget extends StatelessWidget {
-  const NewCompaniesWidget({super.key});
+class SimilarCompaniesWidget extends StatelessWidget {
+  final String companyId;
+  const SimilarCompaniesWidget({super.key, required this.companyId});
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
-    final publicCompanyBloc = context.read<PublicCompanyBloc>();
+    final similarCompanyBloc = context.read<SimilarCompaniesBloc>();
 
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 300 &&
-          !publicCompanyBloc.state.isLoading &&
-          !publicCompanyBloc.state.isMoreLoading) {
-        // print(
-        //     'going to call the similar tender list pagination ${publicCompanyBloc.state.totalPages} and ${publicCompanyBloc.state.currentPage} and company ${tenderId}');
-        int pageSize = publicCompanyBloc.state.newCompanyPageSize;
-        if (publicCompanyBloc.state.newCompanyCurrentPage < pageSize) {
-          int nextPage = publicCompanyBloc.state.newCompanyCurrentPage;
+          !similarCompanyBloc.state.isLoading &&
+          !similarCompanyBloc.state.isMoreLoading) {
+        print(
+            'going to call the similar company list pagination ${similarCompanyBloc.state.totalPages} and ${similarCompanyBloc.state.currentPage} and company ${companyId}');
+        int pageSize = similarCompanyBloc.state.totalPages;
+        if (similarCompanyBloc.state.currentPage < pageSize) {
+          int nextPage = similarCompanyBloc.state.currentPage;
 
-          publicCompanyBloc.add(GetNewPublicCompany(nextPage + 1));
+          similarCompanyBloc.add(GetSimilarCompanies(
+              companyId: companyId, currentPage: nextPage + 1));
         }
       }
     });
@@ -40,75 +40,55 @@ class NewCompaniesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // double height = MediaQuery.sizeOf(context).height;
     final ScrollController _scrollController = ScrollController();
     _callScrolling(context, _scrollController);
-    double width = MediaQuery.sizeOf(context).width;
-    return BlocBuilder<PublicCompanyBloc, PublicCompanyState>(
-      builder: (context, state) {
-        if (state.isLoading || state.newCompanies.isEmpty) {
-          return SizedBox();
-        }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'new_companies'.tr,
-              style: h16.copyWith(color: ColorResources.darkGray),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: width * 0.4,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                child: Row(
+    return BlocBuilder<SimilarCompaniesBloc, SimilarCompaniesState>(
+      builder: (context, similarCompaniesState) {
+        return similarCompaniesState.similarCompanies.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: state.newCompanies.length,
-                      itemBuilder: (context, index) {
-                        return companiesItem(
-                            context, state.newCompanies[index]);
-                      },
+                    Text(
+                      'Похожие поставщики',
+                      style: h16.copyWith(color: ColorResources.darkGray),
                     ),
-                    if (state.isMoreLoading)
-                      const Center(
-                        child: CircularProgressIndicator(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: Get.width * 0.4,
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  similarCompaniesState.similarCompanies.length,
+                              itemBuilder: (context, index) {
+                                return companiesItem(
+                                    context,
+                                    similarCompaniesState
+                                        .similarCompanies[index]);
+                              },
+                            ),
+                            if (similarCompaniesState.isMoreLoading)
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          ],
+                        ),
                       ),
+                    ).paddingOnly(bottom: 80),
                   ],
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const NewCompaniesScreen());
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'all_companies'.tr,
-                        style: button16.copyWith(color: ColorResources.blue),
-                      ),
-                      SvgPicture.asset(Images.svgArrowForwardIcon),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+              )
+            : SizedBox.shrink();
       },
     );
   }
@@ -128,7 +108,7 @@ class NewCompaniesWidget extends StatelessWidget {
             ));
       },
       child: Container(
-        width: width * 0.8,
+        width: width * 0.83,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         margin: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
@@ -150,18 +130,6 @@ class NewCompaniesWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Container(
-            //   margin: const EdgeInsets.only(top: 10, left: 5),
-            //   height: 40,
-            //   width: 40,
-            //   decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       border: Border.all(
-            //         width: 0.56,
-            //         color: ColorResources.lgColor,
-            //       )),
-            //       chi
-            // ),
             CustomImage(
                 image: company.logo ?? '', height: 40, width: 40, radius: 40),
             const SizedBox(
@@ -174,14 +142,12 @@ class NewCompaniesWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(
-                        child: Text(
-                          company.name ?? '',
-                          // 'Садовая мебель Loft',
-                          style: h16.copyWith(color: ColorResources.darkGray),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      Text(
+                        company.name ?? '',
+                        // 'Садовая мебель Loft',
+                        style: h16.copyWith(color: ColorResources.darkGray),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       // IconButton(
                       //   onPressed: () {},

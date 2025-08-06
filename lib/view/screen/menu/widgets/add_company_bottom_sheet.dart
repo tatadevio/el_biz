@@ -24,6 +24,7 @@ class AddCompanyBottomSheet extends StatefulWidget {
 
 class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
   String? _selectedOption;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -44,9 +45,28 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
     }
   }
 
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<CompanyBloc>();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !accountController.state.isLoading &&
+          !accountController.state.myCompanyLoadMore) {
+        int pageSize = accountController.state.myCompanyPageSize;
+        if (accountController.state.myCompanyCurrentPage < pageSize) {
+          int nextPage = accountController.state.myCompanyCurrentPage;
+
+          accountController.add(GetMyCompanies(currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
+    _callScrolling(context, _scrollController);
     return Container(
       height: height * 0.6,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -76,6 +96,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -157,7 +178,10 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                                 );
                               },
                             ),
-
+                          if (companyState.myCompanyLoadMore)
+                            const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           // RadioListTile<String>(
                           //   contentPadding: const EdgeInsets.all(0),
                           //   title: accountInfo('Посуда Loft', 'ОсОО...'),

@@ -33,6 +33,7 @@ class AppConstants {
   static const String tenderStatusChangeUrl = "api/tenders/change-status";
   static const String deleteTenderImageUrl = "api/tenders/delete-images";
   static const String udpateTenderUrl = "api/tenders/update";
+  static const String similarTendersUrl = "api/related-tenders";
 
   /// Company
   static const String addCompanyUrl = "api/companies/store";
@@ -121,6 +122,7 @@ class AppConstants {
   static const String contractDetailUrl = "api/contracts/detail";
   static const String signContractUrl = "api/contracts/signing";
   static const String updateContractStatusUrl = "api/contracts/update-status";
+  static const String relatedCompaniesUrl = "api/companies/related";
 
   static const String token = "token";
 

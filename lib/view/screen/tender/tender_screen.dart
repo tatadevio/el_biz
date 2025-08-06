@@ -35,6 +35,7 @@ class _TenderScreenState extends State<TenderScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
+      // Show/hide scroll to top button
       if (_scrollController.offset > 300 && !_showScrollToTopButton) {
         setState(() {
           _showScrollToTopButton = true;
@@ -43,6 +44,42 @@ class _TenderScreenState extends State<TenderScreen> {
         setState(() {
           _showScrollToTopButton = false;
         });
+      }
+
+      // Pagination logic
+      final publicTenderBloc = context.read<PublicTenderBloc>();
+
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !publicTenderBloc.state.isLoading &&
+          !publicTenderBloc.state.isMoreLoading) {
+        if (publicTenderBloc.state.isFilterEnable) {
+          // Handle filtered tenders pagination
+          print(
+              'going to call the filtered tenders pagination - Total Pages: ${publicTenderBloc.state.filterTenderPageSize}, Current Page: ${publicTenderBloc.state.filterTenderCurrentPage}');
+
+          if (publicTenderBloc.state.filterTenderCurrentPage <
+              publicTenderBloc.state.filterTenderPageSize) {
+            int nextPage = publicTenderBloc.state.filterTenderCurrentPage + 1;
+
+            publicTenderBloc.add(FilterPublicTenderProduct(
+                productFilterValuesModel:
+                    publicTenderBloc.state.tenderFilterValuesModel!,
+                currentPage: nextPage));
+          }
+        } else {
+          // Handle regular tenders pagination
+          print(
+              'going to call the tenders list pagination - Total Pages: ${publicTenderBloc.state.tenderPageSize}, Current Page: ${publicTenderBloc.state.tenderCurrentPage}');
+
+          if (publicTenderBloc.state.tenderCurrentPage <
+              publicTenderBloc.state.tenderPageSize) {
+            int nextPage = publicTenderBloc.state.tenderCurrentPage + 1;
+
+            publicTenderBloc.add(GetPublicTender(nextPage,
+                direction: direction, orderBy: orderBy));
+          }
+        }
       }
     });
   }
@@ -70,8 +107,13 @@ class _TenderScreenState extends State<TenderScreen> {
     );
   }
 
+  // void _callScrolling(BuildContext context, ScrollController scrollController) {
+
+  // }
+
   @override
   Widget build(BuildContext context) {
+    // _callScrolling(context, _scrollController);
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -578,41 +620,76 @@ class _TenderScreenState extends State<TenderScreen> {
                       }
                     },
                     child: tendersController.isGridView
-                        ? GridView.builder(
+                        ? SingleChildScrollView(
                             controller: _scrollController,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10,
-                                    childAspectRatio: 0.65),
-                            itemCount: publicTenderState.isFilterEnable
-                                ? publicTenderState.filterTenders.length
-                                : publicTenderState.publicTenders.length,
-                            itemBuilder: (context, index) {
-                              return TenderGridItem(
-                                tender: publicTenderState.isFilterEnable
-                                    ? publicTenderState.filterTenders[index]
-                                    : publicTenderState.publicTenders[index],
-                                isCompanyTender: false,
-                                isPublicTender: true,
-                              );
-                            },
+                            child: Column(
+                              children: [
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 10,
+                                          crossAxisSpacing: 10,
+                                          childAspectRatio: 0.65),
+                                  itemCount: publicTenderState.isFilterEnable
+                                      ? publicTenderState.filterTenders.length
+                                      : publicTenderState.publicTenders.length,
+                                  itemBuilder: (context, index) {
+                                    return TenderGridItem(
+                                      tender: publicTenderState.isFilterEnable
+                                          ? publicTenderState
+                                              .filterTenders[index]
+                                          : publicTenderState
+                                              .publicTenders[index],
+                                      isCompanyTender: false,
+                                      isPublicTender: true,
+                                    );
+                                  },
+                                ),
+                                if (publicTenderState.isMoreLoading)
+                                  const Center(
+                                    child: CircularProgressIndicator(),
+                                  ).paddingOnly(
+                                      bottom: MediaQuery.of(context)
+                                          .padding
+                                          .bottom),
+                              ],
+                            ),
                           )
-                        : ListView.builder(
+                        : SingleChildScrollView(
                             controller: _scrollController,
-                            itemCount: publicTenderState.isFilterEnable
-                                ? publicTenderState.filterTenders.length
-                                : publicTenderState.publicTenders.length,
-                            itemBuilder: (context, index) {
-                              return TenderListItem(
-                                tender: publicTenderState.isFilterEnable
-                                    ? publicTenderState.filterTenders[index]
-                                    : publicTenderState.publicTenders[index],
-                                isCompanyTender: false,
-                                isPublicTender: true,
-                              );
-                            },
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: publicTenderState.isFilterEnable
+                                      ? publicTenderState.filterTenders.length
+                                      : publicTenderState.publicTenders.length,
+                                  itemBuilder: (context, index) {
+                                    return TenderListItem(
+                                      tender: publicTenderState.isFilterEnable
+                                          ? publicTenderState
+                                              .filterTenders[index]
+                                          : publicTenderState
+                                              .publicTenders[index],
+                                      isCompanyTender: false,
+                                      isPublicTender: true,
+                                    );
+                                  },
+                                ),
+                                if (publicTenderState.isMoreLoading)
+                                  const Center(
+                                    child: CircularProgressIndicator(),
+                                  ).paddingOnly(
+                                      bottom: MediaQuery.of(context)
+                                          .padding
+                                          .bottom),
+                              ],
+                            ),
                           ),
                   ),
                 );

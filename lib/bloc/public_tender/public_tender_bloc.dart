@@ -27,23 +27,25 @@ class PublicTenderBloc extends Bloc<PublicTenderEvent, PublicTenderState> {
     if (event.currentPage == 1) {
       emit(state.copyWith(isLoading: true, publicTenders: []));
     } else {
-      // emit.is
+      emit(state.copyWith(isMoreLoading: true));
     }
     try {
-      final response = await publicTenderRepo.companyTenders(
-          event.currentPage, event.direction ?? 'asc', event.orderBy ?? 'created_at');
+      final response = await publicTenderRepo.companyTenders(event.currentPage,
+          event.direction ?? 'asc', event.orderBy ?? 'created_at');
+      print('this is the response ${response.statusCode} ${response.body}');
       if (response.statusCode == 200) {
         final companyTenders = CompanyTendersModel.fromJson(response.body);
         emit(state.copyWith(
           publicTenders: List<TenderItem>.from(state.publicTenders)
             ..addAll(companyTenders.data?.items ?? []),
           isLoading: false,
+          isMoreLoading: false,
           tenderCurrentPage: companyTenders.data?.currentPage ?? 1,
           tenderPageSize: companyTenders.data?.totalPages ?? 1,
         ));
       }
     } catch (e) {
-      emit(state.copyWith(isLoading: false));
+      emit(state.copyWith(isLoading: false, isMoreLoading: false));
     }
   }
 
@@ -149,23 +151,26 @@ class PublicTenderBloc extends Bloc<PublicTenderEvent, PublicTenderState> {
           emit(state.copyWith(
             filterTenders: companies.data?.items,
             isLoading: false,
+            isMoreLoading: false,
+            filterTenderCurrentPage: companies.data?.currentPage ?? 1,
+            filterTenderPageSize: companies.data?.totalPages ?? 1,
           ));
         } else {
           emit(state.copyWith(
             filterTenders: List<TenderItem>.from(state.filterTenders)
               ..addAll(companies.data?.items ?? []),
+            isLoading: false,
+            isMoreLoading: false,
+            filterTenderCurrentPage: companies.data?.currentPage ?? 1,
+            filterTenderPageSize: companies.data?.totalPages ?? 1,
           ));
         }
-
-        emit(state.copyWith(
-            filterTenderCurrentPage: companies.data?.currentPage ?? 1,
-            filterTenderPageSize: companies.data?.totalPages ?? 1));
       } else {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isLoading: false, isMoreLoading: false));
       }
     } catch (e) {
       print(e.toString());
+      emit(state.copyWith(isLoading: false, isMoreLoading: false));
     }
-    emit(state.copyWith(isLoading: false, isMoreLoading: false));
   }
 }

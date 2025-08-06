@@ -22,7 +22,6 @@ import '../../../utils/custom_text_style.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
 import '../company/add_company_screen.dart';
-import '../company/widgets/show_company_detail_box.dart';
 import '../company/widgets/show_llc_issue_box.dart';
 
 class MenuScreen extends StatelessWidget {

@@ -22,6 +22,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../data/model/response/chat/chat_list_model.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
@@ -397,6 +398,10 @@ class ProductDetailScreen extends StatelessWidget {
                     if (productDetail.data?.company != null) {
                       context.read<CompanyDetailBloc>().add(GetCompanyDetail(
                           productDetail.data!.company!.id.toString()));
+                              context.read<SimilarCompaniesBloc>().add(
+                          GetSimilarCompanies(
+                              companyId: productDetail.data!.company!.id.toString(),
+                              currentPage: 1));
                       Get.to(() => CompanyPageScreen());
                     }
                   },

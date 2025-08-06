@@ -69,6 +69,7 @@ class NotificationService {
       // Check if bloc is available before using it
       if (Get.isRegistered<CompanyDetailBloc>()) {
         Get.find<CompanyDetailBloc>().add(GetCompanyDetail(id));
+        
       }
       Get.to(() => CompanyPageScreen(isCompany: true));
     } catch (e) {

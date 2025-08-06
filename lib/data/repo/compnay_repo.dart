@@ -14,10 +14,11 @@ class CompnayRepo {
   final SharedPreferences sharedPreferences;
   CompnayRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> getMyCompanies() async {
+  Future<Response> getMyCompanies(int currentPage) async {
     // missing pagination
 
-    return await apiClient.getData("${AppConstants.myCompaniesUrl}?perPage=30");
+    return await apiClient
+        .getData("${AppConstants.myCompaniesUrl}?perPage=30&page=$currentPage");
   }
 
   Future<Response> deleteCompany(String id) async {
