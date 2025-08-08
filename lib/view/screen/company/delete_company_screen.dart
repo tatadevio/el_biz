@@ -108,7 +108,7 @@ class _DeleteCompanyScreenState extends State<DeleteCompanyScreen> {
         color: Colors.white,
         child: CustomButtonWithIcon(
           onTap: () {
-            context.read<CompanyBloc>().add(DeleteCompany(widget.id));
+            context.read<CompanyBloc>().add(DeleteCompany(widget.id, context));
             Get.back();
           },
           title: 'continue'.tr,

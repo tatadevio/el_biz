@@ -19,6 +19,7 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
     on<UpdateCompanyFilterEnable>(_onUpdateCompanyFilterEnable);
     on<FilterPublicCompanyProduct>(_onFilterPublicCompanyProduct);
     on<ClearPublicCompanyState>(_onClearPublicCompanyState);
+    on<DeleteCompanies>(_onDeleteCompany);
   }
 
   Future<void> _onGetPublicCompany(
@@ -62,14 +63,20 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
       final res = await publicCompanyRepo.getNewMyCompanies(event.currentPage);
       if (res.statusCode == 200) {
         MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
+        if (event.currentPage == 1) {
+          emit(state.copyWith(newCompanies: []));
+        }
 
         List<CompanyItem> myCompaniesList = myCompanies.data?.items ?? [];
+        print('new companies list length = ${myCompaniesList.length}');
         emit(state.copyWith(
           newCompanies: List<CompanyItem>.from(state.newCompanies)
             ..addAll(myCompaniesList),
           newCompanyCurrentPage: myCompanies.data?.currentPage ?? 1,
           newCompanyPageSize: myCompanies.data?.totalPages ?? 1,
         ));
+        print(
+            'new companies list length = ${state.newCompanies.length} and ${state.newCompanyCurrentPage} and ${state.newCompanyPageSize}');
         // have to add the pagination
       } else {
         showShortToast(res.body['message']);
@@ -146,5 +153,49 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
     Emitter<PublicCompanyState> emit,
   ) async {
     emit(PublicCompanyInitial());
+  }
+
+  Future<void> _onDeleteCompany(
+    DeleteCompanies event,
+    Emitter<PublicCompanyState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    // Check and remove from all lists that contain the ID
+    List<CompanyItem> updatedPublicCompanies = state.publicCompanies;
+    List<CompanyItem> updatedNewCompanies = state.newCompanies;
+    List<CompanyItem> updatedFilterCompanies = state.filterCompanies;
+
+    // Remove from publicCompanies if it exists
+    if (state.publicCompanies
+        .any((element) => element.id.toString() == event.id)) {
+      updatedPublicCompanies = state.publicCompanies
+          .where((element) => element.id.toString() != event.id)
+          .toList();
+    }
+
+    // Remove from newCompanies if it exists
+    if (state.newCompanies
+        .any((element) => element.id.toString() == event.id)) {
+      updatedNewCompanies = state.newCompanies
+          .where((element) => element.id.toString() != event.id)
+          .toList();
+    }
+
+    // Remove from filterCompanies if it exists
+    if (state.filterCompanies
+        .any((element) => element.id.toString() == event.id)) {
+      updatedFilterCompanies = state.filterCompanies
+          .where((element) => element.id.toString() != event.id)
+          .toList();
+    }
+
+    // Emit the updated state with all potentially modified lists
+    emit(state.copyWith(
+      publicCompanies: updatedPublicCompanies,
+      newCompanies: updatedNewCompanies,
+      filterCompanies: updatedFilterCompanies,
+      isLoading: false,
+    ));
   }
 }

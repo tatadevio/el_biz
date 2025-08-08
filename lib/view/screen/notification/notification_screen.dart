@@ -78,20 +78,30 @@ class _NotificationScreenState extends State<NotificationScreen> {
               );
             }
             if (notificationState.notificationsList.isEmpty) {
-              return Center(
-                child: Text(
-                  'no_notifications'.tr,
-                  style: body16.copyWith(color: ColorResources.gray),
+              return SingleChildScrollView(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.8,
+                  child: Center(
+                    child: Text(
+                      'no_notifications'.tr,
+                      style: body16.copyWith(color: ColorResources.gray),
+                    ),
+                  ),
                 ),
               );
             }
             return Stack(
               children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: _scrollController,
+                SingleChildScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: notificationState.notificationsList.length,
                         itemBuilder: (context, index) {
                           return NotificationItemWidget(
@@ -101,13 +111,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           );
                         },
                       ),
-                    ),
-                    if (notificationState.isMoreLoading)
-                      const Center(
-                        child: CircularProgressIndicator(),
-                      ).paddingOnly(
-                          bottom: MediaQuery.of(context).padding.bottom),
-                  ],
+                      if (notificationState.isMoreLoading)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ).paddingOnly(
+                            bottom: MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
                 ),
                 if (_showScrollToTopButton)
                   Positioned(

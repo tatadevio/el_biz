@@ -592,15 +592,49 @@ class _TenderScreenState extends State<TenderScreen> {
             builder: (context, tendersController) {
               return BlocBuilder<PublicTenderBloc, PublicTenderState>(
                   builder: (context, publicTenderState) {
-                if (publicTenderState.isLoading &&
-                    publicTenderState.publicTenders.isEmpty) {
+                if (publicTenderState.isLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (publicTenderState.publicTenders.isEmpty) {
-                  return Center(
-                    child: Text('no_tender_found'.tr),
+                if (publicTenderState.publicTenders.isEmpty &&
+                    !publicTenderState.isFilterEnable) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      context
+                          .read<PublicTenderBloc>()
+                          .add(GetPublicTender(1, direction: direction));
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        height: Get.height * 0.7,
+                        child: Center(
+                          child: Text('no_tender_found'.tr),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                if (publicTenderState.filterTenders.isEmpty &&
+                    publicTenderState.isFilterEnable) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<PublicTenderBloc>().add(
+                          FilterPublicTenderProduct(
+                              productFilterValuesModel:
+                                  publicTenderState.tenderFilterValuesModel!,
+                              currentPage: 1));
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        height: Get.height * 0.7,
+                        child: Center(
+                          child: Text('no_tender_found'.tr),
+                        ),
+                      ),
+                    ),
                   );
                 }
                 return Padding(

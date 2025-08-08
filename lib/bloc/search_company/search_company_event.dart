@@ -18,3 +18,11 @@ class SearchCompany extends SearchCompanyEvent {
   @override
   List<Object> get props => [search, currentPage];
 }
+
+class DeleteSearchCompany extends SearchCompanyEvent {
+  final String id;
+  const DeleteSearchCompany(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

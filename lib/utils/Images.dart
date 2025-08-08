@@ -42,6 +42,7 @@ class Images {
   static const String svgFile = "assets/icons/file.svg";
   static const String svgMailIcon = "assets/icons/mail-icon.svg";
   static const String svgDocument = "assets/icons/document.svg";
+  static const String svgCompanyReviews = "assets/icons/company_reviews.svg";
 
   // images used
   static const String emptySvg = "";

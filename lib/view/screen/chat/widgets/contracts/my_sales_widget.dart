@@ -71,9 +71,21 @@ class MySalesWidget extends StatelessWidget {
 
           if (displayList.isEmpty) {
             if (agreement.salesSearchQuery.isNotEmpty) {
-              return Center(child: Text('no_search_results'.tr));
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.60,
+                  child: Center(child: Text('no_search_results'.tr)),
+                ),
+              );
             } else {
-              return Center(child: Text('no_contract_found'.tr));
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.60,
+                  child: Center(child: Text('no_contract_found'.tr)),
+                ),
+              );
             }
           }
 

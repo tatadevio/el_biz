@@ -12,10 +12,12 @@ import '../../base/custom_border_button.dart';
 
 class CompanyReviewsScreen extends StatelessWidget {
   final String companyId;
+  final String? title;
 
   const CompanyReviewsScreen({
     super.key,
     required this.companyId,
+    this.title,
   });
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
@@ -43,7 +45,7 @@ class CompanyReviewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'reviews_of_the_company'.tr,
+          title ?? 'reviews_of_the_company'.tr,
           style: h16.copyWith(color: ColorResources.darkGray),
         ),
       ),
@@ -199,32 +201,33 @@ class CompanyReviewsScreen extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomBorderButton(
-          onTap: () {
-            Get.bottomSheet(
-                CustomAddReviewWidget(
-                  companyId: companyId,
-                ),
-                isScrollControlled: true,
-                backgroundColor: Colors.white);
-          },
-          height: 44,
-          width: Get.width,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          border: Border.all(width: 1, color: ColorResources.blue),
-          borderRadius: BorderRadius.circular(12),
-          boxShaow: const [
-            ColorResources.shadow1,
-          ],
-          child: Text(
-            'write_a_review'.tr,
-            style: textMd.copyWith(color: ColorResources.blue),
-          ),
-        ),
-      ),
+      // bottomNavigationBar:
+      // BottomAppBar(
+      //   color: Colors.white,
+      //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+      //   child: CustomBorderButton(
+      //     onTap: () {
+      //       Get.bottomSheet(
+      //           CustomAddReviewWidget(
+      //             companyId: companyId,
+      //           ),
+      //           isScrollControlled: true,
+      //           backgroundColor: Colors.white);
+      //     },
+      //     height: 44,
+      //     width: Get.width,
+      //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      //     border: Border.all(width: 1, color: ColorResources.blue),
+      //     borderRadius: BorderRadius.circular(12),
+      //     boxShaow: const [
+      //       ColorResources.shadow1,
+      //     ],
+      //     child: Text(
+      //       'write_a_review'.tr,
+      //       style: textMd.copyWith(color: ColorResources.blue),
+      //     ),
+      //   ),
+      // ),
     );
   }
 

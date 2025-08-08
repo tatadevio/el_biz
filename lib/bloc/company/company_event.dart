@@ -25,10 +25,11 @@ class GetMyCompanies extends CompanyEvent {
 
 class DeleteCompany extends CompanyEvent {
   final String id;
-  const DeleteCompany(this.id);
+  final BuildContext context;
+  const DeleteCompany(this.id, this.context);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [id, context];
 }
 
 class UpdateShowGood extends CompanyEvent {

@@ -48,42 +48,58 @@ class ContractsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: BlocBuilder<ContractsBloc, ContractsState>(
-            builder: (context, contractState) {
-          if (contractState.isLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          if (isSale) {
+            context
+                .read<ContractsBloc>()
+                .add(GetCompanySales(companyId: contractId, currentPage: 1));
+          } else {
+            context.read<ContractsBloc>().add(
+                GetCompanyPurchases(companyId: contractId, currentPage: 1));
           }
-          if (contractState.salesContractItems.isEmpty) {
-            return Center(
-              child: Text('no_contracts_found'.tr),
-            );
-          }
-          return RefreshIndicator(
-            onRefresh: () async {
-              if (isSale) {
-                context.read<ContractsBloc>().add(
-                    GetCompanySales(companyId: contractId, currentPage: 1));
-              } else {
-                context.read<ContractsBloc>().add(
-                    GetCompanyPurchases(companyId: contractId, currentPage: 1));
-              }
-            },
-            child: ListView.builder(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: contractState.salesContractItems.length,
-              // contractState.contracts.length,
-              itemBuilder: (context, index) {
-                return ContractItem(
-                    contractModel: contractState.salesContractItems[index]);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: BlocBuilder<ContractsBloc, ContractsState>(
+              builder: (context, contractState) {
+            if (contractState.isLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (contractState.salesContractItems.isEmpty) {
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.78,
+                  child: Center(child: Text('no_contracts_found'.tr)),
+                ),
+              );
+            }
+            return RefreshIndicator(
+              onRefresh: () async {
+                if (isSale) {
+                  context.read<ContractsBloc>().add(
+                      GetCompanySales(companyId: contractId, currentPage: 1));
+                } else {
+                  context.read<ContractsBloc>().add(GetCompanyPurchases(
+                      companyId: contractId, currentPage: 1));
+                }
               },
-            ),
-          );
-        }),
+              child: ListView.builder(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: contractState.salesContractItems.length,
+                // contractState.contracts.length,
+                itemBuilder: (context, index) {
+                  return ContractItem(
+                      contractModel: contractState.salesContractItems[index]);
+                },
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

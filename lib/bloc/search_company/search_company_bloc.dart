@@ -12,6 +12,7 @@ class SearchCompanyBloc extends Bloc<SearchCompanyEvent, SearchCompanyState> {
     on<SearchCompanyEvent>((event, emit) {});
     on<SearchCompany>(_onSearchProduct);
     on<ClearSearchCompanyList>(_onClearSearchList);
+    on<DeleteSearchCompany>(_onDeleteSearchCompany);
     // on<ToggleSearchProductFavorite>(_onToggleSearchProductFavorite);
   }
 
@@ -112,4 +113,12 @@ class SearchCompanyBloc extends Bloc<SearchCompanyEvent, SearchCompanyState> {
   //     emit(state.copyWith(searchProducts: updatedProducts));
   //   }
   // }
+
+  Future<void> _onDeleteSearchCompany(
+      DeleteSearchCompany event, Emitter<SearchCompanyState> emit) async {
+    emit(state.copyWith(
+        searchProducts: state.searchProducts
+            .where((element) => element.id.toString() != event.id)
+            .toList()));
+  }
 }

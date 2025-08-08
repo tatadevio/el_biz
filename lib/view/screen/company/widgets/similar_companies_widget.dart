@@ -46,13 +46,16 @@ class SimilarCompaniesWidget extends StatelessWidget {
       builder: (context, similarCompaniesState) {
         return similarCompaniesState.similarCompanies.isNotEmpty
             ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Похожие поставщики',
-                      style: h16.copyWith(color: ColorResources.darkGray),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Похожие поставщики',
+                        style: h16.copyWith(color: ColorResources.darkGray),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -64,6 +67,9 @@ class SimilarCompaniesWidget extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
+                            const SizedBox(
+                              width: 16,
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),

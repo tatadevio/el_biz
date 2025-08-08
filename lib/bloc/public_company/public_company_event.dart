@@ -47,3 +47,11 @@ class FilterPublicCompanyProduct extends PublicCompanyEvent {
 }
 
 class ClearPublicCompanyState extends PublicCompanyEvent {}
+
+class DeleteCompanies extends PublicCompanyEvent {
+  final String id;
+  const DeleteCompanies(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

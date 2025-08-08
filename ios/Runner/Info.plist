@@ -45,18 +45,24 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
+	<!-- <key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to pick a PDF file.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera to take photos.</string>
+	<string>Camera access is required so users can take photos for their profile or while creating a post.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need access to your photo library to save photos.</string>
-	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your photo library so you can select photos to use in your profile or posts.</string> -->
+	<key>NSCameraUsageDescription</key>
+	<string>We use the camera so you can take a photo for your profile or capture images while creating a post.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library so you can select photos to use in your profile or posts.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to your photo library to save the photos you take or upload in the app.</string>
+	<!-- <key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone for audio recording.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>We need access to your documents folder to save and open files.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
-	<string>We need access to your downloads folder to save files.</string>
+	<string>We need access to your downloads folder to save files.</string> -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

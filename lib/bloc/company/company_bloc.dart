@@ -17,6 +17,8 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../data/model/base/timing_date_model.dart';
 import '../../data/model/response/company/my_companies_model.dart';
+import '../public_company/public_company_bloc.dart';
+import '../search_company/search_company_bloc.dart';
 
 part 'company_event.dart';
 part 'company_state.dart';
@@ -99,6 +101,11 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       emit(state.copywith(isLoading: false));
       Get.back();
       add(GetMyCompanies(currentPage: 1));
+      // update companies
+      event.context.read<PublicCompanyBloc>().add(DeleteCompanies(event.id));
+      event.context
+          .read<SearchCompanyBloc>()
+          .add(DeleteSearchCompany(event.id));
     } else {
       emit(state.copywith(isLoading: false));
     }

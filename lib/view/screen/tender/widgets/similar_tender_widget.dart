@@ -47,17 +47,20 @@ class SimilarTenderWidget extends StatelessWidget {
             'this is the similar tender state ${similarTendersState.similarTenders.length}');
         return similarTendersState.similarTenders.isNotEmpty
             ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Похожие закупки',
-                      style: h16.copyWith(color: ColorResources.darkGray),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Похожие закупки',
+                        style: h16.copyWith(color: ColorResources.darkGray),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
                     SizedBox(
                       height: Get.width * 0.4,
                       child: SingleChildScrollView(
@@ -65,6 +68,9 @@ class SimilarTenderWidget extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
+                            const SizedBox(
+                              width: 16,
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),

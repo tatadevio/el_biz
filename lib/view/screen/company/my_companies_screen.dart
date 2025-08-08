@@ -22,9 +22,29 @@ import 'widgets/no_company_widget.dart';
 class MyCompaniesScreen extends StatelessWidget {
   const MyCompaniesScreen({super.key});
 
+  void _callScrolling(BuildContext context, ScrollController scrollController) {
+    final accountController = context.read<CompanyBloc>();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !accountController.state.isLoading &&
+          !accountController.state.myCompanyLoadMore) {
+        int pageSize = accountController.state.myCompanyPageSize;
+        if (accountController.state.myCompanyCurrentPage < pageSize) {
+          int nextPage = accountController.state.myCompanyCurrentPage;
+
+          accountController.add(GetMyCompanies(currentPage: nextPage + 1));
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.sizeOf(context).width;
+    final ScrollController _scrollController = ScrollController();
+    _callScrolling(context, _scrollController);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -56,12 +76,27 @@ class MyCompaniesScreen extends StatelessWidget {
               return NoCompanyWidget();
             }
 
-            return ListView.builder(
-              itemCount: companyState.myCompanies.length,
-              itemBuilder: (context, index) {
-                return myCompanyWidget(
-                    context, companyState.myCompanies[index]);
-              },
+            return SingleChildScrollView(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: companyState.myCompanies.length,
+                    itemBuilder: (context, index) {
+                      return myCompanyWidget(
+                          context, companyState.myCompanies[index]);
+                    },
+                  ),
+                  if (companyState.myCompanyLoadMore)
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ).paddingOnly(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
             );
           }),
         ),
@@ -107,7 +142,7 @@ class MyCompaniesScreen extends StatelessWidget {
           context
               .read<CompanyDetailBloc>()
               .add(GetCompanyDetail(company.id.toString()));
-                  context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+          context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
               companyId: company.id.toString(), currentPage: 1));
           Get.to(() => const CompanyPageScreen(
                 isCompany: true,

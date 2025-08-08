@@ -99,15 +99,41 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
 
           if (companyState.publicCompanies.isEmpty &&
               !companyState.isFilterEnable) {
-            return Center(
-              child: Text('no_companies_found'.tr),
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<PublicCompanyBloc>().add(GetPublicCompany(1));
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.60,
+                  child: Center(
+                    child: Text('no_companies_found'.tr),
+                  ),
+                ),
+              ),
             );
           }
 
           if (companyState.filterCompanies.isEmpty &&
               companyState.isFilterEnable) {
-            return Center(
-              child: Text('no_companies_found'.tr),
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<PublicCompanyBloc>().add(
+                    FilterPublicCompanyProduct(
+                        productFilterValuesModel:
+                            companyState.companyFilterValuesModel!,
+                        currentPage: 1));
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.60,
+                  child: Center(
+                    child: Text('no_companies_found'.tr),
+                  ),
+                ),
+              ),
             );
           }
 

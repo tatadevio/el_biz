@@ -224,29 +224,30 @@ class PublicProductBloc extends Bloc<PublicProductEvent, PublicProductState> {
           emit(state.copyWith(
             publicFilterProducts: companyProducts.data?.items,
             isLoading: false,
+            isMoreLoading: false,
+            filterCurrentPage: companyProducts.data?.currentPage ?? 1,
+            filterPageSize: companyProducts.data?.totalPages ?? 1,
           ));
         } else {
           emit(state.copyWith(
             publicFilterProducts:
                 List<ProductListItem>.from(state.publicFilterProducts)
                   ..addAll(companyProducts.data?.items ?? []),
-
-            // [
-            //   ...state.publicProducts ,
-            //   ...companyProducts.data?.items ?? []
-            // ]
+            isLoading: false,
+            isMoreLoading: false,
+            filterCurrentPage: companyProducts.data?.currentPage ?? 1,
+            filterPageSize: companyProducts.data?.totalPages ?? 1,
           ));
         }
 
-        emit(state.copyWith(
-            filterCurrentPage: companyProducts.data?.currentPage ?? 1,
-            filterPageSize: companyProducts.data?.totalPages ?? 1));
+        print(
+            'this is the list length of the filter products= ${companyProducts.data?.total}');
       } else {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isLoading: false, isMoreLoading: false));
       }
     } catch (e) {
       print(e.toString());
+      emit(state.copyWith(isLoading: false, isMoreLoading: false));
     }
-    emit(state.copyWith(isLoading: false, isMoreLoading: false));
   }
 }

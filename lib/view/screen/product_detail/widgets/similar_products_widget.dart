@@ -53,28 +53,47 @@ class SimilarProductsWidget extends StatelessWidget {
         return SizedBox();
       }
       return Padding(
-        padding: const EdgeInsets.only(left: 15),
+        padding: const EdgeInsets.only(left: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Похожие товары',
-              style: h16.copyWith(color: ColorResources.darkGray),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Похожие товары',
+                style: h16.copyWith(color: ColorResources.darkGray),
+              ),
             ),
             const SizedBox(
               height: 10,
             ),
             SizedBox(
               height: Get.height * 0.45,
-              child: ListView.builder(
+              child: SingleChildScrollView(
                 controller: _controller,
                 scrollDirection: Axis.horizontal,
-                itemCount: similarProductState.similarProduct.length,
-                itemBuilder: (context, index) {
-                  // return SizedBox(width: Get.width / 2.2, child: ProductGridItem());
-                  return productItem(
-                      similarProductState.similarProduct[index], context);
-                },
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: similarProductState.similarProduct.length,
+                      itemBuilder: (context, index) {
+                        // return SizedBox(width: Get.width / 2.2, child: ProductGridItem());
+                        return productItem(
+                            similarProductState.similarProduct[index], context);
+                      },
+                    ),
+                    if (similarProductState.isMoreLoading)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                  ],
+                ),
               ),
             )
           ],

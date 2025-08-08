@@ -164,80 +164,93 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'products'.tr,
-                  style: h16.copyWith(color: ColorResources.blackText),
+          title: BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, productController) {
+            return Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    productController.isShowCategories
+                        ? 'Каталог'
+                        : 'products'.tr,
+                    style: h16.copyWith(color: ColorResources.blackText),
+                  ),
                 ),
-              ),
-              if (!widget.isSelectProduct)
-                GestureDetector(
-                  onTap: () {
-                    context
-                        .read<search.SearchBloc>()
-                        .add(search.ChangeStatusSearch(true));
-                    Get.to(() => SearchScreen());
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: ColorResources.lgColor,
+                if (!widget.isSelectProduct)
+                  GestureDetector(
+                    onTap: () {
+                      if (productController.isShowCategories) {
+                        context
+                            .read<search.SearchBloc>()
+                            .add(search.ChangeStatusSearch(false));
+                      } else {
+                        context
+                            .read<search.SearchBloc>()
+                            .add(search.ChangeStatusSearch(true));
+                      }
+                      Get.to(() => SearchScreen());
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: ColorResources.lgColor,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(Images.svgSearch),
                     ),
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(Images.svgSearch),
                   ),
-                ),
-              const SizedBox(
-                width: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  Get.to(() => const AddProductScreen());
-                },
-                child: Container(
-                  height: 40,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      12,
+                if (!productController.isShowCategories) ...[
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.to(() => const AddProductScreen());
+                    },
+                    child: Container(
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 14),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          12,
+                        ),
+                        color: ColorResources.green,
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 2,
+                            spreadRadius: 0,
+                            offset: Offset(0, 1),
+                            color: Color.fromRGBO(16, 24, 40, 0.05),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(
+                            Images.svgPlus,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'new_product'.tr,
+                            style: button16,
+                          ),
+                        ],
+                      ),
                     ),
-                    color: ColorResources.green,
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 2,
-                        spreadRadius: 0,
-                        offset: Offset(0, 1),
-                        color: Color.fromRGBO(16, 24, 40, 0.05),
-                      ),
-                    ],
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        Images.svgPlus,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        'Новый тендер',
-                        style: button16,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+                ],
+              ],
+            );
+          }),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(55),
             child: BlocBuilder<ProductBloc, ProductState>(

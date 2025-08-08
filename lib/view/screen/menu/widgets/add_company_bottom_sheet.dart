@@ -129,7 +129,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                                       profile: userState.userInfo!.data!,
                                       companyItem: CompanyItem(),
                                       isUser: true));
-                              // Get.back();
+                              Get.back();
                               // Get.to(() => const CompanyPageScreen());
                             },
                           ),
@@ -174,6 +174,7 @@ class _AddCompanyBottomSheetState extends State<AddCompanyBottomSheet> {
                                             profile: UserData(),
                                             companyItem: company,
                                             isUser: false));
+                                    Get.back();
                                   },
                                 );
                               },

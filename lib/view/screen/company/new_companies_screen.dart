@@ -31,6 +31,19 @@ class _NewCompaniesScreenState extends State<NewCompaniesScreen> {
           _showScrollToTopButton = false;
         });
       }
+
+      final publicCompanyBloc = context.read<PublicCompanyBloc>();
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !publicCompanyBloc.state.isLoading &&
+          !publicCompanyBloc.state.isMoreLoading) {
+        int pageSize = publicCompanyBloc.state.newCompanyPageSize;
+        if (publicCompanyBloc.state.newCompanyCurrentPage < pageSize) {
+          int nextPage = publicCompanyBloc.state.newCompanyCurrentPage;
+
+          publicCompanyBloc.add(GetNewPublicCompany(nextPage + 1));
+        }
+      }
     });
   }
 
@@ -48,27 +61,9 @@ class _NewCompaniesScreenState extends State<NewCompaniesScreen> {
     );
   }
 
-  void _callScrolling(BuildContext context, ScrollController scrollController) {
-    final accountController = context.read<PublicCompanyBloc>();
-
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent - 300 &&
-          !accountController.state.isLoading &&
-          !accountController.state.isMoreLoading) {
-        int pageSize = accountController.state.newCompanyPageSize;
-        if (accountController.state.newCompanyCurrentPage < pageSize) {
-          int nextPage = accountController.state.newCompanyCurrentPage;
-
-          accountController.add(GetNewPublicCompany(nextPage + 1));
-        }
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    _callScrolling(context, _scrollController);
+    // _callScrolling(context, _scrollController);
     return Scaffold(
       appBar: AppBar(
         title: Text('new_companies'.tr),
@@ -87,20 +82,35 @@ class _NewCompaniesScreenState extends State<NewCompaniesScreen> {
                 child: Text('no_company_found'.tr),
               );
             }
+            print(
+                'new companies list length in file = ${companyState.newCompanies.length} and ${companyState.newCompanyCurrentPage} and ${companyState.newCompanyPageSize}');
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: RefreshIndicator(
                 onRefresh: () async {
                   context.read<PublicCompanyBloc>().add(GetNewPublicCompany(1));
                 },
-                child: ListView.builder(
+                child: SingleChildScrollView(
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: companyState.publicCompanies.length,
-                  itemBuilder: (context, index) {
-                    return CompanyItemWidget(
-                        company: companyState.publicCompanies[index]);
-                  },
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: companyState.newCompanies.length,
+                        itemBuilder: (context, index) {
+                          return CompanyItemWidget(
+                              company: companyState.newCompanies[index]);
+                        },
+                      ),
+                      if (companyState.isMoreLoading)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ).paddingOnly(
+                            bottom: MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
                 ),
               ),
             );

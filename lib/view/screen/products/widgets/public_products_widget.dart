@@ -55,32 +55,37 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
     final publicProductBloc = context.read<PublicProductBloc>();
 
     scrollController.addListener(() {
-      if (Get.find<PublicProductBloc>().state.isFilterEnable) {
-        if (scrollController.position.pixels >=
-                scrollController.position.maxScrollExtent - 300 &&
-            !publicProductBloc.state.isLoading &&
-            !publicProductBloc.state.isMoreLoading) {
-          int pageSize = publicProductBloc.state.filterPageSize;
-          if (publicProductBloc.state.filterCurrentPage < pageSize) {
-            int nextPage = publicProductBloc.state.filterCurrentPage;
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent - 300 &&
+          !publicProductBloc.state.isLoading &&
+          !publicProductBloc.state.isMoreLoading) {
+        // print(
+        //     'Pagination triggered - isFilterEnable: ${publicProductBloc.state.isFilterEnable}');
+
+        if (publicProductBloc.state.isFilterEnable) {
+          // Handle filtered products pagination
+
+          if (publicProductBloc.state.filterCurrentPage <
+              publicProductBloc.state.filterPageSize) {
+            int nextPage = publicProductBloc.state.filterCurrentPage + 1;
 
             publicProductBloc.add(FilterPublicProduct(
-                productFilterValuesModel: Get.find<PublicProductBloc>()
-                    .state
-                    .productFilterValuesModel!,
-                currentPage: nextPage + 1));
+                productFilterValuesModel:
+                    publicProductBloc.state.productFilterValuesModel!,
+                currentPage: nextPage));
+          } else {
+            // print('No more filter pages available');
           }
-        }
-      } else {
-        if (scrollController.position.pixels >=
-                scrollController.position.maxScrollExtent - 300 &&
-            !publicProductBloc.state.isLoading &&
-            !publicProductBloc.state.isMoreLoading) {
-          int pageSize = publicProductBloc.state.pageSize;
-          if (publicProductBloc.state.currentPage < pageSize) {
-            int nextPage = publicProductBloc.state.currentPage;
+        } else {
+          // Handle regular products pagination
 
-            publicProductBloc.add(GetPublicProduct(nextPage + 1));
+          if (publicProductBloc.state.currentPage <
+              publicProductBloc.state.pageSize) {
+            int nextPage = publicProductBloc.state.currentPage + 1;
+
+            publicProductBloc.add(GetPublicProduct(nextPage));
+          } else {
+            // print('No more regular pages available');
           }
         }
       }
@@ -102,13 +107,32 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
               }
 
               if (state.publicProducts.isEmpty && !state.isFilterEnable) {
-                return Center(
-                  child: Text('no_product_found'.tr),
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<PublicProductBloc>().add(GetPublicProduct(1));
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(
+                      height: Get.height * 0.60,
+                      child: Center(
+                        child: Text('no_product_found'.tr),
+                      ),
+                    ),
+                  ),
                 );
               }
               if (state.publicFilterProducts.isEmpty && state.isFilterEnable) {
-                return Center(
-                  child: Text('no_product_found'.tr),
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<PublicProductBloc>().add(FilterPublicProduct(
+                        productFilterValuesModel:
+                            state.productFilterValuesModel!,
+                        currentPage: 1));
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                  ),
                 );
               }
 

@@ -31,7 +31,7 @@ class PublicCompaniesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.sizeOf(context).width;
-    final _scrollController = ScrollController();
+    final ScrollController _scrollController = ScrollController();
 
     _callScrolling(context, _scrollController);
 
@@ -63,10 +63,15 @@ class PublicCompaniesScreen extends StatelessWidget {
               );
             }
             if (companyState.publicCompanies.isEmpty) {
-              return Center(
-                child: Text('no_company_found'.tr),
+              return SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: Get.height * 0.75,
+                  child: Center(
+                    child: Text('no_company_found'.tr),
+                  ),
+                ),
               );
-              // return NoCompanyWidget();
             }
 
             return SingleChildScrollView(

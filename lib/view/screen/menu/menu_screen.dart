@@ -3,6 +3,7 @@ import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/screen/account/account_screen.dart';
 import 'package:el_biz/view/screen/auth/login.dart';
+import 'package:el_biz/view/screen/company/company_reviews_screen.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
 import 'package:el_biz/view/screen/language/language_screen.dart';
 import 'package:el_biz/view/screen/menu/profile_information_screen.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../bloc/company/company_bloc.dart';
+import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../bloc/public_company/public_company_bloc.dart';
 import '../../../bloc/search_company/search_company_bloc.dart';
 import '../../../bloc/tin_number/tin_bloc.dart';
@@ -201,6 +203,7 @@ class MenuScreen extends StatelessWidget {
                                     isScrollControlled: true);
                               },
                             ),
+                            // if (userState.selectedAccountModel?.isUser == false)
                             cusotmInfoList(
                               Images.svgCreditCard,
                               'current_accounts'.tr,
@@ -224,6 +227,32 @@ class MenuScreen extends StatelessWidget {
                                 Get.to(() => const FavoriteScreen());
                               },
                             ),
+                            if (userState.selectedAccountModel?.isUser ==
+                                    false &&
+                                userState.selectedAccountModel?.companyId !=
+                                    null)
+                              cusotmInfoList(
+                                Images.svgCompanyReviews,
+                                'Мои отзывы',
+                                isSelected: false,
+                                onTap: () {
+                                  context.read<CompanyDetailBloc>().add(
+                                        GetCompanyReviews(
+                                            userState.selectedAccountModel
+                                                    ?.companyId
+                                                    .toString() ??
+                                                '',
+                                            1),
+                                      );
+                                  Get.to(() => CompanyReviewsScreen(
+                                        companyId: userState
+                                                .selectedAccountModel?.companyId
+                                                .toString() ??
+                                            '',
+                                        title: 'Мои отзывы',
+                                      ));
+                                },
+                              ),
                             cusotmInfoList(
                               Images.language,
                               'language'.tr,
