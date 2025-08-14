@@ -9,10 +9,13 @@ sealed class PublicCompanyEvent extends Equatable {
 
 class GetPublicCompany extends PublicCompanyEvent {
   final int currentPage;
-  const GetPublicCompany(this.currentPage);
+  final String orderBy;
+  final String direction;
+  const GetPublicCompany(this.currentPage,
+      {this.orderBy = 'created_at', this.direction = 'asc'});
 
   @override
-  List<Object> get props => [currentPage];
+  List<Object> get props => [currentPage, orderBy, direction];
 }
 
 class GetNewPublicCompany extends PublicCompanyEvent {

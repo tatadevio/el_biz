@@ -311,7 +311,7 @@ class _TenderScreenState extends State<TenderScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Sort by',
+                                            'sort_by'.tr,
                                             style: h16.copyWith(
                                                 color: ColorResources.darkGray,
                                                 fontWeight: FontWeight.w600),
@@ -364,7 +364,7 @@ class _TenderScreenState extends State<TenderScreen> {
                                                   SvgPicture.asset(
                                                       Images.svgArrowUpDown),
                                                   const SizedBox(width: 12),
-                                                  Text('Newest first',
+                                                  Text('newest_first'.tr,
                                                       style: body14),
                                                 ],
                                               ),
@@ -393,7 +393,7 @@ class _TenderScreenState extends State<TenderScreen> {
                                                   SvgPicture.asset(
                                                       Images.svgArrowUpDown),
                                                   const SizedBox(width: 12),
-                                                  Text('Oldest first',
+                                                  Text('oldest_first'.tr,
                                                       style: body14),
                                                 ],
                                               ),
@@ -422,7 +422,7 @@ class _TenderScreenState extends State<TenderScreen> {
                                                   SvgPicture.asset(
                                                       Images.svgArrowUpDown),
                                                   const SizedBox(width: 12),
-                                                  Text('Title (A-Z)',
+                                                  Text('title_a_z'.tr,
                                                       style: body14),
                                                 ],
                                               ),
@@ -451,7 +451,7 @@ class _TenderScreenState extends State<TenderScreen> {
                                                   SvgPicture.asset(
                                                       Images.svgArrowUpDown),
                                                   const SizedBox(width: 12),
-                                                  Text('Title (Z-A)',
+                                                  Text('title_z_a'.tr,
                                                       style: body14),
                                                 ],
                                               ),

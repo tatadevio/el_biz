@@ -71,7 +71,8 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAddCompanyAppbar(title: "register company".tr),
+      appBar: customAddCompanyAppbar(
+          title: widget.isEdit ? "edit_company".tr : "register_company".tr),
       body: BlocBuilder<CompanyBloc, CompanyState>(
         builder: (context, state) {
           return SingleChildScrollView(

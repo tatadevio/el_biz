@@ -12,9 +12,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../bloc/add_product/add_product_bloc.dart';
 import '../../../utils/Images.dart';
+import '../../../utils/appConstant.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/custom_button.dart';
+import '../../base/custom_image.dart';
 import './widgets/add_product_images_preview.dart';
 
 class PreviewProductScreen extends StatefulWidget {
@@ -64,13 +66,38 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
             }
             return SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: AddProductImagesPreview(
-                      productData: productData,
+                  if (productData.productImages?.isNotEmpty ?? false)
+                    Padding(
+                      padding: EdgeInsets.all(16),
+                      child: AddProductImagesPreview(
+                        productData: productData,
+                      ),
                     ),
-                  ),
+                  if (productData.productUploadedImages != null &&
+                      productData.productUploadedImages!.isNotEmpty)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Wrap(
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        children: productData.productUploadedImages!
+                            .map(
+                              (image) => Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: CustomImage(
+                                    image: image.small ?? '',
+                                    height: 80,
+                                    width: 70,
+                                    radius: 10),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 24),
@@ -126,14 +153,15 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                           height: 5,
                         ),
                         Text(
-                          'Раскладной садовый стул из шпона дерева.',
+                          productData.brandName ?? '',
+                          // 'Раскладной садовый стул из шпона дерева.',
                           style: body16.copyWith(color: ColorResources.gray),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          productData.price ?? '',
+                          "${productData.price} ${AppConstants.currencyCode}",
                           // '2 500 сом',
                           style: h24.copyWith(color: ColorResources.blue),
                         ),

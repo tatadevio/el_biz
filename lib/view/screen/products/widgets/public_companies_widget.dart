@@ -17,7 +17,10 @@ import '../../../base/custom_toast.dart';
 import '../../company/company_page_screen.dart';
 
 class PublicCompaniesWidget extends StatefulWidget {
-  const PublicCompaniesWidget({super.key});
+  final String orderBy;
+  final String direction;
+  const PublicCompaniesWidget(
+      {super.key, this.orderBy = 'created_at', this.direction = 'asc'});
 
   @override
   State<PublicCompaniesWidget> createState() => _PublicCompaniesWidgetState();
@@ -62,9 +65,8 @@ class _PublicCompaniesWidgetState extends State<PublicCompaniesWidget> {
           if (publicCompanies.state.companyCurrentPage < pageSize) {
             int nextPage = publicCompanies.state.companyCurrentPage;
 
-            context
-                .read<PublicCompanyBloc>()
-                .add(GetPublicCompany(nextPage + 1));
+            context.read<PublicCompanyBloc>().add(GetPublicCompany(nextPage + 1,
+                orderBy: widget.orderBy, direction: widget.direction));
           }
         }
       }

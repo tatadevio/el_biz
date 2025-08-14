@@ -400,5 +400,18 @@
   "no_companies_found": "No companies found",
   "login_to_view_product": "Login to view product",
   "login_to_view_company": "Login to view company",
-  "login_to_view_tender": "Login to view tender"
+  "login_to_view_tender": "Login to view tender",
+  "sort_by": "Sort by",
+  "newest_first": "Newest first",
+  "oldest_first": "Oldest first",
+  "name_a_z": "Name (A-Z)",
+  "name_z_a": "Name (Z-A)",
+  "price_low_high": "Price (Low-High)",
+  "price_high_low": "Price (High-Low)",
+  "quantity_low_high": "Quantity (Low-High)",
+  "quantity_high_low": "Quantity (High-Low)",
+  "title_a_z": "Title (A-Z)",
+  "title_z_a": "Title (Z-A)",
+  "edit_company": "Edit Company",
+  "register_company": "Register Company"
 }

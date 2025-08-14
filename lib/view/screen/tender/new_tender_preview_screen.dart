@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
+import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
@@ -124,41 +125,41 @@ class _NewTenderPreviewScreenState extends State<NewTenderPreviewScreen> {
                                     color: ColorResources.darkGray),
                               ),
                             ),
-                            Container(
-                              height: 40,
-                              width: 40,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    width: 1, color: ColorResources.lgColor),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 2,
-                                    spreadRadius: 0,
-                                    offset: Offset(0, 1),
-                                    color: Color.fromRGBO(16, 24, 40, 0.05),
-                                  ),
-                                ],
-                              ),
-                              alignment: Alignment.center,
-                              child: SvgPicture.asset(Images.svgHeartBorder),
-                            ),
+                            // Container(
+                            //   height: 40,
+                            //   width: 40,
+                            //   padding: const EdgeInsets.all(10),
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.white,
+                            //     border: Border.all(
+                            //         width: 1, color: ColorResources.lgColor),
+                            //     borderRadius: BorderRadius.circular(12),
+                            //     boxShadow: const [
+                            //       BoxShadow(
+                            //         blurRadius: 2,
+                            //         spreadRadius: 0,
+                            //         offset: Offset(0, 1),
+                            //         color: Color.fromRGBO(16, 24, 40, 0.05),
+                            //       ),
+                            //     ],
+                            //   ),
+                            //   alignment: Alignment.center,
+                            //   child: SvgPicture.asset(Images.svgHeartBorder),
+                            // ),
                           ],
                         ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          'Раскладной садовый стул из шпона дерева.',
+                          tenderData.shortDescription ?? '',
                           style: body16.copyWith(color: ColorResources.gray),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          tenderData.budgetStart ?? '',
+                          "${tenderData.budgetStart} - ${tenderData.budgetEnd} ${AppConstants.currencyCode}",
                           // '2 500 сом',
                           style: h24.copyWith(color: ColorResources.blue),
                         ),
@@ -275,7 +276,7 @@ class _NewTenderPreviewScreenState extends State<NewTenderPreviewScreen> {
               height: Get.height,
               onTap: () {
                 if (widget.isEdit) {
-                  showCustomSnackBar('Product Updated....');
+                  // showCustomSnackBar('Product Updated....');
                   // Get.offAll(() => const DashboardScreen());
                   final tenderdata =
                       context.read<TendersBloc>().state.newTenderModel;

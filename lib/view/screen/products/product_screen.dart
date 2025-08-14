@@ -40,8 +40,10 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
-  String direction = 'asc';
-  String orderBy = 'created_at';
+  String productDirection = 'asc';
+  String productOrderBy = 'created_at';
+  String companyOrderBy = 'created_at';
+  String companyDirection = 'asc';
 
   @override
   void initState() {
@@ -130,6 +132,7 @@ class _ProductScreenState extends State<ProductScreen> {
     required String direction,
     required String currentOrderBy,
     required String currentDirection,
+    bool isCompany = false,
   }) {
     final bool isSelected =
         (orderBy == currentOrderBy && direction == currentDirection);
@@ -138,12 +141,24 @@ class _ProductScreenState extends State<ProductScreen> {
       groupValue: isSelected ? value : null,
       onChanged: (_) {
         setState(() {
-          this.orderBy = orderBy;
-          this.direction = direction;
+          if (isCompany) {
+            companyOrderBy = orderBy;
+            companyDirection = direction;
+          } else {
+            productOrderBy = orderBy;
+            productDirection = direction;
+          }
         });
-        context.read<PublicProductBloc>().add(
-              GetPublicProduct(1, orderBy: orderBy, direction: direction),
-            );
+        if (isCompany) {
+          context.read<PublicCompanyBloc>().add(
+                GetPublicCompany(1,
+                    orderBy: companyOrderBy, direction: companyDirection),
+              );
+        } else {
+          context.read<PublicProductBloc>().add(
+                GetPublicProduct(1, orderBy: orderBy, direction: direction),
+              );
+        }
         Navigator.pop(context);
       },
       title: Row(
@@ -393,206 +408,461 @@ class _ProductScreenState extends State<ProductScreen> {
                         Expanded(
                           child: InkWell(
                             borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20)),
-                                ),
-                                builder: (context) {
-                                  return StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return DraggableScrollableSheet(
-                                        initialChildSize: 0.6,
-                                        minChildSize: 0.5,
-                                        maxChildSize: 0.9,
-                                        expand: false,
-                                        builder: (context, scrollController) {
-                                          return Container(
-                                            padding: const EdgeInsets.all(20),
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.vertical(
-                                                      top: Radius.circular(20)),
-                                            ),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Sort by',
-                                                      style: h16.copyWith(
-                                                          color: ColorResources
-                                                              .darkGray,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      icon: const Icon(
-                                                          Icons.close),
-                                                      color:
-                                                          ColorResources.gray,
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Expanded(
-                                                  child: SingleChildScrollView(
-                                                    controller:
-                                                        scrollController,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        color: Colors.white,
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.grey
-                                                                .withOpacity(
-                                                                    0.1),
-                                                            spreadRadius: 1,
-                                                            blurRadius: 5,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title:
-                                                                'Newest first',
-                                                            value: 'newest',
-                                                            orderBy:
-                                                                'created_at',
-                                                            direction: 'desc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title:
-                                                                'Oldest first',
-                                                            value: 'oldest',
-                                                            orderBy:
-                                                                'created_at',
-                                                            direction: 'asc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title: 'Name (A-Z)',
-                                                            value: 'name_az',
-                                                            orderBy: 'name',
-                                                            direction: 'asc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title: 'Name (Z-A)',
-                                                            value: 'name_za',
-                                                            orderBy: 'name',
-                                                            direction: 'desc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title:
-                                                                'Price (Low-High)',
-                                                            value:
-                                                                'price_low_high',
-                                                            orderBy: 'price',
-                                                            direction: 'asc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title:
-                                                                'Price (High-Low)',
-                                                            value:
-                                                                'price_high_low',
-                                                            orderBy: 'price',
-                                                            direction: 'desc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title:
-                                                                'Quantity (Low-High)',
-                                                            value:
-                                                                'quantity_low_high',
-                                                            orderBy: 'quantity',
-                                                            direction: 'asc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                          _buildSortOption(
-                                                            context: context,
-                                                            setState: setState,
-                                                            title:
-                                                                'Quantity (High-Low)',
-                                                            value:
-                                                                'quantity_high_low',
-                                                            orderBy: 'quantity',
-                                                            direction: 'desc',
-                                                            currentOrderBy:
-                                                                orderBy,
-                                                            currentDirection:
-                                                                direction,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+                            onTap: (productController.isShowCategories)
+                                ? () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20)),
+                                      ),
+                                      builder: (context) {
+                                        return StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return DraggableScrollableSheet(
+                                              initialChildSize: 0.4,
+                                              minChildSize: 0.3,
+                                              maxChildSize: 0.8,
+                                              expand: false,
+                                              builder:
+                                                  (context, scrollController) {
+                                                return Container(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                            top:
+                                                                Radius.circular(
+                                                                    20)),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'sort_by'.tr,
+                                                            style: h16.copyWith(
+                                                                color:
+                                                                    ColorResources
+                                                                        .darkGray,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ),
+                                                          IconButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            icon: const Icon(
+                                                                Icons.close),
+                                                            color:
+                                                                ColorResources
+                                                                    .gray,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      Expanded(
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          controller:
+                                                              scrollController,
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              color:
+                                                                  Colors.white,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .withOpacity(
+                                                                          0.1),
+                                                                  spreadRadius:
+                                                                      1,
+                                                                  blurRadius: 5,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            child: Column(
+                                                              children: [
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'newest_first'
+                                                                          .tr,
+                                                                  value:
+                                                                      'c_newest',
+                                                                  orderBy:
+                                                                      'created_at',
+                                                                  direction:
+                                                                      'desc',
+                                                                  currentOrderBy:
+                                                                      companyOrderBy,
+                                                                  currentDirection:
+                                                                      companyDirection,
+                                                                  isCompany:
+                                                                      true,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'oldest_first'
+                                                                          .tr,
+                                                                  value:
+                                                                      'c_oldest',
+                                                                  orderBy:
+                                                                      'created_at',
+                                                                  direction:
+                                                                      'asc',
+                                                                  currentOrderBy:
+                                                                      companyOrderBy,
+                                                                  currentDirection:
+                                                                      companyDirection,
+                                                                  isCompany:
+                                                                      true,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'name_a_z'
+                                                                          .tr,
+                                                                  value:
+                                                                      'c_name_az',
+                                                                  orderBy:
+                                                                      'name',
+                                                                  direction:
+                                                                      'asc',
+                                                                  currentOrderBy:
+                                                                      companyOrderBy,
+                                                                  currentDirection:
+                                                                      companyDirection,
+                                                                  isCompany:
+                                                                      true,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'name_z_a'
+                                                                          .tr,
+                                                                  value:
+                                                                      'c_name_za',
+                                                                  orderBy:
+                                                                      'name',
+                                                                  direction:
+                                                                      'desc',
+                                                                  currentOrderBy:
+                                                                      companyOrderBy,
+                                                                  currentDirection:
+                                                                      companyDirection,
+                                                                  isCompany:
+                                                                      true,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  }
+                                : () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20)),
+                                      ),
+                                      builder: (context) {
+                                        return StatefulBuilder(
+                                          builder: (context, setState) {
+                                            return DraggableScrollableSheet(
+                                              initialChildSize: 0.6,
+                                              minChildSize: 0.5,
+                                              maxChildSize: 0.9,
+                                              expand: false,
+                                              builder:
+                                                  (context, scrollController) {
+                                                return Container(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                            top:
+                                                                Radius.circular(
+                                                                    20)),
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'sort_by'.tr,
+                                                            style: h16.copyWith(
+                                                                color:
+                                                                    ColorResources
+                                                                        .darkGray,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ),
+                                                          IconButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            icon: const Icon(
+                                                                Icons.close),
+                                                            color:
+                                                                ColorResources
+                                                                    .gray,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      Expanded(
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          controller:
+                                                              scrollController,
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              color:
+                                                                  Colors.white,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .withOpacity(
+                                                                          0.1),
+                                                                  spreadRadius:
+                                                                      1,
+                                                                  blurRadius: 5,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            child: Column(
+                                                              children: [
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'newest_first'
+                                                                          .tr,
+                                                                  value:
+                                                                      'newest',
+                                                                  orderBy:
+                                                                      'created_at',
+                                                                  direction:
+                                                                      'desc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'oldest_first'
+                                                                          .tr,
+                                                                  value:
+                                                                      'oldest',
+                                                                  orderBy:
+                                                                      'created_at',
+                                                                  direction:
+                                                                      'asc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'name_a_z'
+                                                                          .tr,
+                                                                  value:
+                                                                      'name_az',
+                                                                  orderBy:
+                                                                      'name',
+                                                                  direction:
+                                                                      'asc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'name_z_a'
+                                                                          .tr,
+                                                                  value:
+                                                                      'name_za',
+                                                                  orderBy:
+                                                                      'name',
+                                                                  direction:
+                                                                      'desc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'price_low_high'
+                                                                          .tr,
+                                                                  value:
+                                                                      'price_low_high',
+                                                                  orderBy:
+                                                                      'price',
+                                                                  direction:
+                                                                      'asc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'price_high_low'
+                                                                          .tr,
+                                                                  value:
+                                                                      'price_high_low',
+                                                                  orderBy:
+                                                                      'price',
+                                                                  direction:
+                                                                      'desc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'quantity_low_high'
+                                                                          .tr,
+                                                                  value:
+                                                                      'quantity_low_high',
+                                                                  orderBy:
+                                                                      'quantity',
+                                                                  direction:
+                                                                      'asc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                                _buildSortOption(
+                                                                  context:
+                                                                      context,
+                                                                  setState:
+                                                                      setState,
+                                                                  title:
+                                                                      'quantity_high_low'
+                                                                          .tr,
+                                                                  value:
+                                                                      'quantity_high_low',
+                                                                  orderBy:
+                                                                      'quantity',
+                                                                  direction:
+                                                                      'desc',
+                                                                  currentOrderBy:
+                                                                      productOrderBy,
+                                                                  currentDirection:
+                                                                      productDirection,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
                             child: Container(
                               height: 40,
                               padding: const EdgeInsets.symmetric(
@@ -884,8 +1154,12 @@ class _ProductScreenState extends State<ProductScreen> {
                       else
                         Expanded(
                           child: !productController.isShowCategories
-                              ? PublicProductsWidget()
-                              : PublicCompaniesWidget(),
+                              ? PublicProductsWidget(
+                                  orderBy: productOrderBy,
+                                  direction: productDirection)
+                              : PublicCompaniesWidget(
+                                  orderBy: companyOrderBy,
+                                  direction: companyDirection),
                           // const SizedBox(),
                         ),
                     ],

@@ -9,7 +9,9 @@ import '../../../base/product_grid_item.dart';
 import '../../../base/product_list_item.dart';
 
 class PublicProductsWidget extends StatefulWidget {
-  const PublicProductsWidget({super.key});
+  final String orderBy;
+  final String direction; 
+  const PublicProductsWidget({super.key, this.orderBy = 'created_at', this.direction = 'asc'});
 
   @override
   State<PublicProductsWidget> createState() => _PublicProductsWidgetState();
@@ -83,7 +85,8 @@ class _PublicProductsWidgetState extends State<PublicProductsWidget> {
               publicProductBloc.state.pageSize) {
             int nextPage = publicProductBloc.state.currentPage + 1;
 
-            publicProductBloc.add(GetPublicProduct(nextPage));
+            publicProductBloc.add(GetPublicProduct(nextPage,
+                orderBy: widget.orderBy, direction: widget.direction));
           } else {
             // print('No more regular pages available');
           }

@@ -30,7 +30,8 @@ class PublicCompanyBloc extends Bloc<PublicCompanyEvent, PublicCompanyState> {
       emit(state.copyWith(isMoreLoading: true));
     }
     try {
-      final res = await publicCompanyRepo.getMyCompanies(event.currentPage);
+      final res = await publicCompanyRepo.getMyCompanies(
+          event.currentPage, event.orderBy, event.direction);
       if (res.statusCode == 200) {
         MyCompaniesModel myCompanies = MyCompaniesModel.fromJson(res.body);
 
