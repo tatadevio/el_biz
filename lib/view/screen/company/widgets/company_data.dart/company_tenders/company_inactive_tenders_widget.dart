@@ -31,8 +31,8 @@ class CompanyInActiveTendersWidget extends StatelessWidget {
                   ?.id
                   .toString() ??
               '';
-          accountController
-              .add(GetCompanyTenders(companyId, currentPage: nextPage + 1));
+          accountController.add(
+              GetCompanyInActiveTenders(companyId, currentPage: nextPage + 1));
         }
       }
     });

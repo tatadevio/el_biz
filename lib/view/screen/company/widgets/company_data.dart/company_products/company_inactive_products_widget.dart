@@ -20,7 +20,7 @@ class CompanyInActiveProductsWidget extends StatelessWidget {
               scrollController.position.maxScrollExtent - 300 &&
           !accountController.state.isLoading &&
           !accountController.state.inActiveProductShowMore) {
-        print('this is scroll view page ended....');
+        // print('this is scroll view page ended....');
         int pageSize = accountController.state.inActiveProductPageSize;
         if (accountController.state.inActiveProductCurrentPage < pageSize) {
           int nextPage = accountController.state.inActiveProductCurrentPage;
@@ -44,6 +44,7 @@ class CompanyInActiveProductsWidget extends StatelessWidget {
     _callScrolling(context, scrollController);
     return BlocBuilder<CompanyBloc, CompanyState>(
         builder: (context, companyState) {
+      // print('this is the company state isShowGoodsGridview')
       return BlocBuilder<CompanyDetailBloc, CompanyDetailState>(
           builder: (context, companyDetailState) {
         if (companyDetailState.companyInactiveProducts == null ||

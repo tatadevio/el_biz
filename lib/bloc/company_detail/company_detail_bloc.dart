@@ -139,7 +139,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
           ));
         } else {
           emit(state.copyWith(companyInactiveProducts: [
-            ...state.companyProducts ?? [],
+            ...state.companyInactiveProducts ?? [],
             ...companyProducts.data?.items ?? []
           ]));
         }
@@ -147,6 +147,8 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(
             inActiveProductCurrentPage: companyProducts.data?.currentPage ?? 1,
             inActiveProductPageSize: companyProducts.data?.totalPages ?? 1));
+        // print(
+        //     'this is the in active current page : ${companyProducts.data?.currentPage} and length : ${state.companyInactiveProducts?.length}');
       } else {
         emit(state.copyWith(isLoading: false));
       }
@@ -161,9 +163,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
   Future<void> _onGetCompanyTenders(
       GetCompanyTenders event, Emitter<CompanyDetailState> emit) async {
     if (event.currentPage == 1) {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, companyTenders: []));
     } else {
-      emit(state.copyWith(inActiveTenderShowMore: true));
+      emit(state.copyWith(activeTenderShowMore: true));
     }
     try {
       final response = await compnayDetailRepo.companyTenders(
@@ -185,6 +187,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(
             activeTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
             activeTenderPageSize: companyTenders.data?.totalPages ?? 1));
+
+        print(
+            'active tender current page = ${companyTenders.data?.currentPage} and length = ${state.companyTenders?.length} and active length = ${companyTenders.data?.total}');
       }
     } catch (e) {
       emit(state.copyWith(isLoading: false, activeTenderShowMore: false));
@@ -214,7 +219,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
           ));
         } else {
           emit(state.copyWith(companyInactiveTenders: [
-            ...state.companyTenders ?? [],
+            ...state.companyInactiveTenders ?? [],
             ...companyTenders.data?.items ?? []
           ]));
         }

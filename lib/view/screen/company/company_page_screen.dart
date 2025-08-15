@@ -13,10 +13,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
-import '../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../data/model/response/company/company_detail_model.dart';
-import '../../../data/model/response/company/my_companies_model.dart';
 import '../../../helper/date_helper.dart';
 import '../../base/custom_button.dart';
 import 'widgets/similar_companies_widget.dart';

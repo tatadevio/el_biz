@@ -222,10 +222,14 @@ class NewCompaniesWidget extends StatelessWidget {
                       const SizedBox(
                         width: 5,
                       ),
-                      Text(
-                        company.address ?? '',
-                        // 'Кыргызстан, Бишкек',
-                        style: body14.copyWith(color: ColorResources.gray),
+                      Expanded(
+                        child: Text(
+                          company.address ?? '',
+                          // 'Кыргызстан, Бишкек',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: body14.copyWith(color: ColorResources.gray),
+                        ),
                       ),
                     ],
                   ),

@@ -18,10 +18,10 @@ class CompanyActiveTendersWidget extends StatelessWidget {
       if (scrollController.position.pixels >=
               scrollController.position.maxScrollExtent - 300 &&
           !accountController.state.isLoading &&
-          !accountController.state.inActiveTenderShowMore) {
-        int pageSize = accountController.state.inActiveTenderPageSize;
-        if (accountController.state.inActiveTenderCurrentPage < pageSize) {
-          int nextPage = accountController.state.inActiveTenderCurrentPage;
+          !accountController.state.activeTenderShowMore) {
+        int pageSize = accountController.state.activeTenderPageSize;
+        if (accountController.state.activeTenderCurrentPage < pageSize) {
+          int nextPage = accountController.state.activeTenderCurrentPage;
           String companyId = context
                   .read<CompanyDetailBloc>()
                   .state
