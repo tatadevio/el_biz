@@ -15,6 +15,7 @@ import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/data/repo/add_tender_repo.dart';
 import 'package:el_biz/data/repo/agreement_repo.dart';
+import 'package:el_biz/data/repo/auction/search_auction_repo.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
 import 'package:el_biz/data/repo/filter_fields_repo.dart';
@@ -40,6 +41,8 @@ import 'package:get/get.dart';
 import '../bloc/account/account_bloc.dart';
 import '../bloc/add_product/add_product_bloc.dart';
 import '../bloc/add_tender/add_tender_bloc.dart';
+import '../bloc/auction/auctions/auctions_bloc.dart';
+import '../bloc/auction/search_auction/search_auction_bloc.dart';
 import '../bloc/company_detail/company_detail_bloc.dart';
 import '../bloc/similar_companies/similar_companies_bloc.dart';
 import '../bloc/similar_tenders/similar_tenders_bloc.dart';
@@ -48,6 +51,7 @@ import '../data/api/api_client.dart';
 import '../data/model/base/language_model.dart';
 import '../data/repo/account_repo.dart';
 import '../data/repo/add_product_repo.dart';
+import '../data/repo/auction/auctions_repo.dart';
 import '../data/repo/auth_repo.dart';
 import '../data/repo/category_repo.dart';
 import '../data/repo/chat_repo.dart';
@@ -147,6 +151,11 @@ Future<Map<String, Map<String, String>>> init() async {
       () => SimilarTendersRepo(
           apiClient: Get.find(), sharedPreferences: Get.find()),
       fenix: true);
+  Get.lazyPut<AuctionsRepo>(() => AuctionsRepo(Get.find(), Get.find()),
+      fenix: true);
+  Get.lazyPut<SearchAuctionRepo>(
+      () => SearchAuctionRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -180,6 +189,9 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<SimilarCompaniesBloc>(() => SimilarCompaniesBloc(Get.find()),
       fenix: true);
   Get.lazyPut<SimilarTendersBloc>(() => SimilarTendersBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<AuctionsBloc>(() => AuctionsBloc(Get.find()), fenix: true);
+  Get.lazyPut<SearchAuctionBloc>(() => SearchAuctionBloc(Get.find()),
       fenix: true);
 
 ////////

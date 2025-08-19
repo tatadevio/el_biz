@@ -12,6 +12,7 @@ import '../../../bloc/auth/auth_bloc.dart';
 import '../../../helper/my_notification.dart';
 import '../../../utils/Images.dart';
 import '../../../utils/color_resources.dart';
+import '../auction/auctions/auctions_screen.dart';
 import '../chat/chat_screen.dart';
 import '../home/home_screen.dart';
 import '../menu/menu_screen.dart';
@@ -39,10 +40,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // _pageController = PageController(initialPage: 0);
     _screens = [
       const HomeScreen(),
-      const ProductScreen(),
       const TenderScreen(),
+      const AuctionsScreen(),
       const ChatScreen(),
-      const MenuScreen(),
+      const ProductScreen(),
     ];
     initNotify();
     updateFcmToken();
@@ -76,7 +77,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BlocBuilder<ConfigBloc, ConfigState>(builder: (context, configState) {
         return BottomNavigationBar(
           selectedItemColor: ColorResources.primary,
-          unselectedItemColor: Color(0xff646F7F),
+          unselectedItemColor: Color.fromRGBO(208, 213, 221, 1),
+          // Color(0xff646F7F),
           backgroundColor: ColorResources.white,
           showUnselectedLabels: true,
           currentIndex: configState.selectedIndex,
@@ -112,10 +114,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bool isSingleVendor, ConfigState state) {
     List<BottomNavigationBarItem> list = [
       _barItem(Images.svgHome, 'home', 0, state),
-      _barItem(Images.svgCategory, 'products', 1, state),
-      _barItem(Images.svgTenders, 'tenders', 2, state),
+      _barItem(Images.svgTenders, 'tenders', 1, state),
+      _barItem(Images.svgChart, 'auctions', 2, state),
       _barItem(Images.svgChat, 'chats', 3, state),
-      _barItem(Images.svgProfile, 'profile', 4, state),
+      _barItem(Images.svgCategory, 'products', 4, state),
     ];
 
     return list;
@@ -128,7 +130,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         icon,
         color: index == state.selectedIndex
             ? ColorResources.primary
-            : Color(0xff646F7F),
+            : Color.fromRGBO(208, 213, 221, 1),
+        //  Color(0xff646F7F),
         height: 25,
         width: 25,
       ),

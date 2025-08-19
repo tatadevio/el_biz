@@ -41,7 +41,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/account/account_bloc.dart';
 import 'bloc/add_product/add_product_bloc.dart';
+import 'bloc/auction/auction_detail/auction_detail_bloc.dart';
+import 'bloc/auction/auctions/auctions_bloc.dart';
+import 'bloc/auction/search_auction/search_auction_bloc.dart';
 import 'bloc/company_detail/company_detail_bloc.dart';
+import 'bloc/auction/similar_auctions/similar_auctions_bloc.dart';
 import 'bloc/similar_companies/similar_companies_bloc.dart';
 import 'bloc/similar_tenders/similar_tenders_bloc.dart';
 import 'bloc/tin_number/tin_bloc.dart';
@@ -149,6 +153,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SearchTenderBloc(Get.find())),
         BlocProvider(create: (_) => SimilarCompaniesBloc(Get.find())),
         BlocProvider(create: (_) => SimilarTendersBloc(Get.find())),
+        BlocProvider(create: (_) => AuctionsBloc(Get.find())),
+        BlocProvider(create: (_) => SimilarAuctionsBloc(Get.find())),
+        BlocProvider(create: (_) => AuctionDetailBloc(Get.find())),
+        BlocProvider(create: (_) => SearchAuctionBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

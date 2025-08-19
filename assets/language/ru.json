@@ -419,5 +419,10 @@
   "status_declined": "Отклонён",
   "status_processing": "Обработка",
   "status_unpaid": "Не оплачен",
-  "status_paid": "Оплачен"
+  "status_paid": "Оплачен",
+  "auctions": "Аукционы",
+  "auctions_detail": "Посмотреть объявления о закупках товаров или добавить свое",
+  "new_auction": "Новый аукцион",
+  "search_for_auctions": "Поиск аукционов...",
+  "no_auction_found": "Аукционы не найдены"
 }

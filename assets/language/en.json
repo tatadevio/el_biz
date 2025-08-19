@@ -419,5 +419,10 @@
   "status_declined": "Declined",
   "status_processing": "Processing",
   "status_unpaid": "Unpaid",
-  "status_paid": "Paid"
+  "status_paid": "Paid",
+  "auctions": "Auctions",
+  "auctions_detail": "View ads for purchasing goods or add your own",
+  "new_auction": "New auction",
+  "search_for_auctions": "Search for auctions...",
+  "no_auction_found": "No auction found"
 }

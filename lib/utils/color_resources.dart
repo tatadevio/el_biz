@@ -38,7 +38,8 @@ class ColorResources {
   static const Color greyLight = Color(0xffBEBEC0);
   static const Color greyHard = Color(0xff8A8A8E);
   static const Color textBlack = Color(0xff344054);
-  static const Color myCompanies = Color(0xFF37474F);
+  static const Color myCompanies = Color.fromRGBO(162, 161, 70, 1);
+  static const Color auctions = Color.fromRGBO(71, 84, 101, 1);
 
   static const LinearGradient primaryGradient = LinearGradient(colors: [
     Color.fromRGBO(22, 77, 160, 1),

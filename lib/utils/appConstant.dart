@@ -35,6 +35,10 @@ class AppConstants {
   static const String udpateTenderUrl = "api/tenders/update";
   static const String similarTendersUrl = "api/related-tenders";
 
+  // auctions
+  static const String publicAuctionsUrl = "api/auction-list";
+  static const String similarAuctionsUrl = "api/related-auctions";
+
   /// Company
   static const String addCompanyUrl = "api/companies/store";
   static const String myCompaniesUrl = "api/companies/my";

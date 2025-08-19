@@ -12,7 +12,9 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_dialog.dart';
+import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
+import 'package:el_biz/view/screen/auction/auctions/auctions_screen.dart';
 import 'package:el_biz/view/screen/favorite/favorite_screen.dart';
 import 'package:el_biz/view/screen/home/widgets/new_companies_widget.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
@@ -33,6 +35,7 @@ import '../../../bloc/user/user_bloc.dart';
 import '../company/add_company_screen.dart';
 import '../company/widgets/fill_company_data_box.dart';
 import '../company/widgets/show_llc_issue_box.dart';
+import '../menu/menu_screen.dart';
 import '../menu/widgets/add_company_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -53,7 +56,6 @@ class HomeScreen extends StatelessWidget {
     context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
     context.read<AuthBloc>().add(CheckLoginStatus());
     // context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
-    
   }
 
   loadCompanyData(BuildContext context) {
@@ -70,7 +72,62 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: SvgPicture.asset(Images.svgsplashLogo, height: 40, width: 40),
+        title: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+          return BlocBuilder<UserBloc, UserState>(
+              builder: (context, userState) {
+            if (authState.isLoggedIn) {
+              final userData = userState.userInfo?.data;
+              return SizedBox(
+                width: Get.width * 0.5,
+                child: ListTile(
+                  onTap: () {
+                    Get.to(() => const MenuScreen());
+                  },
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: CustomImage(
+                      image: userData?.image ?? '',
+                      height: 40,
+                      width: 40,
+                      radius: 40),
+                  title: Row(
+                    children: [
+                      Text(
+                        userData?.name ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: ColorResources.darkGray),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 15,
+                        color: ColorResources.darkGray,
+                      )
+                    ],
+                  ),
+                  subtitle: Text(
+                    userData?.email ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: ColorResources.gray),
+                  ),
+                ),
+              );
+            }
+            return SvgPicture.asset(Images.svgsplashLogo,
+                height: 40, width: 40);
+          });
+        }),
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(12),
@@ -220,56 +277,64 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: height * 0.04,
                       ),
-                      if (context.read<AuthBloc>().state.isLoggedIn) ...[
-                        homeOptions(
-                            title: 'my_companies'.tr,
-                            titleImage: Images.svgBriefcase,
-                            detail:
-                                'switch_and_manage_between_your_company_accounts'
-                                    .tr,
-                            backgroundColor: ColorResources.myCompanies,
-                            onTap: () {
-                              Get.bottomSheet(const AddCompanyBottomSheet(),
-                                  backgroundColor: Colors.white,
-                                  isScrollControlled: true);
-                              // Get.to(() => PublicCompaniesScreen()
-                              //     // const MyCompaniesScreen(),
-                              //     );
-                            }),
-                        SizedBox(
-                          height: height * 0.025,
-                        ),
-                      ],
-                      homeOptions(
-                          title: 'companies'.tr,
-                          titleImage: Images.svgBriefcase,
-                          detail:
-                              'base_of_wholesale_suppliers_manufacturers_of_goods_or_logistics_services'
-                                  .tr,
-                          backgroundColor: ColorResources.blue,
-                          onTap: () {
-                            Get.to(() => PublicCompaniesScreen()
-                                // const MyCompaniesScreen(),
-                                );
-                          }),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: homeOptions(
+                                title: 'companies'.tr,
+                                titleImage: Images.svgBriefcase,
+                                detail: '',
+                                // 'base_of_wholesale_suppliers_manufacturers_of_goods_or_logistics_services'
+                                //     .tr,
+                                backgroundColor: ColorResources.blue,
+                                onTap: () {
+                                  Get.to(() => PublicCompaniesScreen()
+                                      // const MyCompaniesScreen(),
+                                      );
+                                }),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: homeOptions(
+                                title: 'goods'.tr,
+                                titleImage: Images.svgShoppingBag,
+                                detail: '',
+                                // 'find_products_from_manufacturers_and_suppliers'
+                                //   .tr,
+                                backgroundColor: ColorResources.green,
+                                onTap: () {
+                                  // Get.find<ProductController>().updateShowCategories(false);
+
+                                  context
+                                      .read<ProductBloc>()
+                                      .add(const UpdateShowCategories(false));
+                                  Get.to(() => const ProductScreen());
+                                }),
+                          ),
+                        ],
+                      ),
+
+                      // SizedBox(
+                      //   height: height * 0.025,
+                      // ),
+
                       SizedBox(
                         height: height * 0.025,
                       ),
-                      homeOptions(
-                          title: 'goods'.tr,
-                          titleImage: Images.svgShoppingBag,
-                          detail:
-                              'find_products_from_manufacturers_and_suppliers'
-                                  .tr,
-                          backgroundColor: ColorResources.green,
-                          onTap: () {
-                            // Get.find<ProductController>().updateShowCategories(false);
 
-                            context
-                                .read<ProductBloc>()
-                                .add(const UpdateShowCategories(false));
-                            Get.to(() => const ProductScreen());
-                          }),
+                      // auctions
+                      homeOptions(
+                        title: 'auctions'.tr,
+                        titleImage: Images.svgChart,
+                        detail: 'auctions_detail'.tr,
+                        backgroundColor: ColorResources.auctions,
+                        onTap: () {
+                          Get.to(() => AuctionsScreen());
+                        },
+                        isShowLook: true,
+                      ),
                       SizedBox(
                         height: height * 0.025,
                       ),
@@ -288,7 +353,9 @@ class HomeScreen extends StatelessWidget {
                           // Get.to(() => const ProductScreen());
                           Get.to(() => TenderScreen());
                         },
+                        isShowLook: true,
                       ),
+
                       SizedBox(
                         height: height * 0.025,
                       ),
@@ -309,6 +376,26 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: height * 0.025,
                       ),
+                      if (context.read<AuthBloc>().state.isLoggedIn) ...[
+                        homeOptions(
+                            title: 'my_companies'.tr,
+                            titleImage: Images.svgMyCompany,
+                            detail:
+                                'switch_and_manage_between_your_company_accounts'
+                                    .tr,
+                            backgroundColor: ColorResources.myCompanies,
+                            onTap: () {
+                              Get.bottomSheet(const AddCompanyBottomSheet(),
+                                  backgroundColor: Colors.white,
+                                  isScrollControlled: true);
+                              // Get.to(() => PublicCompaniesScreen()
+                              //     // const MyCompaniesScreen(),
+                              //     );
+                            }),
+                        SizedBox(
+                          height: height * 0.025,
+                        ),
+                      ],
                       const NewCompaniesWidget(),
                       SizedBox(
                         height: height * 0.03,
@@ -401,7 +488,8 @@ class HomeScreen extends StatelessWidget {
       String? detail,
       String? titleImage,
       Color? backgroundColor,
-      Function()? onTap}) {
+      Function()? onTap,
+      bool isShowLook = false}) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
@@ -409,7 +497,7 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(32),
           boxShadow: const [
             BoxShadow(
               blurRadius: 2,
@@ -424,10 +512,20 @@ class HomeScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                SvgPicture.asset(
-                  titleImage!,
-                  height: 24,
-                  width: 24,
+                Container(
+                  height: 34,
+                  width: 34,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: SvgPicture.asset(
+                    titleImage!,
+                    color: backgroundColor,
+                    // height: 16,
+                    // width: 16,
+                  ),
                 ),
                 const SizedBox(
                   width: 10,
@@ -438,13 +536,35 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              detail ?? '',
-              style: body14.copyWith(color: Colors.white),
-            ),
+            if (detail != null && detail.isNotEmpty) ...[
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                detail,
+                style: body14.copyWith(color: Colors.white),
+              ),
+            ],
+            if (isShowLook) ...[
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'look'.tr,
+                    style: button16.copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SvgPicture.asset(
+                    Images.svgArrowForward,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
