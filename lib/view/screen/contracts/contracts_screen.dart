@@ -15,19 +15,34 @@ class ContractsScreen extends StatelessWidget {
     final accountController = context.read<ContractsBloc>();
 
     scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent - 300 &&
-          !accountController.state.isLoading &&
-          !accountController.state.isLoadingMore) {
-        int pageSize = accountController.state.pageSize;
-        if (accountController.state.currentPage < pageSize) {
-          int nextPage = accountController.state.currentPage;
-          if (isSale) {
+      if (isSale) {
+        if (scrollController.position.pixels >=
+                scrollController.position.maxScrollExtent - 300 &&
+            !accountController.state.isLoading &&
+            !accountController.state.isSalesLoadingMore) {
+          int pageSize = accountController.state.salesContractItemsPageSize;
+          if (accountController.state.salesContractItemsCurrentPage <
+              pageSize) {
+            int nextPage =
+                accountController.state.salesContractItemsCurrentPage;
+
             context.read<ContractsBloc>().add(GetCompanySales(
                 companyId: contractId, currentPage: nextPage + 1));
-          } else {
-            context.read<ContractsBloc>().add(
-                GetCompanyPurchases(companyId: contractId, currentPage: 1));
+          }
+        }
+      } else {
+        if (scrollController.position.pixels >=
+                scrollController.position.maxScrollExtent - 300 &&
+            !accountController.state.isLoading &&
+            !accountController.state.isPurchasesLoadingMore) {
+          int pageSize = accountController.state.purchasesContractItemsPageSize;
+          if (accountController.state.purchasesContractItemsCurrentPage <
+              pageSize) {
+            int nextPage =
+                accountController.state.purchasesContractItemsCurrentPage;
+
+            context.read<ContractsBloc>().add(GetCompanyPurchases(
+                companyId: contractId, currentPage: nextPage + 1));
           }
         }
       }
@@ -49,58 +64,65 @@ class ContractsScreen extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async {
-          if (isSale) {
-            context
-                .read<ContractsBloc>()
-                .add(GetCompanySales(companyId: contractId, currentPage: 1));
-          } else {
-            context.read<ContractsBloc>().add(
-                GetCompanyPurchases(companyId: contractId, currentPage: 1));
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: BlocBuilder<ContractsBloc, ContractsState>(
-              builder: (context, contractState) {
-            if (contractState.isLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+          onRefresh: () async {
+            if (isSale) {
+              context
+                  .read<ContractsBloc>()
+                  .add(GetCompanySales(companyId: contractId, currentPage: 1));
+            } else {
+              context.read<ContractsBloc>().add(
+                  GetCompanyPurchases(companyId: contractId, currentPage: 1));
             }
-            if (contractState.salesContractItems.isEmpty) {
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: BlocBuilder<ContractsBloc, ContractsState>(
+                builder: (context, contractState) {
+              if (contractState.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (contractState.salesContractItems.isEmpty) {
+                return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: Get.height * 0.78,
+                    child: Center(child: Text('no_contracts_found'.tr)),
+                  ),
+                );
+              }
               return SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: Get.height * 0.78,
-                  child: Center(child: Text('no_contracts_found'.tr)),
-                ),
-              );
-            }
-            return RefreshIndicator(
-              onRefresh: () async {
-                if (isSale) {
-                  context.read<ContractsBloc>().add(
-                      GetCompanySales(companyId: contractId, currentPage: 1));
-                } else {
-                  context.read<ContractsBloc>().add(GetCompanyPurchases(
-                      companyId: contractId, currentPage: 1));
-                }
-              },
-              child: ListView.builder(
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: contractState.salesContractItems.length,
-                // contractState.contracts.length,
-                itemBuilder: (context, index) {
-                  return ContractItem(
-                      contractModel: contractState.salesContractItems[index]);
-                },
-              ),
-            );
-          }),
-        ),
-      ),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: contractState.salesContractItems.length,
+                      // contractState.contracts.length,
+                      itemBuilder: (context, index) {
+                        return ContractItem(
+                            contractModel:
+                                contractState.salesContractItems[index]);
+                      },
+                    ),
+                    if (isSale && contractState.isSalesLoadingMore)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ).paddingOnly(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                    if (!isSale && contractState.isPurchasesLoadingMore)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ).paddingOnly(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                  ],
+                ),
+              );
+            }),
+          )),
     );
   }
 }

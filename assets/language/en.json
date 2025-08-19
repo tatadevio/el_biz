@@ -413,5 +413,11 @@
   "title_a_z": "Title (A-Z)",
   "title_z_a": "Title (Z-A)",
   "edit_company": "Edit Company",
-  "register_company": "Register Company"
+  "register_company": "Register Company",
+  "status_pending": "Pending",
+  "status_signed": "Signed",
+  "status_declined": "Declined",
+  "status_processing": "Processing",
+  "status_unpaid": "Unpaid",
+  "status_paid": "Paid"
 }

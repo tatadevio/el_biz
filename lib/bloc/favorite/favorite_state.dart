@@ -9,6 +9,9 @@ class FavoriteState extends Equatable {
   final bool isProductsLoadingMore;
   final int productsCurrentPage;
   final int productsPageSize;
+  final bool isTendersLoadingMore;
+  final int tendersCurrentPage;
+  final int tendersPageSize;
 
   const FavoriteState(
       {this.isLoading = false,
@@ -18,7 +21,10 @@ class FavoriteState extends Equatable {
       this.favoriteTenders = const [],
       this.isProductsLoadingMore = false,
       this.productsCurrentPage = 1,
-      this.productsPageSize = 1});
+      this.productsPageSize = 1,
+      this.isTendersLoadingMore = false,
+      this.tendersCurrentPage = 1,
+      this.tendersPageSize = 1});
 
   FavoriteState copyWith({
     bool? isLoading,
@@ -29,6 +35,9 @@ class FavoriteState extends Equatable {
     bool? isProductsLoadingMore,
     int? productsCurrentPage,
     int? productsPageSize,
+    bool? isTendersLoadingMore,
+    int? tendersCurrentPage,
+    int? tendersPageSize,
   }) {
     return FavoriteState(
       isLoading: isLoading ?? this.isLoading,
@@ -40,6 +49,10 @@ class FavoriteState extends Equatable {
           isProductsLoadingMore ?? this.isProductsLoadingMore,
       productsCurrentPage: productsCurrentPage ?? this.productsCurrentPage,
       productsPageSize: productsPageSize ?? this.productsPageSize,
+      isTendersLoadingMore:
+          isTendersLoadingMore ?? this.isTendersLoadingMore,
+      tendersCurrentPage: tendersCurrentPage ?? this.tendersCurrentPage,
+      tendersPageSize: tendersPageSize ?? this.tendersPageSize,
     );
   }
 
@@ -53,6 +66,9 @@ class FavoriteState extends Equatable {
         isProductsLoadingMore,
         productsCurrentPage,
         productsPageSize,
+        isTendersLoadingMore,
+        tendersCurrentPage,
+        tendersPageSize,
       ];
 }
 

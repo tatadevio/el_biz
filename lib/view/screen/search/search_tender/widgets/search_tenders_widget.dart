@@ -96,33 +96,62 @@ class _SearchTendersWidgetState extends State<SearchTendersWidget> {
                 );
               }
               if (searchState.isGridView) {
-                return GridView.builder(
+                return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   controller: widget.scrollController!,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.7),
-                  itemCount: searchTenderState.searchTenders.length,
-                  itemBuilder: (context, index) {
-                    // return SizedBox();
-                    return TenderGridItem(
-                      tender: searchTenderState.searchTenders[index],
-                      isSearchTender: true,
-                      isCompanyTender: false,
-                    );
-                  },
+                  child: Column(
+                    children: [
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                childAspectRatio: 0.7),
+                        itemCount: searchTenderState.searchTenders.length,
+                        itemBuilder: (context, index) {
+                          // return SizedBox();
+                          return TenderGridItem(
+                            tender: searchTenderState.searchTenders[index],
+                            isSearchTender: true,
+                            isCompanyTender: false,
+                          );
+                        },
+                      ),
+                      if (searchTenderState.isMoreLoading)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ).paddingOnly(
+                            bottom: MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
                 );
               }
-              return ListView.builder(
+              return SingleChildScrollView(
                 controller: widget.scrollController!,
-                itemCount: searchTenderState.searchTenders.length,
-                itemBuilder: (context, index) {
-                  return TenderListItem(
-                    tender: searchTenderState.searchTenders[index],
-                    isSearchTender: true,
-                  );
-                },
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: searchTenderState.searchTenders.length,
+                      itemBuilder: (context, index) {
+                        return TenderListItem(
+                          tender: searchTenderState.searchTenders[index],
+                          isSearchTender: true,
+                        );
+                      },
+                    ),
+                    if (searchTenderState.isMoreLoading)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ).paddingOnly(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                  ],
+                ),
               );
             });
           }),

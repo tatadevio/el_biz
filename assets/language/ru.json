@@ -413,5 +413,11 @@
   "title_a_z": "Заголовок (А-Я)",
   "title_z_a": "Заголовок (Я-А)",
   "edit_company": "Редактировать компанию",
-  "register_company": "Зарегистрировать компанию"
+  "register_company": "Зарегистрировать компанию",
+  "status_pending": "Ожидает согласования",
+  "status_signed": "Подписан",
+  "status_declined": "Отклонён",
+  "status_processing": "Обработка",
+  "status_unpaid": "Не оплачен",
+  "status_paid": "Оплачен"
 }

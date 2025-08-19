@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import '../../../data/model/response/agreement/company_sales_model.dart';
 import '../../../data/model/response/company/company_product_model.dart';
 import '../../../data/model/response/tender/tender_item_model.dart';
+import '../../../helper/status_helper.dart';
 import '../../base/custom_toast.dart';
 import 'new_contract_screen.dart';
 import 'widgets/show_contract_files.dart';
@@ -138,15 +139,22 @@ class _ContractPageScreenState extends State<ContractPageScreen> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 2, horizontal: 12),
                       decoration: BoxDecoration(
-                        color: contractModel.status == "Подписан"
+                        color: contractModel.status?.toLowerCase() == "signed"
+                            // "Подписан"
                             ? ColorResources.green
-                            : contractModel.status == "Отклонён"
+                            : contractModel.status?.toLowerCase() == "declined"
+                                // "Отклонён"
                                 ? ColorResources.errorInput
                                 : ColorResources.orange,
+                        // color: contractModel.status == "Подписан"
+                        //     ? ColorResources.green
+                        //     : contractModel.status == "Отклонён"
+                        //         ? ColorResources.errorInput
+                        //         : ColorResources.orange,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Text(
-                        contractModel.status ?? '',
+                        StatusHelper.getStatus(contractModel.status ?? ''),
                         style: body14.copyWith(color: ColorResources.white),
                       ),
                     ),
@@ -154,7 +162,7 @@ class _ContractPageScreenState extends State<ContractPageScreen> {
                   dataItem(
                     'payment_status'.tr,
                     Text(
-                      contractModel.paymentStatus ?? '',
+                      StatusHelper.getStatus(contractModel.paymentStatus ?? ''),
                       style: body16.copyWith(
                           fontWeight: FontWeight.w500,
                           color: contractModel.paymentStatus == "paid"

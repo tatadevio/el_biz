@@ -28,7 +28,7 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
     if (event.currentPage == 1) {
       emit(state.copywith(isLoading: true, salesContractItems: []));
     } else {
-      emit(state.copywith(isLoadingMore: true));
+      emit(state.copywith(isSalesLoadingMore: true));
     }
     try {
       final response = await contractRepo.getCompanySales(
@@ -37,14 +37,17 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
         final sales = CompanySalesModel.fromJson(response.body);
         emit(state.copywith(
             salesContractItems:
-                List<CompanyContractItem>.from(sales.data?.items ?? [])));
+                List<CompanyContractItem>.from(state.salesContractItems)
+                  ..addAll(sales.data?.items ?? []),
+            salesContractItemsCurrentPage: sales.data?.currentPage ?? 1,
+            salesContractItemsPageSize: sales.data?.totalPages ?? 1));
       } else {
         // Handle error
       }
     } catch (e) {
       // Handle exception
     }
-    emit(state.copywith(isLoading: false, isLoadingMore: false));
+    emit(state.copywith(isLoading: false, isSalesLoadingMore: false));
   }
 
   Future<void> _onGetCompanyPurchases(
@@ -52,7 +55,7 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
     if (event.currentPage == 1) {
       emit(state.copywith(isLoading: true, salesContractItems: []));
     } else {
-      emit(state.copywith(isLoadingMore: true));
+      emit(state.copywith(isPurchasesLoadingMore: true));
     }
     try {
       final response = await contractRepo.getCompanyPurchases(
@@ -61,14 +64,21 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
         final purchases = CompanySalesModel.fromJson(response.body);
         emit(state.copywith(
             salesContractItems:
-                List<CompanyContractItem>.from(purchases.data?.items ?? [])));
+                List<CompanyContractItem>.from(state.salesContractItems)
+                  ..addAll(purchases.data?.items ?? []),
+            //      favoriteProducts: List<ProductListItem>.from(state.favoriteProducts)
+            // ..addAll(favoriteProducts.items ?? []),
+            purchasesContractItemsCurrentPage: purchases.data?.currentPage ?? 1,
+            purchasesContractItemsPageSize: purchases.data?.totalPages ?? 1));
+        print(
+            'purchases items = ${state.salesContractItems.length} total length = ${purchases.data?.total} ');
       } else {
         // Handle error
       }
     } catch (e) {
       // Handle exception
     }
-    emit(state.copywith(isLoading: false, isLoadingMore: false));
+    emit(state.copywith(isLoading: false, isPurchasesLoadingMore: false));
   }
 
   Future<void> _onSignContract(

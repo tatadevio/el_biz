@@ -31,6 +31,25 @@ class _FavoriteTendersWidgetState extends State<FavoriteTendersWidget> {
           _showScrollToTopButton = false;
         });
       }
+
+// start pagination logic
+
+      final favoriteBloc = context.read<FavoriteBloc>();
+
+      // isShowcategories mean showCompanies
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !favoriteBloc.state.isLoading &&
+          !favoriteBloc.state.isTendersLoadingMore) {
+        int pageSize = favoriteBloc.state.tendersPageSize;
+        if (favoriteBloc.state.tendersCurrentPage < pageSize) {
+          int nextPage = favoriteBloc.state.tendersCurrentPage;
+
+          favoriteBloc.add(GetFavoriteTenders(nextPage + 1));
+        }
+      }
+
+//end pagination logic
     });
   }
 
@@ -67,36 +86,65 @@ class _FavoriteTendersWidgetState extends State<FavoriteTendersWidget> {
               );
             }
             return favoriteState.isShowGridView
-                ? GridView.builder(
+                ? SingleChildScrollView(
                     controller: _scrollController,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 0.7),
-                    itemCount: favoriteState.favoriteTenders.length,
-                    itemBuilder: (context, index) {
-                      return TenderGridItem(
-                        isCompanyTender: false,
-                        // isFavorite:
-                        //     favoriteState.favoriteProducts[index].isFavorite ??
-                        //         false,
-                        tender: favoriteState.favoriteTenders[index],
-                      );
-                    },
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.7),
+                          itemCount: favoriteState.favoriteTenders.length,
+                          itemBuilder: (context, index) {
+                            return TenderGridItem(
+                              isCompanyTender: false,
+                              // isFavorite:
+                              //     favoriteState.favoriteProducts[index].isFavorite ??
+                              //         false,
+                              tender: favoriteState.favoriteTenders[index],
+                            );
+                          },
+                        ),
+                        if (favoriteState.isTendersLoadingMore)
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ).paddingOnly(
+                              bottom: MediaQuery.of(context).padding.bottom),
+                      ],
+                    ),
                   )
-                : ListView.builder(
+                : SingleChildScrollView(
                     controller: _scrollController,
-                    itemCount: favoriteState.favoriteTenders.length,
-                    itemBuilder: (context, index) {
-                      return TenderListItem(
-                        // isFavorite:
-                        //     favoriteState.favoriteProducts[index].isFavorite ??
-                        //         false,
-                        tender: favoriteState.favoriteTenders[index],
-                      );
-                    },
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _scrollController,
+                          itemCount: favoriteState.favoriteTenders.length,
+                          itemBuilder: (context, index) {
+                            return TenderListItem(
+                              // isFavorite:
+                              //     favoriteState.favoriteProducts[index].isFavorite ??
+                              //         false,
+                              tender: favoriteState.favoriteTenders[index],
+                            );
+                          },
+                        ),
+                        if (favoriteState.isTendersLoadingMore)
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ).paddingOnly(
+                              bottom: MediaQuery.of(context).padding.bottom),
+                      ],
+                    ),
                   );
           }
           return SizedBox.shrink();

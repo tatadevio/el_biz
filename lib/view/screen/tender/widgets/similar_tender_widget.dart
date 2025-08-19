@@ -78,7 +78,7 @@ class SimilarTenderWidget extends StatelessWidget {
                               itemCount:
                                   similarTendersState.similarTenders.length,
                               itemBuilder: (context, index) {
-                                return companiesItem(context,
+                                return similarTenderItem(context,
                                     similarTendersState.similarTenders[index]);
                               },
                             ),
@@ -98,7 +98,7 @@ class SimilarTenderWidget extends StatelessWidget {
     );
   }
 
-  Widget companiesItem(BuildContext context, TenderItem tender,
+  Widget similarTenderItem(BuildContext context, TenderItem tender,
       {bool isVerifiedSupplier = false}) {
     double width = Get.width;
     return SizedBox(
@@ -219,12 +219,14 @@ class SimilarTenderWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     color: Color.fromRGBO(71, 84, 103, 1)),
                               ),
-                              Text(
-                                '${tender.quantity} шт',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: body14.copyWith(
-                                    color: Color.fromRGBO(71, 84, 103, 1)),
+                              Expanded(
+                                child: Text(
+                                  '${tender.quantity} шт',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: body14.copyWith(
+                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                ),
                               ),
                             ],
                           ),
@@ -241,12 +243,14 @@ class SimilarTenderWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     color: Color.fromRGBO(71, 84, 103, 1)),
                               ),
-                              Text(
-                                '${tender.budgetFrom} - ${tender.budgetTo} сом',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: body14.copyWith(
-                                    color: Color.fromRGBO(71, 84, 103, 1)),
+                              Expanded(
+                                child: Text(
+                                  '${tender.budgetFrom} - ${tender.budgetTo} сом',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: body14.copyWith(
+                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                ),
                               ),
                             ],
                           ),

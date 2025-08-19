@@ -117,18 +117,32 @@ class _SearchCompanyWidgetState extends State<SearchCompanyWidget> {
               //     },
               //   );
               // }
-              return ListView.builder(
+              return SingleChildScrollView(
                 controller: widget.scrollController!,
-                itemCount: searchState.searchProducts.length,
-                itemBuilder: (context, index) {
-                  return CompanyItemWidget(
-                    company: searchState.searchProducts[index],
-                    isSearchCompany: true,
-                    // product: searchState.searchProducts[index],
-                    // isPublicProduct: false,
-                    // isSearchProduct: true,
-                  );
-                },
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: searchState.searchProducts.length,
+                      itemBuilder: (context, index) {
+                        return CompanyItemWidget(
+                          company: searchState.searchProducts[index],
+                          isSearchCompany: true,
+                          // product: searchState.searchProducts[index],
+                          // isPublicProduct: false,
+                          // isSearchProduct: true,
+                        );
+                      },
+                    ),
+                    if (searchState.isMoreLoading)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ).paddingOnly(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                  ],
+                ),
               );
             });
           }),

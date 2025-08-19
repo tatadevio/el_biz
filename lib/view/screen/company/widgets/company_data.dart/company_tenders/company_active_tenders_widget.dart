@@ -30,6 +30,8 @@ class CompanyActiveTendersWidget extends StatelessWidget {
                   ?.id
                   .toString() ??
               '';
+          print(
+              'calling get company tenders api with current page = ${nextPage + 1} and isbottomloading = ${accountController.state.activeTenderShowMore}');
           accountController
               .add(GetCompanyTenders(companyId, currentPage: nextPage + 1));
         }

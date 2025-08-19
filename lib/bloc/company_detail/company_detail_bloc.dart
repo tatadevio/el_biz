@@ -165,14 +165,18 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     if (event.currentPage == 1) {
       emit(state.copyWith(isLoading: true, companyTenders: []));
     } else {
-      emit(state.copyWith(activeTenderShowMore: true));
+      if (state.activeTenderShowMore) {
+        return;
+      }
+      emit(state.copyWith(
+        activeTenderShowMore: true,
+      ));
     }
     try {
       final response = await compnayDetailRepo.companyTenders(
           event.companyId, 'active', event.currentPage);
       if (response.statusCode == 200) {
         final companyTenders = CompanyTendersModel.fromJson(response.body);
-        print('active tenders list = ${companyTenders.data?.items?.length}');
         if (event.currentPage == 1) {
           emit(state.copyWith(
             companyTenders: companyTenders.data?.items,
@@ -187,9 +191,6 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(
             activeTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
             activeTenderPageSize: companyTenders.data?.totalPages ?? 1));
-
-        print(
-            'active tender current page = ${companyTenders.data?.currentPage} and length = ${state.companyTenders?.length} and active length = ${companyTenders.data?.total}');
       }
     } catch (e) {
       emit(state.copyWith(isLoading: false, activeTenderShowMore: false));
@@ -203,6 +204,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     if (event.currentPage == 1) {
       emit(state.copyWith(isLoading: true));
     } else {
+      if (state.inActiveTenderShowMore) {
+        return;
+      }
       emit(state.copyWith(inActiveTenderShowMore: true));
     }
     try {
@@ -211,7 +215,7 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
 
       if (response.statusCode == 200) {
         final companyTenders = CompanyTendersModel.fromJson(response.body);
-        print('inactive tenders list = ${companyTenders.data?.items?.length}');
+
         if (event.currentPage == 1) {
           emit(state.copyWith(
             companyInactiveTenders: companyTenders.data?.items,
@@ -227,6 +231,8 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(
             inActiveTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
             inActiveTenderPageSize: companyTenders.data?.totalPages ?? 1));
+
+       
       } else {
         emit(state.copyWith(isLoading: false));
       }

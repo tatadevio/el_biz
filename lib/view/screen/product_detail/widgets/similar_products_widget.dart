@@ -156,6 +156,7 @@ class SimilarProductsWidget extends StatelessWidget {
               Text(
                 product.name ?? '',
                 // 'Стул раскладной',
+                maxLines: 2, overflow: TextOverflow.ellipsis,
                 style: h16.copyWith(color: ColorResources.darkGray),
               ),
               SizedBox(

@@ -43,7 +43,11 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
         emit(state.copyWith(
             favoriteProducts: List<ProductListItem>.from(state.favoriteProducts)
-              ..addAll(favoriteProducts.items ?? [])));
+              ..addAll(favoriteProducts.items ?? []),
+            productsCurrentPage: favoriteProducts.currentPage ?? 1,
+            productsPageSize: favoriteProducts.totalPages ?? 1));
+        print(
+            'favorite products items = ${state.favoriteProducts.length} total length = ${favoriteProducts.total} ');
       } else {
         emit(FavoriteProductsError(response.body['message']));
       }
@@ -58,7 +62,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     if (event.currentPage == 1) {
       emit(state.copyWith(isLoading: true, favoriteTenders: []));
     } else {
-      emit(state.copyWith(isProductsLoadingMore: true));
+      emit(state.copyWith(isTendersLoadingMore: true));
     }
     try {
       final response = await favoriteRepo.getFavoriteTenders(event.currentPage);
@@ -69,6 +73,8 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         emit(state.copyWith(
           favoriteTenders: List<TenderItem>.from(state.favoriteTenders)
             ..addAll(favoriteTenders.items ?? []),
+          tendersCurrentPage: favoriteTenders.currentPage ?? 1,
+          tendersPageSize: favoriteTenders.totalPages ?? 1,
         ));
       } else {
         emit(FavoriteTendersError(response.body['message']));
@@ -76,7 +82,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     } catch (e) {
       emit(FavoriteTendersError(e.toString()));
     }
-    emit(state.copyWith(isLoading: false, isProductsLoadingMore: false));
+    emit(state.copyWith(isLoading: false, isTendersLoadingMore: false));
   }
 
   Future<void> _onRemoveProductFromFavoriteList(

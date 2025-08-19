@@ -11,15 +11,16 @@ import '../../../base/product_list_item.dart';
 class SearchProductWidget extends StatefulWidget {
   final TextEditingController searchController;
   final ScrollController? scrollController;
-  const SearchProductWidget({super.key, required this.searchController, required this.scrollController});
+  const SearchProductWidget(
+      {super.key,
+      required this.searchController,
+      required this.scrollController});
 
   @override
   State<SearchProductWidget> createState() => _SearchProductWidgetState();
 }
 
 class _SearchProductWidgetState extends State<SearchProductWidget> {
-
-
   bool _showScrollToTopButton = false;
 
   @override
@@ -30,13 +31,14 @@ class _SearchProductWidgetState extends State<SearchProductWidget> {
         setState(() {
           _showScrollToTopButton = true;
         });
-      } else if (widget.scrollController!.offset <= 300 && _showScrollToTopButton) {
+      } else if (widget.scrollController!.offset <= 300 &&
+          _showScrollToTopButton) {
         setState(() {
           _showScrollToTopButton = false;
         });
       }
 
-    final  searchBloc = context.read<SearchBloc>();
+      final searchBloc = context.read<SearchBloc>();
 
       if (widget.scrollController!.position.pixels >=
               widget.scrollController!.position.maxScrollExtent - 300 &&
@@ -52,8 +54,6 @@ class _SearchProductWidgetState extends State<SearchProductWidget> {
       }
     });
   }
-
-
 
   void _scrollToTop() {
     widget.scrollController!.animateTo(
@@ -93,36 +93,65 @@ class _SearchProductWidgetState extends State<SearchProductWidget> {
               );
             }
             if (searchState.isGridView) {
-              return GridView.builder(
+              return SingleChildScrollView(
                 controller: widget.scrollController!,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.7),
-                itemCount: searchState.searchProducts.length,
-                itemBuilder: (context, index) {
-                  // return SizedBox();
-                  return ProductGridItem(
-                    product: searchState.searchProducts[index],
-                    isSearchProduct: true,
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 0.7),
+                      itemCount: searchState.searchProducts.length,
+                      itemBuilder: (context, index) {
+                        // return SizedBox();
+                        return ProductGridItem(
+                          product: searchState.searchProducts[index],
+                          isSearchProduct: true,
 
-                    // product: companyController.,
-                    // product: index,
-                  );
-                },
+                          // product: companyController.,
+                          // product: index,
+                        );
+                      },
+                    ),
+                    if (searchState.isMoreLoading)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ).paddingOnly(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                  ],
+                ),
               );
             }
-            return ListView.builder(
+            return SingleChildScrollView(
               controller: widget.scrollController!,
-              itemCount: searchState.searchProducts.length,
-              itemBuilder: (context, index) {
-                return ProductListItemWidget(
-                  product: searchState.searchProducts[index],
-                  isPublicProduct: false,
-                  isSearchProduct: true,
-                );
-              },
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: searchState.searchProducts.length,
+                    itemBuilder: (context, index) {
+                      return ProductListItemWidget(
+                        product: searchState.searchProducts[index],
+                        isPublicProduct: false,
+                        isSearchProduct: true,
+                      );
+                    },
+                  ),
+                  if (searchState.isMoreLoading)
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ).paddingOnly(
+                        bottom: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
             );
           }),
         ),

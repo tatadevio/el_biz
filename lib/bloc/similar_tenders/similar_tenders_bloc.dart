@@ -36,12 +36,9 @@ class SimilarTendersBloc
     try {
       final response = await similarTenderRepo.getSimilarTenders(
           event.tenderId, event.currentPage);
-      print(
-          'this is the response code of similar tender ${response.statusCode}');
-      print('this is the response body of similar tender ${response.body}');
+
       if (response.statusCode == 200) {
         final companies = CompanyTendersModel.fromJson(response.body);
-        print('these are companies ${companies.data?.items}');
 
         if (event.currentPage == 1) {
           emit(state.copyWith(similarTenders: []));
@@ -53,9 +50,11 @@ class SimilarTendersBloc
 
         emit(state.copyWith(
             currentPage: companies.data?.currentPage ?? 1,
-            totalPages: companies.data?.totalPages ?? 1));
+            totalPages: companies.data?.totalPages ?? 1,
+            isLoading: false,
+            isMoreLoading: false));
       } else {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isLoading: false, isMoreLoading: false));
       }
     } catch (e) {
       emit(state.copyWith(isLoading: false, isMoreLoading: false));

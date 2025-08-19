@@ -31,6 +31,25 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
           _showScrollToTopButton = false;
         });
       }
+
+// start pagination logic
+
+      final favoriteBloc = context.read<FavoriteBloc>();
+
+      // isShowcategories mean showCompanies
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !favoriteBloc.state.isLoading &&
+          !favoriteBloc.state.isProductsLoadingMore) {
+        int pageSize = favoriteBloc.state.productsPageSize;
+        if (favoriteBloc.state.productsCurrentPage < pageSize) {
+          int nextPage = favoriteBloc.state.productsCurrentPage;
+
+          favoriteBloc.add(GetFavoriteProducts(nextPage + 1));
+        }
+      }
+
+//end pagination logic
     });
   }
 
@@ -67,35 +86,65 @@ class _FavoriteProductsWidgetState extends State<FavoriteProductsWidget> {
               );
             }
             return favoriteState.isShowGridView
-                ? GridView.builder(
+                ? SingleChildScrollView(
                     controller: _scrollController,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 0.7),
-                    itemCount: favoriteState.favoriteProducts.length,
-                    itemBuilder: (context, index) {
-                      return ProductGridItem(
-                        // isFavorite:
-                        //     favoriteState.favoriteProducts[index].isFavorite ??
-                        //         false,
-                        product: favoriteState.favoriteProducts[index],
-                      );
-                    },
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        GridView.builder(
+                          // controller: _scrollController,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.7),
+                          itemCount: favoriteState.favoriteProducts.length,
+                          itemBuilder: (context, index) {
+                            return ProductGridItem(
+                              // isFavorite:
+                              //     favoriteState.favoriteProducts[index].isFavorite ??
+                              //         false,
+                              product: favoriteState.favoriteProducts[index],
+                            );
+                          },
+                        ),
+                        if (favoriteState.isProductsLoadingMore)
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ).paddingOnly(
+                              bottom: MediaQuery.of(context).padding.bottom),
+                      ],
+                    ),
                   )
-                : ListView.builder(
+                : SingleChildScrollView(
                     controller: _scrollController,
-                    itemCount: favoriteState.favoriteProducts.length,
-                    itemBuilder: (context, index) {
-                      return ProductListItemWidget(
-                        // isFavorite:
-                        //     favoriteState.favoriteProducts[index].isFavorite ??
-                        //         false,
-                        product: favoriteState.favoriteProducts[index],
-                      );
-                    },
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          // controller: _scrollController,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: favoriteState.favoriteProducts.length,
+                          itemBuilder: (context, index) {
+                            return ProductListItemWidget(
+                              // isFavorite:
+                              //     favoriteState.favoriteProducts[index].isFavorite ??
+                              //         false,
+                              product: favoriteState.favoriteProducts[index],
+                            );
+                          },
+                        ),
+                        if (favoriteState.isProductsLoadingMore)
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ).paddingOnly(
+                              bottom: MediaQuery.of(context).padding.bottom),
+                      ],
+                    ),
                   );
           }
           return SizedBox.shrink();

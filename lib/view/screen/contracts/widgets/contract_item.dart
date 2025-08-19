@@ -1,4 +1,5 @@
 import 'package:el_biz/data/model/response/agreement/company_sales_model.dart';
+import 'package:el_biz/helper/status_helper.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -60,7 +61,7 @@ class ContractItem extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                contractModel.status ?? '',
+                contractModel.contractProducts?.first.productName ?? '',
                 // contractModel.subTitle,
                 style: body14.copyWith(color: ColorResources.darkGray),
               ),
@@ -86,15 +87,17 @@ class ContractItem extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
                     decoration: BoxDecoration(
-                      color: contractModel.status == "Подписан"
+                      color: contractModel.status?.toLowerCase() == "signed"
+                          // "Подписан"
                           ? ColorResources.green
-                          : contractModel.status == "Отклонён"
+                          : contractModel.status?.toLowerCase() == "declined"
+                              // "Отклонён"
                               ? ColorResources.errorInput
                               : ColorResources.orange,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Text(
-                      contractModel.status ?? '',
+                      StatusHelper.getStatus(contractModel.status ?? ''),
                       style: body14.copyWith(color: ColorResources.white),
                     ),
                   ),

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/repo/auth_repo.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
@@ -7,7 +6,6 @@ import 'package:el_biz/view/screen/auth/password_changed_screen.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';

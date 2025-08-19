@@ -21,24 +21,24 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  final ScrollController _scrollController = ScrollController();
-  bool _showScrollToTopButton = false;
+  // final ScrollController _scrollController = ScrollController();
+  // bool _showScrollToTopButton = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.offset > 300 && !_showScrollToTopButton) {
-        setState(() {
-          _showScrollToTopButton = true;
-        });
-      } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
-        setState(() {
-          _showScrollToTopButton = false;
-        });
-      }
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _scrollController.addListener(() {
+  //     if (_scrollController.offset > 300 && !_showScrollToTopButton) {
+  //       setState(() {
+  //         _showScrollToTopButton = true;
+  //       });
+  //     } else if (_scrollController.offset <= 300 && _showScrollToTopButton) {
+  //       setState(() {
+  //         _showScrollToTopButton = false;
+  //       });
+  //     }
+  //   });
+  // }
 
   late PublicProductBloc publicProductBloc;
   // late FavoriteBloc favoriteBloc;
@@ -52,12 +52,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     publicTenderBloc = context.read<PublicTenderBloc>();
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    updateProducts();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _scrollController.dispose();
+  //   updateProducts();
+  //   super.dispose();
+  // }
 
   void updateProducts() async {
     publicProductBloc.add(GetPublicProduct(1));
@@ -66,14 +66,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     publicTenderBloc.add(GetPublicTender(1, direction: 'asc'));
   }
 
-
-  void _scrollToTop() {
-    _scrollController.animateTo(
-      0, // Scroll to the top
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-  }
+  // void _scrollToTop() {
+  //   _scrollController.animateTo(
+  //     0, // Scroll to the top
+  //     duration: const Duration(milliseconds: 500),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -331,26 +330,26 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               },
             ),
           ),
-          if (_showScrollToTopButton)
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: GestureDetector(
-                onTap: _scrollToTop,
-                child: Container(
-                  height: 32,
-                  width: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: ColorResources.primary,
-                  ),
-                  child: const Icon(
-                    Icons.keyboard_arrow_up,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+          // if (_showScrollToTopButton)
+          //   Positioned(
+          //     bottom: 20,
+          //     right: 20,
+          //     child: GestureDetector(
+          //       onTap: _scrollToTop,
+          //       child: Container(
+          //         height: 32,
+          //         width: 32,
+          //         decoration: const BoxDecoration(
+          //           shape: BoxShape.circle,
+          //           color: ColorResources.primary,
+          //         ),
+          //         child: const Icon(
+          //           Icons.keyboard_arrow_up,
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );
