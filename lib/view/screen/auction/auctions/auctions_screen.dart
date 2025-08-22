@@ -15,6 +15,7 @@ import '../../../base/auction_grid_item.dart';
 import '../../../base/auction_list_item.dart';
 import '../../product/add_product_screen.dart';
 import '../../products/product_screen.dart';
+import '../auction_filter/auction_filter_screen.dart';
 import '../new_auction/new_auction_screen.dart';
 import '../search_auction/search_auction_screen.dart';
 
@@ -344,7 +345,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                               // context
                               //     .read<FilterFieldsBloc>()
                               //     .add(GetFilterFields());
-                              // Get.to(() => TenderFilterScreen());
+                              Get.to(() => AuctionFilterScreen());
                             },
                             child: Container(
                               height: 40,

@@ -1,6 +1,8 @@
+import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../bloc/auction/auction_detail/auction_detail_bloc.dart';
@@ -68,129 +70,155 @@ class AuctionListItem extends StatelessWidget {
         },
         child: SizedBox(
           height: 130,
-          child: Row(
+          child: Stack(
             children: [
-              Stack(
+              Row(
                 children: [
-                  CustomImage(image: '', height: 120, width: 100, radius: 16),
-                  Positioned(
-                      right: 5,
-                      top: 5,
-                      child: CustomFavoriteButton(
-                        isFavorite: false,
-                        // tender.isFavorite ?? false,
-                        onTap: () {
-                          // if (isCompanyTender) {
-                          //   context.read<CompanyDetailBloc>().add(
-                          //       ToggleTenderFavorite(tender.id!, context));
-                          // } else if (isSearchTender) {
-                          //   context.read<SearchTenderBloc>().add(
-                          //       ToggleSearchTenderFavorite(
-                          //           tender.id!, context));
-                          // } else
-                          // // if (isPublicTender)
-                          // {
-                          //   context.read<PublicTenderBloc>().add(
-                          //       TogglePublicTenderFavorite(
-                          //           tender.id!, context));
-                          // }
-                        },
-                      )),
+                  Stack(
+                    children: [
+                      CustomImage(
+                          image: '', height: 120, width: 100, radius: 16),
+                      Positioned(
+                          right: 5,
+                          top: 5,
+                          child: CustomFavoriteButton(
+                            isFavorite: false,
+                            // tender.isFavorite ?? false,
+                            onTap: () {
+                              // if (isCompanyTender) {
+                              //   context.read<CompanyDetailBloc>().add(
+                              //       ToggleTenderFavorite(tender.id!, context));
+                              // } else if (isSearchTender) {
+                              //   context.read<SearchTenderBloc>().add(
+                              //       ToggleSearchTenderFavorite(
+                              //           tender.id!, context));
+                              // } else
+                              // // if (isPublicTender)
+                              // {
+                              //   context.read<PublicTenderBloc>().add(
+                              //       TogglePublicTenderFavorite(
+                              //           tender.id!, context));
+                              // }
+                            },
+                          )),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '500\$',
+                              style: h16.copyWith(color: ColorResources.blue),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'Silvie Mahdal art',
+                              style:
+                                  h16.copyWith(color: ColorResources.darkGray),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'Живопись и графика',
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  size: 16,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Бишкек',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: body14.copyWith(
+                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(Images.svgPersons),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  '50 ставок',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: body14.copyWith(
+                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //       'Юр.лицо',
+                        //       style: body14.copyWith(color: ColorResources.gray),
+                        //     ),
+                        //     Text(
+                        //       formatDateInRu(DateTime.now().toString()),
+                        //       style: body14.copyWith(color: ColorResources.gray),
+                        //     )
+                        //   ],
+                        // ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(
-                width: 5,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              Positioned(
+                  top: 5,
+                  right: 10,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: ColorResources.yellow,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Row(
                       children: [
-                        Text(
-                          '500\$',
-                          style: h16.copyWith(color: ColorResources.blue),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        SvgPicture.asset(Images.svgClock),
+                        const SizedBox(
+                          width: 5,
                         ),
                         Text(
-                          'Silvie Mahdal art',
-                          style: h16.copyWith(color: ColorResources.darkGray),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'Живопись и графика',
-                          style: body14.copyWith(color: ColorResources.gray),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 16,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Бишкек',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: body14.copyWith(
-                                  color: Color.fromRGBO(71, 84, 103, 1)),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.person_2,
-                              size: 16,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              '50 ставок',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: body14.copyWith(
-                                  color: Color.fromRGBO(71, 84, 103, 1)),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
+                          '6дн 20ч',
+                          style: textStyle13Inter,
                         ),
                       ],
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text(
-                    //       'Юр.лицо',
-                    //       style: body14.copyWith(color: ColorResources.gray),
-                    //     ),
-                    //     Text(
-                    //       formatDateInRu(DateTime.now().toString()),
-                    //       style: body14.copyWith(color: ColorResources.gray),
-                    //     )
-                    //   ],
-                    // ),
-                  ],
-                ),
-              ),
+                  )),
             ],
           ),
         ),

@@ -185,10 +185,7 @@ class AuctionGridItem extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      Icons.person_2,
-                      size: 16,
-                    ),
+                    SvgPicture.asset(Images.svgPersons),
                     const SizedBox(
                       width: 5,
                     ),

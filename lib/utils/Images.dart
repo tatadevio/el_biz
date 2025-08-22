@@ -50,6 +50,7 @@ class Images {
   static const String svgQuestion = "assets/icons/question.svg";
   static const String svgCurrency = "assets/icons/currency.svg";
   static const String svgPersons = "assets/icons/persons.svg";
+  static const String svgClock = "assets/icons/clock.svg";
 
   // images used
   static const String emptySvg = "";
