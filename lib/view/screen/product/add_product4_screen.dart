@@ -6,6 +6,7 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
+import 'package:el_biz/view/screen/auction/auctions/auctions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../../../bloc/material/material_bloc.dart' as material;
 import '../../../bloc/product/product_bloc.dart';
 import '../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../base/custom_button.dart';
+import '../auction/new_auction/new_auction_screen.dart';
 import '../dashboard/dashboard.dart';
 import '../home/home_screen.dart';
 
@@ -23,12 +25,14 @@ class AddProduct4Screen extends StatefulWidget {
   final Function()? onSelect;
   final bool? isAddProduct;
   final String alreadySelected;
+  final bool isAuction;
   const AddProduct4Screen(
       {super.key,
       required this.isEdit,
       this.onSelect,
       this.isAddProduct,
-      required this.alreadySelected});
+      required this.alreadySelected,
+      required this.isAuction});
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -74,6 +78,7 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
 
   @override
   Widget build(BuildContext context) {
+    print('this is isAuction ${widget.isAuction}');
     return Scaffold(
       appBar: AppBar(
         title: Text('material'.tr),
@@ -81,9 +86,17 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
       body: BlocListener<AddProductBloc, AddProductState>(
         listener: (context, state) {
           if (state is AddProductSuccess) {
-            HomeScreen().loadData(context);
-            Get.offAll(() => const DashboardScreen());
-            context.read<ProductBloc>().add(EmptyPickedLogo());
+            if (widget.isAuction) {
+              Get.until((route) =>
+                  route.settings.name == '/AuctionsScreen' ||
+                  route.settings.name == '/DashboardScreen');
+              Get.to(
+                  () => NewAuctionScreen(selectedProduct: state.productItem!));
+            } else {
+              HomeScreen().loadData(context);
+              Get.offAll(() => const DashboardScreen());
+              context.read<ProductBloc>().add(EmptyPickedLogo());
+            }
           } else if (state is AddProductFailure) {
             showCustomSnackBar(state.message);
           }

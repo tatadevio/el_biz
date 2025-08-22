@@ -45,6 +45,11 @@ class Images {
   static const String svgCompanyReviews = "assets/icons/company_reviews.svg";
   static const String svgChart = "assets/icons/chart.svg";
   static const String svgMyCompany = "assets/icons/my_company.svg";
+  static const String svgBag = "assets/icons/bag.svg";
+  static const String svgPlus1 = "assets/icons/plus1.svg";
+  static const String svgQuestion = "assets/icons/question.svg";
+  static const String svgCurrency = "assets/icons/currency.svg";
+  static const String svgPersons = "assets/icons/persons.svg";
 
   // images used
   static const String emptySvg = "";

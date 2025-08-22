@@ -189,6 +189,9 @@ class AuctionGridItem extends StatelessWidget {
                       Icons.person_2,
                       size: 16,
                     ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       '50 ставок', // location
                       overflow: TextOverflow.ellipsis,

@@ -17,17 +17,20 @@ import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_image.dart';
+import '../auction/new_auction/new_auction_screen.dart';
 import './widgets/add_product_images_preview.dart';
 
 class PreviewProductScreen extends StatefulWidget {
   // final List<Map<String, dynamic>> selectedMaterial;
   // final AddProductModel productData;
   final bool isEdit;
+  final bool isAuction;
   const PreviewProductScreen(
       {super.key,
       // required this.selectedMaterial,
       // required this.productData,
-      required this.isEdit});
+      required this.isEdit,
+      required this.isAuction});
 
   @override
   State<PreviewProductScreen> createState() => _PreviewProductScreenState();
@@ -43,9 +46,17 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
       body: BlocListener<AddProductBloc, AddProductState>(
         listener: (context, state) {
           if (state is AddProductSuccess) {
-            HomeScreen().loadData(context);
-            Get.offAll(() => const DashboardScreen());
-            context.read<ProductBloc>().add(EmptyPickedLogo());
+            if (widget.isAuction) {
+              Get.until((route) =>
+                  route.settings.name == '/AuctionsScreen' ||
+                  route.settings.name == '/DashboardScreen');
+              Get.to(
+                  () => NewAuctionScreen(selectedProduct: state.productItem!));
+            } else {
+              HomeScreen().loadData(context);
+              Get.offAll(() => const DashboardScreen());
+              context.read<ProductBloc>().add(EmptyPickedLogo());
+            }
           } else if (state is AddProductFailure) {
             showCustomSnackBar(state.message);
           }

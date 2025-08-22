@@ -168,7 +168,7 @@ class ProductListItem {
           name: json["name"],
           description: json['description'],
           slug: json["slug"],
-          price: json["price"],
+          price: int.tryParse(json["price"].toString()) ?? 0,
           quantity: json["quantity"],
           image: json["image"],
           user: json["user"] == null ? null : User.fromJson(json["user"]),

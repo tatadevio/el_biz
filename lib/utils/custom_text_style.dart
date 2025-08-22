@@ -124,3 +124,10 @@ TextStyle textStyle14Inter = const TextStyle(
   fontWeight: FontWeight.w700,
   color: Color(0xff212020),
 );
+
+TextStyle textStyle13Inter = const TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 13,
+  fontWeight: FontWeight.w400,
+  color: ColorResources.gray,
+);

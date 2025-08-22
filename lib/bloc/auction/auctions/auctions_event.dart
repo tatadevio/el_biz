@@ -7,10 +7,10 @@ sealed class AuctionsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class UpdateGridView extends AuctionsEvent {
+class UpdateAuctionGridView extends AuctionsEvent {
   final bool isGridView;
 
-  const UpdateGridView(this.isGridView);
+  const UpdateAuctionGridView(this.isGridView);
 
   @override
   List<Object> get props => [isGridView];

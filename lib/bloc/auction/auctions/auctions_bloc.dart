@@ -11,11 +11,11 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
   AuctionsBloc(this.auctionsRepo) : super(AuctionsInitial()) {
     on<AuctionsEvent>((event, emit) {});
 
-    on<UpdateGridView>(_updateToggleShowGridView);
+    on<UpdateAuctionGridView>(_updateToggleShowGridView);
   }
 
   void _updateToggleShowGridView(
-      UpdateGridView event, Emitter<AuctionsState> emit) {
+      UpdateAuctionGridView event, Emitter<AuctionsState> emit) {
     emit(state.copyWith(isGridView: event.isGridView));
   }
 }

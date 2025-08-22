@@ -24,12 +24,17 @@ import '../../../data/model/response/company/my_companies_model.dart';
 import '../../../utils/Images.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_dialog.dart';
+import '../auction/auctions/auctions_screen.dart';
+import '../auction/new_auction/new_auction_screen.dart';
+import '../tender/tender_screen.dart';
 import 'preview_product_screen.dart';
 
 class AddProduct3Screen extends StatefulWidget {
   // final AddProductModel addProductData;
   final bool isEdit;
-  const AddProduct3Screen({super.key, required this.isEdit});
+  final bool isAuction;
+  const AddProduct3Screen(
+      {super.key, required this.isEdit, required this.isAuction});
 
   @override
   State<AddProduct3Screen> createState() => _AddProduct3ScreenState();
@@ -617,8 +622,10 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
                               // selectedMaterial: selectedMaterials,
                               // productData: widget.productData,
                               isEdit: widget.isEdit,
+                              isAuction: widget.isAuction,
                             ));
                       },
+                      isAuction: widget.isAuction,
                     ));
               }
             },

@@ -1,29 +1,42 @@
 import 'package:el_biz/bloc/auction/auction_detail/auction_detail_bloc.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
+import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
+import 'widgets/auction_bets_widget.dart';
+import 'widgets/auction_detail_widget.dart';
 import 'widgets/similar_auctions_widget.dart';
 
-class AuctionDetailScreen extends StatelessWidget {
+class AuctionDetailScreen extends StatefulWidget {
   // final bool isProduct;
   final String auctionName;
 
   const AuctionDetailScreen({super.key, required this.auctionName});
 
   @override
+  State<AuctionDetailScreen> createState() => _AuctionDetailScreenState();
+}
+
+class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
+  bool isShowDescription = true;
+  final TextEditingController lastBidController = TextEditingController();
+  final TextEditingController suggestedBidController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(auctionName),
+        title: Text(widget.auctionName),
         actions: [
           Container(
             height: 40,
@@ -69,6 +82,7 @@ class AuctionDetailScreen extends StatelessWidget {
         // 'this is the favorite option in tender detail = ${tenderDetail.data?.isFavorite ?? false}');
         return SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -82,7 +96,7 @@ class AuctionDetailScreen extends StatelessWidget {
               ),
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 14),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
@@ -98,90 +112,194 @@ class AuctionDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            // tenderDetail.data?.title ?? '',
-                            'Стул раскладной hrer update',
-                            style: h24.copyWith(color: ColorResources.darkGray),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: ColorResources.green,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        'Бесплатная доставка',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: ColorResources.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.location_on),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          'Бишкек',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorResources.gray,
+                                              fontFamily: 'Inter'),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      // tenderDetail.data?.title ?? '',
+                                      'Silvie Mahdal art',
+                                      style: h24.copyWith(
+                                          color: ColorResources.darkGray),
+                                    ),
+                                    Text(
+                                      'Живопись и графика',
+                                      style: body16.copyWith(
+                                          color: ColorResources.gray),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              CustomFavoriteButton(
+                                isFavorite: false,
+                                // tenderDetail.data?.isFavorite ?? false,
+                                onTap: () {
+                                  // context.read<TenderDetailBloc>().add(
+                                  //     ToggleTenderDetailFavorite(
+                                  //         tenderId: tenderDetail.data!.id!,
+                                  //         context: context));
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                        CustomFavoriteButton(
-                          isFavorite: false,
-                          // tenderDetail.data?.isFavorite ?? false,
-                          onTap: () {
-                            // context.read<TenderDetailBloc>().add(
-                            //     ToggleTenderDetailFavorite(
-                            //         tenderId: tenderDetail.data!.id!,
-                            //         context: context));
-                          },
-                        ),
-                      ],
-                    ),
 
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      'Описание',
-                      style: h16.copyWith(color: ColorResources.darkGray),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Своя цена: ',
+                                style: textStyle13Inter,
+                              ),
+                              Text(
+                                '200\$',
+                                style: h16.copyWith(color: ColorResources.blue),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Цена с учетом последней ставки: ',
+                                style: textStyle13Inter,
+                              ),
+                              Text(
+                                '220\$',
+                                style: h16.copyWith(color: ColorResources.blue),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            height: 32,
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(232, 232, 237, 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                // description
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isShowDescription = true;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 28,
+                                      decoration: BoxDecoration(
+                                        color: isShowDescription
+                                            ? Colors.white
+                                            : null,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Описание',
+                                        style: textStyle13Inter.copyWith(
+                                            color: isShowDescription
+                                                ? Colors.black
+                                                : Colors.black
+                                                    .withOpacity(0.8)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // bets
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isShowDescription = false;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 28,
+                                      decoration: BoxDecoration(
+                                        color: isShowDescription
+                                            ? null
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Ставки',
+                                        style: textStyle13Inter.copyWith(
+                                            color: isShowDescription
+                                                ? Colors.black.withOpacity(0.8)
+                                                : Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // ],
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      // tenderDetail.data?.description ?? '',
-                      'Ищу поставщиков садовой мебели, конкретно раскладных стульев хорошего качества, из натуральных материалов, с интересным дизайном, 20 штук желательно похожих или в двух расцветках.',
-                      style: body14.copyWith(color: ColorResources.darkGray),
-                    ),
+                    isShowDescription
+                        ? AuctionDetailWidget()
+                        : AuctionBetsWidget(),
                     const SizedBox(
                       height: 20,
                     ),
-                    productInfoWidget(
-                        title: 'Товар: ',
-                        value: 'Количество',
-                        titleBold: true,
-                        valueBold: true),
-                    // ListView.builder(
-                    //   shrinkWrap: true,
-                    //   physics: const NeverScrollableScrollPhysics(),
-                    //   itemCount: tenderDetail.data?.tenderProducts?.length ?? 0,
-                    //   itemBuilder: (context, index) {
-                    //     final tenderProduct =
-                    //         tenderDetail.data!.tenderProducts![index];
-                    //     return productInfoWidget(
-                    //         title: tenderProduct.productName,
-                    //         value:
-                    //             "${tenderProduct.quantity} ${tenderProduct.unit}"
-                    //         // '20шт',
-                    //         );
-                    //   },
-                    // ),
-                    // productInfoWidget(title: 'Диваны', value: '20шт'),
-                    // productInfoWidget(title: 'Шкафы', value: '20шт'),
-                    // productInfoWidget(
-                    //     title: 'Бюджет: ',
-                    //     value: '50 000 сом',
-                    //     valueBold: true),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Опубликовано: ',
-                          style: body14.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          formatDateInRu(DateTime.now().toString()),
-                          // '24.10.2024, 18:10',
-                          style: body14.copyWith(fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    // ],
                   ],
                 ),
               ),
@@ -287,177 +405,103 @@ class AuctionDetailScreen extends StatelessWidget {
           ),
         );
       }),
-      // bottomNavigationBar: BlocBuilder<TenderDetailBloc, TenderDetailState>(
-      //   builder: (context, state) {
-      //     if (state is TenderDetailLoading ||
-      //         state is TenderDetailError ||
-      //         state.tenderDetailModel?.data == null) {
-      //       return SizedBox.shrink();
-      //     }
-
-      //     var tenderDetail = state.tenderDetailModel!;
-      //     // if (state is TenderDetailSuccess) {
-      //     //   tenderDetail = state.tenderDetailModel;
-      //     // }
-      //     return BlocBuilder<UserBloc, UserState>(
-      //         builder: (context, userState) {
-      //       if ((userState.selectedAccountModel!.isUser == true &&
-      //               tenderDetail.data!.company!.owner!.id ==
-      //                   userState.selectedAccountModel!.userId) ||
-      //           (userState.selectedAccountModel!.isUser == false &&
-      //               userState.selectedAccountModel!.companyId ==
-      //                   tenderDetail.data!.company!.id)) {
-      //         return BottomAppBar(
-      //           color: Colors.white,
-      //           padding:
-      //               const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-      //           child: Row(
-      //             children: [
-      //               Expanded(
-      //                 child: CustomBorderButton(
-      //                   height: Get.height,
-      //                   width: Get.width,
-      //                   padding: const EdgeInsets.all(0),
-      //                   border:
-      //                       Border.all(width: 1, color: ColorResources.blue),
-      //                   borderRadius: BorderRadius.circular(12),
-      //                   boxShaow: const [ColorResources.shadow1],
-      //                   child: Text(
-      //                     "edit".tr,
-      //                     style: button16.copyWith(color: ColorResources.blue),
-      //                   ),
-      //                   onTap: () {
-      //                     Get.to(() => NewTende2Screen(isEdit: true));
-      //                   },
-      //                 ),
-      //               ),
-      //               const SizedBox(
-      //                 width: 10,
-      //               ),
-      //               // Expanded(
-      //               //   child: CustomBorderButton(
-      //               //     height: Get.height,
-      //               //     width: Get.width,
-      //               //     padding: const EdgeInsets.all(0),
-      //               //     border: Border.all(width: 1, color: ColorResources.red),
-      //               //     borderRadius: BorderRadius.circular(12),
-      //               //     boxShaow: const [ColorResources.shadow1],
-      //               //     child: Text(
-      //               //       "not_active".tr,
-      //               //       style: button16.copyWith(color: ColorResources.red),
-      //               //     ),
-      //               //     onTap: () {},
-      //               //   ),
-      //               // ),
-      //               Expanded(
-      //                 child: CustomBorderButton(
-      //                   height: Get.height,
-      //                   width: Get.width,
-      //                   padding: const EdgeInsets.all(0),
-      //                   border: Border.all(width: 1, color: ColorResources.red),
-      //                   borderRadius: BorderRadius.circular(12),
-      //                   boxShaow: const [ColorResources.shadow1],
-      //                   onTap: state.statusUpdating
-      //                       ? () {}
-      //                       : () {
-      //                           context
-      //                               .read<TenderDetailBloc>()
-      //                               .add(ChangeTenderStatus(
-      //                                 tenderDetail.data!.id.toString(),
-      //                                 tenderDetail.data!.activeStatus ==
-      //                                         'active'
-      //                                     ? 'inactive'
-      //                                     : 'active',
-      //                                 context,
-      //                               ));
-      //                         },
-      //                   child: state.statusUpdating
-      //                       ? SizedBox(
-      //                           height: 25,
-      //                           width: 25,
-      //                           child: CircularProgressIndicator())
-      //                       : Text(
-      //                           tenderDetail.data!.activeStatus ?? '',
-      //                           //  == 'published'
-      //                           //     ? "not_active".tr
-      //                           //     : 'active'.tr,
-      //                           style: button16.copyWith(
-      //                               color: ColorResources.red),
-      //                         ),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         );
-      //       } else if (state.tenderDetailModel!.data!.company?.owner?.id !=
-      //           userState.userInfo!.data!.id) {
-      //         return BottomAppBar(
-      //           color: Colors.white,
-      //           padding:
-      //               const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-      //           child: CustomButton(
-      //               width: Get.width,
-      //               height: 56,
-      //               onTap: () {
-      //                 String tenderUserId = state
-      //                     .tenderDetailModel!.data!.company!.owner!.id
-      //                     .toString();
-
-      //                 String myUserId = userState.userInfo!.data!.id.toString();
-      //                 final myUser = userState.userInfo?.data;
-      //                 ChatItem chatItem = ChatItem(
-      //                   chatId: 0,
-      //                   // int.parse(getChatId(userState, state)),
-      //                   firebaseChatId:
-      //                       "tender_${state.tenderDetailModel?.data?.id}_user_$myUserId",
-      //                   type: 'tender',
-      //                   product: ProductListItem(),
-      //                   tender: TenderItem(
-      //                     id: state.tenderDetailModel!.data!.id,
-      //                     title: state.tenderDetailModel!.data!.title,
-      //                     description:
-      //                         state.tenderDetailModel!.data!.description,
-      //                     budgetFrom: state.tenderDetailModel!.data!.budgetFrom,
-      //                     budgetTo: state.tenderDetailModel!.data!.budgetTo,
-      //                     quantity: state.tenderDetailModel!.data!.quantity
-      //                         .toString(),
-      //                     status: state.tenderDetailModel!.data!.status,
-      //                     image: state.tenderDetailModel!.data!.media
-      //                                 ?.isNotEmpty ==
-      //                             true
-      //                         ? state.tenderDetailModel!.data!.media![0].url
-      //                         : '',
-      //                   ),
-      //                   user: User(
-      //                     id: myUser?.id,
-      //                     name: myUser?.name,
-      //                     image: myUser?.image,
-      //                     phone: myUser?.phone,
-      //                     email: myUser?.email,
-      //                     fcmToken: myUser?.fcmToken,
-      //                   ),
-      //                   company: state.tenderDetailModel!.data!.company,
-      //                   lastMessage: state.tenderDetailModel!.data!.title,
-      //                   lastMessageDate:
-      //                       state.tenderDetailModel!.data!.createdAt,
-      //                   userUnreadCount: 0,
-      //                   productOwnerUnreadCount: 0,
-      //                   createdAt: state.tenderDetailModel!.data!.createdAt,
-      //                 );
-      //                 Get.to(() => ChatConversation(
-      //                       chatItem: chatItem,
-      //                       isFirstMessage: true,
-
-      //                     ));
-      //               },
-      //               title: 'Чат с продавцом'),
-      //         );
-      //       } else {
-      //         return SizedBox.shrink();
-      //       }
-      //     });
-      //   },
-      // ),
+      bottomNavigationBar: BottomAppBar(
+        height: 150,
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 110,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Последняя ставка',
+                        style: body12.copyWith(color: ColorResources.gray),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(243, 243, 243, 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '500\$',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: ColorResources.darkGray,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Предлагаемая ставка',
+                        style: body12.copyWith(color: ColorResources.gray),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      CustomTextField(
+                          controller: suggestedBidController,
+                          hintColor: '',
+                          inputType: TextInputType.number,
+                          leading: '',
+                          readOnly: false),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // CustomButton(width: Get.width, height: 44, onTap: () {}, title: ''),
+            Container(
+              height: 46,
+              decoration: BoxDecoration(
+                color: ColorResources.primary,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(width: 1, color: ColorResources.blue),
+              ),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(Images.svgCurrency),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Сделать ставку',
+                    style: body16.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

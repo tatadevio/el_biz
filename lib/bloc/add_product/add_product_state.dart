@@ -20,7 +20,11 @@ final class AddProductLoading extends AddProductState {}
 
 final class AddProductLoaded extends AddProductState {}
 
-final class AddProductSuccess extends AddProductState {}
+final class AddProductSuccess extends AddProductState {
+  final String? message;
+  final ProductListItem? productItem;
+  const AddProductSuccess(this.message, this.productItem);
+}
 
 final class AddProductFailure extends AddProductState {
   final String message;

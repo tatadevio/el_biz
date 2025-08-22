@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
+import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/data/model/response/product/product_detail_model.dart';
+import 'package:el_biz/data/model/response/product/product_model.dart';
 import 'package:el_biz/data/repo/add_product_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -68,7 +70,8 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
       Response response =
           await addProductRepo.addNewProduct(event.addProductModel);
       if (response.statusCode == 200) {
-        emit(AddProductSuccess());
+        final productItem = ProductListItem.fromJson(response.body['data']);
+        emit(AddProductSuccess(response.body['message'], productItem));
         emit(state.copyWith(productData: AddProductModel()));
       } else {
         emit(AddProductFailure(response.body));
@@ -96,7 +99,8 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
             add(DeleteProductImage(event.productId, delImage.id.toString()));
           }
         }
-        emit(AddProductSuccess());
+        final productItem = ProductListItem.fromJson(response.body['data']);
+        emit(AddProductSuccess(response.body['message'], productItem));
         emit(state.copyWith(productData: AddProductModel()));
       } else {
         emit(AddProductFailure(response.body));

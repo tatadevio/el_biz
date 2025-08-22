@@ -15,7 +15,8 @@ import 'add_product3_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
   final bool isEdit;
-  const AddProductScreen({super.key, this.isEdit = false});
+  final bool isAuction;
+  const AddProductScreen({super.key, this.isEdit = false, this.isAuction = false});
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -404,6 +405,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 Get.to(() => AddProduct3Screen(
                       // addProductData: addProduct,
                       isEdit: widget.isEdit,
+                      isAuction: widget.isAuction,
                     ));
               }
             },

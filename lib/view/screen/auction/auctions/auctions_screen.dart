@@ -9,8 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/product/product_bloc.dart';
+import '../../../../data/model/response/company/company_product_model.dart';
 import '../../../base/auction_grid_item.dart';
 import '../../../base/auction_list_item.dart';
+import '../../product/add_product_screen.dart';
+import '../../products/product_screen.dart';
+import '../new_auction/new_auction_screen.dart';
 import '../search_auction/search_auction_screen.dart';
 
 class AuctionsScreen extends StatefulWidget {
@@ -142,6 +147,129 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
               ),
               InkWell(
                 onTap: () {
+                  Get.bottomSheet(
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 4,
+                                  width: 55,
+                                  decoration: BoxDecoration(
+                                      color:
+                                          ColorResources.gray.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(10)),
+                                )
+                              ],
+                            ),
+                          ),
+                          Text(
+                            'new_auction'.tr,
+                            style: h16.copyWith(color: ColorResources.darkGray),
+                          ),
+                          const SizedBox(height: 10),
+                          ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: SvgPicture.asset(Images.svgBag),
+                            onTap: () {
+                              // context
+                              //         .read<ProductBloc>()
+                              //         .add(const UpdateShowCategories(false));
+                              // clearSelectedProduct();
+                              // UserData? myUser = context
+                              //     .read<UserBloc>()
+                              //     .state
+                              //     .userInfo
+                              //     ?.data;
+                              Get.back();
+                              Get.to(
+                                () => ProductScreen(
+                                  isSelectProduct: true,
+                                  onSendProduct: () async {
+                                    ProductListItem? selectedProduct = context
+                                        .read<ProductBloc>()
+                                        .state
+                                        .selectedProduct;
+
+                                    Get.back();
+                                    // send isProduct message...
+                                    if (selectedProduct != null) {
+                                      Get.to(() => NewAuctionScreen(
+                                          selectedProduct: selectedProduct));
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                            title: Text(
+                              'Выбрать из своих товаров'.tr,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                            subtitle: Text(
+                              'Размещайте уже имеющиеся товары'.tr,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black.withOpacity(0.6),
+                              ),
+                            ),
+                            // trailing: Icon(Icons.arrow_forward_ios),
+                          ),
+                          Divider(
+                            color: ColorResources.gray.withOpacity(0.4),
+                          ),
+                          ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: SvgPicture.asset(Images.svgPlus1),
+                            onTap: () {
+                              Get.back();
+                              Get.to(() => const AddProductScreen(
+                                    isAuction: true,
+                                  ));
+                            },
+                            title: Text(
+                              'Создать новый'.tr,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                            subtitle: Text(
+                              'Создайте аукцион с новым товаром'.tr,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black.withOpacity(0.6),
+                              ),
+                            ),
+                            // trailing: Icon(Icons.arrow_forward_ios),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).padding.bottom,
+                          ),
+                        ],
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                    isScrollControlled: true,
+                  );
                   // Get.to(() => SelectCategoryScreen(
                   //       onSelect: (selectedCategories) {
                   //         for (var category in selectedCategories) {
@@ -501,7 +629,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                       onTap: () {
                         context
                             .read<AuctionsBloc>()
-                            .add(const UpdateGridView(true));
+                            .add(const UpdateAuctionGridView(true));
                         // tendersController.updateGridView(true);
                       },
                       child: Container(
@@ -536,7 +664,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                       onTap: () {
                         context
                             .read<AuctionsBloc>()
-                            .add(const UpdateGridView(false));
+                            .add(const UpdateAuctionGridView(false));
                         // auctionsController.updateGridView(false);
                       },
                       child: Container(
