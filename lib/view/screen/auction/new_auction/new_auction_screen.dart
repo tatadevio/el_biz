@@ -1,6 +1,7 @@
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/view/base/custom_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,7 +150,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                     children: [
                       if (paymentMethod != null) ...[
                         Text(
-                          'Способ оплаты',
+                          'payment_method'.tr,
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -162,7 +163,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                           isExpanded: true,
 
                           hint: Text(
-                            'Способ оплаты',
+                            'payment_method'.tr,
                             style: TextStyle(
                               color: ColorResources.darkGray,
                               fontSize: 14,
@@ -211,7 +212,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                     children: [
                       if (selectedLocation != null) ...[
                         Text(
-                          'Локация',
+                          'location'.tr,
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -224,7 +225,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                           isExpanded: true,
 
                           hint: Text(
-                            'Локация',
+                            'location'.tr,
                             style: TextStyle(
                               color: ColorResources.darkGray,
                               fontSize: 14,
@@ -301,7 +302,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Дата начало'.tr,
+                                'start_date'.tr,
                                 style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,
@@ -355,7 +356,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Дата завершения'.tr,
+                                'end_date'.tr,
                                 style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,
@@ -394,7 +395,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Лимит времени для отмены ставки',
+                              'bet_cancellation_time_limit'.tr,
                               style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
@@ -420,7 +421,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'час',
+                            'hour'.tr,
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
@@ -441,7 +442,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                 ),
                 // price
                 Text(
-                  'Цена'.tr,
+                  'price'.tr,
                 ),
                 Container(
                   padding:
@@ -457,7 +458,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Минимальный порог',
+                              'minimum_threshold'.tr,
                               style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
@@ -480,7 +481,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                         ),
                       ),
                       Text(
-                        '% от последней ставки',
+                        'percent_of_last_bet'.tr,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
@@ -505,7 +506,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                     children: [
                       if (selectedCurrency != null) ...[
                         Text(
-                          'Валюта',
+                          'currency'.tr,
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -518,7 +519,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                           isExpanded: true,
 
                           hint: Text(
-                            'Валюта',
+                            'currency'.tr,
                             style: TextStyle(
                               color: ColorResources.darkGray,
                               fontSize: 14,
@@ -598,8 +599,25 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
           child: CustomButton(
               width: Get.width,
               height: Get.height,
-              onTap: () {},
-              title: 'Опубликовать'),
+              onTap: () {
+                Get.dialog(CupertinoAlertDialog(
+                  title: Text('your_auction_published'.tr),
+                  content: Text('buyers_can_place_bets'.tr),
+                  actions: [
+                    CupertinoDialogAction(
+                        child: Text(
+                          'got_it'.tr,
+                          style: TextStyle(
+                              color: ColorResources.blue,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        }),
+                  ],
+                ));
+              },
+              title: 'publish'.tr),
         ));
   }
 

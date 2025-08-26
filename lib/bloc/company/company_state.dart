@@ -6,8 +6,10 @@ class CompanyState extends Equatable {
   final List<CompanyItem> myCompanies;
   final bool isShowActiveGoods;
   final bool isShowActiveTenders;
+  final bool isShowActiveAuctions;
   final bool isShowGoodsGridView;
   final bool isShowTendersGridView;
+  final bool isShowAuctionsGridView;
   final List<DaySchedule> scheduleTiming;
   final AddCompanyModel addCompanyModel;
   final int myCompanyCurrentPage;
@@ -20,8 +22,10 @@ class CompanyState extends Equatable {
     this.myCompanies = const [],
     this.isShowActiveGoods = true,
     this.isShowActiveTenders = true,
+    this.isShowActiveAuctions = true,
     this.isShowGoodsGridView = true,
     this.isShowTendersGridView = true,
+    this.isShowAuctionsGridView = true,
     this.scheduleTiming = const [],
     required this.addCompanyModel,
     this.myCompanyCurrentPage = 1,
@@ -35,8 +39,10 @@ class CompanyState extends Equatable {
     List<CompanyItem>? myCompanies,
     bool? isShowActiveGoods,
     bool? isShowActiveTenders,
+    bool? isShowActiveAuctions,
     bool? isShowGoodsGridView,
     bool? isShowTendersGridView,
+    bool? isShowAuctionsGridView,
     List<DaySchedule>? scheduleTiming,
     AddCompanyModel? addCompanyModel,
     int? myCompanyCurrentPage,
@@ -49,9 +55,12 @@ class CompanyState extends Equatable {
       myCompanies: myCompanies ?? this.myCompanies,
       isShowActiveGoods: isShowActiveGoods ?? this.isShowActiveGoods,
       isShowActiveTenders: isShowActiveTenders ?? this.isShowActiveTenders,
+      isShowActiveAuctions: isShowActiveAuctions ?? this.isShowActiveAuctions,
       isShowGoodsGridView: isShowGoodsGridView ?? this.isShowGoodsGridView,
       isShowTendersGridView:
           isShowTendersGridView ?? this.isShowTendersGridView,
+      isShowAuctionsGridView:
+          isShowAuctionsGridView ?? this.isShowAuctionsGridView,
       scheduleTiming: scheduleTiming ?? this.scheduleTiming,
       addCompanyModel: addCompanyModel ?? this.addCompanyModel,
       myCompanyCurrentPage: myCompanyCurrentPage ?? this.myCompanyCurrentPage,
@@ -67,8 +76,10 @@ class CompanyState extends Equatable {
         myCompanies,
         isShowActiveGoods,
         isShowActiveTenders,
+        isShowActiveAuctions,
         isShowGoodsGridView,
         isShowTendersGridView,
+        isShowAuctionsGridView,
         scheduleTiming,
         addCompanyModel, myCompanyCurrentPage, myCompanyPageSize,
         myCompanyLoadMore,

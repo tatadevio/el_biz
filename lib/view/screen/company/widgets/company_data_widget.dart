@@ -8,6 +8,8 @@ import 'package:el_biz/view/screen/company/widgets/company_data.dart/my_reviews_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'company_data.dart/company_auctions.dart';
+
 class CompanyDataWidget extends StatefulWidget {
   final ScrollController scrollController;
   const CompanyDataWidget({super.key, required this.scrollController});
@@ -22,6 +24,7 @@ class _CompanyDataWidgetState extends State<CompanyDataWidget>
     "about_company",
     'goods',
     'tenders',
+    'auctions',
     'reviews',
     'documents',
   ];
@@ -67,8 +70,12 @@ class _CompanyDataWidgetState extends State<CompanyDataWidget>
             CompanyTenders(
               scrollController: widget.scrollController,
             ),
-          if (selectedOption == 3) const MyReviewsWidget(),
-          if (selectedOption == 4) const CompanyDocumentsWidget(),
+          if (selectedOption == 3)
+            CompanyAuctions(
+              scrollController: widget.scrollController,
+            ),
+          if (selectedOption == 4) const MyReviewsWidget(),
+          if (selectedOption == 5) const CompanyDocumentsWidget(),
         ],
       ),
     );

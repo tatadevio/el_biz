@@ -26,8 +26,8 @@ class SimilarAuctionWidget extends StatelessWidget {
         if (similarTenderBloc.state.currentPage < pageSize) {
           int nextPage = similarTenderBloc.state.currentPage;
 
-          similarTenderBloc.add(
-              GetSimilarAuctions(auctionId: tenderId, currentPage: nextPage + 1));
+          similarTenderBloc.add(GetSimilarAuctions(
+              auctionId: tenderId, currentPage: nextPage + 1));
         }
       }
     });
@@ -50,7 +50,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        'Похожие закупки',
+                        'similar_purchases'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -74,8 +74,10 @@ class SimilarAuctionWidget extends StatelessWidget {
                               itemCount:
                                   similarAuctionsState.similarAuctions.length,
                               itemBuilder: (context, index) {
-                                return similarTenderItem(context,
-                                    similarAuctionsState.similarAuctions[index]);
+                                return similarTenderItem(
+                                    context,
+                                    similarAuctionsState
+                                        .similarAuctions[index]);
                               },
                             ),
                             if (similarAuctionsState.isMoreLoading)
@@ -123,12 +125,7 @@ class SimilarAuctionWidget extends StatelessWidget {
               children: [
                 Stack(
                   children: [
-                    CustomImage(
-                        image: '',
-                        height: 120,
-                        width: 100,
-                        radius: 16),
-                  
+                    CustomImage(image: '', height: 120, width: 100, radius: 16),
                     Positioned(
                         right: 5,
                         top: 5,
@@ -139,7 +136,6 @@ class SimilarAuctionWidget extends StatelessWidget {
                             //     ToggleFavoriteSimilarTender(
                             //         tenderId: tender.id.toString(),
                             //         context: context));
-                           
                           },
                         )),
                   ],
@@ -175,7 +171,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Количество: ',
+                                'quantity'.tr,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: body14.copyWith(
@@ -199,7 +195,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Бюджет: ',
+                                'budget'.tr,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: body14.copyWith(
@@ -208,7 +204,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${tender.budgetFrom} - ${tender.budgetTo} сом',
+                                  '${tender.budgetFrom} - ${tender.budgetTo} ${'som'.tr}',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: body14.copyWith(
@@ -226,7 +222,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Юр.лицо',
+                            'legal_entity'.tr,
                             style: body14.copyWith(color: ColorResources.gray),
                           ),
                           Text(

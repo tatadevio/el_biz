@@ -1,6 +1,7 @@
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../../utils/Images.dart';
 import '../../../../../utils/custom_text_style.dart';
@@ -28,11 +29,11 @@ class AuctionBetsWidget extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'До завершения:',
+                  'until_completion'.tr,
                   style: textStyle13Inter,
                 ),
                 Text(
-                  '6дн : 20ч : 45мин',
+                  '6${'days'.tr} : 20${'hours'.tr} : 45${'minutes'.tr}',
                   style: body16.copyWith(
                       color: ColorResources.darkGray, fontFamily: 'Inter'),
                 ),
@@ -49,7 +50,7 @@ class AuctionBetsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Ставки',
+                'bets'.tr,
                 style: h16.copyWith(
                     color: ColorResources.darkGray, fontFamily: 'Inter'),
               ),
@@ -66,7 +67,7 @@ class AuctionBetsWidget extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '6 ставок',
+                    '6 ${'bets'.tr.toLowerCase()}',
                     style:
                         textStyle14Inter.copyWith(fontWeight: FontWeight.w500),
                   ),
@@ -81,7 +82,7 @@ class AuctionBetsWidget extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '2 участника',
+                    '2 ${'participants'.tr}',
                     style:
                         textStyle14Inter.copyWith(fontWeight: FontWeight.w500),
                   ),
@@ -136,14 +137,62 @@ class AuctionBetsWidget extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Inter'),
                 ),
-                trailing: Text(
-                  '100\$',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: ColorResources.darkGray,
-                  ),
-                ),
+                trailing:
+                    // if my own bet then i can cancel it
+                    index == 0
+                        ? SizedBox(
+                            width: Get.width * 0.4,
+                            child: Row(
+                              children: [
+                                // my last bet then show this buttion
+                                // Container(
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 8, vertical: 4),
+                                //   decoration: BoxDecoration(
+                                //     color: ColorResources.blue,
+                                //     borderRadius: BorderRadius.circular(20),
+                                //   ),
+                                //   child: Text(
+                                //     'Выиграл',
+                                //     style: body14.copyWith(
+                                //         color: ColorResources.white),
+                                //   ),
+                                // ),
+                                // if i win this auction then show this button on my bet
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: ColorResources.orange,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    'winner'.tr,
+                                    style: body14.copyWith(
+                                        color: ColorResources.white),
+                                  ),
+                                ),
+
+                                const Spacer(),
+                                Text(
+                                  '100\$',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorResources.darkGray,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Text(
+                            '100\$',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: ColorResources.darkGray,
+                            ),
+                          ),
               ),
             );
           },

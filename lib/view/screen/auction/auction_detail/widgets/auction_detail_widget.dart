@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../../helper/date_helper.dart';
 import '../../../../../utils/color_resources.dart';
@@ -15,7 +16,7 @@ class AuctionDetailWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Описание',
+            'description'.tr,
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           const SizedBox(
@@ -30,7 +31,7 @@ class AuctionDetailWidget extends StatelessWidget {
             height: 10,
           ),
           Text(
-            'Товар: ',
+            'product'.tr,
             style: body14.copyWith(fontWeight: FontWeight.w700),
           ),
           Padding(
@@ -39,27 +40,11 @@ class AuctionDetailWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Техника: ',
+                  'technique'.tr,
                   style: body14,
                 ),
                 Text(
-                  'Уголь',
-                  style: body14,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Материал: ',
-                  style: body14,
-                ),
-                Text(
-                  'Плотная художественная бумага',
+                  'coal'.tr,
                   style: body14,
                 ),
               ],
@@ -71,11 +56,11 @@ class AuctionDetailWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Ширина:',
+                  'material'.tr,
                   style: body14,
                 ),
                 Text(
-                  '70 см',
+                  'dense_art_paper'.tr,
                   style: body14,
                 ),
               ],
@@ -87,11 +72,27 @@ class AuctionDetailWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Высота:',
+                  'width'.tr,
                   style: body14,
                 ),
                 Text(
-                  '100 см',
+                  '70 ${'cm'.tr}',
+                  style: body14,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'height'.tr,
+                  style: body14,
+                ),
+                Text(
+                  '100 ${'cm'.tr}',
                   style: body14,
                 ),
               ],
@@ -130,7 +131,7 @@ class AuctionDetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Опубликовано: ',
+                'published'.tr,
                 style: body14.copyWith(fontWeight: FontWeight.w700),
               ),
               Text(

@@ -67,12 +67,20 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       emit(state.copywith(isShowActiveTenders: event.showActive));
     });
 
+    on<UpdateShowAuctions>((event, emit) {
+      emit(state.copywith(isShowActiveAuctions: event.showActive));
+    });
+
     on<UpdateShowGoodsGridView>((event, emit) {
       emit(state.copywith(isShowGoodsGridView: event.showGridView));
     });
 
     on<UpdateShowTendersGridView>((event, emit) {
       emit(state.copywith(isShowTendersGridView: event.showGridView));
+    });
+
+    on<UpdateShowAuctionsGridView>((event, emit) {
+      emit(state.copywith(isShowAuctionsGridView: event.showGridView));
     });
 
     on<UpdateDay>(_onUpdateDay);

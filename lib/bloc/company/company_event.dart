@@ -48,6 +48,14 @@ class UpdateShowTenders extends CompanyEvent {
   List<Object> get props => [showActive];
 }
 
+class UpdateShowAuctions extends CompanyEvent {
+  final bool showActive;
+  const UpdateShowAuctions(this.showActive);
+
+  @override
+  List<Object> get props => [showActive];
+}
+
 class UpdateShowGoodsGridView extends CompanyEvent {
   final bool showGridView;
   const UpdateShowGoodsGridView(this.showGridView);
@@ -59,6 +67,14 @@ class UpdateShowGoodsGridView extends CompanyEvent {
 class UpdateShowTendersGridView extends CompanyEvent {
   final bool showGridView;
   const UpdateShowTendersGridView(this.showGridView);
+
+  @override
+  List<Object> get props => [showGridView];
+}
+
+class UpdateShowAuctionsGridView extends CompanyEvent {
+  final bool showGridView;
+  const UpdateShowAuctionsGridView(this.showGridView);
 
   @override
   List<Object> get props => [showGridView];

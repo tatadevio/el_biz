@@ -77,7 +77,7 @@ class AuctionListItem extends StatelessWidget {
                   Stack(
                     children: [
                       CustomImage(
-                          image: '', height: 120, width: 100, radius: 16),
+                          image: '', height: 104, width: 102, radius: 16),
                       Positioned(
                           right: 5,
                           top: 5,
@@ -116,7 +116,7 @@ class AuctionListItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '500\$',
+                              '200\$',
                               style: h16.copyWith(color: ColorResources.blue),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -143,6 +143,8 @@ class AuctionListItem extends StatelessWidget {
                                 Icon(
                                   Icons.location_on,
                                   size: 16,
+                                  color:
+                                      ColorResources.darkGray.withOpacity(0.8),
                                 ),
                                 const SizedBox(
                                   width: 5,
@@ -152,7 +154,9 @@ class AuctionListItem extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: body14.copyWith(
-                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorResources.darkGray
+                                          .withOpacity(0.8)),
                                 ),
                               ],
                             ),
@@ -170,7 +174,8 @@ class AuctionListItem extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: body14.copyWith(
-                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                      color: ColorResources.darkGray
+                                          .withOpacity(0.8)),
                                 ),
                               ],
                             ),

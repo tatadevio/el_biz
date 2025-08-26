@@ -25,6 +25,8 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
 
     on<GetCompanyTenders>(_onGetCompanyTenders);
     on<GetCompanyInActiveTenders>(_onGetCompanyInActiveTenders);
+    on<GetCompanyAuctions>(_onGetCompanyAuctions);
+    on<GetCompanyInActiveAuctions>(_onGetCompanyInActiveAuctions);
     on<GetCompanyReviews>(_onGetCompanyReviews);
     on<DeleteCompanyReview>(_onDeleteCompanyReview);
     on<DeleteCompanyDocument>(_onDeleteCompanyDocument);
@@ -231,8 +233,6 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(
             inActiveTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
             inActiveTenderPageSize: companyTenders.data?.totalPages ?? 1));
-
-       
       } else {
         emit(state.copyWith(isLoading: false));
       }
@@ -241,6 +241,90 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     }
     emit(state.copyWith(isLoading: false, inActiveTenderShowMore: false));
   }
+
+  // company auctions
+
+  Future<void> _onGetCompanyAuctions(
+      GetCompanyAuctions event, Emitter<CompanyDetailState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true, companyAuctions: []));
+    } else {
+      if (state.activeAuctionShowMore) {
+        return;
+      }
+      emit(state.copyWith(
+        activeAuctionShowMore: true,
+      ));
+    }
+    try {
+      final response = await compnayDetailRepo.companyAuctions(
+          event.companyId, 'active', event.currentPage);
+      // if (response.statusCode == 200) {
+      //   final companyTenders = CompanyTendersModel.fromJson(response.body);
+      //   if (event.currentPage == 1) {
+      //     emit(state.copyWith(
+      //       companyTenders: companyTenders.data?.items,
+      //       isLoading: false,
+      //     ));
+      //   } else {
+      //     emit(state.copyWith(companyTenders: [
+      //       ...state.companyTenders ?? [],
+      //       ...companyTenders.data?.items ?? []
+      //     ]));
+      //   }
+      //   emit(state.copyWith(
+      //       activeTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
+      //       activeTenderPageSize: companyTenders.data?.totalPages ?? 1));
+      // }
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, activeAuctionShowMore: false));
+    }
+    emit(state.copyWith(isLoading: false, activeAuctionShowMore: false));
+  }
+
+  //_onGetCompanyInActiveTenders
+  Future<void> _onGetCompanyInActiveAuctions(GetCompanyInActiveAuctions event,
+      Emitter<CompanyDetailState> emit) async {
+    if (event.currentPage == 1) {
+      emit(state.copyWith(isLoading: true));
+    } else {
+      if (state.inActiveAuctionShowMore) {
+        return;
+      }
+      emit(state.copyWith(inActiveAuctionShowMore: true));
+    }
+    try {
+      final response = await compnayDetailRepo.companyAuctions(
+          event.companyId, 'inactive', event.currentPage);
+
+      // if (response.statusCode == 200) {
+      //   final companyTenders = CompanyTendersModel.fromJson(response.body);
+
+      //   if (event.currentPage == 1) {
+      //     emit(state.copyWith(
+      //       companyInactiveTenders: companyTenders.data?.items,
+      //       isLoading: false,
+      //     ));
+      //   } else {
+      //     emit(state.copyWith(companyInactiveTenders: [
+      //       ...state.companyInactiveTenders ?? [],
+      //       ...companyTenders.data?.items ?? []
+      //     ]));
+      //   }
+
+      //   emit(state.copyWith(
+      //       inActiveTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
+      //       inActiveTenderPageSize: companyTenders.data?.totalPages ?? 1));
+      // } else {
+      //   emit(state.copyWith(isLoading: false));
+      // }
+    } catch (e) {
+      print(e.toString());
+    }
+    emit(state.copyWith(isLoading: false, inActiveAuctionShowMore: false));
+  }
+
+  // end company auctions
 
   Future<void> _onGetCompanyReviews(
       GetCompanyReviews event, Emitter<CompanyDetailState> emit) async {

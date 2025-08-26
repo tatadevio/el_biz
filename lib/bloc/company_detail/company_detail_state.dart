@@ -9,6 +9,8 @@ class CompanyDetailState extends Equatable {
   final List<DocumentItem>? companyDocuments;
   final List<TenderItem>? companyTenders;
   final List<TenderItem>? companyInactiveTenders;
+  final List? companyAuctions;
+  final List? companyInactiveAuctions;
   final List<ReviewItem>? companyReviews;
   final CompanyReviewsModel? companyReviewsModel;
   final bool isMoreLoading;
@@ -26,6 +28,12 @@ class CompanyDetailState extends Equatable {
   final int inActiveTenderCurrentPage;
   final int inActiveTenderPageSize;
   final bool inActiveTenderShowMore;
+  final int activeAuctionCurrentPage;
+  final int activeAuctionPageSize;
+  final bool activeAuctionShowMore;
+  final int inActiveAuctionCurrentPage;
+  final int inActiveAuctionPageSize;
+  final bool inActiveAuctionShowMore;
 
   const CompanyDetailState({
     this.companyDetailLoading = false,
@@ -36,6 +44,8 @@ class CompanyDetailState extends Equatable {
     this.companyDocuments = const [],
     this.companyTenders = const [],
     this.companyInactiveTenders = const [],
+    this.companyAuctions = const [],
+    this.companyInactiveAuctions = const [],
     this.companyReviews = const [],
     this.companyReviewsModel,
     this.isMoreLoading = false,
@@ -53,6 +63,12 @@ class CompanyDetailState extends Equatable {
     this.inActiveTenderCurrentPage = 1,
     this.inActiveTenderPageSize = 1,
     this.inActiveTenderShowMore = false,
+    this.activeAuctionCurrentPage = 1,
+    this.activeAuctionPageSize = 1,
+    this.activeAuctionShowMore = false,
+    this.inActiveAuctionCurrentPage = 1,
+    this.inActiveAuctionPageSize = 1,
+    this.inActiveAuctionShowMore = false,
   });
 
   CompanyDetailState copyWith({
@@ -64,6 +80,8 @@ class CompanyDetailState extends Equatable {
     List<DocumentItem>? companyDocuments,
     List<TenderItem>? companyTenders,
     List<TenderItem>? companyInactiveTenders,
+    List? companyAuctions,
+    List? companyInactiveAuctions,
     List<ReviewItem>? companyReviews,
     CompanyReviewsModel? companyReviewsModel,
     bool? isMoreLoading,
@@ -81,6 +99,12 @@ class CompanyDetailState extends Equatable {
     int? inActiveTenderCurrentPage,
     int? inActiveTenderPageSize,
     bool? inActiveTenderShowMore,
+    int? activeAuctionCurrentPage,
+    int? activeAuctionPageSize,
+    bool? activeAuctionShowMore,
+    int? inActiveAuctionCurrentPage,
+    int? inActiveAuctionPageSize,
+    bool? inActiveAuctionShowMore,
   }) {
     return CompanyDetailState(
       companyDetailLoading: companyDetailLoading ?? this.companyDetailLoading,
@@ -93,6 +117,9 @@ class CompanyDetailState extends Equatable {
       companyTenders: companyTenders ?? this.companyTenders,
       companyInactiveTenders:
           companyInactiveTenders ?? this.companyInactiveTenders,
+      companyAuctions: companyAuctions ?? this.companyAuctions,
+      companyInactiveAuctions:
+          companyInactiveAuctions ?? this.companyInactiveAuctions,
       companyReviews: companyReviews ?? this.companyReviews,
       companyReviewsModel: companyReviewsModel ?? this.companyReviewsModel,
       isMoreLoading: isMoreLoading ?? this.isMoreLoading,
@@ -117,6 +144,18 @@ class CompanyDetailState extends Equatable {
           inActiveTenderPageSize ?? this.inActiveTenderPageSize,
       inActiveTenderShowMore:
           inActiveTenderShowMore ?? this.inActiveTenderShowMore,
+      activeAuctionCurrentPage:
+          activeAuctionCurrentPage ?? this.activeAuctionCurrentPage,
+      activeAuctionPageSize:
+          activeAuctionPageSize ?? this.activeAuctionPageSize,
+      activeAuctionShowMore:
+          activeAuctionShowMore ?? this.activeAuctionShowMore,
+      inActiveAuctionCurrentPage:
+          inActiveAuctionCurrentPage ?? this.inActiveAuctionCurrentPage,
+      inActiveAuctionPageSize:
+          inActiveAuctionPageSize ?? this.inActiveAuctionPageSize,
+      inActiveAuctionShowMore:
+          inActiveAuctionShowMore ?? this.inActiveAuctionShowMore,
     );
   }
 
@@ -130,6 +169,8 @@ class CompanyDetailState extends Equatable {
         companyDocuments,
         companyTenders,
         companyInactiveTenders,
+        companyAuctions,
+        companyInactiveAuctions,
         companyReviews,
         companyReviewsModel,
         isMoreLoading,
@@ -147,5 +188,11 @@ class CompanyDetailState extends Equatable {
         inActiveTenderCurrentPage,
         inActiveTenderPageSize,
         inActiveTenderShowMore,
+        activeAuctionCurrentPage,
+        activeAuctionPageSize,
+        activeAuctionShowMore,
+        inActiveAuctionCurrentPage,
+        inActiveAuctionPageSize,
+        inActiveAuctionShowMore,
       ];
 }

@@ -119,9 +119,19 @@ class AuctionGridItem extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20)),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 6),
-                      child: Text(
-                        '6дн : 20ч : 45мин',
-                        style: body14.copyWith(color: ColorResources.darkGray),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(Images.svgClock),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            '6дн 20ч',
+                            style: textStyle13Inter.copyWith(
+                                color:
+                                    ColorResources.darkGray.withOpacity(0.8)),
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -136,15 +146,15 @@ class AuctionGridItem extends StatelessWidget {
               children: [
                 Text(
                   // tender.title ?? '',
-                  '500\$',
-                  style: h16.copyWith(color: ColorResources.darkGray),
+                  '200\$',
+                  style: h16.copyWith(color: ColorResources.blue),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   // tender.description ?? '',
                   'Silvie Mahdal art',
-                  style: body14.copyWith(color: ColorResources.gray),
+                  style: h16.copyWith(color: ColorResources.darkGray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -155,8 +165,7 @@ class AuctionGridItem extends StatelessWidget {
                   'Живопись и графика',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: body14.copyWith(
-                      color: const Color.fromRGBO(71, 84, 103, 1)),
+                  style: body14.copyWith(color: ColorResources.gray),
                 ),
                 const SizedBox(
                   height: 5,
@@ -166,7 +175,7 @@ class AuctionGridItem extends StatelessWidget {
                     Icon(
                       Icons.location_on,
                       size: 16,
-                      color: ColorResources.darkGray,
+                      color: ColorResources.darkGray.withOpacity(0.8),
                     ),
                     const SizedBox(
                       width: 5,
@@ -176,7 +185,8 @@ class AuctionGridItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: body14.copyWith(
-                          color: const Color.fromRGBO(71, 84, 103, 1)),
+                          fontWeight: FontWeight.w500,
+                          color: ColorResources.darkGray.withOpacity(0.8)),
                     ),
                   ],
                 ),
@@ -185,7 +195,9 @@ class AuctionGridItem extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    SvgPicture.asset(Images.svgPersons),
+                    SvgPicture.asset(
+                      Images.svgPersons,
+                    ),
                     const SizedBox(
                       width: 5,
                     ),
@@ -194,7 +206,7 @@ class AuctionGridItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: body14.copyWith(
-                          color: const Color.fromRGBO(71, 84, 103, 1)),
+                          color: ColorResources.darkGray.withOpacity(0.8)),
                     ),
                   ],
                 ),
@@ -206,11 +218,13 @@ class AuctionGridItem extends StatelessWidget {
                   children: [
                     Text(
                       'Юр.лицо',
-                      style: body14.copyWith(color: ColorResources.gray),
+                      style: textStyle13Inter.copyWith(
+                          color: ColorResources.darkGray.withOpacity(0.8)),
                     ),
                     Text(
                       formatDateInRu(DateTime.now().toString()),
-                      style: body14.copyWith(color: ColorResources.gray),
+                      style: textStyle13Inter.copyWith(
+                          color: ColorResources.darkGray.withOpacity(0.8)),
                     )
                   ],
                 ),

@@ -217,14 +217,14 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                               );
                             },
                             title: Text(
-                              'Выбрать из своих товаров'.tr,
+                              'select_from_your_products'.tr,
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.black),
                             ),
                             subtitle: Text(
-                              'Размещайте уже имеющиеся товары'.tr,
+                              'post_existing_products'.tr,
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
@@ -246,14 +246,14 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                   ));
                             },
                             title: Text(
-                              'Создать новый'.tr,
+                              'create_new'.tr,
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.black),
                             ),
                             subtitle: Text(
-                              'Создайте аукцион с новым товаром'.tr,
+                              'create_auction_with_new_product'.tr,
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,

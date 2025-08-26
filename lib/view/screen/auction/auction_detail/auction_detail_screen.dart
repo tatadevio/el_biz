@@ -1,11 +1,11 @@
 import 'package:el_biz/bloc/auction/auction_detail/auction_detail_bloc.dart';
-import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/custom_button.dart';
-import 'package:el_biz/view/base/custom_favorite_button.dart';
+import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
-import 'package:el_biz/view/base/custom_textfield.dart';
+import 'package:el_biz/view/screen/auction/auction_detail/widgets/add_bet_bottomsheet.dart';
+import 'package:el_biz/view/screen/auction/auction_detail/widgets/leave_review_bottomsheet.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,15 +13,17 @@ import 'package:get/get.dart';
 
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
+import '../../../base/custom_favorite_button.dart';
 import 'widgets/auction_bets_widget.dart';
 import 'widgets/auction_detail_widget.dart';
 import 'widgets/similar_auctions_widget.dart';
 
 class AuctionDetailScreen extends StatefulWidget {
-  // final bool isProduct;
+  final bool isSeller;
   final String auctionName;
 
-  const AuctionDetailScreen({super.key, required this.auctionName});
+  const AuctionDetailScreen(
+      {super.key, required this.auctionName, this.isSeller = false});
 
   @override
   State<AuctionDetailScreen> createState() => _AuctionDetailScreenState();
@@ -29,8 +31,9 @@ class AuctionDetailScreen extends StatefulWidget {
 
 class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
   bool isShowDescription = true;
-  final TextEditingController lastBidController = TextEditingController();
+  // final TextEditingController lastBidController = TextEditingController();
   final TextEditingController suggestedBidController = TextEditingController();
+  final TextEditingController leaveReviewController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.sizeOf(context).width;
@@ -70,7 +73,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
         }
         if (productDetialController is AuctionDetailError) {
           return Center(
-            child: Text('error'),
+            child: Text('error'.tr),
           );
         }
         // if (productDetialController.tenderDetailModel?.data == null) {
@@ -132,7 +135,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
-                                        'Бесплатная доставка',
+                                        'free_delivery'.tr,
                                         style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
@@ -150,7 +153,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          'Бишкек',
+                                          'bishkek'.tr,
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w500,
@@ -169,7 +172,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                           color: ColorResources.darkGray),
                                     ),
                                     Text(
-                                      'Живопись и графика',
+                                      'painting_and_graphics'.tr,
                                       style: body16.copyWith(
                                           color: ColorResources.gray),
                                     ),
@@ -195,7 +198,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                           Row(
                             children: [
                               Text(
-                                'Своя цена: ',
+                                'own_price'.tr,
                                 style: textStyle13Inter,
                               ),
                               Text(
@@ -207,7 +210,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                           Row(
                             children: [
                               Text(
-                                'Цена с учетом последней ставки: ',
+                                'price_with_last_bet'.tr,
                                 style: textStyle13Inter,
                               ),
                               Text(
@@ -246,7 +249,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                       ),
                                       alignment: Alignment.center,
                                       child: Text(
-                                        'Описание',
+                                        'description'.tr,
                                         style: textStyle13Inter.copyWith(
                                             color: isShowDescription
                                                 ? Colors.black
@@ -274,7 +277,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                       ),
                                       alignment: Alignment.center,
                                       child: Text(
-                                        'Ставки',
+                                        'bets'.tr,
                                         style: textStyle13Inter.copyWith(
                                             color: isShowDescription
                                                 ? Colors.black.withOpacity(0.8)
@@ -306,6 +309,158 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
               const SizedBox(
                 height: 20,
               ),
+              // winner leave comment
+              GestureDetector(
+                onTap: () {
+                  Get.bottomSheet(
+                    LeaveReviewBottomsheet(
+                      leaveReviewController: leaveReviewController,
+                      onChanged: (val) {
+                        setState(() {});
+                      },
+                    ),
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  // width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 4,
+                        spreadRadius: -2,
+                        offset: Offset(0, 2),
+                        color: Color.fromRGBO(16, 24, 40, 0.06),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('leave_review'.tr,
+                          style: h16.copyWith(
+                              color: ColorResources.darkGray, fontSize: 15)),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: ColorResources.white,
+                          border: Border.all(
+                              width: 1, color: ColorResources.lgColor),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          leaveReviewController.text.isEmpty
+                              ? 'write_something_nice'.tr
+                              : leaveReviewController.text,
+                          style: body16.copyWith(
+                              color: ColorResources.darkGray.withOpacity(0.3)),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
+              // feedback on auction
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 4,
+                      spreadRadius: -2,
+                      offset: Offset(0, 2),
+                      color: Color.fromRGBO(16, 24, 40, 0.06),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('auction_review'.tr,
+                        style: h16.copyWith(
+                            color: ColorResources.darkGray, fontSize: 15)),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: ColorResources.lightBlue,
+                        borderRadius: BorderRadius.circular(16),
+                        //   border:
+                        //       Border.all(width: 1, color: ColorResources.lgColor),
+                      ),
+                      child: ListTile(
+                        dense: true,
+                        contentPadding: const EdgeInsets.all(0),
+                        title: Text(
+                          // tenderDetail.data!.company?.name ?? '',
+                          'Тансулуу Р.',
+                          style: h16.copyWith(color: ColorResources.darkGray),
+                        ),
+                        subtitle: Text(
+                          // tenderDetail.data!.company?.owner?.name ?? '',
+                          'Получила! Все отлично!🥰 ',
+                          style:
+                              body14.copyWith(color: ColorResources.darkGray),
+                        ),
+                        trailing: SizedBox(
+                          // width: 100,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
+                            decoration: BoxDecoration(
+                              color: ColorResources.orange,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              'winner'.tr,
+                              style: body14.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+
+              // salesman for the auction
               GestureDetector(
                 onTap: () {
                   // if (tenderDetail.data?.company != null) {
@@ -337,6 +492,13 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text('seller'.tr,
+                          style: h16.copyWith(
+                            color: ColorResources.darkGray,
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
@@ -372,21 +534,21 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                       ),
                       // if (tenderDetail.data!.company?.verificationStatus ==
                       //     'verified')
-                      //   Row(
-                      //     children: [
-                      //       SvgPicture.asset(Images.svgVerified),
-                      //       const SizedBox(
-                      //         width: 10,
-                      //       ),
-                      //       Expanded(
-                      //         child: Text(
-                      //           'verified_supplier'.tr,
-                      //           style:
-                      //               body14.copyWith(color: ColorResources.gray),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(Images.svgVerified),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'verified_supplier'.tr,
+                              style:
+                                  body14.copyWith(color: ColorResources.gray),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -406,101 +568,230 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
         );
       }),
       bottomNavigationBar: BottomAppBar(
-        height: 150,
+        height: widget.isSeller ? 75 : 150,
         color: Colors.white,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 110,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: widget.isSeller
+            ? CustomBorderButton(
+                height: 47,
+                width: Get.width,
+                padding: EdgeInsets.all(0),
+                border: Border.all(width: 1, color: ColorResources.orange),
+                borderRadius: BorderRadius.circular(12),
+                boxShaow: [],
+                child: Text(
+                  'withdraw_auction'.tr,
+                  style: h16.copyWith(
+                      color: ColorResources.orange,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter'),
+                ),
+                onTap: () {
+                  print('pressed');
+                  // if goal price is offered.....
+                  // Get.dialog(
+                  //   CupertinoAlertDialog(
+                  //     title: Text('Ваша целевая цена 500\$ была предложена'),
+                  //     content: Text('Хотите отозвать аукцион или продолжать?'),
+                  //     actions: [
+                  //       CupertinoDialogAction(
+                  //           child: Text('Отозвать'),
+                  //           onPressed: () {
+                  //             Get.back();
+                  //           }),
+                  //       CupertinoDialogAction(
+                  //           child: Text('Продолжать'),
+                  //           onPressed: () {
+                  //             Get.back();
+                  //           }),
+                  //     ],
+                  //   ),
+                  // );
+                  Get.dialog(
+                    CupertinoAlertDialog(
+                      title: Text('confirmed_withdraw_auction'.tr),
+                      content: Text('buyers_no_longer_bet'.tr),
+                      actions: [
+                        CupertinoDialogAction(
+                            child: Text('yes'.tr),
+                            onPressed: () {
+                              Get.back();
+                            }),
+                        CupertinoDialogAction(
+                            child: Text('cancel'.tr),
+                            onPressed: () {
+                              Get.back();
+                            }),
+                      ],
+                    ),
+                  );
+                })
+
+            // Container(
+            //     height: 46,
+            //     decoration: BoxDecoration(
+            //       color: ColorResources.primary,
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //   )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Text(
-                        'Последняя ставка',
-                        style: body12.copyWith(color: ColorResources.gray),
+                      SizedBox(
+                        width: 110,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'last_bet'.tr,
+                              style:
+                                  body12.copyWith(color: ColorResources.gray),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              height: 46,
+                              decoration: BoxDecoration(
+                                color: Color.fromRGBO(243, 243, 243, 1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '500\$',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorResources.darkGray,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(
-                        height: 5,
+                        width: 10,
                       ),
-                      Container(
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(243, 243, 243, 1),
-                          borderRadius: BorderRadius.circular(10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'your_bet'.tr,
+                              style:
+                                  body12.copyWith(color: ColorResources.gray),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            // CustomTextField(
+                            //     controller: suggestedBidController,
+                            //     hintColor: '',
+                            //     inputType: TextInputType.number,
+                            //     leading: '',
+
+                            //     readOnly: false),
+                            GestureDetector(
+                              onTap: () {
+                                Get.bottomSheet(
+                                  AddBetBottomSheet(
+                                    suggestedBidController:
+                                        suggestedBidController,
+                                    onChanged: (val) {
+                                      setState(() {});
+                                    },
+                                  ),
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: 46,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      width: 1, color: ColorResources.lgColor),
+                                ),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '${suggestedBidController.text}\$',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorResources.darkGray,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '500\$',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: ColorResources.darkGray,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // CustomButton(width: Get.width, height: 44, onTap: () {}, title: ''),
+                  GestureDetector(
+                    onTap: () {
+                      Get.bottomSheet(
+                        AddBetBottomSheet(
+                          suggestedBidController: suggestedBidController,
+                          onChanged: (val) {
+                            setState(() {});
+                          },
+                        ),
+                        isScrollControlled: true,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
                           ),
                         ),
+                      );
+                    },
+                    child: Container(
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: ColorResources.primary,
+                        borderRadius: BorderRadius.circular(12),
+                        border:
+                            Border.all(width: 1, color: ColorResources.blue),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Предлагаемая ставка',
-                        style: body12.copyWith(color: ColorResources.gray),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(Images.svgCurrency),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'place_bet'.tr,
+                            style: body16.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Inter'),
+                          ),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      CustomTextField(
-                          controller: suggestedBidController,
-                          hintColor: '',
-                          inputType: TextInputType.number,
-                          leading: '',
-                          readOnly: false),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            // CustomButton(width: Get.width, height: 44, onTap: () {}, title: ''),
-            Container(
-              height: 46,
-              decoration: BoxDecoration(
-                color: ColorResources.primary,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(width: 1, color: ColorResources.blue),
-              ),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(Images.svgCurrency),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Сделать ставку',
-                    style: body16.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter'),
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

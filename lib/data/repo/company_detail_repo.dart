@@ -35,6 +35,12 @@ class CompnayDetailRepo {
         "${AppConstants.companyDetailUrl}/$companyId/tenders?active_status=$status&page=$page");
   }
 
+  Future<Response> companyAuctions(
+      String companyId, String status, int page) async {
+    return await apiClient.getData(
+        "${AppConstants.companyDetailUrl}/$companyId/auctions?active_status=$status&page=$page");
+  }
+
   Future<Response> companyReviews(String companyId, int page) async {
     return await apiClient.getData(
         "${AppConstants.companyDetailUrl}/$companyId/reviews?page=$page");

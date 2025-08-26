@@ -51,6 +51,24 @@ class GetCompanyInActiveTenders extends CompanyDetailEvent {
   List<Object> get props => [companyId, currentPage];
 }
 
+class GetCompanyAuctions extends CompanyDetailEvent {
+  final String companyId;
+  final int currentPage;
+  const GetCompanyAuctions(this.companyId, {required this.currentPage});
+
+  @override
+  List<Object> get props => [companyId, currentPage];
+}
+
+class GetCompanyInActiveAuctions extends CompanyDetailEvent {
+  final String companyId;
+  final int currentPage;
+  const GetCompanyInActiveAuctions(this.companyId, {required this.currentPage});
+
+  @override
+  List<Object> get props => [companyId, currentPage];
+}
+
 class GetCompanyReviews extends CompanyDetailEvent {
   final String companyId;
   final int currentPage;
