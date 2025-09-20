@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:el_biz/bloc/add_auction/add_auction_bloc.dart';
 import 'package:el_biz/bloc/add_tender/add_tender_bloc.dart';
 import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
@@ -157,6 +158,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SimilarAuctionsBloc(Get.find())),
         BlocProvider(create: (_) => AuctionDetailBloc(Get.find())),
         BlocProvider(create: (_) => SearchAuctionBloc(Get.find())),
+        BlocProvider(create: (_) => AddAuctionBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

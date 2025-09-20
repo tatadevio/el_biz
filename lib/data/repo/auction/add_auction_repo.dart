@@ -4,14 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/appConstant.dart';
 
-class AuctionDetailRepo {
+class AddAuctionRepo {
   final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
+  AddAuctionRepo(
+    this.apiClient,
+    this.sharedPreferences,
+  );
 
-  AuctionDetailRepo(this.apiClient, this.sharedPreferences);
-
-  Future<Response> getAuctionDetail(String auctionId) async {
-    return await apiClient
-        .getData("${AppConstants.publicAuctionsUrl}/$auctionId");
+  Future<Response> addNewAuction(Map auctionData) async {
+    return await apiClient.postData(AppConstants.addAuctionUrl, auctionData);
   }
 }

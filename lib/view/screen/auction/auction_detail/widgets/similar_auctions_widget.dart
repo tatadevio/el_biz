@@ -1,5 +1,5 @@
 import 'package:el_biz/bloc/auction/similar_auctions/similar_auctions_bloc.dart';
-import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
+import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -96,7 +96,7 @@ class SimilarAuctionWidget extends StatelessWidget {
     );
   }
 
-  Widget similarTenderItem(BuildContext context, TenderItem tender,
+  Widget similarTenderItem(BuildContext context, AuctionListItem tender,
       {bool isVerifiedSupplier = false}) {
     double width = Get.width;
     return SizedBox(
@@ -130,7 +130,8 @@ class SimilarAuctionWidget extends StatelessWidget {
                         right: 5,
                         top: 5,
                         child: CustomFavoriteButton(
-                          isFavorite: tender.isFavorite ?? false,
+                          isFavorite: false,
+                          // tender.isFavorite ?? false,
                           onTap: () {
                             // context.read<SimilarTendersBloc>().add(
                             //     ToggleFavoriteSimilarTender(
@@ -160,7 +161,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            tender.description ?? '',
+                            tender.product?.description ?? '',
                             style: body14.copyWith(color: ColorResources.gray),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -178,15 +179,15 @@ class SimilarAuctionWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     color: Color.fromRGBO(71, 84, 103, 1)),
                               ),
-                              Expanded(
-                                child: Text(
-                                  '${tender.quantity} шт',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: body14.copyWith(
-                                      color: Color.fromRGBO(71, 84, 103, 1)),
-                                ),
-                              ),
+                              // Expanded(
+                              //   child: Text(
+                              //     '${tender.quantity} шт',
+                              //     overflow: TextOverflow.ellipsis,
+                              //     maxLines: 1,
+                              //     style: body14.copyWith(
+                              //         color: Color.fromRGBO(71, 84, 103, 1)),
+                              //   ),
+                              // ),
                             ],
                           ),
                           const SizedBox(
@@ -194,23 +195,23 @@ class SimilarAuctionWidget extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Text(
-                                'budget'.tr,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: body14.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: Color.fromRGBO(71, 84, 103, 1)),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${tender.budgetFrom} - ${tender.budgetTo} ${'som'.tr}',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: body14.copyWith(
-                                      color: Color.fromRGBO(71, 84, 103, 1)),
-                                ),
-                              ),
+                              // Text(
+                              //   'budget'.tr,
+                              //   overflow: TextOverflow.ellipsis,
+                              //   maxLines: 1,
+                              //   style: body14.copyWith(
+                              //       fontWeight: FontWeight.w700,
+                              //       color: Color.fromRGBO(71, 84, 103, 1)),
+                              // ),
+                              // Expanded(
+                              //   child: Text(
+                              //     '${tender.budgetFrom} - ${tender.budgetTo} ${'som'.tr}',
+                              //     overflow: TextOverflow.ellipsis,
+                              //     maxLines: 1,
+                              //     style: body14.copyWith(
+                              //         color: Color.fromRGBO(71, 84, 103, 1)),
+                              //   ),
+                              // ),
                             ],
                           ),
                           const SizedBox(

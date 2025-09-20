@@ -15,3 +15,13 @@ class UpdateAuctionGridView extends AuctionsEvent {
   @override
   List<Object> get props => [isGridView];
 }
+
+class GetAuctions extends AuctionsEvent {
+  final int page;
+  final bool isRefresh;
+
+  const GetAuctions({this.page = 1, this.isRefresh = false});
+
+  @override
+  List<Object> get props => [page, isRefresh];
+}

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:el_biz/bloc/add_auction/add_auction_bloc.dart';
 import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:el_biz/bloc/similar_products/similar_products_bloc.dart';
 import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
 import 'package:el_biz/data/repo/add_tender_repo.dart';
 import 'package:el_biz/data/repo/agreement_repo.dart';
+import 'package:el_biz/data/repo/auction/add_auction_repo.dart';
 import 'package:el_biz/data/repo/auction/search_auction_repo.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
@@ -166,6 +168,8 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<SearchAuctionRepo>(
       () => SearchAuctionRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<AddAuctionRepo>(() => AddAuctionRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -207,6 +211,7 @@ Future<Map<String, Map<String, String>>> init() async {
       fenix: true);
   Get.lazyPut<SimilarAuctionsBloc>(() => SimilarAuctionsBloc(Get.find()),
       fenix: true);
+  Get.lazyPut<AddAuctionBloc>(() => AddAuctionBloc(Get.find()), fenix: true);
 
 ////////
   ///

@@ -12,10 +12,11 @@ import '../../../../base/custom_textfield.dart';
 class AddBetBottomSheet extends StatelessWidget {
   final TextEditingController suggestedBidController;
   final ValueChanged<String> onChanged;
-  const AddBetBottomSheet(
-      {super.key,
-      required this.suggestedBidController,
-      required this.onChanged});
+  const AddBetBottomSheet({
+    super.key,
+    required this.suggestedBidController,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -124,18 +125,25 @@ class AddBetBottomSheet extends StatelessWidget {
             height: 5,
           ),
           CustomTextField(
-              controller: suggestedBidController,
-              hintColor: '',
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))
-              ],
-              inputType: TextInputType.number,
-              leading: '',
-              onChanged: (val) {
-                // setState(() {});
-                onChanged(val);
-              },
-              readOnly: false),
+            controller: suggestedBidController,
+            // controller: suggestedBidController,
+            hintColor: '',
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))
+            ],
+            inputType: TextInputType.number,
+            leading: '',
+            onChanged: (val) {
+              // setState(() {});
+              onChanged(val);
+            },
+            readOnly: false,
+
+            suffix: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+              child: Text('\$'),
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -250,7 +258,9 @@ class AddBetBottomSheet extends StatelessWidget {
             radius: 16,
           ),
         ],
-      ).paddingOnly(bottom: MediaQuery.of(context).padding.bottom - 12),
+      ).paddingOnly(
+          bottom: (MediaQuery.of(context).padding.bottom - 12)
+              .clamp(0.0, double.infinity)),
     );
   }
 }

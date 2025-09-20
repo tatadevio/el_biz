@@ -1,7 +1,7 @@
 part of 'search_auction_bloc.dart';
 
 class SearchAuctionState extends Equatable {
-  final List searchAuctions;
+  final List<AuctionListItem> searchAuctions;
   final int currentPage;
   final int pageSize;
   final bool isLoading;
@@ -15,7 +15,7 @@ class SearchAuctionState extends Equatable {
   });
 
   SearchAuctionState copyWith({
-    List? searchAuctions,
+    List<AuctionListItem>? searchAuctions,
     int? currentPage,
     int? pageSize,
     bool? isLoading,

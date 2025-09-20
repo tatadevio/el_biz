@@ -398,9 +398,10 @@ class ProductDetailScreen extends StatelessWidget {
                     if (productDetail.data?.company != null) {
                       context.read<CompanyDetailBloc>().add(GetCompanyDetail(
                           productDetail.data!.company!.id.toString()));
-                              context.read<SimilarCompaniesBloc>().add(
+                      context.read<SimilarCompaniesBloc>().add(
                           GetSimilarCompanies(
-                              companyId: productDetail.data!.company!.id.toString(),
+                              companyId:
+                                  productDetail.data!.company!.id.toString(),
                               currentPage: 1));
                       Get.to(() => CompanyPageScreen());
                     }

@@ -2,7 +2,7 @@ part of 'similar_auctions_bloc.dart';
 
 class SimilarAuctionsState extends Equatable {
   final bool isLoading;
-  final List similarAuctions;
+  final List<AuctionListItem> similarAuctions;
   final bool isMoreLoading;
   final int currentPage;
   final int totalPages;
@@ -16,7 +16,7 @@ class SimilarAuctionsState extends Equatable {
 
   SimilarAuctionsState copyWith({
     bool? isLoading,
-    List? similarAuctions,
+    List<AuctionListItem>? similarAuctions,
     bool? isMoreLoading,
     int? currentPage,
     int? totalPages,

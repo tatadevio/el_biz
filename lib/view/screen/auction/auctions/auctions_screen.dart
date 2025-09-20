@@ -702,14 +702,14 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
           BlocBuilder<AuctionsBloc, AuctionsState>(
             builder: (context, auctionsController) {
               return BlocBuilder<PublicTenderBloc, PublicTenderState>(
-                  builder: (context, publicTenderState) {
-                if (publicTenderState.isLoading) {
+                  builder: (context, pTenderState) {
+                if (auctionsController.isLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (publicTenderState.publicTenders.isEmpty &&
-                    !publicTenderState.isFilterEnable) {
+                if (auctionsController.auctions.isEmpty &&
+                    !auctionsController.isFilterEnable) {
                   return RefreshIndicator(
                     onRefresh: () async {
                       // context
@@ -727,8 +727,8 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                     ),
                   );
                 }
-                if (publicTenderState.filterTenders.isEmpty &&
-                    publicTenderState.isFilterEnable) {
+                if (auctionsController.filteredAuctions.isEmpty &&
+                    auctionsController.isFilterEnable) {
                   return RefreshIndicator(
                     onRefresh: () async {
                       // context.read<PublicTenderBloc>().add(
@@ -778,11 +778,19 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                           mainAxisSpacing: 10,
                                           crossAxisSpacing: 10,
                                           childAspectRatio: 0.52),
-                                  itemCount: publicTenderState.isFilterEnable
-                                      ? publicTenderState.filterTenders.length
-                                      : publicTenderState.publicTenders.length,
+                                  itemCount: auctionsController.isFilterEnable
+                                      ? auctionsController
+                                          .filteredAuctions.length
+                                      : auctionsController.auctions.length,
                                   itemBuilder: (context, index) {
                                     return AuctionGridItem(
+                                          auction: auctionsController.isFilterEnable
+                                          ? auctionsController
+                                              .filteredAuctions[index]
+                                          : auctionsController.auctions[index],
+                                      isPublicAuction: true,
+                                      isCompanyAuction: false,
+                                      isSearchAuction: false,
                                         // tender: publicTenderState.isFilterEnable
                                         //     ? publicTenderState
                                         //         .filterTenders[index]
@@ -793,7 +801,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                         );
                                   },
                                 ),
-                                if (publicTenderState.isMoreLoading)
+                                if (auctionsController.isLoadingMore)
                                   const Center(
                                     child: CircularProgressIndicator(),
                                   ).paddingOnly(
@@ -811,22 +819,29 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                 ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: publicTenderState.isFilterEnable
-                                      ? publicTenderState.filterTenders.length
-                                      : publicTenderState.publicTenders.length,
+                                  itemCount: auctionsController.isFilterEnable
+                                      ? auctionsController
+                                          .filteredAuctions.length
+                                      : auctionsController.auctions.length,
                                   itemBuilder: (context, index) {
-                                    return AuctionListItem(
-                                        // tender: publicTenderState.isFilterEnable
-                                        //     ? publicTenderState
-                                        //         .filterTenders[index]
-                                        //     : publicTenderState
-                                        //         .publicTenders[index],
-                                        // isCompanyTender: false,
-                                        // isPublicTender: true,
-                                        );
+                                    return AuctionListItemWidget(
+                                      auction: auctionsController.isFilterEnable
+                                          ? auctionsController
+                                              .filteredAuctions[index]
+                                          : auctionsController.auctions[index],
+                                      isPublicAuction: true,
+                                      // isFavorite: tender.isFavorite ?? false,
+                                      // tender: publicTenderState.isFilterEnable
+                                      //     ? publicTenderState
+                                      //         .filterTenders[index]
+                                      //     : publicTenderState
+                                      //         .publicTenders[index],
+                                      // isCompanyTender: false,
+                                      // isPublicTender: true,
+                                    );
                                   },
                                 ),
-                                if (publicTenderState.isMoreLoading)
+                                if (auctionsController.isLoadingMore)
                                   const Center(
                                     child: CircularProgressIndicator(),
                                   ).paddingOnly(

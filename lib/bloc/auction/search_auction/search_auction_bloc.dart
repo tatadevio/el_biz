@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/model/response/auction/auctions_list_model.dart';
 import '../../../data/repo/auction/search_auction_repo.dart';
 
 part 'search_auction_event.dart';
@@ -32,23 +33,23 @@ class SearchAuctionBloc extends Bloc<SearchAuctionEvent, SearchAuctionState> {
           event.search, event.currentPage);
 
       if (response.statusCode == 200) {
-        // final companyProducts = CompanyTendersModel.fromJson(response.body);
+        final auctions = AuctionsListModel.fromJson(response.body);
 
-        // if (event.currentPage == 1) {
-        //   emit(state.copyWith(
-        //     searchTenders: companyProducts.data?.items,
-        //     isLoading: false,
-        //   ));
-        // } else {
-        //   emit(state.copyWith(
-        //     searchTenders: List<TenderItem>.from(state.searchTenders)
-        //       ..addAll(companyProducts.data?.items ?? []),
-        //   ));
-        // }
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            searchAuctions: auctions.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(
+            searchAuctions: List<AuctionListItem>.from(state.searchAuctions)
+              ..addAll(auctions.data?.items ?? []),
+          ));
+        }
 
-        // emit(state.copyWith(
-        //     currentPage: companyProducts.data?.currentPage ?? 1,
-        //     pageSize: companyProducts.data?.totalPages ?? 1));
+        emit(state.copyWith(
+            currentPage: auctions.data?.currentPage ?? 1,
+            pageSize: auctions.data?.totalPages ?? 1));
       } else {
         emit(state.copyWith(isLoading: false));
       }

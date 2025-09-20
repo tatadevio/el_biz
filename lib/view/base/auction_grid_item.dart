@@ -1,12 +1,8 @@
 import 'package:el_biz/bloc/auction/similar_auctions/similar_auctions_bloc.dart';
-import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
-import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
-import 'package:el_biz/bloc/search_tender/search_tender_bloc.dart';
-import 'package:el_biz/bloc/tender_detail/tender_detail_bloc.dart';
+import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/check_box_tender_button.dart';
 import 'package:el_biz/view/base/custom_favorite_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
@@ -17,29 +13,26 @@ import 'package:get/get.dart';
 
 import '../../bloc/auction/auction_detail/auction_detail_bloc.dart';
 import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/similar_tenders/similar_tenders_bloc.dart';
-import '../../data/model/response/tender/tender_item_model.dart';
 import '../../utils/Images.dart';
 import '../screen/auction/auction_detail/auction_detail_screen.dart';
-import '../screen/tender/tender_detail_screen.dart';
 
 class AuctionGridItem extends StatelessWidget {
   // final bool isFavorite;
-  // final TenderItem tender;
-  // final bool isCompanyTender;
-  // final bool isPublicTender;
+  final AuctionListItem auction;
+  final bool isCompanyAuction;
+  final bool isPublicAuction;
   // final bool isSelect;
   // final bool isAlreadySelect;
-  // final bool isSearchTender;
+  final bool isSearchAuction;
   const AuctionGridItem({
     super.key,
     // this.isFavorite = false,
-    // required this.tender,
-    // required this.isCompanyTender,
-    // this.isPublicTender = false,
+    required this.auction,
+    required this.isCompanyAuction,
+    this.isPublicAuction = false,
     // this.isSelect = false,
     // this.isAlreadySelect = false,
-    // this.isSearchTender = false,
+    this.isSearchAuction = false,
   });
 
   @override
@@ -47,14 +40,12 @@ class AuctionGridItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (context.read<AuthBloc>().state.isLoggedIn) {
-          final auctionId = '';
           context
               .read<AuctionDetailBloc>()
-              .add(GetAuctionDetail(auctionId: auctionId));
+              .add(GetAuctionDetail(auctionId: auction.id.toString()));
           context.read<SimilarAuctionsBloc>().add(
                 GetSimilarAuctions(
-                  auctionId: auctionId,
-                  // tender.id.toString(),
+                  auctionId: auction.id.toString(),
                   currentPage: 1,
                 ),
               );
@@ -78,7 +69,10 @@ class AuctionGridItem extends StatelessWidget {
               child: Stack(
                 children: [
                   CustomImage(
-                      image: '',
+                      image: auction.product?.images != null &&
+                              auction.product!.images!.isNotEmpty
+                          ? auction.product!.images![0].small.toString()
+                          : '',
                       height: Get.height,
                       width: Get.width,
                       radius: 16),
@@ -126,7 +120,8 @@ class AuctionGridItem extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            '6дн 20ч',
+                            auction.timeRemaining ?? '',
+                            // '6дн 20ч',
                             style: textStyle13Inter.copyWith(
                                 color:
                                     ColorResources.darkGray.withOpacity(0.8)),
@@ -145,15 +140,15 @@ class AuctionGridItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  // tender.title ?? '',
-                  '200\$',
+                  auction.buyoutPrice ?? auction.productPrice ?? '',
+                  //  '200\$',
                   style: h16.copyWith(color: ColorResources.blue),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  // tender.description ?? '',
-                  'Silvie Mahdal art',
+                  auction.title ?? '',
+                  // 'Silvie Mahdal art',
                   style: h16.copyWith(color: ColorResources.darkGray),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -162,7 +157,8 @@ class AuctionGridItem extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  'Живопись и графика',
+                  auction.product?.description ?? '',
+                  // 'Живопись и графика',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: body14.copyWith(color: ColorResources.gray),
@@ -181,7 +177,7 @@ class AuctionGridItem extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      'Бишкек', // location
+                      auction.location ?? '',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: body14.copyWith(
@@ -202,7 +198,7 @@ class AuctionGridItem extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      '50 ставок', // location
+                      '${auction.bidCount} ставок',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: body14.copyWith(
@@ -222,7 +218,7 @@ class AuctionGridItem extends StatelessWidget {
                           color: ColorResources.darkGray.withOpacity(0.8)),
                     ),
                     Text(
-                      formatDateInRu(DateTime.now().toString()),
+                      formatDateInRu(auction.createdAt.toString()),
                       style: textStyle13Inter.copyWith(
                           color: ColorResources.darkGray.withOpacity(0.8)),
                     )

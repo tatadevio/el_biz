@@ -16,7 +16,7 @@ String productDetailModelToJson(ProductDetailModel data) =>
 
 class ProductDetailModel {
   final String? message;
-  final Data? data;
+  final ProductDetailData? data;
   final int? statusCode;
   final String? status;
 
@@ -29,7 +29,7 @@ class ProductDetailModel {
 
   ProductDetailModel copyWith({
     String? message,
-    Data? data,
+    ProductDetailData? data,
     int? statusCode,
     String? status,
   }) =>
@@ -43,7 +43,9 @@ class ProductDetailModel {
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) =>
       ProductDetailModel(
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : ProductDetailData.fromJson(json["data"]),
         statusCode: json["status_code"],
         status: json["status"],
       );
@@ -56,7 +58,7 @@ class ProductDetailModel {
       };
 }
 
-class Data {
+class ProductDetailData {
   final int? id;
   final String? name;
   final String? slug;
@@ -84,7 +86,7 @@ class Data {
   final bool? isReview;
   final int? contractId;
 
-  Data({
+  ProductDetailData({
     this.id,
     this.name,
     this.slug,
@@ -113,7 +115,7 @@ class Data {
     this.contractId,
   });
 
-  Data copyWith({
+  ProductDetailData copyWith({
     int? id,
     String? name,
     String? slug,
@@ -141,7 +143,7 @@ class Data {
     bool? isReview,
     int? contractId,
   }) =>
-      Data(
+      ProductDetailData(
         id: id ?? this.id,
         name: name ?? this.name,
         slug: slug ?? this.slug,
@@ -170,7 +172,8 @@ class Data {
         contractId: contractId ?? this.contractId,
       );
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory ProductDetailData.fromJson(Map<String, dynamic> json) =>
+      ProductDetailData(
         id: json["id"],
         name: json["name"],
         slug: json["slug"],

@@ -8,6 +8,7 @@ class ColorResources {
   static const Color black = Color(0xff1E293B);
   static const Color red = Color.fromRGBO(240, 68, 56, 1);
   static const Color darkGray = Color.fromRGBO(30, 30, 30, 1);
+  static const Color dark = Color.fromRGBO(22, 22, 22, 1);
   static const Color gray = Color.fromRGBO(71, 84, 103, 1);
   static const Color blue = Color.fromRGBO(22, 77, 160, 1);
   static const Color lgColor = Color.fromRGBO(208, 213, 221, 1);

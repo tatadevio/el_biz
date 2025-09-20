@@ -128,7 +128,9 @@ class LeaveReviewBottomsheet extends StatelessWidget {
           //   radius: 16,
           // ),
         ],
-      ).paddingOnly(bottom: MediaQuery.of(context).padding.bottom - 12),
+      ).paddingOnly(
+          bottom: (MediaQuery.of(context).padding.bottom - 12)
+              .clamp(0.0, double.infinity)),
     );
   }
 }

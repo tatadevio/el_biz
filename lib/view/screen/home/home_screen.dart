@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/auction/auctions/auctions_bloc.dart';
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/cities/cities_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
@@ -55,6 +56,7 @@ class HomeScreen extends StatelessWidget {
     context.read<UserBloc>().add(GetSelectedAccount(context: context));
     context.read<CategoryBloc>().add(GetCategory(currentPage: 1));
     context.read<AuthBloc>().add(CheckLoginStatus());
+    context.read<AuctionsBloc>().add(GetAuctions(page: 1));
     // context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
   }
 

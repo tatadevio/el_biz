@@ -114,10 +114,13 @@ class _SearchAuctionsWidgetState extends State<SearchAuctionsWidget> {
                         itemBuilder: (context, index) {
                           // return SizedBox();
                           return AuctionGridItem(
-                              // auction: searchAuctionState.searchAuctions[index],
-                              // isSearchAuction: true,
-                              // isCompanyTender: false,
-                              );
+                            auction: searchAuctionState.searchAuctions[index],
+                            isSearchAuction: true, isCompanyAuction: false,
+                            isPublicAuction: false,
+                            // auction: searchAuctionState.searchAuctions[index],
+                            // isSearchAuction: true,
+                            // isCompanyTender: false,
+                          );
                         },
                       ),
                       if (searchAuctionState.isMoreLoading)
@@ -139,10 +142,10 @@ class _SearchAuctionsWidgetState extends State<SearchAuctionsWidget> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: searchAuctionState.searchAuctions.length,
                       itemBuilder: (context, index) {
-                        return AuctionListItem(
-                            // auction: searchAuctionState.searchAuctions[index],
-                            // isSearchAuction: true,
-                            );
+                        return AuctionListItemWidget(
+                          auction: searchAuctionState.searchAuctions[index],
+                          // isSearchAuction: true,
+                        );
                       },
                     ),
                     if (searchAuctionState.isMoreLoading)

@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
@@ -8,39 +9,30 @@ import 'package:get/get.dart';
 import '../../bloc/auction/auction_detail/auction_detail_bloc.dart';
 import '../../bloc/auction/similar_auctions/similar_auctions_bloc.dart';
 import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/company_detail/company_detail_bloc.dart';
-import '../../bloc/public_tender/public_tender_bloc.dart';
-import '../../bloc/search_tender/search_tender_bloc.dart';
-import '../../bloc/similar_tenders/similar_tenders_bloc.dart';
-import '../../bloc/tender_detail/tender_detail_bloc.dart';
-import '../../data/model/response/tender/tender_item_model.dart';
-import '../../helper/date_helper.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/custom_text_style.dart';
 import '../screen/auction/auction_detail/auction_detail_screen.dart';
-import '../screen/tender/tender_detail_screen.dart';
-import 'check_box_tender_button.dart';
 import 'custom_favorite_button.dart';
 import 'custom_toast.dart';
 
-class AuctionListItem extends StatelessWidget {
-  // final bool isFavorite;
-  // final TenderItem tender;
-  // final bool isCompanyTender;
-  // final bool isPublicTender;
+class AuctionListItemWidget extends StatelessWidget {
+  final bool isFavorite;
+  final AuctionListItem auction;
+  final bool isCompanyAuction;
+  final bool isPublicAuction;
   // final bool isSelect;
   // final bool isAlreadySelect;
-  // final bool isSearchTender;
+  final bool isSearchAuction;
 
-  const AuctionListItem({
+  const AuctionListItemWidget({
     super.key,
-    // this.isFavorite = false,
-    // required this.tender,
-    // this.isCompanyTender = false,
-    // this.isPublicTender = false,
+    this.isFavorite = false,
+    required this.auction,
+    this.isCompanyAuction = false,
+    this.isPublicAuction = false,
     // this.isSelect = false,
     // this.isAlreadySelect = false,
-    // this.isSearchTender = false,
+    this.isSearchAuction = false,
   });
 
   @override
@@ -50,13 +42,13 @@ class AuctionListItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (context.read<AuthBloc>().state.isLoggedIn) {
-            final auctionId = '';
+            // final auctionId =  auction.id ?? '';
             context
                 .read<AuctionDetailBloc>()
-                .add(GetAuctionDetail(auctionId: auctionId));
+                .add(GetAuctionDetail(auctionId: auction.id.toString()));
             context.read<SimilarAuctionsBloc>().add(
                   GetSimilarAuctions(
-                    auctionId: auctionId,
+                    auctionId: auction.id.toString(),
                     // tender.id.toString(),
                     currentPage: 1,
                   ),
@@ -83,7 +75,7 @@ class AuctionListItem extends StatelessWidget {
                           top: 5,
                           child: CustomFavoriteButton(
                             isFavorite: false,
-                            // tender.isFavorite ?? false,
+                            // auction.isFavorite ?? false,
                             onTap: () {
                               // if (isCompanyTender) {
                               //   context.read<CompanyDetailBloc>().add(
@@ -116,20 +108,23 @@ class AuctionListItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '200\$',
+                              // '200\$',
+                              auction.buyoutPrice ?? auction.productPrice ?? '',
                               style: h16.copyWith(color: ColorResources.blue),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              'Silvie Mahdal art',
+                              auction.title ?? '',
+                              // 'Silvie Mahdal art',
                               style:
                                   h16.copyWith(color: ColorResources.darkGray),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              'Живопись и графика',
+                              auction.product?.description ?? '',
+                              // 'Живопись и графика',
                               style:
                                   body14.copyWith(color: ColorResources.gray),
                               maxLines: 1,
@@ -150,7 +145,8 @@ class AuctionListItem extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  'Бишкек',
+                                  auction.location ?? '',
+                                  // 'Бишкек',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: body14.copyWith(
@@ -170,7 +166,7 @@ class AuctionListItem extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  '50 ставок',
+                                  '${auction.bidCount} ставок',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: body14.copyWith(
@@ -218,7 +214,8 @@ class AuctionListItem extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          '6дн 20ч',
+                          // '6дн 20ч',
+                          auction.timeRemaining ?? '',
                           style: textStyle13Inter,
                         ),
                       ],
