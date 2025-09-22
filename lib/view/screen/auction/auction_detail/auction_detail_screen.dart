@@ -128,23 +128,24 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          color: ColorResources.green,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Text(
-                                          'free_delivery'.tr,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: ColorResources.white,
+                                      if (auction.freeShipping == true)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: ColorResources.green,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Text(
+                                            'free_delivery'.tr,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                              color: ColorResources.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -208,7 +209,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                   style: textStyle13Inter,
                                 ),
                                 Text(
-                                  '${auction.targetPrice}\$',
+                                  '${auction.productPrice}\$',
                                   style:
                                       h16.copyWith(color: ColorResources.blue),
                                 ),
@@ -588,234 +589,230 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
         // print(
         // 'this is the favorite option in tender detail = ${tenderDetail.data?.isFavorite ?? false}');
       }),
-      bottomNavigationBar: BottomAppBar(
-        height: widget.isSeller ? 75 : 150,
-        color: Colors.white,
-        child: widget.isSeller
-            ? CustomBorderButton(
-                height: 47,
-                width: Get.width,
-                padding: EdgeInsets.all(0),
-                border: Border.all(width: 1, color: ColorResources.orange),
-                borderRadius: BorderRadius.circular(12),
-                boxShaow: [],
-                child: Text(
-                  'withdraw_auction'.tr,
-                  style: h16.copyWith(
-                      color: ColorResources.orange,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Inter'),
-                ),
-                onTap: () {
-                  print('pressed');
-                  // if goal price is offered.....
-                  // Get.dialog(
-                  //   CupertinoAlertDialog(
-                  //     title: Text('Ваша целевая цена 500\$ была предложена'),
-                  //     content: Text('Хотите отозвать аукцион или продолжать?'),
-                  //     actions: [
-                  //       CupertinoDialogAction(
-                  //           child: Text('Отозвать'),
-                  //           onPressed: () {
-                  //             Get.back();
-                  //           }),
-                  //       CupertinoDialogAction(
-                  //           child: Text('Продолжать'),
-                  //           onPressed: () {
-                  //             Get.back();
-                  //           }),
-                  //     ],
-                  //   ),
-                  // );
-                  Get.dialog(
-                    CupertinoAlertDialog(
-                      title: Text('confirmed_withdraw_auction'.tr),
-                      content: Text('buyers_no_longer_bet'.tr),
-                      actions: [
-                        CupertinoDialogAction(
-                            child: Text('yes'.tr),
-                            onPressed: () {
-                              Get.back();
-                            }),
-                        CupertinoDialogAction(
-                            child: Text('cancel'.tr),
-                            onPressed: () {
-                              Get.back();
-                            }),
-                      ],
-                    ),
-                  );
-                })
-
-            // Container(
-            //     height: 46,
-            //     decoration: BoxDecoration(
-            //       color: ColorResources.primary,
-            //       borderRadius: BorderRadius.circular(12),
-            //     ),
-            //   )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 110,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'last_bet'.tr,
-                              style:
-                                  body12.copyWith(color: ColorResources.gray),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                              height: 46,
-                              decoration: BoxDecoration(
-                                color: Color.fromRGBO(243, 243, 243, 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '500\$',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorResources.darkGray,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+      bottomNavigationBar: BlocBuilder<AuctionDetailBloc, AuctionDetailState>(
+        builder: (context, state) {
+          if (state is AuctionDetailSuccess) {
+            final auction = state.auctionDetailModel.data;
+            // setState(() {});
+            if (auction == null) {
+              return SizedBox();
+            }
+            return BottomAppBar(
+              height: widget.isSeller ? 75 : 150,
+              color: Colors.white,
+              child: widget.isSeller
+                  ? CustomBorderButton(
+                      height: 47,
+                      width: Get.width,
+                      padding: EdgeInsets.all(0),
+                      border:
+                          Border.all(width: 1, color: ColorResources.orange),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShaow: [],
+                      child: Text(
+                        'withdraw_auction'.tr,
+                        style: h16.copyWith(
+                            color: ColorResources.orange,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter'),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'your_bet'.tr,
-                              style:
-                                  body12.copyWith(color: ColorResources.gray),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            // CustomTextField(
-                            //     controller: suggestedBidController,
-                            //     hintColor: '',
-                            //     inputType: TextInputType.number,
-                            //     leading: '',
+                      onTap: () {
+                        print('pressed');
 
-                            //     readOnly: false),
-                            GestureDetector(
-                              onTap: () {
-                                Get.bottomSheet(
-                                  // SizedBox(
-                                  //   height: 300,
-                                  // ),
-                                  AddBetBottomSheet(
-                                    suggestedBidController:
-                                        suggestedBidController,
-                                    onChanged: (val) {
-                                      setState(() {});
-                                    },
+                        Get.dialog(
+                          CupertinoAlertDialog(
+                            title: Text('confirmed_withdraw_auction'.tr),
+                            content: Text('buyers_no_longer_bet'.tr),
+                            actions: [
+                              CupertinoDialogAction(
+                                  child: Text('yes'.tr),
+                                  onPressed: () {
+                                    Get.back();
+                                  }),
+                              CupertinoDialogAction(
+                                  child: Text('cancel'.tr),
+                                  onPressed: () {
+                                    Get.back();
+                                  }),
+                            ],
+                          ),
+                        );
+                      })
+
+                  // Container(
+                  //     height: 46,
+                  //     decoration: BoxDecoration(
+                  //       color: ColorResources.primary,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     ),
+                  //   )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 110,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'last_bet'.tr,
+                                    style: body12.copyWith(
+                                        color: ColorResources.gray),
                                   ),
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16),
-                                      topRight: Radius.circular(16),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                    height: 46,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromRGBO(243, 243, 243, 1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      // '500\$',
+                                      '${auction.higestBitPrice}\$',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorResources.darkGray,
+                                      ),
                                     ),
                                   ),
-                                );
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 46,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                      width: 1, color: ColorResources.lgColor),
-                                ),
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  '${suggestedBidController.text}\$',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorResources.darkGray,
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'your_bet'.tr,
+                                    style: body12.copyWith(
+                                        color: ColorResources.gray),
                                   ),
-                                ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  // CustomTextField(
+                                  //     controller: suggestedBidController,
+                                  //     hintColor: '',
+                                  //     inputType: TextInputType.number,
+                                  //     leading: '',
+
+                                  //     readOnly: false),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.bottomSheet(
+                                        AddBetBottomSheet(
+                                          suggestedBidController:
+                                              suggestedBidController,
+                                          onChanged: (val) {
+                                            setState(() {});
+                                          },
+                                          auction: auction,
+                                        ),
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(16),
+                                            topRight: Radius.circular(16),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 46,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: ColorResources.lgColor),
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '${suggestedBidController.text}\$',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: ColorResources.darkGray,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // CustomButton(width: Get.width, height: 44, onTap: () {}, title: ''),
-                  GestureDetector(
-                    onTap: () {
-                      Get.bottomSheet(
-                        AddBetBottomSheet(
-                          suggestedBidController: suggestedBidController,
-                          onChanged: (val) {
-                            setState(() {});
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // CustomButton(width: Get.width, height: 44, onTap: () {}, title: ''),
+                        GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(
+                              AddBetBottomSheet(
+                                suggestedBidController: suggestedBidController,
+                                onChanged: (val) {
+                                  setState(() {});
+                                },
+                                auction: auction,
+                              ),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16),
+                                ),
+                              ),
+                            );
                           },
-                        ),
-                        isScrollControlled: true,
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
+                          child: Container(
+                            height: 46,
+                            decoration: BoxDecoration(
+                              color: ColorResources.primary,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                  width: 1, color: ColorResources.blue),
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(Images.svgCurrency),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'place_bet'.tr,
+                                  style: body16.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Inter'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      );
-                    },
-                    child: Container(
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: ColorResources.primary,
-                        borderRadius: BorderRadius.circular(12),
-                        border:
-                            Border.all(width: 1, color: ColorResources.blue),
-                      ),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(Images.svgCurrency),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'place_bet'.tr,
-                            style: body16.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Inter'),
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
+            );
+          }
+          return SizedBox();
+        },
       ),
     );
   }

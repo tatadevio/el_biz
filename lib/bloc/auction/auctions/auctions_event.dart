@@ -25,3 +25,23 @@ class GetAuctions extends AuctionsEvent {
   @override
   List<Object> get props => [page, isRefresh];
 }
+
+class AddAuctionBid extends AuctionsEvent {
+  final int auctionId;
+  final double bidAmount;
+
+  const AddAuctionBid({required this.auctionId, required this.bidAmount});
+
+  @override
+  List<Object> get props => [auctionId, bidAmount];
+}
+
+class CancelAuctionBid extends AuctionsEvent {
+  final int auctionId;
+  final int bidId;
+
+  const CancelAuctionBid({required this.auctionId, required this.bidId});
+
+  @override
+  List<Object> get props => [auctionId, bidId];
+}

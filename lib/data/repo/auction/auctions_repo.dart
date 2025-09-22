@@ -14,4 +14,16 @@ class AuctionsRepo {
     return await apiClient
         .getData("${AppConstants.publicAuctionsUrl}?page=$page");
   }
+
+  Future<Response> addAuctionBid(int auctionId, double bidAmount) async {
+    return await apiClient.postData(
+        "${AppConstants.publicAuctionsUrl}/$auctionId/bid",
+        {"bid_amount": bidAmount});
+  }
+
+  Future<Response> cancelAuctionBid(int auctionId, int bidId) async {
+    return await apiClient.postData(
+        "${AppConstants.publicAuctionsUrl}/$auctionId/cancel-bid",
+        {"bid_id": bidId});
+  }
 }

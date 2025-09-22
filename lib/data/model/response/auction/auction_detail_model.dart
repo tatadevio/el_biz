@@ -14,7 +14,7 @@ String auctionDetailModelToJson(AuctionDetailModel data) =>
 
 class AuctionDetailModel {
   final bool? success;
-  final Data? data;
+  final AuctionDetailData? data;
   final bool? isWinner;
   final bool? canBid;
   final int? minimumNextBid;
@@ -29,7 +29,7 @@ class AuctionDetailModel {
 
   AuctionDetailModel copyWith({
     bool? success,
-    Data? data,
+    AuctionDetailData? data,
     bool? isWinner,
     bool? canBid,
     int? minimumNextBid,
@@ -45,7 +45,9 @@ class AuctionDetailModel {
   factory AuctionDetailModel.fromJson(Map<String, dynamic> json) =>
       AuctionDetailModel(
         success: json["success"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null
+            ? null
+            : AuctionDetailData.fromJson(json["data"]),
         isWinner: json["is_winner"],
         canBid: json["can_bid"],
         minimumNextBid: json["minimum_next_bid"],
@@ -60,7 +62,7 @@ class AuctionDetailModel {
       };
 }
 
-class Data {
+class AuctionDetailData {
   final int? id;
   final String? title;
   final String? status;
@@ -92,13 +94,15 @@ class Data {
   final String? carGeneration;
   final String? carMileage;
   final String? carCustomsCleared;
-  final List<dynamic>? bids;
+
   final List<dynamic>? reviews;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? targetPrice;
+  final String? higestBitPrice;
+  final List<Bid>? bids;
 
-  Data({
+  AuctionDetailData({
     this.id,
     this.title,
     this.status,
@@ -130,91 +134,94 @@ class Data {
     this.carGeneration,
     this.carMileage,
     this.carCustomsCleared,
-    this.bids,
     this.reviews,
     this.createdAt,
     this.updatedAt,
     this.targetPrice,
+    this.higestBitPrice,
+    this.bids,
   });
 
-  Data copyWith({
-    int? id,
-    String? title,
-    String? status,
-    String? productPrice,
-    String? currentTotalPrice,
-    String? buyoutPrice,
-    String? minimumIncrement,
-    DateTime? startDate,
-    DateTime? endDate,
-    String? timeRemaining,
-    bool? isActive,
-    String? canBeBidOn,
-    int? bidCount,
-    String? participantCount,
-    String? location,
-    bool? freeShipping,
-    String? paymentMethod,
-    String? bidCancellationHours,
-    bool? autoCloseOnBuyout,
-    String? searchKeywords,
-    List<String>? tags,
-    Category? category,
-    Company? company,
-    Company? creator,
-    ProductDetailData? product,
-    List<dynamic>? images,
-    String? carBrand,
-    String? carModel,
-    String? carGeneration,
-    String? carMileage,
-    String? carCustomsCleared,
-    List<dynamic>? bids,
-    List<dynamic>? reviews,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    String? targetPrice,
-  }) =>
-      Data(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        status: status ?? this.status,
-        productPrice: productPrice ?? this.productPrice,
-        currentTotalPrice: currentTotalPrice ?? this.currentTotalPrice,
-        buyoutPrice: buyoutPrice ?? this.buyoutPrice,
-        minimumIncrement: minimumIncrement ?? this.minimumIncrement,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-        timeRemaining: timeRemaining ?? this.timeRemaining,
-        isActive: isActive ?? this.isActive,
-        canBeBidOn: canBeBidOn ?? this.canBeBidOn,
-        bidCount: bidCount ?? this.bidCount,
-        participantCount: participantCount ?? this.participantCount,
-        location: location ?? this.location,
-        freeShipping: freeShipping ?? this.freeShipping,
-        paymentMethod: paymentMethod ?? this.paymentMethod,
-        bidCancellationHours: bidCancellationHours ?? this.bidCancellationHours,
-        autoCloseOnBuyout: autoCloseOnBuyout ?? this.autoCloseOnBuyout,
-        searchKeywords: searchKeywords ?? this.searchKeywords,
-        tags: tags ?? this.tags,
-        category: category ?? this.category,
-        company: company ?? this.company,
-        creator: creator ?? this.creator,
-        product: product ?? this.product,
-        images: images ?? this.images,
-        carBrand: carBrand ?? this.carBrand,
-        carModel: carModel ?? this.carModel,
-        carGeneration: carGeneration ?? this.carGeneration,
-        carMileage: carMileage ?? this.carMileage,
-        carCustomsCleared: carCustomsCleared ?? this.carCustomsCleared,
-        bids: bids ?? this.bids,
-        reviews: reviews ?? this.reviews,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        targetPrice: targetPrice ?? this.targetPrice,
-      );
+  AuctionDetailData copyWith(
+          {int? id,
+          String? title,
+          String? status,
+          String? productPrice,
+          String? currentTotalPrice,
+          String? buyoutPrice,
+          String? minimumIncrement,
+          DateTime? startDate,
+          DateTime? endDate,
+          String? timeRemaining,
+          bool? isActive,
+          String? canBeBidOn,
+          int? bidCount,
+          String? participantCount,
+          String? location,
+          bool? freeShipping,
+          String? paymentMethod,
+          String? bidCancellationHours,
+          bool? autoCloseOnBuyout,
+          String? searchKeywords,
+          List<String>? tags,
+          Category? category,
+          Company? company,
+          Company? creator,
+          ProductDetailData? product,
+          List<dynamic>? images,
+          String? carBrand,
+          String? carModel,
+          String? carGeneration,
+          String? carMileage,
+          String? carCustomsCleared,
+          List<Bid>? bids,
+          List<dynamic>? reviews,
+          DateTime? createdAt,
+          DateTime? updatedAt,
+          String? targetPrice,
+          String? higestBitPrice}) =>
+      AuctionDetailData(
+          id: id ?? this.id,
+          title: title ?? this.title,
+          status: status ?? this.status,
+          productPrice: productPrice ?? this.productPrice,
+          currentTotalPrice: currentTotalPrice ?? this.currentTotalPrice,
+          buyoutPrice: buyoutPrice ?? this.buyoutPrice,
+          minimumIncrement: minimumIncrement ?? this.minimumIncrement,
+          startDate: startDate ?? this.startDate,
+          endDate: endDate ?? this.endDate,
+          timeRemaining: timeRemaining ?? this.timeRemaining,
+          isActive: isActive ?? this.isActive,
+          canBeBidOn: canBeBidOn ?? this.canBeBidOn,
+          bidCount: bidCount ?? this.bidCount,
+          participantCount: participantCount ?? this.participantCount,
+          location: location ?? this.location,
+          freeShipping: freeShipping ?? this.freeShipping,
+          paymentMethod: paymentMethod ?? this.paymentMethod,
+          bidCancellationHours:
+              bidCancellationHours ?? this.bidCancellationHours,
+          autoCloseOnBuyout: autoCloseOnBuyout ?? this.autoCloseOnBuyout,
+          searchKeywords: searchKeywords ?? this.searchKeywords,
+          tags: tags ?? this.tags,
+          category: category ?? this.category,
+          company: company ?? this.company,
+          creator: creator ?? this.creator,
+          product: product ?? this.product,
+          images: images ?? this.images,
+          carBrand: carBrand ?? this.carBrand,
+          carModel: carModel ?? this.carModel,
+          carGeneration: carGeneration ?? this.carGeneration,
+          carMileage: carMileage ?? this.carMileage,
+          carCustomsCleared: carCustomsCleared ?? this.carCustomsCleared,
+          bids: bids ?? this.bids,
+          reviews: reviews ?? this.reviews,
+          createdAt: createdAt ?? this.createdAt,
+          updatedAt: updatedAt ?? this.updatedAt,
+          targetPrice: targetPrice ?? this.targetPrice,
+          higestBitPrice: higestBitPrice ?? this.higestBitPrice);
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory AuctionDetailData.fromJson(Map<String, dynamic> json) =>
+      AuctionDetailData(
         id: json["id"],
         title: json["title"],
         status: json["status"],
@@ -261,7 +268,7 @@ class Data {
         carCustomsCleared: json["car_customs_cleared"],
         bids: json["bids"] == null
             ? []
-            : List<dynamic>.from(json["bids"]!.map((x) => x)),
+            : List<Bid>.from(json["bids"]!.map((x) => Bid.fromJson(x))),
         reviews: json["reviews"] == null
             ? []
             : List<dynamic>.from(json["reviews"]!.map((x) => x)),
@@ -272,6 +279,7 @@ class Data {
             ? null
             : DateTime.parse(json["updated_at"]),
         targetPrice: json["target_price"],
+        higestBitPrice: json["higest_bit_price"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -307,12 +315,111 @@ class Data {
         "car_generation": carGeneration,
         "car_mileage": carMileage,
         "car_customs_cleared": carCustomsCleared,
-        "bids": bids == null ? [] : List<dynamic>.from(bids!.map((x) => x)),
+        "bids": bids == null
+            ? []
+            : List<dynamic>.from(bids!.map((x) => x.toJson())),
         "reviews":
             reviews == null ? [] : List<dynamic>.from(reviews!.map((x) => x)),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "target_price": targetPrice,
+        "higest_bit_price": higestBitPrice,
+      };
+}
+
+class Bid {
+  final int? id;
+  final BidUser? user;
+  final dynamic company;
+  final String? bidAmount;
+  final String? totalPrice;
+  final int? percentageIncrease;
+  final DateTime? createdAt;
+  final String? timeSinceBid;
+
+  Bid({
+    this.id,
+    this.user,
+    this.company,
+    this.bidAmount,
+    this.totalPrice,
+    this.percentageIncrease,
+    this.createdAt,
+    this.timeSinceBid,
+  });
+
+  Bid copyWith({
+    int? id,
+    BidUser? user,
+    dynamic company,
+    String? bidAmount,
+    String? totalPrice,
+    int? percentageIncrease,
+    DateTime? createdAt,
+    String? timeSinceBid,
+  }) =>
+      Bid(
+        id: id ?? this.id,
+        user: user ?? this.user,
+        company: company ?? this.company,
+        bidAmount: bidAmount ?? this.bidAmount,
+        totalPrice: totalPrice ?? this.totalPrice,
+        percentageIncrease: percentageIncrease ?? this.percentageIncrease,
+        createdAt: createdAt ?? this.createdAt,
+        timeSinceBid: timeSinceBid ?? this.timeSinceBid,
+      );
+
+  factory Bid.fromJson(Map<String, dynamic> json) => Bid(
+        id: json["id"],
+        user: json["user"] == null ? null : BidUser.fromJson(json["user"]),
+        company: json["company"],
+        bidAmount: json["bid_amount"],
+        totalPrice: json["total_price"],
+        percentageIncrease: json["percentage_increase"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        timeSinceBid: json["time_since_bid"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user": user?.toJson(),
+        "company": company,
+        "bid_amount": bidAmount,
+        "total_price": totalPrice,
+        "percentage_increase": percentageIncrease,
+        "created_at": createdAt?.toIso8601String(),
+        "time_since_bid": timeSinceBid,
+      };
+}
+
+class BidUser {
+  final int? id;
+  final String? name;
+
+  BidUser({
+    this.id,
+    this.name,
+  });
+
+  BidUser copyWith({
+    int? id,
+    String? name,
+  }) =>
+      BidUser(
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
+
+  factory BidUser.fromJson(Map<String, dynamic> json) => BidUser(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
       };
 }
 
