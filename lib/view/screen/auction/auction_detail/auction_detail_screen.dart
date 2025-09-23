@@ -81,7 +81,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
           if (auction == null) {
             return SizedBox();
           }
-          print('this is the location = ${auction.location}');
+          // print('this is the location = ${auction.location}');
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +311,9 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                       ),
                       isShowDescription
                           ? AuctionDetailWidget()
-                          : AuctionBetsWidget(),
+                          : AuctionBetsWidget(
+                              auction: auction,
+                            ),
                       const SizedBox(
                         height: 20,
                       ),

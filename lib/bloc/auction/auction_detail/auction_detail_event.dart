@@ -8,9 +8,10 @@ sealed class AuctionDetailEvent extends Equatable {
 }
 
 class GetAuctionDetail extends AuctionDetailEvent {
-  final String auctionId;
-  const GetAuctionDetail({required this.auctionId});
+  final int auctionId;
+  final BuildContext context;
+  const GetAuctionDetail({required this.auctionId, required this.context});
 
   @override
-  List<Object> get props => [auctionId];
+  List<Object> get props => [auctionId, context];
 }

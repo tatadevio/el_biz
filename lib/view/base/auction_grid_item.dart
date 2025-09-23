@@ -40,9 +40,8 @@ class AuctionGridItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (context.read<AuthBloc>().state.isLoggedIn) {
-          context
-              .read<AuctionDetailBloc>()
-              .add(GetAuctionDetail(auctionId: auction.id.toString()));
+          context.read<AuctionDetailBloc>().add(GetAuctionDetail(
+              auctionId: auction.id!,  context: context));
           context.read<SimilarAuctionsBloc>().add(
                 GetSimilarAuctions(
                   auctionId: auction.id.toString(),
@@ -50,10 +49,10 @@ class AuctionGridItem extends StatelessWidget {
                 ),
               );
           Get.to(() => AuctionDetailScreen(
-                auctionName: '',
+                auctionName: auction.title ?? '',
               ));
         } else {
-          showShortToast('login_to_view_tender'.tr);
+          showShortToast('login_to_view_auction'.tr);
         }
       },
       child: Container(

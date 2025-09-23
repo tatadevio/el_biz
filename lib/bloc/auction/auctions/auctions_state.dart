@@ -58,20 +58,4 @@ class AuctionsState extends Equatable {
 
 final class AuctionsInitial extends AuctionsState {}
 
-class AddAuctionBidLoading extends AuctionsState {}
 
-class AddAuctionBidSuccess extends AuctionsState {}
-
-class AddAuctionBidError extends AuctionsState {
-  final String message;
-  const AddAuctionBidError(this.message);
-}
-
-class CancelAuctionBidLoading extends AuctionsState {}
-
-class CancelAuctionBidSuccess extends AuctionsState {}
-
-class CancelAuctionBidError extends AuctionsState {
-  final String message;
-  const CancelAuctionBidError(this.message);
-}

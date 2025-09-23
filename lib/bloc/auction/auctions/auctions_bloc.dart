@@ -14,8 +14,7 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
 
     on<UpdateAuctionGridView>(_updateToggleShowGridView);
     on<GetAuctions>(_getAuctions);
-    on<AddAuctionBid>(_addAuctionBid);
-    on<CancelAuctionBid>(_cancelAuctionBid);
+
   }
 
   void _updateToggleShowGridView(
@@ -68,39 +67,5 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
     }
   }
 
-  void _addAuctionBid(AddAuctionBid event, Emitter<AuctionsState> emit) async {
-    emit(AddAuctionBidLoading());
-    try {
-      final response =
-          await auctionsRepo.addAuctionBid(event.auctionId, event.bidAmount);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(AddAuctionBidSuccess());
-      } else {
-        String errorMessage = response.body['message'] ?? 'Failed to place bid';
-
-        emit(AddAuctionBidError(errorMessage));
-      }
-    } catch (e) {
-      AddAuctionBidError('An error occurred while placing the bid $e');
-    }
-  }
-
-  void _cancelAuctionBid(
-      CancelAuctionBid event, Emitter<AuctionsState> emit) async {
-    emit(CancelAuctionBidLoading());
-    try {
-      final response =
-          await auctionsRepo.cancelAuctionBid(event.auctionId, event.bidId);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(CancelAuctionBidSuccess());
-      } else {
-        String errorMessage =
-            response.body['message'] ?? 'Failed to cancel bid';
-        emit(CancelAuctionBidError(errorMessage));
-      }
-    } catch (e) {
-      emit(CancelAuctionBidError(
-          'An error occurred while cancelling the bid $e'));
-    }
-  }
+  
 }

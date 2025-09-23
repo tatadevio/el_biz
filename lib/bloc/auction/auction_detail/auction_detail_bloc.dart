@@ -1,3 +1,5 @@
+import 'package:el_biz/bloc/auction/auction_bids_list/auction_bids_list_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:el_biz/data/repo/auction/auction_detail_repo.dart';
@@ -17,6 +19,9 @@ class AuctionDetailBloc extends Bloc<AuctionDetailEvent, AuctionDetailState> {
   void _onGetAuctionDetail(
       GetAuctionDetail event, Emitter<AuctionDetailState> emit) async {
     emit(AuctionDetailLoading());
+    event.context
+        .read<AuctionBidsListBloc>()
+        .add(GetAuctionBids(auctionId: event.auctionId));
     try {
       final response =
           await auctionDetailRepo.getAuctionDetail(event.auctionId);

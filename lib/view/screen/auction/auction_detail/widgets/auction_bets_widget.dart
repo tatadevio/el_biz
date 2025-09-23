@@ -1,13 +1,18 @@
+import 'package:el_biz/data/model/response/auction/auction_detail_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../../bloc/auction/auction_bid/auction_bid_bloc.dart';
+import '../../../../../bloc/auction/auction_bids_list/auction_bids_list_bloc.dart';
 import '../../../../../utils/Images.dart';
 import '../../../../../utils/custom_text_style.dart';
 
 class AuctionBetsWidget extends StatelessWidget {
-  const AuctionBetsWidget({super.key});
+  final AuctionDetailData auction;
+  const AuctionBetsWidget({super.key, required this.auction});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,8 @@ class AuctionBetsWidget extends StatelessWidget {
                   style: textStyle13Inter,
                 ),
                 Text(
-                  '6${'days'.tr} : 20${'hours'.tr} : 45${'minutes'.tr}',
+                  // '6${'days'.tr} : 20${'hours'.tr} : 45${'minutes'.tr}',
+                  auction.timeRemaining ?? '',
                   style: body16.copyWith(
                       color: ColorResources.darkGray, fontFamily: 'Inter'),
                 ),
@@ -67,7 +73,7 @@ class AuctionBetsWidget extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '6 ${'bets'.tr.toLowerCase()}',
+                    '${auction.bidCount} ${'bets'.tr.toLowerCase()}',
                     style:
                         textStyle14Inter.copyWith(fontWeight: FontWeight.w500),
                   ),
@@ -82,7 +88,7 @@ class AuctionBetsWidget extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '2 ${'participants'.tr}',
+                    '${auction.participantCount} ${'participants'.tr}',
                     style:
                         textStyle14Inter.copyWith(fontWeight: FontWeight.w500),
                   ),
@@ -94,106 +100,156 @@ class AuctionBetsWidget extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 7,
-          separatorBuilder: (context, index) {
-            return Divider(
-              height: 1,
-              color: ColorResources.dividerColor,
-            );
-          },
-          itemBuilder: (context, index) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: index % 2 == 0
-                    ? ColorResources.white
-                    : ColorResources.backgroundColor,
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Text(
-                  index.toString(),
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: ColorResources.darkGray,
+        BlocBuilder<AuctionBidsListBloc, AuctionBidsListState>(
+          builder: (context, state) {
+            print(
+                'this is the auctions bids list = ${state.auctionBids} and is loading = ${state.isLoading}');
+            if (state.auctionBids.isEmpty) {
+              return SizedBox(
+                  height: 150,
+                  child: Center(
+                    child: Text(
+                      'no_bets_yet'.tr,
+                      style: body14.copyWith(color: ColorResources.gray),
+                    ),
+                  ));
+            }
+            return ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: state.auctionBids.length,
+              separatorBuilder: (context, index) {
+                return Divider(
+                  height: 1,
+                  color: ColorResources.dividerColor,
+                );
+              },
+              itemBuilder: (context, index) {
+                final bidItem = state.auctionBids[index];
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: index % 2 == 0
+                        ? ColorResources.white
+                        : ColorResources.backgroundColor,
                   ),
-                ),
-                title: Text(
-                  'Нур И.',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: ColorResources.darkGray,
-                  ),
-                ),
-                subtitle: Text(
-                  '18.07.2025 / 20:00',
-                  style: body12.copyWith(
-                      color: ColorResources.gray,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Inter'),
-                ),
-                trailing:
-                    // if my own bet then i can cancel it
-                    index == 0
-                        ? SizedBox(
-                            width: Get.width * 0.4,
-                            child: Row(
-                              children: [
-                                // my last bet then show this buttion
-                                // Container(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 8, vertical: 4),
-                                //   decoration: BoxDecoration(
-                                //     color: ColorResources.blue,
-                                //     borderRadius: BorderRadius.circular(20),
-                                //   ),
-                                //   child: Text(
-                                //     'Выиграл',
-                                //     style: body14.copyWith(
-                                //         color: ColorResources.white),
-                                //   ),
-                                // ),
-                                // if i win this auction then show this button on my bet
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.orange,
+                  child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Text(
+                        index.toString(),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: ColorResources.darkGray,
+                        ),
+                      ),
+                      title: Text(
+                        bidItem.user?.name ?? '',
+                        // 'Нур И.',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: ColorResources.darkGray,
+                        ),
+                      ),
+                      subtitle: Text(
+                        bidItem.timeSinceBid ?? '',
+                        // '18.07.2025 / 20:00',
+                        style: body12.copyWith(
+                            color: ColorResources.gray,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Inter'),
+                      ),
+                      trailing:
+                          // if my own bet then i can cancel it
+                          // index == 0
+                          //     ?
+                          SizedBox(
+                        width: Get.width * 0.4,
+                        child: Row(
+                          children: [
+                            // my last bet then show this buttion
+                            if (bidItem.isCancellable == true)
+                              BlocBuilder<AuctionBidBloc, AuctionBidState>(
+                                builder: (context, acuctionBidState) {
+                                  return InkWell(
                                     borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    'winner'.tr,
-                                    style: body14.copyWith(
-                                        color: ColorResources.white),
-                                  ),
-                                ),
+                                    onTap: () {
+                                      if (acuctionBidState
+                                          is! CancelAuctionBidLoading) {
+                                        context.read<AuctionBidBloc>().add(
+                                            CancelAuctionBid(
+                                                auctionId: auction.id ?? 0,
+                                                bidId: bidItem.id ?? 0,
+                                                context: context));
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: ColorResources.blue,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: acuctionBidState
+                                              is CancelAuctionBidLoading
+                                          ? SizedBox(
+                                              width: 16,
+                                              height: 16,
+                                              child: CircularProgressIndicator(
+                                                color: ColorResources.white,
+                                                strokeWidth: 2,
+                                              ),
+                                            )
+                                          : Text(
+                                              'Перебить', // cancel bid
+                                              style: body14.copyWith(
+                                                  color: ColorResources.white),
+                                            ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            // if i win this auction then show this button on my bet
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(
+                            //       horizontal: 8, vertical: 4),
+                            //   decoration: BoxDecoration(
+                            //     color: ColorResources.orange,
+                            //     borderRadius: BorderRadius.circular(20),
+                            //   ),
+                            //   child: Text(
+                            //     'winner'.tr,
+                            //     style: body14.copyWith(
+                            //         color: ColorResources.white),
+                            //   ),
+                            // ),
 
-                                const Spacer(),
-                                Text(
-                                  '100\$',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorResources.darkGray,
-                                  ),
-                                ),
-                              ],
+                            const Spacer(),
+                            Text(
+                              bidItem.totalPrice ?? '',
+                              // '100\$',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: ColorResources.darkGray,
+                              ),
                             ),
-                          )
-                        : Text(
-                            '100\$',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: ColorResources.darkGray,
-                            ),
-                          ),
-              ),
+                          ],
+                        ),
+                      )
+                      // : Text(
+                      //     bidItem.totalPrice ?? '',
+                      //     // '100\$',
+                      //     style: TextStyle(
+                      //       fontSize: 15,
+                      //       fontWeight: FontWeight.w600,
+                      //       color: ColorResources.darkGray,
+                      //     ),
+                      //   ),
+                      ),
+                );
+              },
             );
           },
         ),

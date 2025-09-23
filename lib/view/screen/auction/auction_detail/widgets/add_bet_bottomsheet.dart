@@ -1,3 +1,5 @@
+import 'package:el_biz/bloc/auction/auction_bid/auction_bid_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_detail/auction_detail_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auction_detail_model.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../../bloc/auction/auctions/auctions_bloc.dart';
+// import '../../../../../bloc/auction/auctions/auctions_bloc.dart';
 import '../../../../../utils/Images.dart';
 import '../../../../../utils/color_resources.dart';
 import '../../../../../utils/custom_text_style.dart';
@@ -26,10 +28,12 @@ class AddBetBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuctionsBloc, AuctionsState>(
+    return BlocListener<AuctionBidBloc, AuctionBidState>(
       listener: (context, state) {
         if (state is AddAuctionBidSuccess) {
           Get.back();
+          //need to call the auction detail bloc to refresh the auction details
+          context.read<AuctionDetailBloc>();
           Get.defaultDialog(
             title: 'you_placed_bet'.tr,
             content: Text('wait_until_auction_end'.tr,
@@ -55,7 +59,7 @@ class AddBetBottomSheet extends StatelessWidget {
           showShortToast(state.message);
         }
       },
-      child: BlocBuilder<AuctionsBloc, AuctionsState>(
+      child: BlocBuilder<AuctionBidBloc, AuctionBidState>(
         builder: (context, auctionsState) {
           return Padding(
             padding: const EdgeInsets.all(12),
@@ -105,53 +109,57 @@ class AddBetBottomSheet extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  width: Get.width,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  decoration: BoxDecoration(
-                      color: ColorResources.backgroundColor,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'last_bet'.tr,
-                        style: body12.copyWith(color: ColorResources.gray),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Нур И.',
-                                  style: h16.copyWith(
-                                      color: ColorResources.darkGray),
-                                ),
-                                Text(
-                                  '18.07.2025 / 20:00',
-                                  style: body12.copyWith(
-                                      color: ColorResources.gray),
-                                ),
-                              ],
+                if (auction.bids != null && auction.bids!.isNotEmpty)
+                  Container(
+                    width: Get.width,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                        color: ColorResources.backgroundColor,
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'last_bet'.tr,
+                          style: body12.copyWith(color: ColorResources.gray),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    auction.bids!.first.user!.name!,
+                                    // 'Нур И.',
+                                    style: h16.copyWith(
+                                        color: ColorResources.darkGray),
+                                  ),
+                                  Text(
+                                    auction.bids!.first.timeSinceBid ?? '',
+                                    // '18.07.2025 / 20:00',
+                                    style: body12.copyWith(
+                                        color: ColorResources.gray),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${auction.higestBitPrice}\$',
-                            // '500\$',
-                            style: h16.copyWith(color: ColorResources.darkGray),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Text(
+                              '${auction.higestBitPrice}\$',
+                              // '500\$',
+                              style:
+                                  h16.copyWith(color: ColorResources.darkGray),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
                 // TextField(
                 //   controller: suggestedBidController,
                 // ),
@@ -193,19 +201,22 @@ class AddBetBottomSheet extends StatelessWidget {
                 //   'Добавьте ещё 60\$ и купите не ожидая окончания аукциона',
                 //   style: body14,
                 // ),
-                RichText(
-                  text: TextSpan(
-                    style: body14, // Your default text style
-                    children: [
-                      TextSpan(text: 'add_more'.tr),
-                      TextSpan(
-                        text: '60\$',
-                        style: body14.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: 'buy_without_waiting'.tr, style: body14),
-                    ],
+                if (double.parse(auction.targetPrice ?? '0') >
+                    double.parse(auction.higestBitPrice ?? '0'))
+                  RichText(
+                    text: TextSpan(
+                      style: body14, // Your default text style
+                      children: [
+                        TextSpan(text: 'add_more'.tr),
+                        TextSpan(
+                          text:
+                              '${double.parse(auction.targetPrice ?? '0') - double.parse(auction.higestBitPrice ?? '0')}\$',
+                          style: body14.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: 'buy_without_waiting'.tr, style: body14),
+                      ],
+                    ),
                   ),
-                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -218,7 +229,7 @@ class AddBetBottomSheet extends StatelessWidget {
                             showShortToast('enter_your_bid'.tr);
                             return;
                           }
-                          context.read<AuctionsBloc>().add(
+                          context.read<AuctionBidBloc>().add(
                                 AddAuctionBid(
                                   auctionId: auction.id!,
                                   bidAmount:
@@ -293,7 +304,8 @@ class AddBetBottomSheet extends StatelessWidget {
                   onTap: () {},
                   width: Get.width,
                   height: 46,
-                  title: '${'buy_at_your_price'.tr} 560\$',
+                  title:
+                      '${'buy_at_your_price'.tr} ${double.parse(auction.targetPrice.toString())}\$',
                   color: ColorResources.blue.withOpacity(0.2),
                   textColor: ColorResources.blue,
                   radius: 16,
