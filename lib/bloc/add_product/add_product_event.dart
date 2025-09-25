@@ -9,10 +9,11 @@ sealed class AddProductEvent extends Equatable {
 
 class AddProduct extends AddProductEvent {
   final AddProductModel addProductModel;
-  const AddProduct({required this.addProductModel});
+  final String productFrom;
+  const AddProduct({required this.addProductModel, required this.productFrom});
 
   @override
-  List<Object> get props => [addProductModel];
+  List<Object> get props => [addProductModel, productFrom];
 }
 
 class SelectCategory extends AddProductEvent {

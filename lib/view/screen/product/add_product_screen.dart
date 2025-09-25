@@ -16,7 +16,13 @@ import 'add_product3_screen.dart';
 class AddProductScreen extends StatefulWidget {
   final bool isEdit;
   final bool isAuction;
-  const AddProductScreen({super.key, this.isEdit = false, this.isAuction = false});
+  // final String productFrom;
+  const AddProductScreen({
+    super.key,
+    this.isEdit = false,
+    this.isAuction = false,
+    // required this.productFrom,
+  });
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -406,6 +412,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       // addProductData: addProduct,
                       isEdit: widget.isEdit,
                       isAuction: widget.isAuction,
+                      // productFrom: widget.productFrom,
                     ));
               }
             },

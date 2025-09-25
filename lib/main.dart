@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:el_biz/bloc/add_auction/add_auction_bloc.dart';
+import 'package:el_biz/bloc/auction/add_auction/add_auction_bloc.dart';
 import 'package:el_biz/bloc/add_tender/add_tender_bloc.dart';
 import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_bid/auction_bid_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_bids_list/auction_bids_list_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_buy_offer/auction_buy_offer_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_cancel/auction_cancel_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_review/auction_review_bloc.dart';
 import 'package:el_biz/bloc/auth/auth_bloc.dart';
 import 'package:el_biz/bloc/category/category_bloc.dart';
 import 'package:el_biz/bloc/chat/chat_bloc.dart';
@@ -163,6 +166,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AddAuctionBloc(Get.find())),
         BlocProvider(create: (_) => AuctionBidBloc(Get.find())),
         BlocProvider(create: (_) => AuctionBidsListBloc(Get.find())),
+        BlocProvider(create: (_) => AuctionReviewBloc(Get.find())),
+        BlocProvider(create: (_) => AuctionCancelBloc(Get.find())),
+        BlocProvider(create: (_) => AuctionBuyOfferBloc(Get.find())),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {

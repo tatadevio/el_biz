@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../data/model/response/auction/auction_detail_model.dart';
 import '../../../../../helper/date_helper.dart';
 import '../../../../../utils/color_resources.dart';
 import '../../../../../utils/custom_text_style.dart';
 
 class AuctionDetailWidget extends StatelessWidget {
-  const AuctionDetailWidget({super.key});
+  final AuctionDetailData auction;
+  const AuctionDetailWidget({super.key, required this.auction});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,10 @@ class AuctionDetailWidget extends StatelessWidget {
             height: 10,
           ),
           Text(
+            auction.product?.description ?? '',
+
             // tenderDetail.data?.description ?? '',
-            'Ищу поставщиков садовой мебели, конкретно раскладных стульев хорошего качества, из натуральных материалов, с интересным дизайном, 20 штук желательно похожих или в двух расцветках.',
+            //  'Ищу поставщиков садовой мебели, конкретно раскладных стульев хорошего качества, из натуральных материалов, с интересным дизайном, 20 штук желательно похожих или в двух расцветках.',
             style: body14.copyWith(color: ColorResources.darkGray),
           ),
           const SizedBox(

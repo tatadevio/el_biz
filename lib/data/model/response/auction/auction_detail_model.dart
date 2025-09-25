@@ -333,7 +333,7 @@ class Bid {
   final dynamic company;
   final String? bidAmount;
   final String? totalPrice;
-  final int? percentageIncrease;
+  final String? percentageIncrease;
   final DateTime? createdAt;
   final String? timeSinceBid;
 
@@ -354,7 +354,7 @@ class Bid {
     dynamic company,
     String? bidAmount,
     String? totalPrice,
-    int? percentageIncrease,
+    String? percentageIncrease,
     DateTime? createdAt,
     String? timeSinceBid,
   }) =>
@@ -375,7 +375,7 @@ class Bid {
         company: json["company"],
         bidAmount: json["bid_amount"],
         totalPrice: json["total_price"],
-        percentageIncrease: json["percentage_increase"],
+        percentageIncrease: json["percentage_increase"].toString(),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),

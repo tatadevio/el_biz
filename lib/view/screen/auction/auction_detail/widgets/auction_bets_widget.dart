@@ -193,12 +193,19 @@ class AuctionBetsWidget extends StatelessWidget {
                                       ),
                                       child: acuctionBidState
                                               is CancelAuctionBidLoading
-                                          ? SizedBox(
-                                              width: 16,
-                                              height: 16,
-                                              child: CircularProgressIndicator(
-                                                color: ColorResources.white,
-                                                strokeWidth: 2,
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 2),
+                                              child: SizedBox(
+                                                width: 16,
+                                                height: 16,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: ColorResources.white,
+                                                  strokeWidth: 2,
+                                                ),
                                               ),
                                             )
                                           : Text(
@@ -210,7 +217,7 @@ class AuctionBetsWidget extends StatelessWidget {
                                   );
                                 },
                               ),
-                            // if i win this auction then show this button on my bet
+                            // if i win this auction then show this button on my bet 1
                             // Container(
                             //   padding: const EdgeInsets.symmetric(
                             //       horizontal: 8, vertical: 4),
@@ -228,7 +235,8 @@ class AuctionBetsWidget extends StatelessWidget {
                             const Spacer(),
                             Text(
                               bidItem.totalPrice ?? '',
-                              // '100\$',
+
+                              /// '100\$',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,

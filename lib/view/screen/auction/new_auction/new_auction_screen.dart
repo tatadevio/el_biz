@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../bloc/add_auction/add_auction_bloc.dart';
+import '../../../../bloc/auction/add_auction/add_auction_bloc.dart';
 import '../../../../data/model/response/cities_model.dart';
 import '../../../../data/model/response/company/company_product_model.dart';
 import '../../../../utils/color_resources.dart';

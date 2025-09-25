@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/data/model/response/company/company_product_model.dart';
 import 'package:el_biz/data/model/response/product/product_detail_model.dart';
-import 'package:el_biz/data/model/response/product/product_model.dart';
 import 'package:el_biz/data/repo/add_product_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -65,10 +64,9 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
   Future<void> _onAddProduct(
       AddProduct event, Emitter<AddProductState> emit) async {
     emit(AddProductLoading());
-    // emit(AddProductState(productData: event.addProductModel));
     try {
-      Response response =
-          await addProductRepo.addNewProduct(event.addProductModel);
+      Response response = await addProductRepo
+          .addNewProduct(event.addProductModel, productFrom: event.productFrom);
       if (response.statusCode == 200) {
         final productItem = ProductListItem.fromJson(response.body['data']);
         emit(AddProductSuccess(response.body['message'], productItem));
@@ -78,7 +76,6 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
       }
     } catch (e) {
       emit(AddProductFailure(e.toString()));
-      // emit(AddProductState(productData: event.addProductModel, error: e.toString()));
     }
   }
 

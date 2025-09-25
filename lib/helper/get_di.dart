@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:el_biz/bloc/add_auction/add_auction_bloc.dart';
+import 'package:el_biz/bloc/auction/add_auction/add_auction_bloc.dart';
 import 'package:el_biz/bloc/agreement/agreement_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_bid/auction_bid_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_buy_offer/auction_buy_offer_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_cancel/auction_cancel_bloc.dart';
+import 'package:el_biz/bloc/auction/auction_review/auction_review_bloc.dart';
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
@@ -19,6 +22,9 @@ import 'package:el_biz/data/repo/add_tender_repo.dart';
 import 'package:el_biz/data/repo/agreement_repo.dart';
 import 'package:el_biz/data/repo/auction/add_auction_repo.dart';
 import 'package:el_biz/data/repo/auction/auction_bid_repo.dart';
+import 'package:el_biz/data/repo/auction/auction_buy_offer_repo.dart';
+import 'package:el_biz/data/repo/auction/auction_cancel_repo.dart';
+import 'package:el_biz/data/repo/auction/auction_review_repo.dart';
 import 'package:el_biz/data/repo/auction/search_auction_repo.dart';
 import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
@@ -179,6 +185,15 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<AuctionBidsListRepo>(
       () => AuctionBidsListRepo(Get.find(), Get.find()),
       fenix: true);
+  Get.lazyPut<AuctionReviewRepo>(
+      () => AuctionReviewRepo(Get.find(), Get.find()),
+      fenix: true);
+  Get.lazyPut<AuctionCancelRepo>(
+      () => AuctionCancelRepo(Get.find(), Get.find()),
+      fenix: true);
+  Get.lazyPut<AuctionBuyOfferRepo>(
+      () => AuctionBuyOfferRepo(Get.find(), Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -223,6 +238,12 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<AddAuctionBloc>(() => AddAuctionBloc(Get.find()), fenix: true);
   Get.lazyPut<AuctionBidBloc>(() => AuctionBidBloc(Get.find()), fenix: true);
   Get.lazyPut<AuctionBidsListBloc>(() => AuctionBidsListBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<AuctionReviewBloc>(() => AuctionReviewBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<AuctionCancelBloc>(() => AuctionCancelBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<AuctionBuyOfferBloc>(() => AuctionBuyOfferBloc(Get.find()),
       fenix: true);
 
 ////////

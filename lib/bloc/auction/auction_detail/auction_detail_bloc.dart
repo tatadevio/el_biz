@@ -19,20 +19,22 @@ class AuctionDetailBloc extends Bloc<AuctionDetailEvent, AuctionDetailState> {
   void _onGetAuctionDetail(
       GetAuctionDetail event, Emitter<AuctionDetailState> emit) async {
     emit(AuctionDetailLoading());
-    event.context
-        .read<AuctionBidsListBloc>()
-        .add(GetAuctionBids(auctionId: event.auctionId));
-    try {
-      final response =
-          await auctionDetailRepo.getAuctionDetail(event.auctionId);
-      if (response.statusCode == 200) {
-        emit(AuctionDetailSuccess(AuctionDetailModel.fromJson(response.body)));
-      } else {
-        emit(AuctionDetailError(
-            response.body['message'] ?? "Something went wrong"));
-      }
-    } catch (e) {
-      emit(AuctionDetailError(e.toString()));
+    // if (event.isRefresh == true) {
+    // } else {
+    //   emit(AuctionDetailLoaderInvisible());
+    // }
+    event.context.read<AuctionBidsListBloc>().add(
+        GetAuctionBids(auctionId: event.auctionId, isRefresh: event.isRefresh));
+    // try {
+    final response = await auctionDetailRepo.getAuctionDetail(event.auctionId);
+    if (response.statusCode == 200) {
+      emit(AuctionDetailSuccess(AuctionDetailModel.fromJson(response.body)));
+    } else {
+      emit(AuctionDetailError(
+          response.body['message'] ?? "Something went wrong"));
     }
+    // } catch (e) {
+    //   emit(AuctionDetailError(e.toString()));
+    // }
   }
 }

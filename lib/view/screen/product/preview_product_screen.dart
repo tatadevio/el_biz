@@ -8,10 +8,8 @@ import 'package:el_biz/view/screen/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../bloc/add_product/add_product_bloc.dart';
-import '../../../utils/Images.dart';
 import '../../../utils/appConstant.dart';
 import '../../../utils/color_resources.dart';
 import '../../../utils/custom_text_style.dart';
@@ -25,12 +23,15 @@ class PreviewProductScreen extends StatefulWidget {
   // final AddProductModel productData;
   final bool isEdit;
   final bool isAuction;
-  const PreviewProductScreen(
-      {super.key,
-      // required this.selectedMaterial,
-      // required this.productData,
-      required this.isEdit,
-      required this.isAuction});
+  // final String productFrom;
+  const PreviewProductScreen({
+    super.key,
+    // required this.selectedMaterial,
+    // required this.productData,
+    required this.isEdit,
+    required this.isAuction,
+    // required this.productFrom,
+  });
 
   @override
   State<PreviewProductScreen> createState() => _PreviewProductScreenState();
@@ -426,9 +427,9 @@ class _PreviewProductScreenState extends State<PreviewProductScreen> {
                       UpdateProduct(currentProductData, productId.toString()));
                 } else {
                   log('this is product data $currentProductData');
-                  context
-                      .read<AddProductBloc>()
-                      .add(AddProduct(addProductModel: currentProductData));
+                  context.read<AddProductBloc>().add(AddProduct(
+                      addProductModel: currentProductData,
+                      productFrom: widget.isAuction ? 'auction' : 'normal'));
                 }
               },
               title: 'save'.tr);

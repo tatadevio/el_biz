@@ -11,6 +11,8 @@ final class AuctionDetailInitial extends AuctionDetailState {}
 
 final class AuctionDetailLoading extends AuctionDetailState {}
 
+final class AuctionDetailLoaderInvisible extends AuctionDetailState {}
+
 final class AuctionDetailError extends AuctionDetailState {
   final String error;
   const AuctionDetailError(this.error);

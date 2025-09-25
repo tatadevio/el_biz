@@ -529,7 +529,7 @@ class ProductDetailScreen extends StatelessWidget {
                                 button16.copyWith(color: ColorResources.blue),
                           ),
                           onTap: () {
-                            Get.to(() => AddProductScreen(isEdit: true));
+                            Get.to(() => AddProductScreen(isEdit: true,));
                           },
                         ),
                       ),

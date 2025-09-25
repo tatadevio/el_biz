@@ -19,13 +19,14 @@ class AuctionBidsListBloc
 
   void _onGetAuctionBids(
       GetAuctionBids event, Emitter<AuctionBidsListState> emit) async {
-    emit(state.copyWith(isLoading: true, auctionBids: []));
+    if (event.isRefresh == true) {
+      emit(state.copyWith(isLoading: true, auctionBids: []));
+    }
 
     // try {
     Response response =
         await auctionBidsListRepo.getAuctionBids(event.auctionId);
-    print('list of bids is ${response.body} ');
-    print('list of bids is code ${response.statusCode} ');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       AuctionBidsModel auctionBids = AuctionBidsModel.fromJson(response.body);
       List<AuctionBidItem> fetchedBids = auctionBids.data?.items ?? [];
@@ -49,9 +50,8 @@ class AuctionBidsListBloc
 
   void _onRemoveBidFromList(
       RemoveBidFromList event, Emitter<AuctionBidsListState> emit) {
-    List<AuctionBidItem> updatedBids = state.auctionBids
-        .where((bid) => bid.id != event.bidId)
-        .toList();
+    List<AuctionBidItem> updatedBids =
+        state.auctionBids.where((bid) => bid.id != event.bidId).toList();
 
     emit(state.copyWith(auctionBids: updatedBids));
   }

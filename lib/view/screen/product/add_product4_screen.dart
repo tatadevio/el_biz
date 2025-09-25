@@ -6,7 +6,6 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
-import 'package:el_biz/view/screen/auction/auctions/auctions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -26,13 +25,16 @@ class AddProduct4Screen extends StatefulWidget {
   final bool? isAddProduct;
   final String alreadySelected;
   final bool isAuction;
-  const AddProduct4Screen(
-      {super.key,
-      required this.isEdit,
-      this.onSelect,
-      this.isAddProduct,
-      required this.alreadySelected,
-      required this.isAuction});
+  // final String  productFrom;
+  const AddProduct4Screen({
+    super.key,
+    required this.isEdit,
+    this.onSelect,
+    this.isAddProduct,
+    required this.alreadySelected,
+    required this.isAuction,
+    // required this.productFrom,
+  });
 
   @override
   State<AddProduct4Screen> createState() => _AddProduct4ScreenState();
@@ -261,7 +263,10 @@ class _AddProduct4ScreenState extends State<AddProduct4Screen> {
                             addProductModel: context
                                 .read<AddProductBloc>()
                                 .state
-                                .productData!));
+                                .productData!,
+                            productFrom: widget.isAuction
+                                ? 'auction'
+                                : 'normal'));
                         // Get.offAll(() => const DashboardScreen());
                       }
                       // widget.onSelect!();

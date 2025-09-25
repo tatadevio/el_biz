@@ -15,8 +15,12 @@ class AddProductRepo {
 
   AddProductRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> addNewProduct(AddProductModel addProductModel,
-      {bool? isUpdate = false, String? productId}) async {
+  Future<Response> addNewProduct(
+    AddProductModel addProductModel, {
+    bool? isUpdate = false,
+    String? productId,
+    String productFrom = "",
+  }) async {
     Map<String, String> fields = {
       'name': addProductModel.productName ?? '',
       'brand': addProductModel.brandName ?? '',
@@ -33,6 +37,9 @@ class AddProductRepo {
       'material': addProductModel.material?.name ?? '',
       'price': addProductModel.price ?? '',
     };
+    if (isUpdate != true && productFrom.isNotEmpty) {
+      fields['product_from'] = productFrom;
+    }
 
     log('this is new product price = ${addProductModel.price ?? ''}');
 
