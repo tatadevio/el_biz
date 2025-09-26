@@ -14,3 +14,12 @@ class CancelAuction extends AuctionCancelEvent {
   @override
   List<Object> get props => [auctionId];
 }
+
+class PublishCanceledAuction extends AuctionCancelEvent {
+  final int auctionId;
+  const PublishCanceledAuction({required this.auctionId});
+
+  @override
+  List<Object> get props => [auctionId];
+}
+

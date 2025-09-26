@@ -40,8 +40,9 @@ class AuctionGridItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (context.read<AuthBloc>().state.isLoggedIn) {
-          context.read<AuctionDetailBloc>().add(GetAuctionDetail(
-              auctionId: auction.id!,  context: context));
+          context
+              .read<AuctionDetailBloc>()
+              .add(GetAuctionDetail(auctionId: auction.id!, context: context));
           context.read<SimilarAuctionsBloc>().add(
                 GetSimilarAuctions(
                   auctionId: auction.id.toString(),
@@ -71,7 +72,7 @@ class AuctionGridItem extends StatelessWidget {
                       image: auction.product?.images != null &&
                               auction.product!.images!.isNotEmpty
                           ? auction.product!.images![0].small.toString()
-                          : '',
+                          : auction.product?.image ?? '',
                       height: Get.height,
                       width: Get.width,
                       radius: 16),

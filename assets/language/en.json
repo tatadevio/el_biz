@@ -484,5 +484,10 @@
   "create_new": "Create new",
   "create_auction_with_new_product": "Create auction with new product",
   "target_price" : "Target price" ,
-  "" : "Completion date must be after start date"
+  "Completion date must be after start date" : "Completion date must be after start date",
+  "publish_auction" : "Publish auction",
+  "similar_auctions" : "Similar auctions",
+  "are_you_sure_to_publish_again" : "Are you sure you want to republish the auction?" ,
+  "completed" : "Completed",
+  "no_bets_yet"  : "No bets yet"
 }

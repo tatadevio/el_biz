@@ -14,6 +14,7 @@ class AuctionDetailBloc extends Bloc<AuctionDetailEvent, AuctionDetailState> {
   AuctionDetailBloc(this.auctionDetailRepo) : super(AuctionDetailInitial()) {
     on<AuctionDetailEvent>((event, emit) {});
     on<GetAuctionDetail>(_onGetAuctionDetail);
+    on<UpdateAuctionStatus>(_onUpdateAuctionStatus);
   }
 
   void _onGetAuctionDetail(
@@ -36,5 +37,16 @@ class AuctionDetailBloc extends Bloc<AuctionDetailEvent, AuctionDetailState> {
     // } catch (e) {
     //   emit(AuctionDetailError(e.toString()));
     // }
+  }
+
+  void _onUpdateAuctionStatus(
+      UpdateAuctionStatus event, Emitter<AuctionDetailState> emit) {
+    if (state is AuctionDetailSuccess) {
+      final currentState = state as AuctionDetailSuccess;
+      final updatedAuction = currentState.auctionDetailModel.data;
+      // updatedAuction?.status = event.status;
+      updatedAuction?.copyWith(status: event.status);
+      emit(AuctionDetailSuccess(AuctionDetailModel(data: updatedAuction)));
+    }
   }
 }

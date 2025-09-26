@@ -17,4 +17,11 @@ class GetAuctionDetail extends AuctionDetailEvent {
   List<Object> get props => [auctionId, context, isRefresh];
 }
 
+class UpdateAuctionStatus extends AuctionDetailEvent {
+  final String status;
+  const UpdateAuctionStatus({required this.status});
+  @override
+  List<Object> get props => [status];
+}
+
 

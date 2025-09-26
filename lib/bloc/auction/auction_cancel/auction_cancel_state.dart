@@ -17,3 +17,14 @@ final class CancelAuctionError extends AuctionCancelState {
   final String message;
   const CancelAuctionError(this.message);
 }
+
+// final class PublishCanceledAuction extends AuctionCancelState {}
+
+final class PublishCanceledAuctionLoading extends AuctionCancelState {}
+
+final class PublishCanceledAuctionSuccess extends AuctionCancelState {}
+
+final class PublishCanceledAuctionError extends AuctionCancelState {
+  final String message;
+  const PublishCanceledAuctionError(this.message);
+}

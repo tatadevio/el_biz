@@ -13,4 +13,9 @@ class AuctionCancelRepo {
     return await apiClient
         .postData("${AppConstants.publicAuctionsUrl}/$auctionId/cancel", {});
   }
+
+  Future<Response> publishCanceledAuction(int auctionId) async {
+    return await apiClient
+        .postData("${AppConstants.publicAuctionsUrl}/$auctionId/publish", {});
+  }
 }

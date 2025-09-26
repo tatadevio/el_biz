@@ -1,6 +1,5 @@
 import 'package:el_biz/bloc/post_ad/post_ad_bloc.dart';
 import 'package:el_biz/bloc/product/product_bloc.dart';
-import 'package:el_biz/data/model/base/tender_filter_values_model.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';

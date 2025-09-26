@@ -2,17 +2,24 @@ import 'package:el_biz/bloc/auction/similar_auctions/similar_auctions_bloc.dart'
 import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../../helper/date_helper.dart';
+import '../../../../../bloc/auction/auction_detail/auction_detail_bloc.dart';
+import '../../../../../bloc/auth/auth_bloc.dart';
+import '../../../../../utils/Images.dart';
 import '../../../../../utils/color_resources.dart';
 import '../../../../../utils/custom_text_style.dart';
 import '../../../../base/custom_favorite_button.dart';
 import '../../../../base/custom_image.dart';
+import '../../../../base/custom_toast.dart';
+import '../auction_detail_screen.dart';
 
 class SimilarAuctionWidget extends StatelessWidget {
-  final String tenderId;
-  const SimilarAuctionWidget({super.key, required this.tenderId});
+  final int auctionId;
+  final String auctionName;
+  const SimilarAuctionWidget(
+      {super.key, required this.auctionId, required this.auctionName});
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
     final similarTenderBloc = context.read<SimilarAuctionsBloc>();
@@ -27,7 +34,7 @@ class SimilarAuctionWidget extends StatelessWidget {
           int nextPage = similarTenderBloc.state.currentPage;
 
           similarTenderBloc.add(GetSimilarAuctions(
-              auctionId: tenderId, currentPage: nextPage + 1));
+              auctionId: auctionId.toString(), currentPage: nextPage + 1));
         }
       }
     });
@@ -50,7 +57,7 @@ class SimilarAuctionWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        'similar_purchases'.tr,
+                        'similar_auctions'.tr,
                         style: h16.copyWith(color: ColorResources.darkGray),
                       ),
                     ),
@@ -96,7 +103,7 @@ class SimilarAuctionWidget extends StatelessWidget {
     );
   }
 
-  Widget similarTenderItem(BuildContext context, AuctionListItem tender,
+  Widget similarTenderItem(BuildContext context, AuctionListItem auction,
       {bool isVerifiedSupplier = false}) {
     double width = Get.width;
     return SizedBox(
@@ -118,6 +125,23 @@ class SimilarAuctionWidget extends StatelessWidget {
             // } else {
             //   showShortToast('login_to_view_tender'.tr);
             // }
+            if (context.read<AuthBloc>().state.isLoggedIn) {
+              context.read<AuctionDetailBloc>().add(
+                  GetAuctionDetail(auctionId: auction.id!, context: context));
+              context.read<SimilarAuctionsBloc>().add(
+                    GetSimilarAuctions(
+                      auctionId: auction.id.toString(),
+                      currentPage: 1,
+                    ),
+                  );
+              Get.off(
+                  () => AuctionDetailScreen(
+                        auctionName: auction.title ?? '',
+                      ),
+                  preventDuplicates: false);
+            } else {
+              showShortToast('login_to_view_auction'.tr);
+            }
           },
           child: SizedBox(
             height: 120,
@@ -126,7 +150,11 @@ class SimilarAuctionWidget extends StatelessWidget {
                 Stack(
                   children: [
                     CustomImage(
-                        image: tender.product?.image ?? '',
+                        // image: tender.product?.image ?? '',
+                        image: auction.product?.images != null &&
+                                auction.product!.images!.isNotEmpty
+                            ? auction.product!.images![0].small.toString()
+                            : auction.product?.image ?? '',
                         height: 120,
                         width: 100,
                         radius: 16),
@@ -158,14 +186,14 @@ class SimilarAuctionWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            tender.title ?? '',
+                            auction.title ?? '',
                             // 'Садовая мебель, раскладные стулья',
                             style: h16.copyWith(color: ColorResources.darkGray),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            tender.product?.description ?? '',
+                            auction.product?.description ?? '',
                             style: body14.copyWith(color: ColorResources.gray),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -183,15 +211,15 @@ class SimilarAuctionWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                     color: Color.fromRGBO(71, 84, 103, 1)),
                               ),
-                              // Expanded(
-                              //   child: Text(
-                              //     '${tender.quantity} шт',
-                              //     overflow: TextOverflow.ellipsis,
-                              //     maxLines: 1,
-                              //     style: body14.copyWith(
-                              //         color: Color.fromRGBO(71, 84, 103, 1)),
-                              //   ),
-                              // ),
+                              Expanded(
+                                child: Text(
+                                  '${auction.product?.quantity} шт',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: body14.copyWith(
+                                      color: Color.fromRGBO(71, 84, 103, 1)),
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(
@@ -199,43 +227,84 @@ class SimilarAuctionWidget extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              // Text(
-                              //   'budget'.tr,
-                              //   overflow: TextOverflow.ellipsis,
-                              //   maxLines: 1,
-                              //   style: body14.copyWith(
-                              //       fontWeight: FontWeight.w700,
-                              //       color: Color.fromRGBO(71, 84, 103, 1)),
-                              // ),
-                              // Expanded(
-                              //   child: Text(
-                              //     '${tender.budgetFrom} - ${tender.budgetTo} ${'som'.tr}',
-                              //     overflow: TextOverflow.ellipsis,
-                              //     maxLines: 1,
-                              //     style: body14.copyWith(
-                              //         color: Color.fromRGBO(71, 84, 103, 1)),
-                              //   ),
-                              // ),
+                              Icon(
+                                Icons.location_on,
+                                size: 16,
+                                color: ColorResources.darkGray.withOpacity(0.8),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                auction.location ?? '',
+                                // 'Бишкек',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: body14.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorResources.darkGray
+                                        .withOpacity(0.8)),
+                              ),
                             ],
                           ),
                           const SizedBox(
                             height: 5,
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'legal_entity'.tr,
-                            style: body14.copyWith(color: ColorResources.gray),
+                          Row(
+                            children: [
+                              SvgPicture.asset(Images.svgPersons),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '${auction.bidCount} ставок',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: body14.copyWith(
+                                    color: ColorResources.darkGray
+                                        .withOpacity(0.8)),
+                              ),
+                            ],
                           ),
-                          Text(
-                            formatDateInRu(tender.createdAt.toString()),
-                            style: body14.copyWith(color: ColorResources.gray),
-                          )
+                          // Row(
+                          //   children: [
+                          //     // Text(
+                          //     //   'budget'.tr,
+                          //     //   overflow: TextOverflow.ellipsis,
+                          //     //   maxLines: 1,
+                          //     //   style: body14.copyWith(
+                          //     //       fontWeight: FontWeight.w700,
+                          //     //       color: Color.fromRGBO(71, 84, 103, 1)),
+                          //     // ),
+                          //     // Expanded(
+                          //     //   child: Text(
+                          //     //     '${tender.budgetFrom} - ${tender.budgetTo} ${'som'.tr}',
+                          //     //     overflow: TextOverflow.ellipsis,
+                          //     //     maxLines: 1,
+                          //     //     style: body14.copyWith(
+                          //     //         color: Color.fromRGBO(71, 84, 103, 1)),
+                          //     //   ),
+                          //     // ),
+                          //   ],
+                          // ),
+                          const SizedBox(
+                            height: 5,
+                          ),
                         ],
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Text(
+                      //       'legal_entity'.tr,
+                      //       style: body14.copyWith(color: ColorResources.gray),
+                      //     ),
+                      //     Text(
+                      //       formatDateInRu(tender.createdAt.toString()),
+                      //       style: body14.copyWith(color: ColorResources.gray),
+                      //     )
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

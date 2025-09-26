@@ -484,5 +484,12 @@
   "create_new": "Создать новый",
   "create_auction_with_new_product": "Создайте аукцион с новым товаром",
   "target_price" : "Целевая цена",
-  "Completion date must be after start date" : "Дата завершения должна быть после даты начала."
+  "Completion date must be after start date" : "Дата завершения должна быть после даты начала.",
+  
+  "publish_auction": "Опубликовать аукцион",
+  "similar_auctions": "Похожие аукционы",
+  "are_you_sure_to_publish_again": "Вы уверены, что хотите снова опубликовать аукцион?",
+  "completed" : "Завершена" ,
+  "no_bets_yet"  : "Ставок пока нет"
+
 }

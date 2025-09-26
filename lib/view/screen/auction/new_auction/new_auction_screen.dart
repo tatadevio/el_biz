@@ -28,7 +28,7 @@ class NewAuctionScreen extends StatefulWidget {
 }
 
 class _NewAuctionScreenState extends State<NewAuctionScreen> {
-  String? paymentMethod;
+  String? paymentMethod = 'cash';
   CityItem? selectedLocation;
   DateTime? startingDate;
   DateTime? completionDate;
@@ -252,39 +252,54 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                                 color: Colors.black.withOpacity(0.6)),
                           ),
                         ],
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
 
-                            hint: Text(
-                              'payment_method'.tr,
+                        // DropdownButtonHideUnderline(
+                        //   child: DropdownButton<String>(
+                        //     isExpanded: true,
+
+                        //     hint: Text(
+                        //       'payment_method'.tr,
+                        //       style: TextStyle(
+                        //         color: ColorResources.darkGray,
+                        //         fontSize: 14,
+                        //       ),
+                        //     ),
+                        //     value:
+                        //         paymentMethod, // Set this to your selected value
+                        //     onChanged: (String? newValue) {
+                        //       // Handle value change
+                        //       setState(() {
+                        //         paymentMethod = newValue;
+                        //       });
+                        //     },
+                        //     items: <String>['cash', 'online']
+                        //         .map<DropdownMenuItem<String>>((String value) {
+                        //       return DropdownMenuItem<String>(
+                        //         value: value,
+                        //         child: Text(
+                        //           value,
+                        //           style: TextStyle(
+                        //             color: ColorResources.darkGray,
+                        //             fontSize: 14,
+                        //           ),
+                        //         ),
+                        //       );
+                        //     }).toList(),
+                        //   ),
+                        // ),
+
+                        Row(
+                          children: [
+                            Text(
+                              'cash'.tr,
                               style: TextStyle(
-                                color: ColorResources.darkGray,
-                                fontSize: 14,
+                                color: ColorResources.black.withOpacity(0.3),
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
-                            value:
-                                paymentMethod, // Set this to your selected value
-                            onChanged: (String? newValue) {
-                              // Handle value change
-                              setState(() {
-                                paymentMethod = newValue;
-                              });
-                            },
-                            items: <String>['cash', 'online']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    color: ColorResources.darkGray,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                          ],
                         ),
                       ],
                     ),

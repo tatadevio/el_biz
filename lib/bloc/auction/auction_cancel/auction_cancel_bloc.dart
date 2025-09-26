@@ -12,6 +12,7 @@ class AuctionCancelBloc extends Bloc<AuctionCancelEvent, AuctionCancelState> {
     on<AuctionCancelEvent>((event, emit) {});
 
     on<CancelAuction>(_onCancelAuction);
+    on<PublishCanceledAuction>(_onPublishCanceledAuction);
   }
 
   void _onCancelAuction(
@@ -30,6 +31,26 @@ class AuctionCancelBloc extends Bloc<AuctionCancelEvent, AuctionCancelState> {
     } catch (e) {
       emit(CancelAuctionError(
           'An error occurred while cancelling the auction: $e'));
+    }
+  }
+
+  void _onPublishCanceledAuction(
+      PublishCanceledAuction event, Emitter<AuctionCancelState> emit) async {
+    emit(PublishCanceledAuctionLoading());
+    try {
+      final response =
+          await auctionCancelRepo.publishCanceledAuction(event.auctionId);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        emit(PublishCanceledAuctionSuccess());
+      } else {
+        String errorMessage =
+            response.body['message'] ?? 'Failed to publish canceled auction';
+        emit(PublishCanceledAuctionError(errorMessage));
+      }
+      // Assuming the operation is successful
+    } catch (e) {
+      emit(PublishCanceledAuctionError(
+          'An error occurred while publishing the canceled auction: $e'));
     }
   }
 }

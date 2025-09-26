@@ -38,22 +38,22 @@ class AuctionDetailWidget extends StatelessWidget {
             'product'.tr,
             style: body14.copyWith(fontWeight: FontWeight.w700),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'technique'.tr,
-                  style: body14,
-                ),
-                Text(
-                  'coal'.tr,
-                  style: body14,
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 4),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(
+          //         'technique'.tr,
+          //         style: body14,
+          //       ),
+          //       Text(
+          //         'coal'.tr,
+          //         style: body14,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
@@ -64,7 +64,8 @@ class AuctionDetailWidget extends StatelessWidget {
                   style: body14,
                 ),
                 Text(
-                  'dense_art_paper'.tr,
+                  auction.product?.material ?? '',
+                  // 'dense_art_paper'.tr,
                   style: body14,
                 ),
               ],
@@ -76,11 +77,12 @@ class AuctionDetailWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'width'.tr,
+                  'dimention'.tr,
                   style: body14,
                 ),
                 Text(
-                  '70 ${'cm'.tr}',
+                  auction.product?.dimention ?? '',
+                  // '70 ${'cm'.tr}',
                   style: body14,
                 ),
               ],
@@ -92,11 +94,12 @@ class AuctionDetailWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'height'.tr,
+                  'weight'.tr,
                   style: body14,
                 ),
                 Text(
-                  '100 ${'cm'.tr}',
+                  auction.product?.weight ?? '',
+                  // '100 ${'cm'.tr}',
                   style: body14,
                 ),
               ],
@@ -139,7 +142,24 @@ class AuctionDetailWidget extends StatelessWidget {
                 style: body14.copyWith(fontWeight: FontWeight.w700),
               ),
               Text(
-                formatDateInRu(DateTime.now().toString()),
+                formatDateInRu(auction.startDate.toString()),
+                // '24.10.2024, 18:10',
+                style: body14.copyWith(fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '${"completed".tr}:',
+                style: body14.copyWith(fontWeight: FontWeight.w700),
+              ),
+              Text(
+                formatDateInRu(auction.endDate.toString()),
                 // '24.10.2024, 18:10',
                 style: body14.copyWith(fontWeight: FontWeight.w400),
               ),

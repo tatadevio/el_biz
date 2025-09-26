@@ -1,10 +1,10 @@
 import 'package:el_biz/bloc/auction/auction_cancel/auction_cancel_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_detail/auction_detail_bloc.dart';
-import 'package:el_biz/bloc/auction/auctions/auctions_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
+import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/auction/auction_detail/widgets/add_bet_bottomsheet.dart';
 import 'package:el_biz/view/screen/auction/auction_detail/widgets/leave_review_bottomsheet.dart';
 import 'package:el_biz/view/screen/product_detail/widgets/product_images.dart';
@@ -14,9 +14,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/company_detail/company_detail_bloc.dart';
+import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../../utils/Images.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../base/custom_favorite_button.dart';
+import '../../company/company_page_screen.dart';
 import 'widgets/auction_bets_widget.dart';
 import 'widgets/auction_detail_widget.dart';
 import 'widgets/similar_auctions_widget.dart';
@@ -184,7 +187,8 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                       ),
                                       Text(
                                         // 'painting_and_graphics'.tr,
-                                        auction.product?.description ?? '',
+                                        // auction.product?.description ?? '',
+                                        auction.product?.brand ?? '',
                                         style: body16.copyWith(
                                             color: ColorResources.gray),
                                       ),
@@ -405,83 +409,86 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                     ),
                   ),
                 ],
-
-                const SizedBox(
-                  height: 20,
-                ),
-                // feedback on auction //  if auction.reviews. is not empty then need to show this
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 4,
-                        spreadRadius: -2,
-                        offset: Offset(0, 2),
-                        color: Color.fromRGBO(16, 24, 40, 0.06),
-                      ),
-                    ],
+                // there have to show the winners review about this auction
+                if (auction.reviews != null && auction.reviews!.isNotEmpty) ...[
+                  const SizedBox(
+                    height: 20,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('auction_review'.tr,
-                          style: h16.copyWith(
-                              color: ColorResources.darkGray, fontSize: 15)),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: ColorResources.lightBlue,
-                          borderRadius: BorderRadius.circular(16),
-                          //   border:
-                          //       Border.all(width: 1, color: ColorResources.lgColor),
+                  // feedback on auction //  if auction.reviews. is not empty then need to show this
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 4,
+                          spreadRadius: -2,
+                          offset: Offset(0, 2),
+                          color: Color.fromRGBO(16, 24, 40, 0.06),
                         ),
-                        child: ListTile(
-                          dense: true,
-                          contentPadding: const EdgeInsets.all(0),
-                          title: Text(
-                            // tenderDetail.data!.company?.name ?? '',
-                            'Тансулуу Р.',
-                            style: h16.copyWith(color: ColorResources.darkGray),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('auction_review'.tr,
+                            style: h16.copyWith(
+                                color: ColorResources.darkGray, fontSize: 15)),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: ColorResources.lightBlue,
+                            borderRadius: BorderRadius.circular(16),
+                            //   border:
+                            //       Border.all(width: 1, color: ColorResources.lgColor),
                           ),
-                          subtitle: Text(
-                            // tenderDetail.data!.company?.owner?.name ?? '',
-                            'Получила! Все отлично!🥰 ',
-                            style:
-                                body14.copyWith(color: ColorResources.darkGray),
-                          ),
-                          trailing: SizedBox(
-                            // width: 100,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 8),
-                              decoration: BoxDecoration(
-                                color: ColorResources.orange,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                'winner'.tr,
-                                style: body14.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400),
+                          child: ListTile(
+                            dense: true,
+                            contentPadding: const EdgeInsets.all(0),
+                            title: Text(
+                              // tenderDetail.data!.company?.name ?? '',
+                              'Тансулуу Р.',
+                              style:
+                                  h16.copyWith(color: ColorResources.darkGray),
+                            ),
+                            subtitle: Text(
+                              // tenderDetail.data!.company?.owner?.name ?? '',
+                              'Получила! Все отлично!🥰 ',
+                              style: body14.copyWith(
+                                  color: ColorResources.darkGray),
+                            ),
+                            trailing: SizedBox(
+                              // width: 100,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: ColorResources.orange,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  'winner'.tr,
+                                  style: body14.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
                 const SizedBox(
                   height: 20,
                 ),
@@ -489,16 +496,16 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                 // salesman for the auction
                 GestureDetector(
                   onTap: () {
-                    // if (tenderDetail.data?.company != null) {
-                    //   context.read<CompanyDetailBloc>().add(GetCompanyDetail(
-                    //       tenderDetail.data!.company!.id.toString()));
-                    //   context.read<SimilarCompaniesBloc>().add(
-                    //       GetSimilarCompanies(
-                    //           companyId:
-                    //               tenderDetail.data!.company!.id.toString(),
-                    //           currentPage: 1));
-                    //   Get.to(() => CompanyPageScreen());
-                    // }
+                    if (auction.product?.company != null) {
+                      context.read<CompanyDetailBloc>().add(GetCompanyDetail(
+                          auction.product!.company!.id.toString()));
+                      context.read<SimilarCompaniesBloc>().add(
+                          GetSimilarCompanies(
+                              companyId:
+                                  auction.product!.company!.id.toString(),
+                              currentPage: 1));
+                      Get.to(() => CompanyPageScreen());
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -537,18 +544,17 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                             dense: true,
                             contentPadding: const EdgeInsets.all(0),
                             leading: CustomImage(
-                                image: '',
-                                // tenderDetail.data!.company?.logo ?? '',
+                                image: auction.product!.company?.logo ?? '',
                                 height: 40,
                                 width: 40,
                                 radius: 40),
                             title: Text(
-                              auction.creator?.name ?? '',
+                              auction.company?.name ?? '',
                               style:
                                   h16.copyWith(color: ColorResources.darkGray),
                             ),
                             subtitle: Text(
-                              auction.company?.name ?? '',
+                              auction.product!.company?.email ?? '',
                               // 'ОсОО...',
                               style: body14.copyWith(
                                   color: ColorResources.darkGray),
@@ -558,23 +564,23 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                         const SizedBox(
                           height: 5,
                         ),
-                        // if (tenderDetail.data!.company?.verificationStatus ==
-                        //     'verified')
-                        Row(
-                          children: [
-                            SvgPicture.asset(Images.svgVerified),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'verified_supplier'.tr,
-                                style:
-                                    body14.copyWith(color: ColorResources.gray),
+                        if (auction.product!.company?.verificationStatus ==
+                            'verified')
+                          Row(
+                            children: [
+                              SvgPicture.asset(Images.svgVerified),
+                              const SizedBox(
+                                width: 10,
                               ),
-                            ),
-                          ],
-                        ),
+                              Expanded(
+                                child: Text(
+                                  'verified_supplier'.tr,
+                                  style: body14.copyWith(
+                                      color: ColorResources.gray),
+                                ),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -583,8 +589,8 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                   height: 20,
                 ),
                 SimilarAuctionWidget(
-                  tenderId: '',
-                  // tenderId: tenderDetail.data!.id.toString(),
+                  auctionId: auction.id!,
+                  auctionName: auction.title ?? '',
                 ),
                 const SizedBox(
                   height: 20,
@@ -605,8 +611,25 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
         listener: (context, cancelState) {
           if (cancelState is CancelAuctionSuccess) {
             Get.back();
-            context.read<AuctionsBloc>().add(GetAuctions(page: 1));
+            // context.read<AuctionsBloc>().add(GetAuctions(page: 1));
+            // Get.back();
+            context
+                .read<AuctionDetailBloc>()
+                .add(UpdateAuctionStatus(status: 'cancelled'));
+          }
+          if (cancelState is CancelAuctionError) {
             Get.back();
+            showShortToast(cancelState.message);
+          }
+          if (cancelState is PublishCanceledAuctionSuccess) {
+            Get.back();
+            context
+                .read<AuctionDetailBloc>()
+                .add(UpdateAuctionStatus(status: 'draft'));
+          }
+          if (cancelState is PublishCanceledAuctionError) {
+            Get.back();
+            showShortToast(cancelState.message);
           }
         },
         child: BlocBuilder<AuctionDetailBloc, AuctionDetailState>(
@@ -616,6 +639,10 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
 
               if (auction == null) {
                 return SizedBox();
+              }
+
+              if (auction.timeRemaining == 'Ended') {
+                return SizedBox.shrink();
               }
               bool isSeller = auction.creator?.id ==
                   context.read<UserBloc>().state.userInfo?.data?.id;
@@ -632,7 +659,9 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShaow: [],
                         child: Text(
-                          'withdraw_auction'.tr,
+                          auction.status == 'cancelled'
+                              ? "publish_auction".tr
+                              : 'withdraw_auction'.tr,
                           style: h16.copyWith(
                               color: ColorResources.orange,
                               fontWeight: FontWeight.w600,
@@ -640,43 +669,92 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                         ),
                         onTap: () {
                           print('pressed');
+                          auction.status == 'cancelled'
+                              ? {
+                                  // add publish auction event
 
-                          Get.dialog(
-                            CupertinoAlertDialog(
-                              title: Text('confirmed_withdraw_auction'.tr),
-                              content: Text('buyers_no_longer_bet'.tr),
-                              actions: [
-                                BlocBuilder<AuctionCancelBloc,
-                                    AuctionCancelState>(
-                                  builder: (context, auctionCancel) {
-                                    return CupertinoDialogAction(
-                                        child: auctionCancel
-                                                is CancelAuctionLoading
-                                            ? SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: Colors.black,
-                                                ),
-                                              )
-                                            : Text('yes'.tr),
-                                        onPressed: () {
-                                          // Get.back();
-                                          context.read<AuctionCancelBloc>().add(
-                                              CancelAuction(
-                                                  auctionId: auction.id!));
-                                        });
-                                  },
-                                ),
-                                CupertinoDialogAction(
-                                    child: Text('cancel'.tr),
-                                    onPressed: () {
-                                      Get.back();
-                                    }),
-                              ],
-                            ),
-                          );
+                                  Get.dialog(
+                                    CupertinoAlertDialog(
+                                      title: Text(
+                                          'are_you_sure_to_publish_again'.tr),
+                                      // content: Text('buyers_no_longer_bet'.tr),
+                                      actions: [
+                                        BlocBuilder<AuctionCancelBloc,
+                                            AuctionCancelState>(
+                                          builder: (context, auctionCancel) {
+                                            return CupertinoDialogAction(
+                                                child: auctionCancel
+                                                        is PublishCanceledAuctionLoading
+                                                    ? SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: Colors.black,
+                                                        ),
+                                                      )
+                                                    : Text('yes'.tr),
+                                                onPressed: () {
+                                                  // Get.back();
+                                                  context
+                                                      .read<AuctionCancelBloc>()
+                                                      .add(
+                                                          PublishCanceledAuction(
+                                                              auctionId:
+                                                                  auction.id!));
+                                                });
+                                          },
+                                        ),
+                                        CupertinoDialogAction(
+                                            child: Text('cancel'.tr),
+                                            onPressed: () {
+                                              Get.back();
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                }
+                              : {
+                                  Get.dialog(
+                                    CupertinoAlertDialog(
+                                      title:
+                                          Text('confirmed_withdraw_auction'.tr),
+                                      content: Text('buyers_no_longer_bet'.tr),
+                                      actions: [
+                                        BlocBuilder<AuctionCancelBloc,
+                                            AuctionCancelState>(
+                                          builder: (context, auctionCancel) {
+                                            return CupertinoDialogAction(
+                                                child: auctionCancel
+                                                        is CancelAuctionLoading
+                                                    ? SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: Colors.black,
+                                                        ),
+                                                      )
+                                                    : Text('yes'.tr),
+                                                onPressed: () {
+                                                  // Get.back();
+                                                  context
+                                                      .read<AuctionCancelBloc>()
+                                                      .add(CancelAuction(
+                                                          auctionId:
+                                                              auction.id!));
+                                                });
+                                          },
+                                        ),
+                                        CupertinoDialogAction(
+                                            child: Text('cancel'.tr),
+                                            onPressed: () {
+                                              Get.back();
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                };
                         })
 
                     // Container(
@@ -740,13 +818,6 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    // CustomTextField(
-                                    //     controller: suggestedBidController,
-                                    //     hintColor: '',
-                                    //     inputType: TextInputType.number,
-                                    //     leading: '',
-
-                                    //     readOnly: false),
                                     GestureDetector(
                                       onTap: () {
                                         Get.bottomSheet(
@@ -800,7 +871,6 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          // CustomButton(width: Get.width, height: 44, onTap: () {}, title: ''),
                           GestureDetector(
                             onTap: () {
                               Get.bottomSheet(

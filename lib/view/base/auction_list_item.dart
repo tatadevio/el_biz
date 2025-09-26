@@ -66,7 +66,13 @@ class AuctionListItemWidget extends StatelessWidget {
                   Stack(
                     children: [
                       CustomImage(
-                          image: '', height: 104, width: 102, radius: 16),
+                          image: auction.product?.images != null &&
+                                  auction.product!.images!.isNotEmpty
+                              ? auction.product!.images![0].small.toString()
+                              : auction.product?.image ?? '',
+                          height: 104,
+                          width: 102,
+                          radius: 16),
                       Positioned(
                           right: 5,
                           top: 5,
