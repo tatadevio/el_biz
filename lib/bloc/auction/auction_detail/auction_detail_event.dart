@@ -11,7 +11,8 @@ class GetAuctionDetail extends AuctionDetailEvent {
   final int auctionId;
   final BuildContext context;
   final bool isRefresh;
-  const GetAuctionDetail({required this.auctionId, required this.context, this.isRefresh = true});
+  const GetAuctionDetail(
+      {required this.auctionId, required this.context, this.isRefresh = true});
 
   @override
   List<Object> get props => [auctionId, context, isRefresh];
@@ -23,5 +24,3 @@ class UpdateAuctionStatus extends AuctionDetailEvent {
   @override
   List<Object> get props => [status];
 }
-
-

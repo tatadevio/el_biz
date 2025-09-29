@@ -1,6 +1,9 @@
 import 'package:el_biz/bloc/auction/auction_cancel/auction_cancel_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_detail/auction_detail_bloc.dart';
+import 'package:el_biz/bloc/auction/favorite_auciton/favorite_auction_bloc.dart';
+import 'package:el_biz/bloc/auction/search_auction/search_auction_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
+import 'package:el_biz/data/model/response/auction/auction_detail_model.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_border_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/auction/auctions/auctions_bloc.dart';
 import '../../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../../utils/Images.dart';
@@ -26,10 +30,14 @@ import 'widgets/similar_auctions_widget.dart';
 
 class AuctionDetailScreen extends StatefulWidget {
   final String auctionName;
+  final int auctionId;
+  final bool isSearch;
 
   const AuctionDetailScreen({
     super.key,
     required this.auctionName,
+    required this.auctionId,
+    required this.isSearch,
   });
 
   @override
@@ -41,6 +49,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
   // final TextEditingController lastBidController = TextEditingController();
   final TextEditingController suggestedBidController = TextEditingController();
   final TextEditingController leaveReviewController = TextEditingController();
+  AuctionDetailData? auction;
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.sizeOf(context).width;
@@ -71,293 +80,372 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<AuctionDetailBloc, AuctionDetailState>(
-          builder: (context, productDetialController) {
-        if (productDetialController is AuctionDetailLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (productDetialController is AuctionDetailError) {
-          return Center(
-            child: Text('error'.tr),
-          );
-        }
-        if (productDetialController is AuctionDetailSuccess) {
-          final auctionModel = productDetialController.auctionDetailModel;
-          final auction = auctionModel.data;
-          if (auction == null) {
-            return SizedBox();
+      body: BlocListener<FavoriteAuctionBloc, FavoriteAuctionState>(
+        listener: (context, state) {
+          if (state is AuctionDetailFavoriteSuccess) {
+            print(
+                'going to call the update function in auctions list with ${auction?.isFavorite}');
+            context.read<AuctionsBloc>().add(UpdateAuctionInFavoriteList(
+                auctionId: auction!.id!,
+                isFavorite: auction?.isFavorite ?? false));
+
+                if(widget.isSearch) {
+                  context.read<SearchAuctionBloc>().add(UpdateSearchAuctionInFavoriteList(
+                  auctionId: auction!.id!,
+                  isFavorite: auction?.isFavorite ?? false));
+                }
           }
-          // print('this is the location = ${auction.location}');
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: ProductImages(
-                    image: const [],
-                    isProductDetail: true,
-                    productDetailImages: auction.product?.images ?? [],
+        },
+        child: BlocBuilder<AuctionDetailBloc, AuctionDetailState>(
+            builder: (context, productDetialController) {
+          if (productDetialController is AuctionDetailLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (productDetialController is AuctionDetailError) {
+            return Center(
+              child: Text('error'.tr),
+            );
+          }
+          if (productDetialController is AuctionDetailSuccess) {
+            final auctionModel = productDetialController.auctionDetailModel;
+            auction = auctionModel.data;
+            if (auction == null) {
+              return SizedBox();
+            }
+
+            // print('this is the location = ${auction.location}');
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: ProductImages(
+                      image: const [],
+                      isProductDetail: true,
+                      productDetailImages: auction?.product?.images ?? [],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 4,
-                        spreadRadius: -2,
-                        offset: Offset(0, 2),
-                        color: Color.fromRGBO(16, 24, 40, 0.06),
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 20,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 4,
+                          spreadRadius: -2,
+                          offset: Offset(0, 2),
+                          color: Color.fromRGBO(16, 24, 40, 0.06),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (auction?.freeShipping == true)
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 4),
+                                            decoration: BoxDecoration(
+                                              color: ColorResources.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Text(
+                                              'free_delivery'.tr,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: ColorResources.white,
+                                              ),
+                                            ),
+                                          ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.location_on),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              auction?.location ?? '',
+                                              // 'bishkek'.tr,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: ColorResources.gray,
+                                                  fontFamily: 'Inter'),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          auction?.title ??
+                                              auction?.product?.name ??
+                                              '',
+                                          // 'Silvie Mahdal art',
+                                          style: h24.copyWith(
+                                              color: ColorResources.darkGray),
+                                        ),
+                                        Text(
+                                          // 'painting_and_graphics'.tr,
+                                          // auction?.product?.description ?? '',
+                                          auction?.product?.brand ?? '',
+                                          style: body16.copyWith(
+                                              color: ColorResources.gray),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  CustomFavoriteButton(
+                                    isFavorite: auction?.isFavorite ?? false,
+                                    onTap: () {
+                                      context.read<FavoriteAuctionBloc>().add(
+                                          ToggleAuctionDetailFavorite(
+                                              auctionId: auction!.id!));
+
+                                      setState(() {
+                                        auction!.isFavorite =
+                                            !auction!.isFavorite!;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'own_price'.tr,
+                                    style: textStyle13Inter,
+                                  ),
+                                  Text(
+                                    '${auction?.productPrice}\$',
+                                    style: h16.copyWith(
+                                        color: ColorResources.blue),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'price_with_last_bet'.tr,
+                                    style: textStyle13Inter,
+                                  ),
+                                  Text(
+                                    '${auction?.buyoutPrice}\$',
+                                    style: h16.copyWith(
+                                        color: ColorResources.blue),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                height: 32,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(232, 232, 237, 1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    // description
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isShowDescription = true;
+                                          });
+                                        },
+                                        child: Container(
+                                          height: 28,
+                                          decoration: BoxDecoration(
+                                            color: isShowDescription
+                                                ? Colors.white
+                                                : null,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'description'.tr,
+                                            style: textStyle13Inter.copyWith(
+                                                color: isShowDescription
+                                                    ? Colors.black
+                                                    : Colors.black
+                                                        .withOpacity(0.8)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // bets
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isShowDescription = false;
+                                          });
+                                        },
+                                        child: Container(
+                                          height: 28,
+                                          decoration: BoxDecoration(
+                                            color: isShowDescription
+                                                ? null
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'bets'.tr,
+                                            style: textStyle13Inter.copyWith(
+                                                color: isShowDescription
+                                                    ? Colors.black
+                                                        .withOpacity(0.8)
+                                                    : Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        isShowDescription
+                            ? AuctionDetailWidget(
+                                auction: auction!,
+                              )
+                            : AuctionBetsWidget(
+                                auction: auction!,
+                              ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // winner leave comment
+                  if (auctionModel.isWinner == true) ...[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.bottomSheet(
+                          LeaveReviewBottomsheet(
+                            leaveReviewController: leaveReviewController,
+                            onChanged: (val) {
+                              setState(() {});
+                            },
+                            auctionId: auction!.id!,
+                          ),
+                          isScrollControlled: true,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              topRight: Radius.circular(16),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        // width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 4,
+                              spreadRadius: -2,
+                              offset: Offset(0, 2),
+                              color: Color.fromRGBO(16, 24, 40, 0.06),
+                            ),
+                          ],
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (auction.freeShipping == true)
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: ColorResources.green,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Text(
-                                            'free_delivery'.tr,
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorResources.white,
-                                            ),
-                                          ),
-                                        ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.location_on),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            auction.location ?? '',
-                                            // 'bishkek'.tr,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: ColorResources.gray,
-                                                fontFamily: 'Inter'),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        auction.title ??
-                                            auction.product?.name ??
-                                            '',
-                                        // 'Silvie Mahdal art',
-                                        style: h24.copyWith(
-                                            color: ColorResources.darkGray),
-                                      ),
-                                      Text(
-                                        // 'painting_and_graphics'.tr,
-                                        // auction.product?.description ?? '',
-                                        auction.product?.brand ?? '',
-                                        style: body16.copyWith(
-                                            color: ColorResources.gray),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                CustomFavoriteButton(
-                                  isFavorite: false,
-                                  // tenderDetail.data?.isFavorite ?? false,
-                                  onTap: () {
-                                    // context.read<TenderDetailBloc>().add(
-                                    //     ToggleTenderDetailFavorite(
-                                    //         tenderId: tenderDetail.data!.id!,
-                                    //         context: context));
-                                  },
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  'own_price'.tr,
-                                  style: textStyle13Inter,
-                                ),
-                                Text(
-                                  '${auction.productPrice}\$',
-                                  style:
-                                      h16.copyWith(color: ColorResources.blue),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  'price_with_last_bet'.tr,
-                                  style: textStyle13Inter,
-                                ),
-                                Text(
-                                  '${auction.buyoutPrice}\$',
-                                  style:
-                                      h16.copyWith(color: ColorResources.blue),
-                                ),
-                              ],
-                            ),
+                            Text('leave_review'.tr,
+                                style: h16.copyWith(
+                                    color: ColorResources.darkGray,
+                                    fontSize: 15)),
                             const SizedBox(
                               height: 10,
                             ),
                             Container(
-                              height: 32,
-                              padding: const EdgeInsets.all(2),
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 10),
                               decoration: BoxDecoration(
-                                color: Color.fromRGBO(232, 232, 237, 1),
-                                borderRadius: BorderRadius.circular(10),
+                                color: ColorResources.white,
+                                border: Border.all(
+                                    width: 1, color: ColorResources.lgColor),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Row(
-                                children: [
-                                  // description
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isShowDescription = true;
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 28,
-                                        decoration: BoxDecoration(
-                                          color: isShowDescription
-                                              ? Colors.white
-                                              : null,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'description'.tr,
-                                          style: textStyle13Inter.copyWith(
-                                              color: isShowDescription
-                                                  ? Colors.black
-                                                  : Colors.black
-                                                      .withOpacity(0.8)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  // bets
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isShowDescription = false;
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 28,
-                                        decoration: BoxDecoration(
-                                          color: isShowDescription
-                                              ? null
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'bets'.tr,
-                                          style: textStyle13Inter.copyWith(
-                                              color: isShowDescription
-                                                  ? Colors.black
-                                                      .withOpacity(0.8)
-                                                  : Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: Text(
+                                leaveReviewController.text.isEmpty
+                                    ? 'write_something_nice'.tr
+                                    : leaveReviewController.text,
+                                style: body16.copyWith(
+                                    color: ColorResources.darkGray
+                                        .withOpacity(0.3)),
                               ),
                             ),
-
-                            // ],
+                            const SizedBox(
+                              height: 5,
+                            ),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      isShowDescription
-                          ? AuctionDetailWidget(
-                              auction: auction,
-                            )
-                          : AuctionBetsWidget(
-                              auction: auction,
-                            ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ),
-                // winner leave comment
-                if (auctionModel.isWinner == true) ...[
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.bottomSheet(
-                        LeaveReviewBottomsheet(
-                          leaveReviewController: leaveReviewController,
-                          onChanged: (val) {
-                            setState(() {});
-                          },
-                          auctionId: auction.id!,
-                        ),
-                        isScrollControlled: true,
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      // width: double.infinity,
+                    ),
+                  ],
+                  // there have to show the winners review about this auction
+                  if (auction?.reviews != null &&
+                      auction!.reviews!.isNotEmpty) ...[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    // feedback on auction //  if auction.reviews. is not empty then need to show this
+                    Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 24),
                       decoration: BoxDecoration(
@@ -375,7 +463,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('leave_review'.tr,
+                          Text('auction_review'.tr,
                               style: h16.copyWith(
                                   color: ColorResources.darkGray,
                                   fontSize: 15)),
@@ -383,22 +471,46 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                             height: 10,
                           ),
                           Container(
-                            width: double.infinity,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 10),
+                                horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: ColorResources.white,
-                              border: Border.all(
-                                  width: 1, color: ColorResources.lgColor),
-                              borderRadius: BorderRadius.circular(12),
+                              color: ColorResources.lightBlue,
+                              borderRadius: BorderRadius.circular(16),
+                              //   border:
+                              //       Border.all(width: 1, color: ColorResources.lgColor),
                             ),
-                            child: Text(
-                              leaveReviewController.text.isEmpty
-                                  ? 'write_something_nice'.tr
-                                  : leaveReviewController.text,
-                              style: body16.copyWith(
-                                  color:
-                                      ColorResources.darkGray.withOpacity(0.3)),
+                            child: ListTile(
+                              dense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                              title: Text(
+                                // tenderDetail.data!.company?.name ?? '',
+                                'Тансулуу Р.',
+                                style: h16.copyWith(
+                                    color: ColorResources.darkGray),
+                              ),
+                              subtitle: Text(
+                                // tenderDetail.data!.company?.owner?.name ?? '',
+                                'Получила! Все отлично!🥰 ',
+                                style: body14.copyWith(
+                                    color: ColorResources.darkGray),
+                              ),
+                              trailing: SizedBox(
+                                // width: 100,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    color: ColorResources.orange,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    'winner'.tr,
+                                    style: body14.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -407,215 +519,138 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                         ],
                       ),
                     ),
-                  ),
-                ],
-                // there have to show the winners review about this auction
-                if (auction.reviews != null && auction.reviews!.isNotEmpty) ...[
+                  ],
                   const SizedBox(
                     height: 20,
                   ),
-                  // feedback on auction //  if auction.reviews. is not empty then need to show this
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4,
-                          spreadRadius: -2,
-                          offset: Offset(0, 2),
-                          color: Color.fromRGBO(16, 24, 40, 0.06),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('auction_review'.tr,
-                            style: h16.copyWith(
-                                color: ColorResources.darkGray, fontSize: 15)),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: ColorResources.lightBlue,
-                            borderRadius: BorderRadius.circular(16),
-                            //   border:
-                            //       Border.all(width: 1, color: ColorResources.lgColor),
+
+                  // salesman for the auction
+                  GestureDetector(
+                    onTap: () {
+                      if (auction?.product?.company != null) {
+                        context.read<CompanyDetailBloc>().add(GetCompanyDetail(
+                            auction!.product!.company!.id.toString()));
+                        context.read<SimilarCompaniesBloc>().add(
+                            GetSimilarCompanies(
+                                companyId:
+                                    auction!.product!.company!.id.toString(),
+                                currentPage: 1));
+                        Get.to(() => CompanyPageScreen());
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 4,
+                            spreadRadius: -2,
+                            offset: Offset(0, 2),
+                            color: Color.fromRGBO(16, 24, 40, 0.06),
                           ),
-                          child: ListTile(
-                            dense: true,
-                            contentPadding: const EdgeInsets.all(0),
-                            title: Text(
-                              // tenderDetail.data!.company?.name ?? '',
-                              'Тансулуу Р.',
-                              style:
-                                  h16.copyWith(color: ColorResources.darkGray),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('seller'.tr,
+                              style: h16.copyWith(
+                                color: ColorResources.darkGray,
+                              )),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: ColorResources.lightBlue,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                  width: 1, color: ColorResources.lgColor),
                             ),
-                            subtitle: Text(
-                              // tenderDetail.data!.company?.owner?.name ?? '',
-                              'Получила! Все отлично!🥰 ',
-                              style: body14.copyWith(
-                                  color: ColorResources.darkGray),
-                            ),
-                            trailing: SizedBox(
-                              // width: 100,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
-                                decoration: BoxDecoration(
-                                  color: ColorResources.orange,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  'winner'.tr,
-                                  style: body14.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
+                            child: ListTile(
+                              dense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                              leading: CustomImage(
+                                  image: auction!.product!.company?.logo ?? '',
+                                  height: 40,
+                                  width: 40,
+                                  radius: 40),
+                              title: Text(
+                                auction!.company?.name ?? '',
+                                style: h16.copyWith(
+                                    color: ColorResources.darkGray),
+                              ),
+                              subtitle: Text(
+                                auction!.product!.company?.email ?? '',
+                                // 'ОсОО...',
+                                style: body14.copyWith(
+                                    color: ColorResources.darkGray),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          if (auction!.product!.company?.verificationStatus ==
+                              'verified')
+                            Row(
+                              children: [
+                                SvgPicture.asset(Images.svgVerified),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'verified_supplier'.tr,
+                                    style: body14.copyWith(
+                                        color: ColorResources.gray),
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SimilarAuctionWidget(
+                    auctionId: auction!.id!,
+                    auctionName: auction!.title ?? '',
+                    isSearch: widget.isSearch,
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                 ],
-                const SizedBox(
-                  height: 20,
-                ),
+              ),
+            );
+          }
+          return SizedBox.shrink();
+          // if (productDetialController.tenderDetailModel?.data == null) {
+          // }
+          // var tenderDetail = productDetialController.tenderDetailModel!;
 
-                // salesman for the auction
-                GestureDetector(
-                  onTap: () {
-                    if (auction.product?.company != null) {
-                      context.read<CompanyDetailBloc>().add(GetCompanyDetail(
-                          auction.product!.company!.id.toString()));
-                      context.read<SimilarCompaniesBloc>().add(
-                          GetSimilarCompanies(
-                              companyId:
-                                  auction.product!.company!.id.toString(),
-                              currentPage: 1));
-                      Get.to(() => CompanyPageScreen());
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4,
-                          spreadRadius: -2,
-                          offset: Offset(0, 2),
-                          color: Color.fromRGBO(16, 24, 40, 0.06),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('seller'.tr,
-                            style: h16.copyWith(
-                              color: ColorResources.darkGray,
-                            )),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: ColorResources.lightBlue,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                                width: 1, color: ColorResources.lgColor),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            contentPadding: const EdgeInsets.all(0),
-                            leading: CustomImage(
-                                image: auction.product!.company?.logo ?? '',
-                                height: 40,
-                                width: 40,
-                                radius: 40),
-                            title: Text(
-                              auction.company?.name ?? '',
-                              style:
-                                  h16.copyWith(color: ColorResources.darkGray),
-                            ),
-                            subtitle: Text(
-                              auction.product!.company?.email ?? '',
-                              // 'ОсОО...',
-                              style: body14.copyWith(
-                                  color: ColorResources.darkGray),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        if (auction.product!.company?.verificationStatus ==
-                            'verified')
-                          Row(
-                            children: [
-                              SvgPicture.asset(Images.svgVerified),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'verified_supplier'.tr,
-                                  style: body14.copyWith(
-                                      color: ColorResources.gray),
-                                ),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SimilarAuctionWidget(
-                  auctionId: auction.id!,
-                  auctionName: auction.title ?? '',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          );
-        }
-        return SizedBox.shrink();
-        // if (productDetialController.tenderDetailModel?.data == null) {
-        // }
-        // var tenderDetail = productDetialController.tenderDetailModel!;
-
-        // print(
-        // 'this is the favorite option in tender detail = ${tenderDetail.data?.isFavorite ?? false}');
-      }),
+          // print(
+          // 'this is the favorite option in tender detail = ${tenderDetail.data?.isFavorite ?? false}');
+        }),
+      ),
       bottomNavigationBar: BlocListener<AuctionCancelBloc, AuctionCancelState>(
         listener: (context, cancelState) {
           if (cancelState is CancelAuctionSuccess) {
             Get.back();
             // context.read<AuctionsBloc>().add(GetAuctions(page: 1));
             // Get.back();
-            context
-                .read<AuctionDetailBloc>()
-                .add(UpdateAuctionStatus(status: 'cancelled'));
+            // context
+            //     .read<AuctionDetailBloc>()
+            //     .add(UpdateAuctionStatus(status: 'cancelled'));
+            context.read<AuctionDetailBloc>().add(GetAuctionDetail(
+                auctionId: widget.auctionId, context: context));
           }
           if (cancelState is CancelAuctionError) {
             Get.back();
@@ -623,9 +658,11 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
           }
           if (cancelState is PublishCanceledAuctionSuccess) {
             Get.back();
-            context
-                .read<AuctionDetailBloc>()
-                .add(UpdateAuctionStatus(status: 'draft'));
+            // context
+            //     .read<AuctionDetailBloc>()
+            //     .add(UpdateAuctionStatus(status: 'draft'));
+            context.read<AuctionDetailBloc>().add(GetAuctionDetail(
+                auctionId: widget.auctionId, context: context));
           }
           if (cancelState is PublishCanceledAuctionError) {
             Get.back();
@@ -635,7 +672,8 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
         child: BlocBuilder<AuctionDetailBloc, AuctionDetailState>(
           builder: (context, state) {
             if (state is AuctionDetailSuccess) {
-              final auction = state.auctionDetailModel.data;
+              final auctionModel = state.auctionDetailModel;
+              final auction = auctionModel.data;
 
               if (auction == null) {
                 return SizedBox();
@@ -828,6 +866,8 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                               setState(() {});
                                             },
                                             auction: auction,
+                                            minimumNextBid: suggestedBidController.text.isEmpty ? 
+                                      auctionModel.minimumNextBid.toString() : suggestedBidController.text,
                                           ),
                                           isScrollControlled: true,
                                           backgroundColor: Colors.white,
@@ -854,7 +894,7 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                         ),
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          '${suggestedBidController.text}\$',
+                                          '${suggestedBidController.text == "" ? auctionModel.minimumNextBid : suggestedBidController.text}\$',
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w600,
@@ -881,6 +921,8 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                     setState(() {});
                                   },
                                   auction: auction,
+                                  minimumNextBid: suggestedBidController.text.isEmpty ? 
+                                      auctionModel.minimumNextBid.toString() : suggestedBidController.text,
                                 ),
                                 isScrollControlled: true,
                                 backgroundColor: Colors.white,

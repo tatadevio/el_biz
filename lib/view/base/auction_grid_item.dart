@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/auction/search_auction/search_auction_bloc.dart';
 import 'package:el_biz/bloc/auction/similar_auctions/similar_auctions_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:el_biz/helper/date_helper.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../bloc/auction/auction_detail/auction_detail_bloc.dart';
+import '../../bloc/auction/auctions/auctions_bloc.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../utils/Images.dart';
 import '../screen/auction/auction_detail/auction_detail_screen.dart';
@@ -26,7 +28,7 @@ class AuctionGridItem extends StatelessWidget {
   final bool isSearchAuction;
   const AuctionGridItem({
     super.key,
-    // this.isFavorite = false,
+    // required this.isFavorite = false,
     required this.auction,
     required this.isCompanyAuction,
     this.isPublicAuction = false,
@@ -51,6 +53,8 @@ class AuctionGridItem extends StatelessWidget {
               );
           Get.to(() => AuctionDetailScreen(
                 auctionName: auction.title ?? '',
+                auctionId: auction.id!,
+                isSearch: isSearchAuction,
               ));
         } else {
           showShortToast('login_to_view_auction'.tr);
@@ -82,9 +86,25 @@ class AuctionGridItem extends StatelessWidget {
                       right: 5,
                       top: 5,
                       child: CustomFavoriteButton(
-                        isFavorite: false,
+                        isFavorite: auction.isFavorite ?? false,
                         // tender.isFavorite ?? false,
                         onTap: () {
+                          if (isCompanyAuction) {
+                          } else if (isSearchAuction) {
+                            context.read<SearchAuctionBloc>().add(
+                                ToggleSearchAuctionsFavorite(
+                                    auctionId: auction.id!,
+                                    context: context,
+                                    isFavorite: auction.isFavorite == false));
+                          } else {
+                            print(
+                                'calling there in auciton grid item with auciton = ${auction.isFavorite == false}');
+                            context.read<AuctionsBloc>().add(
+                                TogglePublicAuctionsFavorite(
+                                    auctionId: auction.id!,
+                                    context: context,
+                                    isFavorite: auction.isFavorite == false));
+                          }
                           // if (isCompanyTender) {
                           //   context
                           //       .read<CompanyDetailBloc>()

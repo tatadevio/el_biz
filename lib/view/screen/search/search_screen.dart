@@ -45,7 +45,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.sizeOf(context).height;
+    // double height = MediaQuery.sizeOf(context).height;
     // double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(

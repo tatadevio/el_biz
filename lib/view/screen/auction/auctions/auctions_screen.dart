@@ -1,5 +1,5 @@
 import 'package:el_biz/bloc/auction/auctions/auctions_bloc.dart';
-import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
+// import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -48,55 +48,59 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
       }
 
       // Pagination logic
-      // final publicTenderBloc = context.read<PublicTenderBloc>();
+      final publicAuctionsBloc = context.read<AuctionsBloc>();
 
-      // if (_scrollController.position.pixels >=
-      //         _scrollController.position.maxScrollExtent - 300 &&
-      //     !publicTenderBloc.state.isLoading &&
-      //     !publicTenderBloc.state.isMoreLoading) {
-      //   if (publicTenderBloc.state.isFilterEnable) {
-      //     // Handle filtered tenders pagination
-      //     print(
-      //         'going to call the filtered tenders pagination - Total Pages: ${publicTenderBloc.state.filterTenderPageSize}, Current Page: ${publicTenderBloc.state.filterTenderCurrentPage}');
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 300 &&
+          !publicAuctionsBloc.state.isLoading &&
+          !publicAuctionsBloc.state.isLoadingMore) {
+        if (publicAuctionsBloc.state.isFilterEnable) {
+          // Handle filtered tenders pagination
+          print(
+              'going to call the filtered tenders pagination - Total Pages: ${publicAuctionsBloc.state.filteredTotalPages}, Current Page: ${publicAuctionsBloc.state.filteredCurrentpage}');
 
-      //     if (publicTenderBloc.state.filterTenderCurrentPage <
-      //         publicTenderBloc.state.filterTenderPageSize) {
-      //       int nextPage = publicTenderBloc.state.filterTenderCurrentPage + 1;
+          if (publicAuctionsBloc.state.filteredCurrentpage <
+              publicAuctionsBloc.state.filteredTotalPages) {
+            int nextPage = publicAuctionsBloc.state.filteredCurrentpage + 1;
 
-      //       publicTenderBloc.add(FilterPublicTenderProduct(
-      //           productFilterValuesModel:
-      //               publicTenderBloc.state.tenderFilterValuesModel!,
-      //           currentPage: nextPage));
-      //     }
-      //   } else {
-      //     // Handle regular tenders pagination
-      //     print(
-      //         'going to call the tenders list pagination - Total Pages: ${publicTenderBloc.state.tenderPageSize}, Current Page: ${publicTenderBloc.state.tenderCurrentPage}');
+            // publicAuctionsBloc.add(FilterPublicAuctionsProduct(
+            //     productFilterValuesModel:
+            //         publicTenderBloc.state.tenderFilterValuesModel!,
+            //     currentPage: nextPage));
+          }
+        } else {
+          // Handle regular tenders pagination
+          print(
+              'going to call the tenders list pagination - Total Pages: ${publicTenderBloc.state.totalPages}, Current Page: ${publicTenderBloc.state.currentPage}');
 
-      //     if (publicTenderBloc.state.tenderCurrentPage <
-      //         publicTenderBloc.state.tenderPageSize) {
-      //       int nextPage = publicTenderBloc.state.tenderCurrentPage + 1;
+          if (publicTenderBloc.state.currentPage <
+              publicTenderBloc.state.totalPages) {
+            int nextPage = publicTenderBloc.state.currentPage + 1;
 
-      //       publicTenderBloc.add(GetPublicTender(nextPage,
-      //           direction: direction, orderBy: orderBy));
-      //     }
-      //   }
-      // }
+            publicTenderBloc.add(GetAuctions(
+              page: nextPage,
+              isRefresh: false,
+              // direction: direction,
+              // orderBy: orderBy,
+            ));
+          }
+        }
+      }
     });
   }
 
-  late PublicTenderBloc publicTenderBloc;
+  late AuctionsBloc publicTenderBloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    publicTenderBloc = context.read<PublicTenderBloc>();
+    publicTenderBloc = context.read<AuctionsBloc>();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    publicTenderBloc.add(UpdateTenderFilterEnable(false));
+    publicTenderBloc.add(UpdateAuctionsFilterEnable(false));
     super.dispose();
   }
 
@@ -335,7 +339,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                 ),
                 child: Row(
                   children: [
-                    BlocBuilder<PublicTenderBloc, PublicTenderState>(
+                    BlocBuilder<AuctionsBloc, AuctionsState>(
                         builder: (context, tenderState) {
                       return Stack(
                         children: [
@@ -701,7 +705,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
         children: [
           BlocBuilder<AuctionsBloc, AuctionsState>(
             builder: (context, auctionsController) {
-              return BlocBuilder<PublicTenderBloc, PublicTenderState>(
+              return BlocBuilder<AuctionsBloc, AuctionsState>(
                   builder: (context, pTenderState) {
                 if (auctionsController.isLoading) {
                   return const Center(
@@ -712,9 +716,11 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                     !auctionsController.isFilterEnable) {
                   return RefreshIndicator(
                     onRefresh: () async {
-                      // context
-                      //     .read<PublicTenderBloc>()
-                      //     .add(GetPublicTender(1, direction: direction));
+                      context.read<AuctionsBloc>().add(GetAuctions(
+                            page: 1,
+                            isRefresh: true,
+                            // direction: direction,
+                          ));
                     },
                     child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
@@ -752,17 +758,19 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      // if (publicTenderState.isFilterEnable) {
-                      //   context.read<PublicTenderBloc>().add(
-                      //       FilterPublicTenderProduct(
-                      //           productFilterValuesModel:
-                      //               publicTenderState.tenderFilterValuesModel!,
-                      //           currentPage: 1));
-                      // } else {
-                      //   context
-                      //       .read<PublicTenderBloc>()
-                      //       .add(GetPublicTender(1, direction: direction));
-                      // }
+                      if (auctionsController.isFilterEnable) {
+                        // context.read<PublicTenderBloc>().add(
+                        //     FilterPublicTenderProduct(
+                        //         productFilterValuesModel:
+                        //             publicTenderState.tenderFilterValuesModel!,
+                        //         currentPage: 1));
+                      } else {
+                        context.read<AuctionsBloc>().add(GetAuctions(
+                              page: 1,
+                              isRefresh: true,
+                              // direction: direction,
+                            ));
+                      }
                     },
                     child: auctionsController.isGridView
                         ? SingleChildScrollView(
@@ -784,21 +792,22 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                       : auctionsController.auctions.length,
                                   itemBuilder: (context, index) {
                                     return AuctionGridItem(
-                                          auction: auctionsController.isFilterEnable
+                                      auction: auctionsController.isFilterEnable
                                           ? auctionsController
                                               .filteredAuctions[index]
                                           : auctionsController.auctions[index],
                                       isPublicAuction: true,
                                       isCompanyAuction: false,
                                       isSearchAuction: false,
-                                        // tender: publicTenderState.isFilterEnable
-                                        //     ? publicTenderState
-                                        //         .filterTenders[index]
-                                        //     : publicTenderState
-                                        //         .publicTenders[index],
-                                        // isCompanyTender: false,
-                                        // isPublicTender: true,
-                                        );
+
+                                      // tender: publicTenderState.isFilterEnable
+                                      //     ? publicTenderState
+                                      //         .filterTenders[index]
+                                      //     : publicTenderState
+                                      //         .publicTenders[index],
+                                      // isCompanyTender: false,
+                                      // isPublicTender: true,
+                                    );
                                   },
                                 ),
                                 if (auctionsController.isLoadingMore)

@@ -16,16 +16,29 @@ import '../../../../../utils/custom_text_style.dart';
 import '../../../../base/custom_button.dart';
 import '../../../../base/custom_textfield.dart';
 
-class AddBetBottomSheet extends StatelessWidget {
+class AddBetBottomSheet extends StatefulWidget {
   final TextEditingController suggestedBidController;
   final ValueChanged<String> onChanged;
   final AuctionDetailData auction;
+  final String minimumNextBid;
   const AddBetBottomSheet({
     super.key,
     required this.suggestedBidController,
     required this.onChanged,
     required this.auction,
+    required this.minimumNextBid,
   });
+
+  @override
+  State<AddBetBottomSheet> createState() => _AddBetBottomSheetState();
+}
+
+class _AddBetBottomSheetState extends State<AddBetBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+    widget.suggestedBidController.text = widget.minimumNextBid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +48,9 @@ class AddBetBottomSheet extends StatelessWidget {
           Get.back();
           //need to call the auction detail bloc to refresh the auction details
           context.read<AuctionDetailBloc>().add(GetAuctionDetail(
-              auctionId: auction.id!, context: context, isRefresh: false));
+              auctionId: widget.auction.id!,
+              context: context,
+              isRefresh: false));
           Get.defaultDialog(
             title: 'you_placed_bet'.tr,
             content: Text('wait_until_auction_end'.tr,
@@ -119,7 +134,8 @@ class AddBetBottomSheet extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      if (auction.bids != null && auction.bids!.isNotEmpty)
+                      if (widget.auction.bids != null &&
+                          widget.auction.bids!.isNotEmpty)
                         Container(
                           width: Get.width,
                           padding: const EdgeInsets.symmetric(
@@ -147,15 +163,15 @@ class AddBetBottomSheet extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          auction.bids!.first.user!.name!,
-                                          // 'Нур И.',
+                                          widget
+                                              .auction.bids!.first.user!.name!,
                                           style: h16.copyWith(
                                               color: ColorResources.darkGray),
                                         ),
                                         Text(
-                                          auction.bids!.first.timeSinceBid ??
+                                          widget.auction.bids!.first
+                                                  .timeSinceBid ??
                                               '',
-                                          // '18.07.2025 / 20:00',
                                           style: body12.copyWith(
                                               color: ColorResources.gray),
                                         ),
@@ -163,8 +179,7 @@ class AddBetBottomSheet extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    '${auction.higestBitPrice}\$',
-                                    // '500\$',
+                                    '${widget.auction.higestBitPrice}\$',
                                     style: h16.copyWith(
                                         color: ColorResources.darkGray),
                                   ),
@@ -173,9 +188,7 @@ class AddBetBottomSheet extends StatelessWidget {
                             ],
                           ),
                         ),
-                      // TextField(
-                      //   controller: suggestedBidController,
-                      // ),
+
                       const SizedBox(
                         height: 10,
                       ),
@@ -187,8 +200,7 @@ class AddBetBottomSheet extends StatelessWidget {
                         height: 5,
                       ),
                       CustomTextField(
-                        controller: suggestedBidController,
-                        // controller: suggestedBidController,
+                        controller: widget.suggestedBidController,
                         hintColor: '',
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
@@ -197,10 +209,9 @@ class AddBetBottomSheet extends StatelessWidget {
                         inputType: TextInputType.number,
                         leading: '',
                         onChanged: (val) {
-                          onChanged(val);
+                          widget.onChanged(val);
                         },
                         readOnly: false,
-
                         suffix: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 14),
@@ -214,8 +225,8 @@ class AddBetBottomSheet extends StatelessWidget {
                       //   'Добавьте ещё 60\$ и купите не ожидая окончания аукциона',
                       //   style: body14,
                       // ),
-                      if (double.parse(auction.targetPrice ?? '0') >
-                          double.parse(auction.higestBitPrice ?? '0'))
+                      if (double.parse(widget.auction.targetPrice ?? '0') >
+                          double.parse(widget.auction.higestBitPrice ?? '0'))
                         RichText(
                           text: TextSpan(
                             style: body14, // Your default text style
@@ -223,7 +234,7 @@ class AddBetBottomSheet extends StatelessWidget {
                               TextSpan(text: 'add_more'.tr),
                               TextSpan(
                                 text:
-                                    '${double.parse(auction.targetPrice ?? '0') - double.parse(auction.higestBitPrice ?? '0')}\$',
+                                    '${double.parse(widget.auction.targetPrice ?? '0') - double.parse(widget.auction.higestBitPrice ?? '0')}\$',
                                 style: body14.copyWith(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -241,44 +252,16 @@ class AddBetBottomSheet extends StatelessWidget {
                                 buyOfferState is AuctionBuyOfferLoading
                             ? null
                             : () {
-                                // Get.back();
-                                if (suggestedBidController.text.isEmpty) {
-                                  showShortToast('enter_your_bid'.tr);
+                                if (widget
+                                    .suggestedBidController.text.isEmpty) {
+                                  showShortToast('add price');
                                   return;
                                 }
                                 context.read<AuctionBidBloc>().add(
-                                      AddAuctionBid(
-                                        auctionId: auction.id!,
-                                        bidAmount: double.parse(
-                                            suggestedBidController.text),
-                                      ),
-                                    );
-                                // Get.dialog(Container(
-                                //   height: 200,
-                                //   decoration: BoxDecoration(
-                                //       color: Colors.white,
-                                //       borderRadius: BorderRadius.circular(24)),
-                                //   child: Column(
-                                //     mainAxisSize: MainAxisSize.min,
-                                //     crossAxisAlignment: CrossAxisAlignment.center,
-                                //     children: [
-                                //       Text(
-                                //         'Вы сделали ставку',
-                                //   style: TextStyle(
-                                //       fontSize: 17,
-                                //       fontWeight: FontWeight.w500,
-                                //       color: Colors.black),
-                                // ),
-                                //       const SizedBox(
-                                //         height: 10,
-                                //       ),
-                                //       Text(
-                                //           'Ожидайте до окончания аукциона. Если в течение этого времени никто не сделает ставку, вы станете победителем!',
-                                //           style: textStyle13Inter.copyWith(
-                                //               color: ColorResources.black)),
-                                //     ],
-                                //   ),
-                                // ));
+                                    AddAuctionBid(
+                                        auctionId: widget.auction.id!,
+                                        bidAmount: double.parse(widget
+                                            .suggestedBidController.text)));
                               },
                         child: Container(
                           height: 46,
@@ -324,14 +307,16 @@ class AddBetBottomSheet extends StatelessWidget {
                             ? () {}
                             : () {
                                 // buy at your price
-                                if (suggestedBidController.text.isEmpty) {
+                                if (widget
+                                    .suggestedBidController.text.isEmpty) {
                                   showShortToast('enter_your_price'.tr);
                                   return;
                                 }
-                                double offerPrice =
-                                    double.parse(suggestedBidController.text);
+                                double offerPrice = double.parse(
+                                    widget.suggestedBidController.text);
                                 if (offerPrice <
-                                    double.parse(auction.targetPrice ?? '0')) {
+                                    double.parse(
+                                        widget.auction.targetPrice ?? '0')) {
                                   showShortToast(
                                       'price_must_be_equal_or_greater_than_target_price'
                                           .tr);
@@ -339,13 +324,13 @@ class AddBetBottomSheet extends StatelessWidget {
                                 }
                                 context.read<AuctionBuyOfferBloc>().add(
                                     SubmitAuctionBuyOfferEvent(
-                                        auction.id!, offerPrice));
+                                        widget.auction.id!, offerPrice));
                               },
                         width: Get.width,
                         height: 46,
                         title: buyOfferState is AuctionBuyOfferLoading
                             ? 'loading'.tr
-                            : '${'buy_at_your_price'.tr} ${double.parse(auction.targetPrice ?? '0')}\$',
+                            : '${'buy_at_your_price'.tr} ${double.parse(widget.auction.targetPrice ?? widget.auction.buyoutPrice ?? '0')}\$',
                         color: ColorResources.blue.withOpacity(0.2),
                         textColor: ColorResources.blue,
                         radius: 16,

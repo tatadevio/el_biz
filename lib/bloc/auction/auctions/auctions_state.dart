@@ -9,6 +9,8 @@ class AuctionsState extends Equatable {
   final bool isLoadingMore;
   final int currentPage;
   final int totalPages;
+  final int filteredCurrentpage;
+  final int filteredTotalPages;
 
   const AuctionsState({
     this.isGridView = true,
@@ -19,6 +21,8 @@ class AuctionsState extends Equatable {
     this.isLoadingMore = false,
     this.currentPage = 1,
     this.totalPages = 1,
+    this.filteredCurrentpage = 1,
+    this.filteredTotalPages = 1,
   });
 
   AuctionsState copyWith({
@@ -30,6 +34,8 @@ class AuctionsState extends Equatable {
     bool? isLoadingMore,
     int? currentPage,
     int? totalPages,
+    int? filteredCurrentpage,
+    int? filteredTotalPages,
   }) {
     return AuctionsState(
       isGridView: isGridView ?? this.isGridView,
@@ -40,6 +46,8 @@ class AuctionsState extends Equatable {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       currentPage: currentPage ?? this.currentPage,
       totalPages: totalPages ?? this.totalPages,
+      filteredCurrentpage: filteredCurrentpage ?? this.filteredCurrentpage,
+      filteredTotalPages: filteredTotalPages ?? this.filteredTotalPages,
     );
   }
 
@@ -52,10 +60,10 @@ class AuctionsState extends Equatable {
         isLoading,
         isLoadingMore,
         currentPage,
-        totalPages
+        totalPages,
+        filteredCurrentpage,
+        filteredTotalPages,
       ];
 }
 
 final class AuctionsInitial extends AuctionsState {}
-
-

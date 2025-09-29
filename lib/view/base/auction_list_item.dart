@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/auction/auctions/auctions_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/view/base/custom_image.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../bloc/auction/auction_detail/auction_detail_bloc.dart';
+import '../../bloc/auction/search_auction/search_auction_bloc.dart';
 import '../../bloc/auction/similar_auctions/similar_auctions_bloc.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../utils/color_resources.dart';
@@ -16,7 +18,7 @@ import 'custom_favorite_button.dart';
 import 'custom_toast.dart';
 
 class AuctionListItemWidget extends StatelessWidget {
-  final bool isFavorite;
+  // final bool isFavorite;
   final AuctionListItem auction;
   final bool isCompanyAuction;
   final bool isPublicAuction;
@@ -26,7 +28,7 @@ class AuctionListItemWidget extends StatelessWidget {
 
   const AuctionListItemWidget({
     super.key,
-    this.isFavorite = false,
+    // this.isFavorite = false,
     required this.auction,
     this.isCompanyAuction = false,
     this.isPublicAuction = false,
@@ -52,6 +54,8 @@ class AuctionListItemWidget extends StatelessWidget {
                 );
             Get.to(() => AuctionDetailScreen(
                   auctionName: auction.title ?? '',
+                  auctionId: auction.id!,
+                  isSearch: isSearchAuction,
                 ));
           } else {
             showShortToast('login_to_view_auction'.tr);
@@ -77,9 +81,24 @@ class AuctionListItemWidget extends StatelessWidget {
                           right: 5,
                           top: 5,
                           child: CustomFavoriteButton(
-                            isFavorite: false,
-                            // auction.isFavorite ?? false,
+                            isFavorite: auction.isFavorite ?? false,
                             onTap: () {
+                              if (isCompanyAuction) {
+                              } else if (isSearchAuction) {
+                                context.read<SearchAuctionBloc>().add(
+                                    ToggleSearchAuctionsFavorite(
+                                        auctionId: auction.id!,
+                                        context: context,
+                                        isFavorite:
+                                            auction.isFavorite == false));
+                              } else {
+                                context.read<AuctionsBloc>().add(
+                                    TogglePublicAuctionsFavorite(
+                                        auctionId: auction.id!,
+                                        context: context,
+                                        isFavorite:
+                                            auction.isFavorite ?? false));
+                              }
                               // if (isCompanyTender) {
                               //   context.read<CompanyDetailBloc>().add(
                               //       ToggleTenderFavorite(tender.id!, context));

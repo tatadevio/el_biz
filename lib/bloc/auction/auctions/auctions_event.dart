@@ -26,3 +26,35 @@ class GetAuctions extends AuctionsEvent {
   List<Object> get props => [page, isRefresh];
 }
 
+class TogglePublicAuctionsFavorite extends AuctionsEvent {
+  final int auctionId;
+  final BuildContext context;
+  final bool isFavorite;
+
+  const TogglePublicAuctionsFavorite(
+      {required this.auctionId,
+      required this.context,
+      required this.isFavorite});
+
+  @override
+  List<Object> get props => [auctionId, context, isFavorite];
+}
+
+class UpdateAuctionInFavoriteList extends AuctionsEvent {
+  final int auctionId;
+  final bool isFavorite;
+
+  const UpdateAuctionInFavoriteList(
+      {required this.auctionId, required this.isFavorite});
+
+  @override
+  List<Object> get props => [auctionId, isFavorite];
+}
+
+class UpdateAuctionsFilterEnable extends AuctionsEvent {
+  final bool isEnable;
+  const UpdateAuctionsFilterEnable(this.isEnable);
+
+  @override
+  List<Object> get props => [isEnable];
+}

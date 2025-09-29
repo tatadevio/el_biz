@@ -1,5 +1,7 @@
+import 'package:el_biz/bloc/auction/favorite_auciton/favorite_auction_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/repo/auction/auctions_repo.dart';
@@ -14,12 +16,21 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
 
     on<UpdateAuctionGridView>(_updateToggleShowGridView);
     on<GetAuctions>(_getAuctions);
-
+    on<TogglePublicAuctionsFavorite>(_onTogglePublicAuctionsFavorite);
+    on<UpdateAuctionInFavoriteList>(_onUpdateAuctionInFavoriteList);
+    on<UpdateAuctionsFilterEnable>(_onUpdateAuctionsFilterEnable);
   }
 
   void _updateToggleShowGridView(
       UpdateAuctionGridView event, Emitter<AuctionsState> emit) {
     emit(state.copyWith(isGridView: event.isGridView));
+  }
+
+  Future<void> _onUpdateAuctionsFilterEnable(
+    UpdateAuctionsFilterEnable event,
+    Emitter<AuctionsState> emit,
+  ) async {
+    emit(state.copyWith(isFilterEnable: event.isEnable));
   }
 
   void _getAuctions(GetAuctions event, Emitter<AuctionsState> emit) async {
@@ -67,5 +78,54 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
     }
   }
 
-  
+  Future<void> _onTogglePublicAuctionsFavorite(
+      TogglePublicAuctionsFavorite event, Emitter<AuctionsState> emit) async {
+    add(UpdateAuctionInFavoriteList(
+        auctionId: event.auctionId, isFavorite: event.isFavorite));
+    try {
+      final response = await auctionsRepo.toggleFavorite(
+        event.auctionId.toString(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // ignore: use_build_context_synchronously
+        event.context
+            .read<FavoriteAuctionBloc>()
+            .add(RemoveAuctionFromFavoriteList(auctionId: event.auctionId));
+      } else {
+        add(UpdateAuctionInFavoriteList(
+            auctionId: event.auctionId, isFavorite: !event.isFavorite));
+      }
+    } catch (e) {
+      add(UpdateAuctionInFavoriteList(
+          auctionId: event.auctionId, isFavorite: !event.isFavorite));
+    }
+  }
+
+  Future<void> _onUpdateAuctionInFavoriteList(
+      UpdateAuctionInFavoriteList event, Emitter<AuctionsState> emit) async {
+    print('this is the auction id in the list = ${event.auctionId}');
+    final updatedAuctions = state.auctions.map((auciton) {
+      if (auciton.id == event.auctionId) {
+        return auciton.copyWith(
+          isFavorite: event.isFavorite,
+        );
+      }
+      return auciton;
+    }).toList();
+
+    emit(state.copyWith(auctions: updatedAuctions));
+
+    if (state.isFilterEnable) {
+      final filteredAuctions = state.filteredAuctions.map((auction) {
+        if (auction.id == event.auctionId) {
+          return auction.copyWith(
+            isFavorite: event.isFavorite,
+          );
+        }
+        return auction;
+      }).toList();
+
+      emit(state.copyWith(filteredAuctions: filteredAuctions));
+    }
+  }
 }

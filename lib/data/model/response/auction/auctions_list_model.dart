@@ -342,6 +342,7 @@ class AuctionListItem {
   final String? carCustomsCleared;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final bool? isFavorite;
 
   AuctionListItem({
     this.id,
@@ -372,6 +373,7 @@ class AuctionListItem {
     this.carCustomsCleared,
     this.createdAt,
     this.updatedAt,
+    this.isFavorite,
   });
 
   AuctionListItem copyWith({
@@ -403,6 +405,7 @@ class AuctionListItem {
     String? carCustomsCleared,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? isFavorite,
   }) =>
       AuctionListItem(
         id: id ?? this.id,
@@ -433,6 +436,7 @@ class AuctionListItem {
         carCustomsCleared: carCustomsCleared ?? this.carCustomsCleared,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        isFavorite: isFavorite ?? this.isFavorite,
       );
 
   factory AuctionListItem.fromJson(Map<String, dynamic> json) =>
@@ -482,6 +486,7 @@ class AuctionListItem {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        isFavorite: json["is_favorite"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -514,6 +519,7 @@ class AuctionListItem {
         "car_customs_cleared": carCustomsCleared,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "is_favorite": isFavorite,
       };
 }
 

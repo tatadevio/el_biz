@@ -18,8 +18,9 @@ import '../auction_detail_screen.dart';
 class SimilarAuctionWidget extends StatelessWidget {
   final int auctionId;
   final String auctionName;
+  final bool isSearch;
   const SimilarAuctionWidget(
-      {super.key, required this.auctionId, required this.auctionName});
+      {super.key, required this.auctionId, required this.auctionName, required this.isSearch});
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
     final similarTenderBloc = context.read<SimilarAuctionsBloc>();
@@ -137,6 +138,8 @@ class SimilarAuctionWidget extends StatelessWidget {
               Get.off(
                   () => AuctionDetailScreen(
                         auctionName: auction.title ?? '',
+                        auctionId: auction.id!,
+                        isSearch: isSearch,
                       ),
                   preventDuplicates: false);
             } else {
