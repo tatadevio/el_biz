@@ -89,15 +89,58 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                 auctionId: auction!.id!,
                 isFavorite: auction?.isFavorite ?? false));
 
-                if(widget.isSearch) {
-                  context.read<SearchAuctionBloc>().add(UpdateSearchAuctionInFavoriteList(
-                  auctionId: auction!.id!,
-                  isFavorite: auction?.isFavorite ?? false));
-                }
+            if (widget.isSearch) {
+              context.read<SearchAuctionBloc>().add(
+                  UpdateSearchAuctionInFavoriteList(
+                      auctionId: auction!.id!,
+                      isFavorite: auction?.isFavorite ?? false));
+            }
           }
         },
-        child: BlocBuilder<AuctionDetailBloc, AuctionDetailState>(
-            builder: (context, productDetialController) {
+        child: BlocConsumer<AuctionDetailBloc, AuctionDetailState>(
+            listener: (context, state) {
+          if (state is AuctionDetailSuccess) {
+            if (auction?.creator?.id != null &&
+                auction?.creator?.id ==
+                    context.read<UserBloc>().state.userInfo?.data?.id) {
+              Get.dialog(
+                CupertinoAlertDialog(
+                  title: Text(
+                      "${'your_target_price'.tr} ${state.auctionDetailModel.data?.targetPrice ?? state.auctionDetailModel.data?.buyoutPrice} ${'has_been_offered'.tr}"),
+                  content:
+                      Text('do_you_want_to_cancel_the_auction_or_continue'.tr),
+                  actions: [
+                    BlocBuilder<AuctionCancelBloc, AuctionCancelState>(
+                      builder: (context, auctionCancel) {
+                        return CupertinoDialogAction(
+                            child: auctionCancel is CancelAuctionLoading
+                                ? SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : Text('stop'.tr),
+                            onPressed: () {
+                              // Get.back();
+                              context
+                                  .read<AuctionCancelBloc>()
+                                  .add(CancelAuction(auctionId: auction!.id!));
+                            });
+                      },
+                    ),
+                    CupertinoDialogAction(
+                        child: Text('continue'.tr),
+                        onPressed: () {
+                          Get.back();
+                        }),
+                  ],
+                ),
+              );
+            }
+          }
+        }, builder: (context, productDetialController) {
           if (productDetialController is AuctionDetailLoading) {
             return Center(
               child: CircularProgressIndicator(),
@@ -866,8 +909,14 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                               setState(() {});
                                             },
                                             auction: auction,
-                                            minimumNextBid: suggestedBidController.text.isEmpty ? 
-                                      auctionModel.minimumNextBid.toString() : suggestedBidController.text,
+                                            minimumNextBid:
+                                                suggestedBidController
+                                                        .text.isEmpty
+                                                    ? auctionModel
+                                                        .minimumNextBid
+                                                        .toString()
+                                                    : suggestedBidController
+                                                        .text,
                                           ),
                                           isScrollControlled: true,
                                           backgroundColor: Colors.white,
@@ -921,8 +970,10 @@ class _AuctionDetailScreenState extends State<AuctionDetailScreen> {
                                     setState(() {});
                                   },
                                   auction: auction,
-                                  minimumNextBid: suggestedBidController.text.isEmpty ? 
-                                      auctionModel.minimumNextBid.toString() : suggestedBidController.text,
+                                  minimumNextBid: suggestedBidController
+                                          .text.isEmpty
+                                      ? auctionModel.minimumNextBid.toString()
+                                      : suggestedBidController.text,
                                 ),
                                 isScrollControlled: true,
                                 backgroundColor: Colors.white,

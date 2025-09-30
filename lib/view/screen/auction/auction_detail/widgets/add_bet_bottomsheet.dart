@@ -254,7 +254,7 @@ class _AddBetBottomSheetState extends State<AddBetBottomSheet> {
                             : () {
                                 if (widget
                                     .suggestedBidController.text.isEmpty) {
-                                  showShortToast('add price');
+                                  showShortToast('enter_your_bid'.tr);
                                   return;
                                 }
                                 context.read<AuctionBidBloc>().add(
