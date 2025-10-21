@@ -595,9 +595,9 @@ class ProductDetailScreen extends StatelessWidget {
                           width: width,
                           height: 56,
                           onTap: () {
-                            String productUserId = state
-                                .productDetailModel!.data!.user!.id
-                                .toString();
+                            // String productUserId = state
+                            //     .productDetailModel!.data!.user!.id
+                            //     .toString();
                             String myUserId = userState
                                 .selectedAccountModel!.userId
                                 .toString();

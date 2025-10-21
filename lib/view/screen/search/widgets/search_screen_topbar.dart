@@ -13,7 +13,7 @@ class SearchScreenTopbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    // final height = MediaQuery.of(context).size.height;
     return BlocBuilder<SearchBloc, SearchState>(
         builder: (context, searchState) {
       return Container(

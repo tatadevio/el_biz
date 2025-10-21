@@ -1,12 +1,9 @@
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/chat/chat_list_model.dart';
-import 'package:el_biz/data/model/response/company/company_product_model.dart';
-import 'package:el_biz/data/model/response/tender/tender_item_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/screen/chat/chat_conversation.dart';
-import 'package:el_biz/view/screen/contracts/contracts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

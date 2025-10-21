@@ -165,7 +165,7 @@ class _ProductsFilterScreenState extends State<ProductsFilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.sizeOf(context).width;
+    // var width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

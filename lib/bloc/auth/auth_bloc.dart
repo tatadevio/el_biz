@@ -102,9 +102,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
         }
       }
-      // else {
 
-      // }
       showShortToast(res.body['message']);
     });
 

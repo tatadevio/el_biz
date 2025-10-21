@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/bloc/contracts/contracts_bloc.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../bloc/company/company_bloc.dart';
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../../bloc/similar_tenders/similar_tenders_bloc.dart';

@@ -20,7 +20,10 @@ class SimilarAuctionWidget extends StatelessWidget {
   final String auctionName;
   final bool isSearch;
   const SimilarAuctionWidget(
-      {super.key, required this.auctionId, required this.auctionName, required this.isSearch});
+      {super.key,
+      required this.auctionId,
+      required this.auctionName,
+      required this.isSearch});
 
   void _callScrolling(BuildContext context, ScrollController scrollController) {
     final similarTenderBloc = context.read<SimilarAuctionsBloc>();
@@ -165,13 +168,13 @@ class SimilarAuctionWidget extends StatelessWidget {
                         right: 5,
                         top: 5,
                         child: CustomFavoriteButton(
-                          isFavorite: false,
+                          isFavorite: auction.isFavorite ?? false,
                           // tender.isFavorite ?? false,
                           onTap: () {
-                            // context.read<SimilarTendersBloc>().add(
-                            //     ToggleFavoriteSimilarTender(
-                            //         tenderId: tender.id.toString(),
-                            //         context: context));
+                            context.read<SimilarAuctionsBloc>().add(
+                                ToggleFavoriteSimilarAuction(
+                                    auctionId: auction.id.toString(),
+                                    context: context));
                           },
                         )),
                   ],

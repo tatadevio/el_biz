@@ -82,6 +82,7 @@ class AuctionListItemWidget extends StatelessWidget {
                           top: 5,
                           child: CustomFavoriteButton(
                             isFavorite: auction.isFavorite ?? false,
+                            // tender.isFavorite ?? false,
                             onTap: () {
                               if (isCompanyAuction) {
                               } else if (isSearchAuction) {
@@ -92,16 +93,19 @@ class AuctionListItemWidget extends StatelessWidget {
                                         isFavorite:
                                             auction.isFavorite == false));
                               } else {
+                                print(
+                                    'calling there in auciton grid item with auciton = ${auction.isFavorite == false}');
                                 context.read<AuctionsBloc>().add(
                                     TogglePublicAuctionsFavorite(
                                         auctionId: auction.id!,
                                         context: context,
                                         isFavorite:
-                                            auction.isFavorite ?? false));
+                                            auction.isFavorite == false));
                               }
                               // if (isCompanyTender) {
-                              //   context.read<CompanyDetailBloc>().add(
-                              //       ToggleTenderFavorite(tender.id!, context));
+                              //   context
+                              //       .read<CompanyDetailBloc>()
+                              //       .add(ToggleTenderFavorite(tender.id!, context));
                               // } else if (isSearchTender) {
                               //   context.read<SearchTenderBloc>().add(
                               //       ToggleSearchTenderFavorite(

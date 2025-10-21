@@ -61,7 +61,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
 
           if (publicAuctionsBloc.state.filteredCurrentpage <
               publicAuctionsBloc.state.filteredTotalPages) {
-            int nextPage = publicAuctionsBloc.state.filteredCurrentpage + 1;
+            // int nextPage = publicAuctionsBloc.state.filteredCurrentpage + 1;
 
             // publicAuctionsBloc.add(FilterPublicAuctionsProduct(
             //     productFilterValuesModel:
@@ -799,14 +799,6 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                       isPublicAuction: true,
                                       isCompanyAuction: false,
                                       isSearchAuction: false,
-
-                                      // tender: publicTenderState.isFilterEnable
-                                      //     ? publicTenderState
-                                      //         .filterTenders[index]
-                                      //     : publicTenderState
-                                      //         .publicTenders[index],
-                                      // isCompanyTender: false,
-                                      // isPublicTender: true,
                                     );
                                   },
                                 ),
@@ -839,14 +831,8 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                               .filteredAuctions[index]
                                           : auctionsController.auctions[index],
                                       isPublicAuction: true,
-                                      // isFavorite: tender.isFavorite ?? false,
-                                      // tender: publicTenderState.isFilterEnable
-                                      //     ? publicTenderState
-                                      //         .filterTenders[index]
-                                      //     : publicTenderState
-                                      //         .publicTenders[index],
-                                      // isCompanyTender: false,
-                                      // isPublicTender: true,
+                                      isCompanyAuction: false,
+                                      isSearchAuction: false,
                                     );
                                   },
                                 ),

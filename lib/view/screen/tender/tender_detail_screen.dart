@@ -430,9 +430,9 @@ class TenderDetailScreen extends StatelessWidget {
                     width: Get.width,
                     height: 56,
                     onTap: () {
-                      String tenderUserId = state
-                          .tenderDetailModel!.data!.company!.owner!.id
-                          .toString();
+                      // String tenderUserId = state
+                      //     .tenderDetailModel!.data!.company!.owner!.id
+                      //     .toString();
 
                       String myUserId = userState.userInfo!.data!.id.toString();
                       final myUser = userState.userInfo?.data;

@@ -15,7 +15,6 @@ import '../../../utils/color_resources.dart';
 import '../auction/auctions/auctions_screen.dart';
 import '../chat/chat_screen.dart';
 import '../home/home_screen.dart';
-import '../menu/menu_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
