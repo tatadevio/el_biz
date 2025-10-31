@@ -107,17 +107,23 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
                   leading: '',
                   readOnly: false,
                   maxLines: 4,
+                  validator: (value) {
+                    if (value == null || value.toString().isEmpty) {
+                      return 'required_field'.tr;
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 5,
                 ),
-                Text(
-                  'optional_field'.tr,
-                  style: body12.copyWith(color: ColorResources.gray),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // Text(
+                //   'optional_field'.tr,
+                //   style: body12.copyWith(color: ColorResources.gray),
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
               ],
             ),
           ),

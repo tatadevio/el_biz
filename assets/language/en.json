@@ -493,5 +493,6 @@
   "your_target_price" : "Your target price",
   "has_been_offered" : "has been offered",
   "do_you_want_to_cancel_the_auction_or_continue" : "Do you want to cancel the auction or continue?",
-  "stop" : "Stop"
+  "stop" : "Stop",
+  "phone_no_is_required" : "Phone number is required"
 }

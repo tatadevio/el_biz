@@ -23,6 +23,7 @@ class CompanyInfoScreen extends StatefulWidget {
 }
 
 class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController streetController = TextEditingController();
   final TextEditingController houseController = TextEditingController();
   final TextEditingController officeController = TextEditingController();
@@ -155,32 +156,34 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
       return;
     }
 
-    lunchBreak = DaySchedule(
-        day: lunchBreak.day,
-        openingTime: lunchStartController.text,
-        closingTime: lunchEndController.text,
-        isOpen: true);
+    if (_formKey.currentState!.validate()) {
+      lunchBreak = DaySchedule(
+          day: lunchBreak.day,
+          openingTime: lunchStartController.text,
+          closingTime: lunchEndController.text,
+          isOpen: true);
 
-    final companyModel = context.read<CompanyBloc>().state.addCompanyModel;
-    companyModel.street = streetController.text;
-    companyModel.house = houseController.text;
-    companyModel.office = officeController.text;
-    companyModel.postalCode = postalCodeController.text;
-    companyModel.city = selectedCity;
-    companyModel.schedule =
-        schedule; // schedule model is not completed to send value...
-    companyModel.lunchBreak = lunchBreak;
+      final companyModel = context.read<CompanyBloc>().state.addCompanyModel;
+      companyModel.street = streetController.text;
+      companyModel.house = houseController.text;
+      companyModel.office = officeController.text;
+      companyModel.postalCode = postalCodeController.text;
+      companyModel.city = selectedCity;
+      companyModel.schedule =
+          schedule; // schedule model is not completed to send value...
+      companyModel.lunchBreak = lunchBreak;
 
-    companyModel.schedule = [];
+      companyModel.schedule = [];
 
-    for (var sch in schedule) {
-      companyModel.schedule!.add(sch);
-      print('this is schedule of the compnay : ${sch.day}');
+      for (var sch in schedule) {
+        companyModel.schedule!.add(sch);
+        print('this is schedule of the compnay : ${sch.day}');
+      }
+
+      Get.to(() => CompanyContactInfoScreen(
+            isEdit: widget.isEdit,
+          ));
     }
-
-    Get.to(() => CompanyContactInfoScreen(
-          isEdit: widget.isEdit,
-        ));
   }
 
   @override
@@ -193,424 +196,442 @@ class _CompanyInfoScreenState extends State<CompanyInfoScreen> {
           builder: (context, sellerState) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'city'.tr,
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'to_select_a_city,_start_typing_the_name_in_the_field_below_or_select_from_the_list',
-                  style: body14.copyWith(color: ColorResources.gray),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'city'.tr,
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'to_select_a_city,_start_typing_the_name_in_the_field_below_or_select_from_the_list',
+                    style: body14.copyWith(color: ColorResources.gray),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-                BlocBuilder<CitiesBloc, CitiesState>(
-                    builder: (context, citiesState) {
-                  print('this is list of cities : ${citiesState.cityItem}');
-                  return Container(
-                    height: 48,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        width: 1,
-                        color: ColorResources.lgColor,
+                  BlocBuilder<CitiesBloc, CitiesState>(
+                      builder: (context, citiesState) {
+                    print('this is list of cities : ${citiesState.cityItem}');
+                    return Container(
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          width: 1,
+                          color: ColorResources.lgColor,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: DropdownButton<CityItem>(
-                      value: selectedCity,
-                      isExpanded: true,
-                      hint: Text(
-                        selectedCity?.name ?? 'select_city'.tr,
-                        style: body16.copyWith(color: ColorResources.gray),
+                      child: DropdownButton<CityItem>(
+                        value: selectedCity,
+                        isExpanded: true,
+                        hint: Text(
+                          selectedCity?.name ?? 'select_city'.tr,
+                          style: body16.copyWith(color: ColorResources.gray),
+                        ),
+                        underline: const SizedBox(), // Remove default underline
+                        onChanged: (CityItem? newValue) {
+                          setState(() {
+                            selectedCity = newValue;
+                          });
+                        },
+                        items: citiesState.cityItem.map((CityItem city) {
+                          return DropdownMenuItem<CityItem>(
+                            value: city,
+                            child: Text(city.name ?? '', style: body16),
+                          );
+                        }).toList(),
                       ),
-                      underline: const SizedBox(), // Remove default underline
-                      onChanged: (CityItem? newValue) {
-                        setState(() {
-                          selectedCity = newValue;
-                        });
-                      },
-                      items: citiesState.cityItem.map((CityItem city) {
-                        return DropdownMenuItem<CityItem>(
-                          value: city,
-                          child: Text(city.name ?? '', style: body16),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                }),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'required_field'.tr,
-                  style: body12.copyWith(color: ColorResources.green),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'address'.tr,
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
+                    );
+                  }),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'required_field'.tr,
+                    style: body12.copyWith(color: ColorResources.green),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'address'.tr,
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
                         flex: 2,
                         child: CustomTextField1(
-                            controller: streetController,
-                            hintColor: '',
-                            inputType: TextInputType.text,
-                            lableText: 'street'.tr,
-                            leading: '',
-                            readOnly: false)),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: CustomTextField1(
-                            controller: houseController,
-                            hintColor: '',
-                            inputType: TextInputType.text,
-                            lableText: 'house'.tr,
-                            leading: '',
-                            readOnly: false)),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: CustomTextField1(
-                            controller: officeController,
-                            hintColor: '',
-                            inputType: TextInputType.text,
-                            lableText: 'office'.tr,
-                            leading: '',
-                            readOnly: false)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'postal_code'.tr,
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
+                          controller: streetController,
+                          hintColor: '',
+                          inputType: TextInputType.text,
+                          lableText: 'street'.tr,
+                          leading: '',
+                          readOnly: false,
+                          validator: (value) {
+                            if (value == null || value.toString().isEmpty) {
+                              return 'required_field'.tr;
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: CustomTextField1(
+                              controller: houseController,
+                              hintColor: '',
+                              inputType: TextInputType.text,
+                              lableText: 'house'.tr,
+                              leading: '',
+                              readOnly: false)),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: CustomTextField1(
+                              controller: officeController,
+                              hintColor: '',
+                              inputType: TextInputType.text,
+                              lableText: 'office'.tr,
+                              leading: '',
+                              readOnly: false)),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'postal_code'.tr,
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextField(
                     controller: postalCodeController,
                     hintColor: '',
                     inputType: TextInputType.text,
                     leading: '',
-                    readOnly: false),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'required_field'.tr,
-                  style: body12.copyWith(color: ColorResources.gray),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "working_hours".tr,
-                    style: normalTextStyle,
+                    readOnly: false,
+                    // validator: (value) {
+                    //   if (value == null || value.toString().isEmpty) {
+                    //     return 'required_field'.tr;
+                    //   }
+                    //   return null;
+                    // },
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'required_field'.tr,
+                    style: body12.copyWith(color: ColorResources.gray),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "working_hours".tr,
+                      style: normalTextStyle,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
 
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: schedule.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Checkbox for Open/Closed
-                          // Checkbox(
-                          //   value: schedule[index].isOpen,
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       schedule[index].isOpen = value!;
-                          //       if (!schedule[index].isOpen) {
-                          //         schedule[index].openingTime = "00:00";
-                          //         schedule[index].closingTime = "00:00";
-                          //       } else {
-                          //         schedule[index].openingTime = "09:00";
-                          //         schedule[index].closingTime = "18:00";
-                          //       }
-                          //     });
-                          //   },
-                          //   checkColor:
-                          //       ColorResources.primary, // Tick mark color
-                          //   fillColor: MaterialStateProperty.resolveWith<Color>(
-                          //       (states) {
-                          //     // Always white background
-                          //     return Colors.white;
-                          //   }),
-                          //   side: const BorderSide(
-                          //     color:
-                          //         ColorResources.primary, // Always blue border
-                          //     width: 2,
-                          //   ),
-                          //   shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(4),
-                          //   ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: schedule.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Checkbox for Open/Closed
+                            // Checkbox(
+                            //   value: schedule[index].isOpen,
+                            //   onChanged: (value) {
+                            //     setState(() {
+                            //       schedule[index].isOpen = value!;
+                            //       if (!schedule[index].isOpen) {
+                            //         schedule[index].openingTime = "00:00";
+                            //         schedule[index].closingTime = "00:00";
+                            //       } else {
+                            //         schedule[index].openingTime = "09:00";
+                            //         schedule[index].closingTime = "18:00";
+                            //       }
+                            //     });
+                            //   },
+                            //   checkColor:
+                            //       ColorResources.primary, // Tick mark color
+                            //   fillColor: MaterialStateProperty.resolveWith<Color>(
+                            //       (states) {
+                            //     // Always white background
+                            //     return Colors.white;
+                            //   }),
+                            //   side: const BorderSide(
+                            //     color:
+                            //         ColorResources.primary, // Always blue border
+                            //     width: 2,
+                            //   ),
+                            //   shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(4),
+                            //   ),
 
-                          // ),
-                          Checkbox(
-                            value: schedule[index].isOpen,
-                            onChanged: (value) {
-                              setState(() {
-                                schedule[index].isOpen = value!;
-                                if (!schedule[index].isOpen) {
-                                  schedule[index].openingTime = "00:00";
-                                  schedule[index].closingTime = "00:00";
-                                } else {
-                                  schedule[index].openingTime = "09:00";
-                                  schedule[index].closingTime = "18:00";
-                                }
-                              });
-                            },
+                            // ),
+                            Checkbox(
+                              value: schedule[index].isOpen,
+                              onChanged: (value) {
+                                setState(() {
+                                  schedule[index].isOpen = value!;
+                                  if (!schedule[index].isOpen) {
+                                    schedule[index].openingTime = "00:00";
+                                    schedule[index].closingTime = "00:00";
+                                  } else {
+                                    schedule[index].openingTime = "09:00";
+                                    schedule[index].closingTime = "18:00";
+                                  }
+                                });
+                              },
 
-                            checkColor:
-                                ColorResources.primary, // Tick mark color
-                            fillColor: WidgetStateProperty.resolveWith<Color>(
-                                (states) {
-                              // Keep background white at all times
-                              return Colors.white;
-                            }),
-                            side: WidgetStateBorderSide.resolveWith((states) {
-                              return BorderSide(
-                                color: ColorResources
-                                    .primary, // Always blue border
-                                width: 2,
-                              );
-                            }),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          // Day Name
-                          Expanded(
-                            flex: 4,
-                            child: Text(
-                              schedule[index].day,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextField(
-                                      enabled: schedule[index].isOpen,
-
-                                      controller: TextEditingController(
-                                          text: schedule[index].openingTime),
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                          filled: false),
-
-                                      // decoration:
-                                      //     const InputDecoration(labelText: "Open Time"),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          schedule[index].openingTime = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-
-                                  // const SizedBox(width: 8),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        '-',
-                                        textAlign: TextAlign.center,
-                                      )),
-
-                                  // Closing Time TextField
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextField(
-                                      enabled: schedule[index].isOpen,
-                                      controller: TextEditingController(
-                                          text: schedule[index].closingTime),
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                          filled: false),
-                                      // decoration: const InputDecoration(
-                                      //     labelText: "Close Time"),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          schedule[index].closingTime = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              checkColor:
+                                  ColorResources.primary, // Tick mark color
+                              fillColor: WidgetStateProperty.resolveWith<Color>(
+                                  (states) {
+                                // Keep background white at all times
+                                return Colors.white;
+                              }),
+                              side: WidgetStateBorderSide.resolveWith((states) {
+                                return BorderSide(
+                                  color: ColorResources
+                                      .primary, // Always blue border
+                                  width: 2,
+                                );
+                              }),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
                               ),
-                              // Opening Time TextField
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                            // Day Name
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                schedule[index].day,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
 
-                const SizedBox(height: 16),
-                Text(
-                  "lunch_break".tr,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                // LunchBreakRow(),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "lunch_break".tr,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: 40,
-                        child: TextField(
-                          controller: lunchStartController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: ColorResources.dividerColor),
-                              borderRadius: BorderRadius.circular(8),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: TextField(
+                                        enabled: schedule[index].isOpen,
+
+                                        controller: TextEditingController(
+                                            text: schedule[index].openingTime),
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            disabledBorder: InputBorder.none,
+                                            filled: false),
+
+                                        // decoration:
+                                        //     const InputDecoration(labelText: "Open Time"),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            schedule[index].openingTime = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+
+                                    // const SizedBox(width: 8),
+                                    Expanded(
+                                        flex: 1,
+                                        child: Text(
+                                          '-',
+                                          textAlign: TextAlign.center,
+                                        )),
+
+                                    // Closing Time TextField
+                                    Expanded(
+                                      flex: 2,
+                                      child: TextField(
+                                        enabled: schedule[index].isOpen,
+                                        controller: TextEditingController(
+                                            text: schedule[index].closingTime),
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            disabledBorder: InputBorder.none,
+                                            filled: false),
+                                        // decoration: const InputDecoration(
+                                        //     labelText: "Close Time"),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            schedule[index].closingTime = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // Opening Time TextField
+                              ),
                             ),
-                          ),
-                          textAlign: TextAlign.center,
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 16),
+                  Text(
+                    "lunch_break".tr,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  // LunchBreakRow(),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          "lunch_break".tr,
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: 40,
-                        child: TextField(
-                          controller: lunchEndController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: ColorResources.dividerColor),
-                              borderRadius: BorderRadius.circular(8),
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: lunchStartController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: ColorResources.dividerColor),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     InkWell(
-                //       onTap: () {
-                //         Get.bottomSheet(
-                //           BottomSheetContentTiming(
-                //               schedule: sellerState.scheduleTiming),
-                //           backgroundColor: Colors.white,
-                //           shape: const RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.vertical(
-                //                 top: Radius.circular(25.0)),
-                //           ),
-                //           isScrollControlled: true,
-                //         );
-                //       },
-                //       child: Container(
-                //         height: 47,
-                //         width: size.width * .76,
-                //         decoration: BoxDecoration(
-                //             color: ColorResources.primary,
-                //             borderRadius: BorderRadius.circular(12.0)),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             const Icon(
-                //               Icons.add,
-                //               color: Colors.white,
-                //               size: 28,
-                //             ),
-                //             const SizedBox(
-                //               width: 8,
-                //             ),
-                //             Text(
-                //               "add_work_schedule".tr,
-                //               style:
-                //                   boldTextStyle.copyWith(color: Colors.white),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-              ],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: lunchEndController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: ColorResources.dividerColor),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     InkWell(
+                  //       onTap: () {
+                  //         Get.bottomSheet(
+                  //           BottomSheetContentTiming(
+                  //               schedule: sellerState.scheduleTiming),
+                  //           backgroundColor: Colors.white,
+                  //           shape: const RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.vertical(
+                  //                 top: Radius.circular(25.0)),
+                  //           ),
+                  //           isScrollControlled: true,
+                  //         );
+                  //       },
+                  //       child: Container(
+                  //         height: 47,
+                  //         width: size.width * .76,
+                  //         decoration: BoxDecoration(
+                  //             color: ColorResources.primary,
+                  //             borderRadius: BorderRadius.circular(12.0)),
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             const Icon(
+                  //               Icons.add,
+                  //               color: Colors.white,
+                  //               size: 28,
+                  //             ),
+                  //             const SizedBox(
+                  //               width: 8,
+                  //             ),
+                  //             Text(
+                  //               "add_work_schedule".tr,
+                  //               style:
+                  //                   boldTextStyle.copyWith(color: Colors.white),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
             ),
           ),
         );

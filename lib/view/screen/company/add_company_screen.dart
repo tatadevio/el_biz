@@ -162,7 +162,13 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                       lableText: 'ОКПО',
                       leading: '',
                       readOnly: false,
-                      validator: null,
+                      // validator: null,
+                      validator: (value) {
+                        if (value == null || value.toString().isEmpty) {
+                          return 'required_field'.tr;
+                        }
+                        return null;
+                      },
                     ),
                     // const SizedBox(
                     //   height: 5,
