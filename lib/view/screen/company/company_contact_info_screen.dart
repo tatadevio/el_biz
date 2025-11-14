@@ -72,7 +72,7 @@ class _CompanyContactInfoScreenState extends State<CompanyContactInfoScreen> {
     if (phoneControllers[0].text.isEmpty) {
       // Get.snackbar('error'.tr, 'please_add_at_least_one_phone_number'.tr,
       //     backgroundColor: Colors.red, colorText: Colors.white);
-      showCustomSnackBar(
+      showShortToast(
         'phone_no_is_required'.tr,
       );
       return;

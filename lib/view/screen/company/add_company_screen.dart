@@ -8,7 +8,6 @@ import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
 import 'package:el_biz/view/base/custom_image.dart';
 import 'package:el_biz/view/base/custom_textfield.dart';
-import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/company/company_description_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,20 +48,20 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final companyData = context.read<CompanyBloc>().state;
-      if ((widget.isEdit ||
-          (companyData.addCompanyModel.companyLogo != null &&
-              companyData.addCompanyModel.companyBanner != null))) {
-        context.read<CompanyBloc>().state.addCompanyModel.companyName =
-            legalNameController.text;
-        context.read<CompanyBloc>().state.addCompanyModel.companyNumber =
-            okpoController.text;
-        Get.to(() => CompanyDescriptionScreen(
-              isEdit: widget.isEdit,
-            ));
-      } else {
-        showShortToast('logo_and_banner_is_requried'.tr);
-      }
+      // final companyData = context.read<CompanyBloc>().state;
+      // if ((widget.isEdit ||
+      //     (companyData.addCompanyModel.companyLogo != null &&
+      //         companyData.addCompanyModel.companyBanner != null))) {
+      context.read<CompanyBloc>().state.addCompanyModel.companyName =
+          legalNameController.text;
+      context.read<CompanyBloc>().state.addCompanyModel.companyNumber =
+          okpoController.text;
+      Get.to(() => CompanyDescriptionScreen(
+            isEdit: widget.isEdit,
+          ));
+      // } else {
+      //   showShortToast('logo_and_banner_is_requried'.tr);
+      // }
     } else {
       // validation issue...
     }

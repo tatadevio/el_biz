@@ -77,11 +77,18 @@ class CompnayRepo {
 
     if (addCompanyModel.otherContacts != null &&
         addCompanyModel.otherContacts!.isNotEmpty) {
-      for (int i = 0; i < addCompanyModel.otherContacts!.length; i++) {
-        fields['contacts[$i][name]'] =
-            addCompanyModel.otherContacts![i].contactName ?? '';
-        fields['contacts[$i][contact]'] =
-            addCompanyModel.otherContacts![i].contactNumber ?? '';
+      if (addCompanyModel.otherContacts != null &&
+          addCompanyModel.otherContacts?.length == 1 &&
+          addCompanyModel.otherContacts![0].contactName == "") {
+        // fields['contacts[]'] = jsonEncode([]);
+        // fields['contacts[]'] = '';
+      } else {
+        for (int i = 0; i < addCompanyModel.otherContacts!.length; i++) {
+          fields['contacts[$i][name]'] =
+              addCompanyModel.otherContacts![i].contactName ?? '';
+          fields['contacts[$i][contact]'] =
+              addCompanyModel.otherContacts![i].contactNumber ?? '';
+        }
       }
     }
 
@@ -106,9 +113,13 @@ class CompnayRepo {
           'banner', addCompanyModel.companyBanner!.path));
     }
 
-    if (addCompanyModel.certificateDocument != null) {
+    if (addCompanyModel.certificateDocument != null &&
+        addCompanyModel.certificateDocument!.path.isEmpty &&
+        addCompanyModel.certificateDocument!.path != "") {
       files.add(await http.MultipartFile.fromPath(
           'certificate', addCompanyModel.certificateDocument!.path));
+    } else {
+      fields['certificate'] = '';
     }
 
     if (addCompanyModel.otherDocuments != null &&

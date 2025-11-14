@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:el_biz/bloc/company_detail/company_detail_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:el_biz/view/screen/company/widgets/custom_add_company_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,28 +20,28 @@ class AddCompanyDocumentScreen extends StatelessWidget {
   void _submitForm(BuildContext context) {
     final companyData = context.read<CompanyBloc>().state.addCompanyModel;
 
-    final detailState = context.read<CompanyDetailBloc>().state;
+    // final detailState = context.read<CompanyDetailBloc>().state;
 
-    if (companyData.certificateDocument != null ||
-        (isEdit &&
-            (companyData.certificateDocument != null ||
-                (detailState.companyDocuments != null &&
-                    detailState.companyDocuments!.isNotEmpty)))) {
-      if (isEdit) {
-        final companyDetail =
-            context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
-        context.read<CompanyBloc>().add(UpdateCompany(
-            addCompanyModel: companyData,
-            companyId: companyDetail.id.toString(),
-            context: context));
-        print(companyData.categories);
-      } else {
-        context.read<CompanyBloc>().add(AddNewCompany(companyData, context));
-      }
-      // context.read<CompanyBloc>().add(ClearAddCompanyModel());
+    // if (companyData.certificateDocument != null ||
+    //     (isEdit &&
+    //         (companyData.certificateDocument != null ||
+    //             (detailState.companyDocuments != null &&
+    //                 detailState.companyDocuments!.isNotEmpty)))) {
+    if (isEdit) {
+      final companyDetail =
+          context.read<CompanyDetailBloc>().state.companyDetailModel!.data!;
+      context.read<CompanyBloc>().add(UpdateCompany(
+          addCompanyModel: companyData,
+          companyId: companyDetail.id.toString(),
+          context: context));
+      print(companyData.categories);
     } else {
-      showShortToast('add_certificate'.tr);
+      context.read<CompanyBloc>().add(AddNewCompany(companyData, context));
     }
+    // context.read<CompanyBloc>().add(ClearAddCompanyModel());
+    // } else {
+    //   showShortToast('add_certificate'.tr);
+    // }
   }
 
   String getFileSize(File file) {
