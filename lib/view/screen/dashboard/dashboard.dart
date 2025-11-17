@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:el_biz/bloc/config/config_bloc.dart';
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/view/screen/products/product_screen.dart';
@@ -11,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shorebird_code_push/shorebird_code_push.dart';
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../helper/my_notification.dart';
 import '../../../utils/Images.dart';
@@ -34,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   // FirebaseDynamicLinkService firebaseDynamicLinkService = FirebaseDynamicLinkService();
 
-  final updater = ShorebirdUpdater();
+  // final updater = ShorebirdUpdater();
 
   @override
   void initState() {
@@ -48,71 +44,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
     initNotify();
     updateFcmToken();
-
-    _startCheckingForUpdates();
-  }
-
-  Timer? _timer;
-
-  _startCheckingForUpdates() {
-    _timer = Timer.periodic(Duration(seconds: 2), (_) => _checkForUpdate());
-  }
-
-  _checkForUpdate() async {
-    print('checking update....');
-
-    final status = await updater.checkForUpdate();
-    if (status == UpdateStatus.outdated) {
-      print('update available....');
-      _timer?.cancel();
-      updater.update();
-
-      if (!mounted) return;
-
-      _showBanner();
-      // _timer?.cancel();
-      // final updateInfo = await updater.getUpdateInfo();
-      // if (updateInfo != null) {
-      //   await updater.downloadUpdate(updateInfo);
-      //   await updater.installUpdate();
-      //   print('update installed, restarting app....');
-      //   await ShorebirdCodePush.restartApp();
-      // }
-      try {
-        await updater.update();
-      } on UpdateException catch (e) {
-        print('update error: $e');
-      }
-    } else {
-      print('no update available....');
-    }
-  }
-
-  _showBanner() {
-    ScaffoldMessenger.of(context).showMaterialBanner(
-      MaterialBanner(
-        content: Text('a new update is available'),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              try {
-                await updater.update();
-                exit(0);
-              } on UpdateException catch (e) {
-                print('update error: $e');
-              }
-            },
-            child: Text('exit'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
   }
 
   updateFcmToken() async {

@@ -2,6 +2,7 @@ import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
 import 'package:el_biz/data/model/response/company/company_detail_model.dart';
 import 'package:el_biz/data/repo/company_detail_repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,14 +58,18 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
           await compnayDetailRepo.companyDetailById(event.companyId);
       if (response.statusCode == 200) {
         final companyDetail = CompanyDetailModel.fromJson(response.body);
-        print('this is company detail : ${companyDetail.toJson()}');
+        if (kDebugMode) {
+          print('this is company detail : ${companyDetail.toJson()}');
+        }
         // emit(state.copyWith(companyDetailModel: companyDetail));
         emit(state.copyWith(
           companyDetailModel: companyDetail,
           isLoading: false,
           companyDetailLoading: false,
         ));
-        print('this is company detail after emit : ${companyDetail.message}');
+        if (kDebugMode) {
+          print('this is company detail after emit : ${companyDetail.message}');
+        }
       } else {
         emit(state.copyWith(
           isLoading: false,
@@ -72,7 +77,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         ));
       }
     } catch (e) {
-      print('Error: $e');
+      if (kDebugMode) {
+        print('Error: $e');
+      }
       emit(state.copyWith(
         isLoading: false,
         companyDetailLoading: false,
@@ -113,7 +120,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(isLoading: false));
       }
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
     emit(state.copyWith(isLoading: false, productShowMore: false));
   }
@@ -155,7 +164,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(isLoading: false));
       }
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
     emit(state.copyWith(isLoading: false, inActiveProductShowMore: false));
   }
@@ -237,7 +248,9 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
         emit(state.copyWith(isLoading: false));
       }
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
     emit(state.copyWith(isLoading: false, inActiveTenderShowMore: false));
   }
