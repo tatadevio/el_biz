@@ -6,10 +6,19 @@ class LocalizationState extends Equatable {
   final int selectedIndex;
   final List<LanguageModel> languages;
 
-  const LocalizationState({required this.locale, this.isLtr = true, this.selectedIndex = 0, this.languages = const []});
+  const LocalizationState(
+      {required this.locale,
+      this.isLtr = true,
+      this.selectedIndex = 0,
+      this.languages = const []});
 
-  LocalizationState copyWith({Locale? locale, bool? isLtr, int? selectedIndex, languages}) {
-    return LocalizationState(locale: locale ?? this.locale, isLtr: isLtr ?? this.isLtr, selectedIndex: selectedIndex ?? this.selectedIndex, languages: languages ?? this.languages);
+  LocalizationState copyWith(
+      {Locale? locale, bool? isLtr, int? selectedIndex, languages}) {
+    return LocalizationState(
+        locale: locale ?? this.locale,
+        isLtr: isLtr ?? this.isLtr,
+        selectedIndex: selectedIndex ?? this.selectedIndex,
+        languages: languages ?? this.languages);
   }
 
   @override

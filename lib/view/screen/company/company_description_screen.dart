@@ -90,12 +90,12 @@ class _CompanyDescriptionScreenState extends State<CompanyDescriptionScreen> {
                   leading: '',
                   readOnly: false,
                   maxLines: 4,
-                  validator: (value) {
-                    if (value == null || value.toString().isEmpty) {
-                      return 'required_field'.tr;
-                    }
-                    return null;
-                  },
+                  // validator: (value) {
+                  //   if (value == null || value.toString().isEmpty) {
+                  //     return 'required_field'.tr;
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 const SizedBox(
                   height: 5,

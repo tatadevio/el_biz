@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -56,6 +58,7 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
             .companyDetailModel!
             .data!
             .categories!;
+        log('this is the isEdit = true and categories is ${categories.length}');
       }
       Get.to(() => SelectCategoryScreen(
             isCompanyCategory: true,
@@ -107,12 +110,12 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
                   leading: '',
                   readOnly: false,
                   maxLines: 4,
-                  validator: (value) {
-                    if (value == null || value.toString().isEmpty) {
-                      return 'required_field'.tr;
-                    }
-                    return null;
-                  },
+                  // validator: (value) {
+                  //   if (value == null || value.toString().isEmpty) {
+                  //     return 'required_field'.tr;
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 const SizedBox(
                   height: 5,

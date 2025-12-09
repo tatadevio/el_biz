@@ -1,6 +1,5 @@
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/base/custom_add_review_widget.dart';
 import 'package:el_biz/view/screen/company/widgets/company_data.dart/review_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
-import '../../base/custom_border_button.dart';
 
 class CompanyReviewsScreen extends StatelessWidget {
   final String companyId;

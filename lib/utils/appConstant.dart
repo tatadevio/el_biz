@@ -12,7 +12,7 @@ class AppConstants {
   // static const String playStoreLink = "https://play.google.com/store/apps/details?id=com.isooq.tatadev";
   // static const int androidVersion = 2;
   // static const String iosVersion = "11";
-  // static const String appStoreId = "6667114968";
+  // static const String appStoreId = "6667114968";app
   // static const String googleMapApiKey = "AIzaSyDzA_aNns0_2hD7DgwxvxqlUwuxtwsZEYs";
 
   /// Auth

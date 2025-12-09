@@ -174,6 +174,7 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
           builder: (context, localizationController) {
+     
         return GetMaterialApp(
           localizationsDelegates: const [
             FormBuilderLocalizations.delegate,

@@ -17,7 +17,8 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
   final ApiClient apiClient;
   LocalizationBloc(this.sharedPreferences, this.apiClient)
       : super(LocalizationState(
-          locale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
+          locale: Locale(AppConstants.languages[0].languageCode,
+              AppConstants.languages[0].countryCode),
           languages: AppConstants.languages,
         )) {
     on<SetSelectIndex>((event, emit) {
@@ -32,8 +33,12 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
 
     on<LoadCurrentLanguage>((event, emit) {
       // emit(state.copyWith())
-      final languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? AppConstants.languages[0].languageCode;
-      final countryCode = sharedPreferences.getString(AppConstants.COUNTRY_CODE) ?? AppConstants.languages[0].countryCode;
+      final languageCode =
+          sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ??
+              AppConstants.languages[0].languageCode;
+      final countryCode =
+          sharedPreferences.getString(AppConstants.COUNTRY_CODE) ??
+              AppConstants.languages[0].countryCode;
       final locale = Locale(languageCode, countryCode);
       final isLtr = languageCode != 'ar';
 
@@ -57,20 +62,24 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
     on<SearchLanguage>(_onSearchLanguage);
   }
 
-  Future<void> _onSaveLanguage(SaveLanguage event, Emitter<LocalizationState> emit) async {
+  Future<void> _onSaveLanguage(
+      SaveLanguage event, Emitter<LocalizationState> emit) async {
     final locale = event.locale;
     final fromMenu = event.fromMenu;
 
-    await sharedPreferences.setString(AppConstants.LANGUAGE_CODE, locale.languageCode);
+    await sharedPreferences.setString(
+        AppConstants.LANGUAGE_CODE, locale.languageCode);
 
-    final String? lang = sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
+    final String? lang =
+        sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
     final String? token = sharedPreferences.getString("token");
     apiClient.updateHeader(token ?? "", lang ?? "ru");
     if (fromMenu) {}
     emit(state.copyWith(locale: locale, isLtr: locale.languageCode != 'ar'));
   }
 
-  void _onSearchLanguage(SearchLanguage event, Emitter<LocalizationState> emit) {
+  void _onSearchLanguage(
+      SearchLanguage event, Emitter<LocalizationState> emit) {
     final query = event.query;
 
     if (query.isEmpty) {
@@ -79,7 +88,10 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
         // selectedIndex: -1,
       ));
     } else {
-      final filteredLanguages = AppConstants.languages.where((language) => language.languageName.toLowerCase().contains(query.toLowerCase())).toList();
+      final filteredLanguages = AppConstants.languages
+          .where((language) =>
+              language.languageName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
 
       emit(state.copyWith(
         languages: filteredLanguages,
