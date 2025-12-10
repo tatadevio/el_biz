@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:el_biz/bloc/favorite/favorite_bloc.dart';
+import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
 import 'package:el_biz/data/model/response/company/company_detail_model.dart';
 import 'package:el_biz/data/repo/company_detail_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -6,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/model/response/company/company_auctions_model.dart';
 import '../../data/model/response/company/company_document_model.dart';
 import '../../data/model/response/company/company_product_model.dart';
 import '../../data/model/response/company/company_reviews_model.dart';
@@ -52,6 +56,8 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     add(GetCompanyReviews(event.companyId, state.currentPage));
     add(GetCompanyInactiveProducts(event.companyId, currentPage: 1));
     add(GetCompanyInActiveTenders(event.companyId, currentPage: 1));
+    add(GetCompanyAuctions(event.companyId, currentPage: 1));
+    add(GetCompanyInActiveAuctions(event.companyId, currentPage: 1));
 
     try {
       final response =
@@ -272,26 +278,28 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
     try {
       final response = await compnayDetailRepo.companyAuctions(
           event.companyId, 'active', event.currentPage);
-      // if (response.statusCode == 200) {
-      //   final companyTenders = CompanyTendersModel.fromJson(response.body);
-      //   if (event.currentPage == 1) {
-      //     emit(state.copyWith(
-      //       companyTenders: companyTenders.data?.items,
-      //       isLoading: false,
-      //     ));
-      //   } else {
-      //     emit(state.copyWith(companyTenders: [
-      //       ...state.companyTenders ?? [],
-      //       ...companyTenders.data?.items ?? []
-      //     ]));
-      //   }
-      //   emit(state.copyWith(
-      //       activeTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
-      //       activeTenderPageSize: companyTenders.data?.totalPages ?? 1));
-      // }
+
+      if (response.statusCode == 200) {
+        final companyTenders = CompanyAuctionsModel.fromJson(response.body);
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            companyAuctions: companyTenders.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(companyAuctions: [
+            ...state.companyAuctions ?? [],
+            ...companyTenders.data?.items ?? []
+          ]));
+        }
+        emit(state.copyWith(
+            activeAuctionCurrentPage: companyTenders.data?.currentPage ?? 1,
+            activeAuctionPageSize: companyTenders.data?.totalPages ?? 1));
+      }
     } catch (e) {
       emit(state.copyWith(isLoading: false, activeAuctionShowMore: false));
     }
+    log('this is the list of company auctions ${state.companyAuctions?.length}');
     emit(state.copyWith(isLoading: false, activeAuctionShowMore: false));
   }
 
@@ -310,27 +318,27 @@ class CompanyDetailBloc extends Bloc<CompanyDetailEvent, CompanyDetailState> {
       final response = await compnayDetailRepo.companyAuctions(
           event.companyId, 'inactive', event.currentPage);
 
-      // if (response.statusCode == 200) {
-      //   final companyTenders = CompanyTendersModel.fromJson(response.body);
+      if (response.statusCode == 200) {
+        final companyInactiveAuctions = CompanyAuctionsModel.fromJson(response.body);
 
-      //   if (event.currentPage == 1) {
-      //     emit(state.copyWith(
-      //       companyInactiveTenders: companyTenders.data?.items,
-      //       isLoading: false,
-      //     ));
-      //   } else {
-      //     emit(state.copyWith(companyInactiveTenders: [
-      //       ...state.companyInactiveTenders ?? [],
-      //       ...companyTenders.data?.items ?? []
-      //     ]));
-      //   }
+        if (event.currentPage == 1) {
+          emit(state.copyWith(
+            companyInactiveAuctions: companyInactiveAuctions.data?.items,
+            isLoading: false,
+          ));
+        } else {
+          emit(state.copyWith(companyInactiveAuctions: [
+            ...state.companyInactiveAuctions ?? [],
+            ...companyInactiveAuctions.data?.items ?? []
+          ]));
+        }
 
-      //   emit(state.copyWith(
-      //       inActiveTenderCurrentPage: companyTenders.data?.currentPage ?? 1,
-      //       inActiveTenderPageSize: companyTenders.data?.totalPages ?? 1));
-      // } else {
-      //   emit(state.copyWith(isLoading: false));
-      // }
+        emit(state.copyWith(
+            inActiveTenderCurrentPage: companyInactiveAuctions.data?.currentPage ?? 1,
+            inActiveTenderPageSize: companyInactiveAuctions.data?.totalPages ?? 1));
+      } else {
+        emit(state.copyWith(isLoading: false));
+      }
     } catch (e) {
       print(e.toString());
     }

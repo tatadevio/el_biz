@@ -1,7 +1,6 @@
 import 'package:el_biz/bloc/company/company_bloc.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
-import 'package:el_biz/view/screen/company/widgets/company_data.dart/company_tenders/company_active_tenders_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,6 @@ import '../../../../base/custom_gridview_widget.dart';
 import '../../../../base/custom_listview_widget.dart';
 import 'company_auctions/company_active_auctions_widget.dart';
 import 'company_auctions/company_inactive_auctions_widget.dart';
-import 'company_tenders/company_inactive_tenders_widget.dart';
 
 class CompanyAuctions extends StatelessWidget {
   final ScrollController scrollController;
@@ -28,7 +26,7 @@ class CompanyAuctions extends StatelessWidget {
         //   return Center(
         //     child: Padding(
         //       padding: EdgeInsets.symmetric(vertical: 10),
-        //       child: Text('no_tender_found'.tr),
+        //       child: Text('no_auction_found'.tr),
         //     ),
         //   );
         // }

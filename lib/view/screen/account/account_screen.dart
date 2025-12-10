@@ -325,9 +325,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Confirm'),
+                      title: Text('confirm'.tr),
                       content: Text(
-                          'Are you sure to add this account as primary account?'),
+                          'are_you_sure_to_add_this_account_as_primary_account?'.tr),
                       actions: [
                         TextButton(
                           style: TextButton.styleFrom(
@@ -335,7 +335,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                           ),
-                          child: Text('Cancel'),
+                          child: Text('cancel'.tr),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -346,7 +346,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                           ),
-                          child: Text('Yes'),
+                          child: Text('yes'.tr),
                           onPressed: () {
                             print('Selected Account ID: ${account.id}');
                             context.read<AccountBloc>().add(MakePrimaryAccount(

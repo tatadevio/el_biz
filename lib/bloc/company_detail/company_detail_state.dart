@@ -9,8 +9,8 @@ class CompanyDetailState extends Equatable {
   final List<DocumentItem>? companyDocuments;
   final List<TenderItem>? companyTenders;
   final List<TenderItem>? companyInactiveTenders;
-  final List? companyAuctions;
-  final List? companyInactiveAuctions;
+  final List<AuctionListItem>? companyAuctions;
+  final List<AuctionListItem>? companyInactiveAuctions;
   final List<ReviewItem>? companyReviews;
   final CompanyReviewsModel? companyReviewsModel;
   final bool isMoreLoading;
@@ -80,8 +80,8 @@ class CompanyDetailState extends Equatable {
     List<DocumentItem>? companyDocuments,
     List<TenderItem>? companyTenders,
     List<TenderItem>? companyInactiveTenders,
-    List? companyAuctions,
-    List? companyInactiveAuctions,
+    List<AuctionListItem>? companyAuctions,
+    List<AuctionListItem>? companyInactiveAuctions,
     List<ReviewItem>? companyReviews,
     CompanyReviewsModel? companyReviewsModel,
     bool? isMoreLoading,

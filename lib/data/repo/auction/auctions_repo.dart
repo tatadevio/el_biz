@@ -10,9 +10,10 @@ class AuctionsRepo {
 
   AuctionsRepo(this.apiClient, this.sharedPreferences);
 
-  Future<Response> getAuctions(int page) async {
-    return await apiClient
-        .getData("${AppConstants.publicAuctionsUrl}?page=$page");
+  Future<Response> getAuctions(int page,
+      {String orderBy = 'created_at', String direction = 'desc'}) async {
+    return await apiClient.getData(
+        "${AppConstants.publicAuctionsUrl}?page=$page&order_by=$orderBy&sort_order=$direction");
   }
 
   Future<Response> toggleFavorite(String id) async {

@@ -495,6 +495,9 @@
   "has_been_offered" : "была предложена",
   "do_you_want_to_cancel_the_auction_or_continue" : "Хотите отозвать аукцион или продолжать?",
   "stop" : "Отозвать",
-  "phone_no_is_required" : "Требуется номер телефона"
+  "phone_no_is_required" : "Требуется номер телефона",
+  "old" : "старый",
+  "are_you_sure_to_add_this_account_as_primary_account?" : "Вы уверены, что добавите этот аккаунт в качестве основного?",
+  "about_product" : "О товаре"
 
 }

@@ -1,5 +1,4 @@
 import 'package:el_biz/bloc/auction/auctions/auctions_bloc.dart';
-// import 'package:el_biz/bloc/public_tender/public_tender_bloc.dart';
 
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
@@ -29,7 +28,7 @@ class AuctionsScreen extends StatefulWidget {
 class _AuctionsScreenState extends State<AuctionsScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
-  String direction = 'asc';
+  String sortOrder = 'asc';
   String orderBy = 'created_at';
 
   @override
@@ -71,17 +70,17 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
         } else {
           // Handle regular tenders pagination
           print(
-              'going to call the tenders list pagination - Total Pages: ${publicTenderBloc.state.totalPages}, Current Page: ${publicTenderBloc.state.currentPage}');
+              'going to call the tenders list pagination - Total Pages: ${publicAuctionBloc.state.totalPages}, Current Page: ${publicAuctionBloc.state.currentPage}');
 
-          if (publicTenderBloc.state.currentPage <
-              publicTenderBloc.state.totalPages) {
-            int nextPage = publicTenderBloc.state.currentPage + 1;
+          if (publicAuctionBloc.state.currentPage <
+              publicAuctionBloc.state.totalPages) {
+            int nextPage = publicAuctionBloc.state.currentPage + 1;
 
-            publicTenderBloc.add(GetAuctions(
+            publicAuctionBloc.add(GetAuctions(
               page: nextPage,
               isRefresh: false,
-              // direction: direction,
-              // orderBy: orderBy,
+              direction: sortOrder,
+              orderBy: orderBy,
             ));
           }
         }
@@ -89,18 +88,18 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
     });
   }
 
-  late AuctionsBloc publicTenderBloc;
+  late AuctionsBloc publicAuctionBloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    publicTenderBloc = context.read<AuctionsBloc>();
+    publicAuctionBloc = context.read<AuctionsBloc>();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    publicTenderBloc.add(UpdateAuctionsFilterEnable(false));
+    publicAuctionBloc.add(UpdateAuctionsFilterEnable(false));
     super.dispose();
   }
 
@@ -405,189 +404,15 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          // showModalBottomSheet(
-                          //   context: context,
-                          //   shape: const RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.vertical(
-                          //       top: Radius.circular(20),
-                          //     ),
-                          //   ),
-                          //   builder: (context) {
-                          //     return StatefulBuilder(
-                          //         builder: (context, setState) {
-                          //       return Container(
-                          //         padding: const EdgeInsets.all(20),
-                          //         decoration: const BoxDecoration(
-                          //           color: Colors.white,
-                          //           borderRadius: BorderRadius.vertical(
-                          //             top: Radius.circular(20),
-                          //           ),
-                          //         ),
-                          //         child: Column(
-                          //           mainAxisSize: MainAxisSize.min,
-                          //           crossAxisAlignment:
-                          //               CrossAxisAlignment.start,
-                          //           children: [
-                          //             Row(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.spaceBetween,
-                          //               children: [
-                          //                 Text(
-                          //                   'sort_by'.tr,
-                          //                   style: h16.copyWith(
-                          //                       color: ColorResources.darkGray,
-                          //                       fontWeight: FontWeight.w600),
-                          //                 ),
-                          //                 IconButton(
-                          //                   onPressed: () =>
-                          //                       Navigator.pop(context),
-                          //                   icon: const Icon(Icons.close),
-                          //                   color: ColorResources.gray,
-                          //                 )
-                          //               ],
-                          //             ),
-                          //             const SizedBox(height: 10),
-                          //             Container(
-                          //               decoration: BoxDecoration(
-                          //                 borderRadius:
-                          //                     BorderRadius.circular(12),
-                          //                 color: Colors.white,
-                          //                 boxShadow: [
-                          //                   BoxShadow(
-                          //                     color:
-                          //                         Colors.grey.withOpacity(0.1),
-                          //                     spreadRadius: 1,
-                          //                     blurRadius: 5,
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //               child: Column(
-                          //                 children: [
-                          //                   RadioListTile<String>(
-                          //                     value: 'newest',
-                          //                     groupValue: direction == 'desc' &&
-                          //                             orderBy == 'created_at'
-                          //                         ? 'newest'
-                          //                         : null,
-                          //                     onChanged: (value) {
-                          //                       setState(() {
-                          //                         direction = 'desc';
-                          //                         orderBy = 'created_at';
-                          //                       });
-                          //                       context
-                          //                           .read<PublicTenderBloc>()
-                          //                           .add(GetPublicTender(1,
-                          //                               direction: direction,
-                          //                               orderBy: orderBy));
-                          //                       Navigator.pop(context);
-                          //                     },
-                          //                     title: Row(
-                          //                       children: [
-                          //                         SvgPicture.asset(
-                          //                             Images.svgArrowUpDown),
-                          //                         const SizedBox(width: 12),
-                          //                         Text('newest_first'.tr,
-                          //                             style: body14),
-                          //                       ],
-                          //                     ),
-                          //                     activeColor: ColorResources.green,
-                          //                   ),
-                          //                   RadioListTile<String>(
-                          //                     value: 'oldest',
-                          //                     groupValue: direction == 'asc' &&
-                          //                             orderBy == 'created_at'
-                          //                         ? 'oldest'
-                          //                         : null,
-                          //                     onChanged: (value) {
-                          //                       setState(() {
-                          //                         direction = 'asc';
-                          //                         orderBy = 'created_at';
-                          //                       });
-                          //                       context
-                          //                           .read<PublicTenderBloc>()
-                          //                           .add(GetPublicTender(1,
-                          //                               direction: direction,
-                          //                               orderBy: orderBy));
-                          //                       Navigator.pop(context);
-                          //                     },
-                          //                     title: Row(
-                          //                       children: [
-                          //                         SvgPicture.asset(
-                          //                             Images.svgArrowUpDown),
-                          //                         const SizedBox(width: 12),
-                          //                         Text('oldest_first'.tr,
-                          //                             style: body14),
-                          //                       ],
-                          //                     ),
-                          //                     activeColor: ColorResources.green,
-                          //                   ),
-                          //                   RadioListTile<String>(
-                          //                     value: 'az',
-                          //                     groupValue: direction == 'asc' &&
-                          //                             orderBy == 'title'
-                          //                         ? 'az'
-                          //                         : null,
-                          //                     onChanged: (value) {
-                          //                       setState(() {
-                          //                         direction = 'asc';
-                          //                         orderBy = 'title';
-                          //                       });
-                          //                       context
-                          //                           .read<PublicTenderBloc>()
-                          //                           .add(GetPublicTender(1,
-                          //                               direction: direction,
-                          //                               orderBy: orderBy));
-                          //                       Navigator.pop(context);
-                          //                     },
-                          //                     title: Row(
-                          //                       children: [
-                          //                         SvgPicture.asset(
-                          //                             Images.svgArrowUpDown),
-                          //                         const SizedBox(width: 12),
-                          //                         Text('title_a_z'.tr,
-                          //                             style: body14),
-                          //                       ],
-                          //                     ),
-                          //                     activeColor: ColorResources.green,
-                          //                   ),
-                          //                   RadioListTile<String>(
-                          //                     value: 'za',
-                          //                     groupValue: direction == 'desc' &&
-                          //                             orderBy == 'title'
-                          //                         ? 'za'
-                          //                         : null,
-                          //                     onChanged: (value) {
-                          //                       setState(() {
-                          //                         direction = 'desc';
-                          //                         orderBy = 'title';
-                          //                       });
-                          //                       context
-                          //                           .read<PublicTenderBloc>()
-                          //                           .add(GetPublicTender(1,
-                          //                               direction: direction,
-                          //                               orderBy: orderBy));
-                          //                       Navigator.pop(context);
-                          //                     },
-                          //                     title: Row(
-                          //                       children: [
-                          //                         SvgPicture.asset(
-                          //                             Images.svgArrowUpDown),
-                          //                         const SizedBox(width: 12),
-                          //                         Text('title_z_a'.tr,
-                          //                             style: body14),
-                          //                       ],
-                          //                     ),
-                          //                     activeColor: ColorResources.green,
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       );
-                          //     });
-                          //   },
-                          // );
+                          setState(() {
+                            sortOrder = sortOrder == "asc" ? "desc" : "asc";
+                          });
+                          publicAuctionBloc.add(GetAuctions(
+                            page: 1,
+                            isRefresh: true,
+                            direction: sortOrder,
+                            orderBy: orderBy,
+                          ));
                         },
                         child: Container(
                           height: 40,
@@ -619,7 +444,7 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                                 width: 5,
                               ),
                               Text(
-                                'new'.tr,
+                                sortOrder == 'asc' ? 'old'.tr : 'new'.tr,
                                 style:
                                     body14.copyWith(color: ColorResources.gray),
                               ),
@@ -719,7 +544,8 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                       context.read<AuctionsBloc>().add(GetAuctions(
                             page: 1,
                             isRefresh: true,
-                            // direction: direction,
+                            direction: sortOrder,
+                            orderBy: orderBy,
                           ));
                     },
                     child: SingleChildScrollView(
@@ -768,7 +594,8 @@ class _AuctionsScreenState extends State<AuctionsScreen> {
                         context.read<AuctionsBloc>().add(GetAuctions(
                               page: 1,
                               isRefresh: true,
-                              // direction: direction,
+                              direction: sortOrder,
+                              orderBy: orderBy,
                             ));
                       }
                     },

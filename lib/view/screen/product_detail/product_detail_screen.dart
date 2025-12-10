@@ -284,7 +284,8 @@ class ProductDetailScreen extends StatelessWidget {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                'О товаре',
+                                // 'О товаре',
+                                "about_product".tr,
                                 style: button16.copyWith(
                                     color: productDetialController
                                             .showProductReviews

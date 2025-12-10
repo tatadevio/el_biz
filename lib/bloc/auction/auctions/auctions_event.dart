@@ -19,11 +19,17 @@ class UpdateAuctionGridView extends AuctionsEvent {
 class GetAuctions extends AuctionsEvent {
   final int page;
   final bool isRefresh;
+  final String orderBy;
+  final String direction;
 
-  const GetAuctions({this.page = 1, this.isRefresh = false});
+  const GetAuctions(
+      {this.page = 1,
+      this.isRefresh = false,
+      this.orderBy = 'created_at',
+      this.direction = 'desc'});
 
   @override
-  List<Object> get props => [page, isRefresh];
+  List<Object> get props => [page, isRefresh, orderBy, direction];
 }
 
 class TogglePublicAuctionsFavorite extends AuctionsEvent {

@@ -83,6 +83,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool selected = checkAvailibity == '1';
+
+    void toggleSelected() {
+      setState(() {
+        checkAvailibity = selected ? '0' : '1';
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('new_product'.tr),
@@ -219,12 +227,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
-                        validator: (p0) {
-                          if (p0 == null || p0.isEmpty) {
-                            return 'required_field'.tr;
-                          }
-                          return null;
-                        },
+                        // validator: (p0) {
+                        //   if (p0 == null || p0.isEmpty) {
+                        //     return 'required_field'.tr;
+                        //   }
+                        //   return null;
+                        // },
                       ),
                     ),
                     const SizedBox(
@@ -247,20 +255,46 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                RadioListTile(
+                // RadioListTile(
+                //   dense: true,
+                //   contentPadding: const EdgeInsets.all(0),
+                //   value: true,
+                //   groupValue: checkAvailibity == '1',
+                //   onChanged: (val) {
+                //     print(
+                //         'this is the check availability $checkAvailibity and value $val');
+
+                //     setState(() {
+                //       checkAvailibity = val == true ? '1' : '0';
+                //       // if (checkAvailibity == val) {
+                //       //   // Already selected → unselect it
+                //       //   checkAvailibity = '0';
+                //       // } else {
+                //       //   // Select it
+                //       //   checkAvailibity = val ?? '';
+                //       // }
+                //     });
+                //   },
+                //   title: Text(
+                //     'check_availability'.tr,
+                //     style: body16.copyWith(color: ColorResources.darkGray),
+                //   ),
+                // ),
+                ListTile(
                   dense: true,
-                  contentPadding: const EdgeInsets.all(0),
-                  value: '1',
-                  groupValue: checkAvailibity,
-                  onChanged: (val) {
-                    setState(() {
-                      checkAvailibity = val ?? '';
-                    });
-                  },
+                  contentPadding: EdgeInsets.zero,
+                  leading: Radio<bool>(
+                    value: true,
+                    groupValue: selected,
+                    // keep this so selecting from the radio also toggles
+                    onChanged: (_) => toggleSelected(),
+                  ),
                   title: Text(
                     'check_availability'.tr,
                     style: body16.copyWith(color: ColorResources.darkGray),
                   ),
+                  // This ensures tapping the whole tile always toggles (even if already selected)
+                  onTap: toggleSelected,
                 ),
                 const SizedBox(
                   height: 20,
@@ -398,7 +432,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     productCodeController.text.toString();
                 productData?.price = priceController.text.toString();
                 productData?.currency = currencyController.text.toString();
-                productData?.quantity = quantityController.text.toString();
+                productData?.quantity = quantityController.text.isEmpty
+                    ? '0'
+                    : quantityController.text.toString();
                 productData?.quantityUnit = unitController.text.toString();
                 productData?.dimensions = dimensionsController.text.toString();
                 productData?.dimensionsUnit =

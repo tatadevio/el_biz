@@ -53,6 +53,27 @@ class _AddProduct3ScreenState extends State<AddProduct3Screen> {
     super.initState();
     if (widget.isEdit) {
       updateProductData();
+    } else {
+      // if selected compnay profile
+      updateSelectedCompany();
+    }
+  }
+
+  updateSelectedCompany() {
+    if (context.read<UserBloc>().state.selectedAccountModel!.isUser == false) {
+      int companyId =
+          context.read<UserBloc>().state.selectedAccountModel!.companyId;
+      final companyList = context.read<CompanyBloc>().state.myCompanies;
+
+      CompanyItem? matchedCompany =
+          companyList.firstWhereOrNull((c) => c.id == companyId);
+
+      if (matchedCompany != null) {
+        setState(() {
+          context.read<AddProductBloc>().state.productData?.company =
+              matchedCompany;
+        });
+      }
     }
   }
 

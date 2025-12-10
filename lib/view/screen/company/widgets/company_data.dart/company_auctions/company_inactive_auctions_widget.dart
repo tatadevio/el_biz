@@ -1,11 +1,11 @@
 import 'package:el_biz/bloc/company/company_bloc.dart';
+import 'package:el_biz/view/base/auction_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../bloc/company_detail/company_detail_bloc.dart';
-import '../../../../../base/tender_grid_item.dart';
-import '../../../../../base/tender_list_item.dart';
+import '../../../../../base/auction_grid_item.dart';
 
 class CompanyInActiveAuctionsWidget extends StatelessWidget {
   final ScrollController scrollController;
@@ -70,10 +70,10 @@ class CompanyInActiveAuctionsWidget extends StatelessWidget {
                 itemCount:
                     companyDetailState.companyInactiveAuctions?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return TenderGridItem(
-                    tender: companyDetailState.companyInactiveAuctions![index],
-                    isCompanyTender: true,
-                    isPublicTender: false,
+                  return AuctionGridItem(
+                    auction: companyDetailState.companyInactiveAuctions![index],
+                    isCompanyAuction: true,
+                    isPublicAuction: false,
                   );
                 },
               ),
@@ -84,10 +84,10 @@ class CompanyInActiveAuctionsWidget extends StatelessWidget {
                 itemCount:
                     companyDetailState.companyInactiveAuctions?.length ?? 0,
                 itemBuilder: (context, index) {
-                  return TenderListItem(
-                    tender: companyDetailState.companyInactiveAuctions![index],
-                    isCompanyTender: true,
-                    isPublicTender: false,
+                  return AuctionListItemWidget(
+                    auction: companyDetailState.companyInactiveAuctions![index],
+                    isCompanyAuction: true,
+                    isPublicAuction: false,
                   );
                 },
               ),

@@ -87,21 +87,30 @@ class HomeScreen extends StatelessWidget {
                   },
                   contentPadding: const EdgeInsets.all(0),
                   leading: CustomImage(
-                      image: userData?.image ?? '',
+                      image: userState.selectedAccountModel?.isUser == true
+                          ? userState.selectedAccountModel?.userImage ?? ''
+                          : userState.selectedAccountModel?.companyLogo ?? '',
+                      // image: userData?.image ?? '',
                       height: 40,
                       width: 40,
                       radius: 40),
                   title: Row(
                     children: [
-                      Text(
-                        userData?.name ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: ColorResources.darkGray),
+                      Expanded(
+                        child: Text(
+                          userState.selectedAccountModel?.isUser == true
+                              ? userState.selectedAccountModel?.userName ?? ''
+                              : userState.selectedAccountModel?.companyName ??
+                                  '',
+                          // userData?.name ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: ColorResources.darkGray),
+                        ),
                       ),
                       const SizedBox(
                         width: 5,
@@ -114,7 +123,10 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   subtitle: Text(
-                    userData?.email ?? '',
+                    userState.selectedAccountModel?.isUser == true
+                        ? userState.selectedAccountModel?.userEmail ?? ''
+                        : userState.selectedAccountModel?.companyEmail ?? '',
+                    // userData?.email ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(

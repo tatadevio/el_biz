@@ -45,7 +45,8 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
     }
 
     try {
-      final response = await auctionsRepo.getAuctions(event.page);
+      final response = await auctionsRepo.getAuctions(event.page,
+          orderBy: event.orderBy, direction: event.direction);
       if (response.statusCode == 200) {
         AuctionsListModel auctions = AuctionsListModel.fromJson(response.body);
         List<AuctionListItem> auctionList = auctions.data?.items ?? [];
