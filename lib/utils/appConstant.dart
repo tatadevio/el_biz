@@ -59,6 +59,9 @@ class AppConstants {
   static const String publicCompaniesUrl = "api/company-list";
   static const String updateCompanyUrl = "api/companies/update";
 
+  static const String importProductTemplate = "api/product-imports/template";
+  static const String importProductUpload = "api/product-imports/upload";
+
   /// Categories
   static const String categoriesUrl = "api/categories";
   static const String categoryDetailUrl = "api/category"; // /api/category/1

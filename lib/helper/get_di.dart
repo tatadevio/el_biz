@@ -11,6 +11,7 @@ import 'package:el_biz/bloc/auction/favorite_auciton/favorite_auction_bloc.dart'
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
+import 'package:el_biz/bloc/product_import/product_import_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
 import 'package:el_biz/bloc/public_company/public_company_bloc.dart';
 import 'package:el_biz/bloc/public_product/public_product_bloc.dart';
@@ -34,6 +35,7 @@ import 'package:el_biz/data/repo/filter_fields_repo.dart';
 import 'package:el_biz/data/repo/material_repo.dart';
 import 'package:el_biz/data/repo/notification_repo.dart';
 import 'package:el_biz/data/repo/product_detail_repo.dart';
+import 'package:el_biz/data/repo/product_import_repo.dart';
 import 'package:el_biz/data/repo/product_review_repo.dart';
 import 'package:el_biz/data/repo/public_company_repo.dart';
 import 'package:el_biz/data/repo/public_product_repo.dart';
@@ -196,10 +198,13 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<AuctionBuyOfferRepo>(
       () => AuctionBuyOfferRepo(Get.find(), Get.find()),
       fenix: true);
-       Get.lazyPut<FavoriteAuctionRepo>(
+  Get.lazyPut<FavoriteAuctionRepo>(
       () => FavoriteAuctionRepo(Get.find(), Get.find()),
       fenix: true);
-      
+  Get.lazyPut<ProductImportRepo>(
+      () => ProductImportRepo(
+          apiClient: Get.find(), sharedPreferences: Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -252,6 +257,9 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<AuctionBuyOfferBloc>(() => AuctionBuyOfferBloc(Get.find()),
       fenix: true);
   Get.lazyPut<FavoriteAuctionBloc>(() => FavoriteAuctionBloc(Get.find()),
+      fenix: true);
+  Get.lazyPut<ProductImportBloc>(
+      () => ProductImportBloc(repository: Get.find()),
       fenix: true);
 
 ////////

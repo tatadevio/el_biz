@@ -498,6 +498,7 @@
   "phone_no_is_required" : "Требуется номер телефона",
   "old" : "старый",
   "are_you_sure_to_add_this_account_as_primary_account?" : "Вы уверены, что добавите этот аккаунт в качестве основного?",
-  "about_product" : "О товаре"
+  "about_product" : "О товаре",
+  "selected_file" : "Выбранный файл: "
 
 }

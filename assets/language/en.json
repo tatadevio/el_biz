@@ -497,5 +497,6 @@
   "phone_no_is_required" : "Phone number is required",
   "old" : "Old",
   "are_you_sure_to_add_this_account_as_primary_account?" : "Are you sure to add this account as primary account?",
-  "about_product" : "About product"
+  "about_product" : "About product",
+  "selected_file" : "Selected File : "
 }

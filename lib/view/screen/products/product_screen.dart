@@ -6,10 +6,13 @@ import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
+import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/product_grid_item.dart';
 import 'package:el_biz/view/base/product_list_item.dart';
 import 'package:el_biz/view/screen/filter/company_filter/company_filter_screen.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
+import 'package:el_biz/view/screen/product/import_product_screen.dart';
+import 'package:el_biz/view/screen/product/product_import_screen.dart';
 import 'package:el_biz/view/screen/products/widgets/public_companies_widget.dart';
 import 'package:el_biz/view/screen/products/widgets/public_products_widget.dart';
 import 'package:el_biz/view/screen/search/search_screen.dart';
@@ -225,7 +228,46 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.to(() => const AddProductScreen());
+                      Get.dialog(AlertDialog(
+                        titlePadding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        contentPadding: EdgeInsets.zero,
+                        title: Row(
+                          children: [
+                            Expanded(child: Text('New Product')),
+                            IconButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: Icon(Icons.close)),
+                          ],
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              // contentPadding: const EdgeInsets.all(0),
+                              onTap: () {
+                                Get.back();
+                                Get.to(() => const AddProductScreen());
+                              },
+                              title: Text('Add New Product'),
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                  bottom: Radius.circular(30)),
+                              child: ListTile(
+                                // contentPadding: const EdgeInsets.all(0),
+                                onTap: () {
+                                  Get.back();
+                                  Get.to(() => ImportProductScreen());
+                                },
+                                title: Text('Import from CSV'),
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
                     },
                     child: Container(
                       height: 40,
