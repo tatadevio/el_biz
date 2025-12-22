@@ -28,3 +28,21 @@ class AddImportProducts extends ProductImportEvent {
   @override
   List<Object?> get props => [file, categoryId, companyId];
 }
+
+class ImportProductStatus extends ProductImportEvent {
+  final int id;
+
+  const ImportProductStatus({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class ImportProductError extends ProductImportEvent {
+  final int id;
+
+  const ImportProductError({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}

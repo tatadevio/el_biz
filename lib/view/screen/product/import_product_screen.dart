@@ -1,12 +1,9 @@
 import 'dart:developer';
 
-import 'package:el_biz/bloc/add_product/add_product_bloc.dart';
 import 'package:el_biz/bloc/product_import/product_import_bloc.dart';
 import 'package:el_biz/data/model/response/category/categories_list_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
-import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
-import 'package:el_biz/view/screen/dashboard/dashboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +89,7 @@ class _ImportProductScreenState extends State<ImportProductScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                  'if you don\'t have the csv farmat that will be accepted to add new products \nyou can download from here'),
+                  'if you don\'t have the Excel farmat that will be accepted to add new products \nyou can download from here'),
               const SizedBox(
                 height: 5,
               ),
@@ -111,7 +108,7 @@ class _ImportProductScreenState extends State<ImportProductScreen> {
                           .read<ProductImportBloc>()
                           .add(ProductImportRequested());
                     },
-                    label: Text('Download CSV'),
+                    label: Text('Download Template'),
                     icon: Icon(
                       Icons.download,
                       color: Colors.white,
@@ -160,7 +157,7 @@ class _ImportProductScreenState extends State<ImportProductScreen> {
                         selectedFile = result; // synchronous update
                       });
                     },
-                    child: Text('Add CSV'),
+                    child: Text('Add Products File'),
                     // icon: Icon(
                     //   Icons.download,
                     //   color: Colors.white,

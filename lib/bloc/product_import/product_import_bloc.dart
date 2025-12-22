@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:el_biz/data/model/response/product/import_product_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/model/response/product/import_product_error_model.dart';
 import '../../data/repo/product_import_repo.dart';
 import 'product_import_event.dart';
 import 'product_import_state.dart';
@@ -16,6 +17,8 @@ class ProductImportBloc extends Bloc<ProductImportEvent, ProductImportState> {
     on<ProductImportRequested>(_onRequested);
     on<ProductImportReset>((event, emit) => emit(ProductImportInitial()));
     on<AddImportProducts>(_addImportProducts);
+    on<ImportProductStatus>(_importProductStatus);
+    on<ImportProductError>(_importProductError);
   }
 
   Future<void> _onRequested(
@@ -55,21 +58,61 @@ class ProductImportBloc extends Bloc<ProductImportEvent, ProductImportState> {
   Future<void> _addImportProducts(
       AddImportProducts event, Emitter<ProductImportState> emit) async {
     emit(ProductImportLoading());
-    // try {
-    final response = await repository.addImportProducts(
-        event.file, event.categoryId, event.companyId);
-    if (response.statusCode! >= 200 && response.statusCode! <= 300) {
-      final importedResponse = ImportProductsModel.fromJson(response.body);
-      log('data in the bloc file = ${importedResponse.toJson()}');
-      emit(state.copyWith(importProductsModel: importedResponse));
+    try {
+      final response = await repository.addImportProducts(
+          event.file, event.categoryId, event.companyId);
+      if (response.statusCode! >= 200 && response.statusCode! <= 300) {
+        final importedResponse = ImportProductsModel.fromJson(response.body);
+        // log('data in the bloc file = ${importedResponse.toJson()}');
+        emit(state.copyWith(importProductsModel: importedResponse));
 
-      log('data in the state file = ${state.importProductsModel?.toJson()}');
-      emit(AddImportProductsSuccess());
-    } else {
-      emit(AddImportProductsError(error: response.body['message'] ?? ''));
+        // log('data in the state file = ${state.importProductsModel?.toJson()}');
+        emit(AddImportProductsSuccess(importedResponse));
+      } else {
+        emit(AddImportProductsError(error: response.body['message'] ?? ''));
+      }
+    } catch (e) {
+      emit(AddImportProductsError(error: e.toString()));
     }
-    // } catch (e) {
-    //   emit(AddImportProductsError(error: e.toString()));
-    // }
+  }
+
+  Future<void> _importProductStatus(
+      ImportProductStatus event, Emitter<ProductImportState> emit) async {
+    // emit(ProductImportLoading());
+    try {
+      final response =
+          await repository.importProductStatus(event.id.toString());
+      if (response.statusCode! >= 200 && response.statusCode! <= 300) {
+        final importedResponse = ImportProductsModel.fromJson(response.body);
+        //log('data in the bloc file in status = ${importedResponse.toJson()}');
+        emit(state.copyWith(importProductsModel: importedResponse));
+
+        // log('data in the state file in status = ${state.importProductsModel?.toJson()}');
+        // emit(AddImportProductsSuccess());
+      } else {
+        emit(AddImportProductsError(error: response.body['message'] ?? ''));
+      }
+    } catch (e) {
+      emit(AddImportProductsError(error: e.toString()));
+    }
+  }
+
+  Future<void> _importProductError(
+      ImportProductError event, Emitter<ProductImportState> emit) async {
+    emit(ProductImportLoading());
+    try {
+      final response = await repository.importProductError(event.id.toString());
+      if (response.statusCode! >= 200 && response.statusCode! <= 300) {
+        final importedResponse =
+            ProductImportErrorModel.fromJson(response.body);
+        // log('data in the bloc file in error = ${importedResponse.toJson()}');
+        // emit(state.copyWith(importProductErrorModel: importedResponse));
+        emit(ImportProductErrorSuccess(error: importedResponse));
+      } else {
+        emit(ImportProductErrorFailed(error: response.body['message'] ?? ''));
+      }
+    } catch (e) {
+      emit(ImportProductErrorFailed(error: e.toString()));
+    }
   }
 }

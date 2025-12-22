@@ -2,6 +2,8 @@ import 'package:el_biz/data/model/response/product/import_product_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
+import '../../data/model/response/product/import_product_error_model.dart';
+
 class ProductImportState extends Equatable {
   final ImportProductsModel? importProductsModel;
   const ProductImportState({this.importProductsModel});
@@ -37,11 +39,34 @@ class ProductImportFailure extends ProductImportState {
   List<Object?> get props => [message];
 }
 
-class AddImportProductsSuccess extends ProductImportState {}
+class AddImportProductsSuccess extends ProductImportState {
+  const AddImportProductsSuccess(ImportProductsModel? model)
+      : super(importProductsModel: model);
+}
 
 class AddImportProductsError extends ProductImportState {
   final String error;
   const AddImportProductsError({required this.error});
+
+  @override
+  List<Object?> get props => [error];
+}
+
+// class ImportProductErrorSuccess extends ProductImportState {
+//   const ImportProductErrorSuccess(ProductImportErrorModel model)
+//       : super(importProductsModel: model);
+// }
+class ImportProductErrorFailed extends ProductImportState {
+  final String error;
+  const ImportProductErrorFailed({required this.error});
+
+  @override
+  List<Object?> get props => [error];
+}
+
+class ImportProductErrorSuccess extends ProductImportState {
+  final ProductImportErrorModel error;
+  const ImportProductErrorSuccess({required this.error});
 
   @override
   List<Object?> get props => [error];

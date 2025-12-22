@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
           return BlocBuilder<UserBloc, UserState>(
               builder: (context, userState) {
             if (authState.isLoggedIn) {
-              final userData = userState.userInfo?.data;
+              // final userData = userState.userInfo?.data;
               return SizedBox(
                 width: Get.width * 0.5,
                 child: ListTile(

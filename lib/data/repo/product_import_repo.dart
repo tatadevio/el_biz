@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:el_biz/data/api/api_client.dart';
 import 'package:file_picker/file_picker.dart';
@@ -17,6 +16,18 @@ class ProductImportRepo {
   Future<Response> importProductTemplate() async {
     return await apiClient.getData(
       AppConstants.importProductTemplate,
+    );
+  }
+
+  Future<Response> importProductStatus(String id) async {
+    return await apiClient.getData(
+      "${AppConstants.importProductStatus}/$id",
+    );
+  }
+
+   Future<Response> importProductError(String id) async {
+    return await apiClient.getData(
+      "${AppConstants.importProductError}/$id",
     );
   }
   // List<http.MultipartFile> files = [];

@@ -52,7 +52,7 @@ class Data {
   final String? status;
   final Progress? progress;
   final Metrics? metrics;
-  final List<dynamic>? summary;
+  // final List<dynamic>? summary;
   final Timestamps? timestamps;
   final User? user;
 
@@ -62,7 +62,7 @@ class Data {
     this.status,
     this.progress,
     this.metrics,
-    this.summary,
+    // this.summary,
     this.timestamps,
     this.user,
   });
@@ -73,7 +73,7 @@ class Data {
     String? status,
     Progress? progress,
     Metrics? metrics,
-    List<dynamic>? summary,
+    // List<dynamic>? summary,
     Timestamps? timestamps,
     User? user,
   }) =>
@@ -83,7 +83,7 @@ class Data {
         status: status ?? this.status,
         progress: progress ?? this.progress,
         metrics: metrics ?? this.metrics,
-        summary: summary ?? this.summary,
+        // summary: summary ?? this.summary,
         timestamps: timestamps ?? this.timestamps,
         user: user ?? this.user,
       );
@@ -97,9 +97,9 @@ class Data {
             : Progress.fromJson(json["progress"]),
         metrics:
             json["metrics"] == null ? null : Metrics.fromJson(json["metrics"]),
-        summary: json["summary"] == null
-            ? []
-            : List<dynamic>.from(json["summary"]!.map((x) => x)),
+        // summary: json["summary"] == null
+        //     ? []
+        //     : List<dynamic>.from(json["summary"]!.map((x) => x)),
         timestamps: json["timestamps"] == null
             ? null
             : Timestamps.fromJson(json["timestamps"]),
@@ -112,8 +112,8 @@ class Data {
         "status": status,
         "progress": progress?.toJson(),
         "metrics": metrics?.toJson(),
-        "summary":
-            summary == null ? [] : List<dynamic>.from(summary!.map((x) => x)),
+        // "summary":
+        // summary == null ? [] : List<dynamic>.from(summary!.map((x) => x)),
         "timestamps": timestamps?.toJson(),
         "user": user?.toJson(),
       };

@@ -6,13 +6,11 @@ import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/custom_button.dart';
-import 'package:el_biz/view/base/custom_dialog.dart';
 import 'package:el_biz/view/base/product_grid_item.dart';
 import 'package:el_biz/view/base/product_list_item.dart';
 import 'package:el_biz/view/screen/filter/company_filter/company_filter_screen.dart';
 import 'package:el_biz/view/screen/filter/products_filter/products_filter_screen.dart';
 import 'package:el_biz/view/screen/product/import_product_screen.dart';
-import 'package:el_biz/view/screen/product/product_import_screen.dart';
 import 'package:el_biz/view/screen/products/widgets/public_companies_widget.dart';
 import 'package:el_biz/view/screen/products/widgets/public_products_widget.dart';
 import 'package:el_biz/view/screen/search/search_screen.dart';
@@ -262,7 +260,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   Get.back();
                                   Get.to(() => ImportProductScreen());
                                 },
-                                title: Text('Import from CSV'),
+                                title: Text('Import from Excel File'),
                               ),
                             )
                           ],

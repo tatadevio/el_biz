@@ -1,11 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
-import 'dart:typed_data';
-import 'package:http/http.dart' as http;
 import '../../../../helper/download_excel.dart';
 
 Future<String> downloadExcelFile(String url, String filename) async {
@@ -23,12 +19,30 @@ Future<String> downloadExcelFile(String url, String filename) async {
   return savedPath;
 }
 
+// Future<FilePickerResult?> pickExcelOrCsvFile() async {
+//   final result = await FilePicker.platform.pickFiles(
+//     type: FileType.custom,
+//     allowedExtensions: ['xlsx', 'xls', 'csv'],
+//     withData: true, // also gives you Uint8List bytes
+//   );
+
+//   return result; // null if user cancels
+// }
+
 Future<FilePickerResult?> pickExcelOrCsvFile() async {
   final result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['xlsx', 'xls', 'csv'],
-    withData: true, // also gives you Uint8List bytes
+    type: FileType.any,
+    withData: true,
   );
 
-  return result; // null if user cancels
+  if (result == null) return null;
+
+  final file = result.files.single;
+  final ext = file.extension?.toLowerCase();
+
+  if (ext == 'csv' || ext == 'xls' || ext == 'xlsx') {
+    return result;
+  }
+
+  return null;
 }

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductImportPage extends StatefulWidget {
-  const ProductImportPage({Key? key}) : super(key: key);
+  const ProductImportPage({super.key});
 
   @override
   _ProductImportPageState createState() => _ProductImportPageState();
@@ -148,7 +148,7 @@ class _ProductImportPageState extends State<ProductImportPage> {
 
   void _handleCompletion(dynamic data) {
     final success = stats['successful'] ?? 0;
-    final failed = stats['failed'] ?? 0;
+    // final failed = stats['failed'] ?? 0;
 
     if (status == 'completed') {
       _showSnack('Import complete — $success products imported.');

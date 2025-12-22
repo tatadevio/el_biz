@@ -61,6 +61,8 @@ class AppConstants {
 
   static const String importProductTemplate = "api/product-imports/template";
   static const String importProductUpload = "api/product-imports/upload";
+  static const String importProductStatus = "api/product-imports/status";
+  static const String importProductError = "api/product-imports/errors";
 
   /// Categories
   static const String categoriesUrl = "api/categories";
