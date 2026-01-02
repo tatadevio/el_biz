@@ -11,9 +11,23 @@ class AuctionBuyOfferRepo {
   AuctionBuyOfferRepo(this.apiClient, this.sharedPreferences);
 
   Future<Response> buyOffer(int auctionId, double offerAmount) async {
+    return await apiClient.postData(
+        "${AppConstants.publicAuctionsUrl}/$auctionId/buy-offer",
+        {"offer_price": offerAmount, "message": "", "expiration_hours": 1});
+  }
+
+  Future<Response> getBuyOffers(int auctionId) async {
     return await apiClient
-        .postData("${AppConstants.publicAuctionsUrl}/$auctionId/buy-offer", {
-      "offer_price": offerAmount,
-    });
+        .getData("${AppConstants.publicAuctionsUrl}/$auctionId/buy-offers");
+  }
+
+  Future<Response> respondToBuyOffer(int offerId) async {
+    return await apiClient.postData(
+      "${AppConstants.publicAuctionsUrl}/buy-offers/$offerId/respond",
+      {
+        "action": "accept",
+        "seller_message": "",
+      },
+    );
   }
 }

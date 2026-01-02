@@ -2,6 +2,7 @@ import 'package:el_biz/bloc/auction/auction_bid/auction_bid_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_buy_offer/auction_buy_offer_bloc.dart';
 import 'package:el_biz/bloc/auction/auction_detail/auction_detail_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auction_detail_model.dart';
+import 'package:el_biz/utils/appConstant.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -179,7 +180,7 @@ class _AddBetBottomSheetState extends State<AddBetBottomSheet> {
                                     ),
                                   ),
                                   Text(
-                                    '${widget.auction.higestBitPrice}\$',
+                                    '${widget.auction.higestBitPrice} ${AppConstants.currencyCode}',
                                     style: h16.copyWith(
                                         color: ColorResources.darkGray),
                                   ),
@@ -215,7 +216,7 @@ class _AddBetBottomSheetState extends State<AddBetBottomSheet> {
                         suffix: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 14),
-                          child: Text('\$'),
+                          child: Text(AppConstants.currencyCode),
                         ),
                       ),
                       const SizedBox(
@@ -234,7 +235,7 @@ class _AddBetBottomSheetState extends State<AddBetBottomSheet> {
                               TextSpan(text: 'add_more'.tr),
                               TextSpan(
                                 text:
-                                    '${double.parse(widget.auction.targetPrice ?? '0') - double.parse(widget.auction.higestBitPrice ?? '0')}\$',
+                                    '${double.parse(widget.auction.targetPrice ?? '0') - double.parse(widget.auction.higestBitPrice ?? '0')} ${AppConstants.currencyCode}',
                                 style: body14.copyWith(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -307,33 +308,50 @@ class _AddBetBottomSheetState extends State<AddBetBottomSheet> {
                             ? () {}
                             : () {
                                 // buy at your price
-                                if (widget
-                                    .suggestedBidController.text.isEmpty) {
-                                  showShortToast('enter_your_price'.tr);
-                                  return;
-                                }
-                                double offerPrice = double.parse(
-                                    widget.suggestedBidController.text);
-                                if (offerPrice <
-                                    double.parse(
-                                        widget.auction.targetPrice ?? '0')) {
+                                // if (widget
+                                //     .suggestedBidController.text.isEmpty) {
+                                //   showShortToast('enter_your_price'.tr);
+                                //   return;
+                                // }
+                                // double offerPrice = double.parse(
+                                //     widget.suggestedBidController.text);
+                                // if (offerPrice <
+                                //     double.parse(
+                                //         widget.auction.targetPrice ?? '0')) {
+                                //   showShortToast(
+                                //       'price_must_be_equal_or_greater_than_target_price'
+                                //           .tr);
+                                //   return;
+                                // }
+                                if (widget.auction.canMakeBuyOffer == false) {
                                   showShortToast(
-                                      'price_must_be_equal_or_greater_than_target_price'
+                                      'you_are_not_allowed_to_send_buy_offer'
                                           .tr);
                                   return;
                                 }
                                 context.read<AuctionBuyOfferBloc>().add(
                                     SubmitAuctionBuyOfferEvent(
-                                        widget.auction.id!, offerPrice));
+                                        widget.auction.id!,
+                                        double.parse(widget.auction.buyoutPrice
+                                            .toString())));
                               },
                         width: Get.width,
                         height: 46,
                         title: buyOfferState is AuctionBuyOfferLoading
                             ? 'loading'.tr
-                            : '${'buy_at_your_price'.tr} ${double.parse(widget.auction.targetPrice ?? widget.auction.buyoutPrice ?? '0')}\$',
+                            : '${'buy_at_your_price'.tr} ${double.parse(widget.auction.targetPrice ?? widget.auction.buyoutPrice ?? '0')} ${AppConstants.currencyCode}',
                         color: ColorResources.blue.withOpacity(0.2),
                         textColor: ColorResources.blue,
                         radius: 16,
+                        child: buyOfferState is AuctionBuyOfferLoading
+                            ? SizedBox(
+                                height: 26,
+                                width: 26,
+                                child: CircularProgressIndicator(
+                                  color: ColorResources.blue,
+                                ),
+                              )
+                            : null,
                       ),
                     ],
                   ).paddingOnly(

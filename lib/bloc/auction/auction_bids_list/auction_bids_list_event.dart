@@ -7,7 +7,7 @@ sealed class AuctionBidsListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetAuctionBids extends AuctionBidsListEvent {
+ class GetAuctionBids extends AuctionBidsListEvent {
   final int auctionId;
   final bool isRefresh;
 

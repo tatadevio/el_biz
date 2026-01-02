@@ -10,6 +10,7 @@ import 'package:el_biz/bloc/auction/auction_review/auction_review_bloc.dart';
 import 'package:el_biz/bloc/auction/favorite_auciton/favorite_auction_bloc.dart';
 import 'package:el_biz/bloc/filter_fields/filter_fields_bloc.dart';
 import 'package:el_biz/bloc/material/material_bloc.dart';
+import 'package:el_biz/bloc/my_products/my_products_bloc.dart';
 import 'package:el_biz/bloc/product_detail/product_detail_bloc.dart';
 import 'package:el_biz/bloc/product_import/product_import_bloc.dart';
 import 'package:el_biz/bloc/product_review/product_review_bloc.dart';
@@ -33,6 +34,7 @@ import 'package:el_biz/data/repo/compnay_repo.dart';
 import 'package:el_biz/data/repo/contract_repo.dart';
 import 'package:el_biz/data/repo/filter_fields_repo.dart';
 import 'package:el_biz/data/repo/material_repo.dart';
+import 'package:el_biz/data/repo/my_products_repo.dart';
 import 'package:el_biz/data/repo/notification_repo.dart';
 import 'package:el_biz/data/repo/product_detail_repo.dart';
 import 'package:el_biz/data/repo/product_import_repo.dart';
@@ -205,6 +207,10 @@ Future<Map<String, Map<String, String>>> init() async {
       () => ProductImportRepo(
           apiClient: Get.find(), sharedPreferences: Get.find()),
       fenix: true);
+  Get.lazyPut<MyProductsRepo>(
+      () =>
+          MyProductsRepo(apiClient: Get.find(), sharedPreferences: Get.find()),
+      fenix: true);
 
   // get bloc
   Get.lazyPut<CompanyDetailBloc>(() => CompanyDetailBloc(Get.find()),
@@ -261,6 +267,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut<ProductImportBloc>(
       () => ProductImportBloc(repository: Get.find()),
       fenix: true);
+  Get.lazyPut<MyProductsBloc>(() => MyProductsBloc(Get.find()), fenix: true);
 
 ////////
   ///

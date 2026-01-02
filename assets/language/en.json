@@ -498,5 +498,16 @@
   "old" : "Old",
   "are_you_sure_to_add_this_account_as_primary_account?" : "Are you sure to add this account as primary account?",
   "about_product" : "About product",
-  "selected_file" : "Selected File : "
+  "selected_file" : "Selected File : ",
+  "cancel_bid" : "Cancel",
+  "active_auctions" : "Active Auctions",
+  "my_auctions": "My Auctions",
+  "my_bids": "My Bids",
+  "my_created": "My Created",
+  "close_auction": "Close Auction",
+  "accept_the_buy_offer" : "Accept the buy offer.",
+  "accept" : "Accept",
+  "winner_buy_offer" : "Winner buy offer",
+  "are_you_sure_to_close_auction" : "Are you sure you want to close the auction?",
+  "as_auction_will_close_it_will_assign_to_higher_bid" : "As the auction will close, it will be assigned to the highest bid."
 }

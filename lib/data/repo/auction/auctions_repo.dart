@@ -16,6 +16,18 @@ class AuctionsRepo {
         "${AppConstants.publicAuctionsUrl}?page=$page&order_by=$orderBy&sort_order=$direction");
   }
 
+  Future<Response> getMyAuctions(int page,
+      {String orderBy = 'created_at', String direction = 'desc'}) async {
+    return await apiClient.getData(
+        "${AppConstants.myAuctionsUrl}?page=$page&order_by=$orderBy&sort_order=$direction");
+  }
+
+  Future<Response> getMyBidAuctions(int page,
+      {String orderBy = 'created_at', String direction = 'desc'}) async {
+    return await apiClient.getData(
+        "${AppConstants.myBidAuctionsUrl}?page=$page&order_by=$orderBy&sort_order=$direction");
+  }
+
   Future<Response> toggleFavorite(String id) async {
     return await apiClient.postData(AppConstants.favoriteToggleUrl, {
       "type": "Auction",

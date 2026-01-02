@@ -95,14 +95,15 @@ class AuctionDetailData {
   final String? carMileage;
   final String? carCustomsCleared;
 
-  final List<dynamic>? reviews;
+  final List<Review>? reviews;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? targetPrice;
   final String? higestBitPrice;
   final List<Bid>? bids;
   bool? isFavorite;
-
+  final CreatorClass? winner;
+  final bool? canMakeBuyOffer;
 
   AuctionDetailData({
     this.id,
@@ -143,6 +144,8 @@ class AuctionDetailData {
     this.higestBitPrice,
     this.bids,
     this.isFavorite,
+    this.winner,
+    this.canMakeBuyOffer,
   });
 
   AuctionDetailData copyWith({
@@ -178,12 +181,14 @@ class AuctionDetailData {
     String? carMileage,
     String? carCustomsCleared,
     List<Bid>? bids,
-    List<dynamic>? reviews,
+    List<Review>? reviews,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? targetPrice,
     String? higestBitPrice,
     bool? isFavorite,
+    CreatorClass? winner,
+    bool? canMakeBuyOffer,
   }) =>
       AuctionDetailData(
         id: id ?? this.id,
@@ -224,6 +229,8 @@ class AuctionDetailData {
         targetPrice: targetPrice ?? this.targetPrice,
         higestBitPrice: higestBitPrice ?? this.higestBitPrice,
         isFavorite: isFavorite ?? this.isFavorite,
+        winner: winner ?? this.winner,
+        canMakeBuyOffer: canMakeBuyOffer ?? this.canMakeBuyOffer,
       );
 
   factory AuctionDetailData.fromJson(Map<String, dynamic> json) =>
@@ -277,7 +284,8 @@ class AuctionDetailData {
             : List<Bid>.from(json["bids"]!.map((x) => Bid.fromJson(x))),
         reviews: json["reviews"] == null
             ? []
-            : List<dynamic>.from(json["reviews"]!.map((x) => x)),
+            : List<Review>.from(
+                json["reviews"]!.map((x) => Review.fromJson(x))),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -287,6 +295,10 @@ class AuctionDetailData {
         targetPrice: json["target_price"],
         higestBitPrice: json["higest_bit_price"],
         isFavorite: json["is_favorite"] ?? false,
+        winner: json["winner"] == null
+            ? null
+            : CreatorClass.fromJson(json["winner"]),
+        canMakeBuyOffer: json["can_make_buy_offer"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -325,13 +337,120 @@ class AuctionDetailData {
         "bids": bids == null
             ? []
             : List<dynamic>.from(bids!.map((x) => x.toJson())),
-        "reviews":
-            reviews == null ? [] : List<dynamic>.from(reviews!.map((x) => x)),
+        "reviews": reviews == null
+            ? []
+            : List<dynamic>.from(reviews!.map((x) => x.toJson())),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "target_price": targetPrice,
         "higest_bit_price": higestBitPrice,
         "is_favorite": isFavorite,
+        "winner": winner?.toJson(),
+        "can_make_buy_offer": canMakeBuyOffer,
+      };
+}
+
+class CreatorClass {
+  final int? id;
+  final String? name;
+  final String? type;
+
+  CreatorClass({
+    this.id,
+    this.name,
+    this.type,
+  });
+
+  CreatorClass copyWith({
+    int? id,
+    String? name,
+    String? type,
+  }) =>
+      CreatorClass(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        type: type ?? this.type,
+      );
+
+  factory CreatorClass.fromJson(Map<String, dynamic> json) => CreatorClass(
+        id: json["id"],
+        name: json["name"],
+        type: json["type"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "type": type,
+      };
+}
+
+class Review {
+  final int? id;
+  final BidUser? user;
+  final dynamic company;
+  final String? comment;
+  final int? rating;
+  final String? ratingStars;
+  final DateTime? reviewedAt;
+  final DateTime? createdAt;
+
+  Review({
+    this.id,
+    this.user,
+    this.company,
+    this.comment,
+    this.rating,
+    this.ratingStars,
+    this.reviewedAt,
+    this.createdAt,
+  });
+
+  Review copyWith({
+    int? id,
+    BidUser? user,
+    dynamic company,
+    String? comment,
+    int? rating,
+    String? ratingStars,
+    DateTime? reviewedAt,
+    DateTime? createdAt,
+  }) =>
+      Review(
+        id: id ?? this.id,
+        user: user ?? this.user,
+        company: company ?? this.company,
+        comment: comment ?? this.comment,
+        rating: rating ?? this.rating,
+        ratingStars: ratingStars ?? this.ratingStars,
+        reviewedAt: reviewedAt ?? this.reviewedAt,
+        createdAt: createdAt ?? this.createdAt,
+      );
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+        id: json["id"],
+        user: json["user"] == null ? null : BidUser.fromJson(json["user"]),
+        company: json["company"],
+        comment: json["comment"],
+        rating: json["rating"],
+        ratingStars: json["rating_stars"],
+        reviewedAt: json["reviewed_at"] == null
+            ? null
+            : DateTime.parse(json["reviewed_at"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user": user?.toJson(),
+        "company": company,
+        "comment": comment,
+        "rating": rating,
+        "rating_stars": ratingStars,
+        "reviewed_at": reviewedAt?.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
       };
 }
 

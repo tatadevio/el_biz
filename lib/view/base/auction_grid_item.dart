@@ -1,3 +1,4 @@
+import 'package:el_biz/bloc/auction/auction_buy_offer/auction_buy_offer_bloc.dart';
 import 'package:el_biz/bloc/auction/search_auction/search_auction_bloc.dart';
 import 'package:el_biz/bloc/auction/similar_auctions/similar_auctions_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auctions_list_model.dart';
@@ -51,6 +52,7 @@ class AuctionGridItem extends StatelessWidget {
                   currentPage: 1,
                 ),
               );
+
           Get.to(() => AuctionDetailScreen(
                 auctionName: auction.title ?? '',
                 auctionId: auction.id!,

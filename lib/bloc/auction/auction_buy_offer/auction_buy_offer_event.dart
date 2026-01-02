@@ -15,3 +15,22 @@ final class SubmitAuctionBuyOfferEvent extends AuctionBuyOfferEvent {
   @override
   List<Object> get props => [auctionId, offerAmount];
 }
+
+class GetBuyOffersEvent extends AuctionBuyOfferEvent {
+  final int auctionId;
+  const GetBuyOffersEvent(this.auctionId);
+
+  @override
+  List<Object> get props => [auctionId];
+}
+
+class RespondToBuyOfferEvent extends AuctionBuyOfferEvent {
+  final int offerId;
+  // final bool isAccepted;
+  const RespondToBuyOfferEvent(
+    this.offerId,
+  );
+
+  @override
+  List<Object> get props => [offerId];
+}

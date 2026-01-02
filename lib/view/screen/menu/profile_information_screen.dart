@@ -248,6 +248,10 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
             height: 44,
             onTap: () {
               print('data is here ');
+              if (emailController.text.isEmpty) {
+                showShortToast('please_enter_email'.tr);
+                return;
+              }
               // firstname, lastname, email, phone
               context.read<UserBloc>().add(UpdateUserData(
                   firstName: nameController.text,

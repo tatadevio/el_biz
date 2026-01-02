@@ -14,4 +14,14 @@ class AuctionDetailRepo {
     return await apiClient
         .getData("${AppConstants.publicAuctionsUrl}/$auctionId");
   }
+
+  Future<Response> openAuctionBid(int auctionId) async {
+    return await apiClient
+        .postData("${AppConstants.publicAuctionsUrl}/$auctionId/open", {});
+  }
+
+  Future<Response> closeAuctionBid(int auctionId) async {
+    return await apiClient
+        .postData("${AppConstants.publicAuctionsUrl}/$auctionId/close", {});
+  }
 }

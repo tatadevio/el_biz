@@ -138,6 +138,9 @@ class SimilarAuctionWidget extends StatelessWidget {
                       currentPage: 1,
                     ),
                   );
+              // context
+              //     .read<AuctionBuyOfferBloc>()
+              //     .add(GetBuyOffersEvent(auction.id!));
               Get.off(
                   () => AuctionDetailScreen(
                         auctionName: auction.title ?? '',

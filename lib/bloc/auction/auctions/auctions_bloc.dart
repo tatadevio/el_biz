@@ -19,6 +19,8 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
     on<TogglePublicAuctionsFavorite>(_onTogglePublicAuctionsFavorite);
     on<UpdateAuctionInFavoriteList>(_onUpdateAuctionInFavoriteList);
     on<UpdateAuctionsFilterEnable>(_onUpdateAuctionsFilterEnable);
+    on<GetMyAuctions>(_getMyAuctions);
+    on<GetMyBidAuctions>(_getMyBidAuctions);
   }
 
   void _updateToggleShowGridView(
@@ -127,6 +129,106 @@ class AuctionsBloc extends Bloc<AuctionsEvent, AuctionsState> {
       }).toList();
 
       emit(state.copyWith(filteredAuctions: filteredAuctions));
+    }
+  }
+
+  void _getMyAuctions(GetMyAuctions event, Emitter<AuctionsState> emit) async {
+    if (event.isRefresh) {
+      emit(state.copyWith(
+          myAuctionsLoading: true, myAuctionsCurrentPage: 1, myAuctions: []));
+    } else {
+      if (event.page == 1) {
+        emit(state.copyWith(
+            myAuctionsLoading: true, myAuctionsCurrentPage: 1, myAuctions: []));
+      } else {
+        emit(state.copyWith(myAuctionsLoadingMore: true));
+      }
+    }
+
+    try {
+      final response = await auctionsRepo.getMyAuctions(event.page,
+          orderBy: event.orderBy, direction: event.direction);
+      if (response.statusCode == 200) {
+        AuctionsListModel auctions = AuctionsListModel.fromJson(response.body);
+        List<AuctionListItem> auctionList = auctions.data?.items ?? [];
+        // List<AuctionListItem> auctionList = (response.body['data']['data']
+        //         as List)
+        //     .map((e) => AuctionListItem.fromJson(e))
+        //     .toList();
+
+        // int totalPages = response.body['data']['last_page'] ?? 1;
+
+        List<AuctionListItem> allAuctions = [];
+        if (event.page == 1 || event.isRefresh) {
+          allAuctions = auctionList;
+        } else {
+          allAuctions = [...state.myAuctions, ...auctionList];
+        }
+
+        emit(state.copyWith(
+          myAuctionsLoading: false,
+          myAuctionsLoadingMore: false,
+          myAuctions: allAuctions,
+          myAuctionsCurrentPage: auctions.data?.currentPage ?? event.page,
+          myAuctionsTotalPages: auctions.data?.totalPages ?? state.totalPages,
+        ));
+      } else {
+        emit(state.copyWith(
+            myAuctionsLoading: false, myAuctionsLoadingMore: false));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+          myAuctionsLoading: false, myAuctionsLoadingMore: false));
+    }
+  }
+
+  void _getMyBidAuctions(
+      GetMyBidAuctions event, Emitter<AuctionsState> emit) async {
+    if (event.isRefresh) {
+      emit(state.copyWith(
+          myBidAuctionsLoading: true,
+          myBidAuctionsCurrentPage: 1,
+          myBidAuctions: []));
+    } else {
+      if (event.page == 1) {
+        emit(state.copyWith(
+            myBidAuctionsLoading: true,
+            myBidAuctionsCurrentPage: 1,
+            myBidAuctions: []));
+      } else {
+        emit(state.copyWith(myBidAuctionsLoadingMore: true));
+      }
+    }
+
+    try {
+      final response = await auctionsRepo.getMyBidAuctions(event.page,
+          orderBy: event.orderBy, direction: event.direction);
+      if (response.statusCode == 200) {
+        AuctionsListModel auctions = AuctionsListModel.fromJson(response.body);
+        List<AuctionListItem> auctionList = auctions.data?.items ?? [];
+
+        List<AuctionListItem> allAuctions = [];
+        if (event.page == 1 || event.isRefresh) {
+          allAuctions = auctionList;
+        } else {
+          allAuctions = [...state.myBidAuctions, ...auctionList];
+        }
+
+        emit(state.copyWith(
+          myBidAuctionsLoading: false,
+          myBidAuctionsLoadingMore: false,
+          myBidAuctions: allAuctions,
+          myBidAuctionsCurrentPage: auctions.data?.currentPage ?? event.page,
+          myBidAuctionsTotalPages:
+              auctions.data?.totalPages ?? state.totalPages,
+        ));
+      } else {
+        emit(state.copyWith(
+            myBidAuctionsLoading: false, myBidAuctionsLoadingMore: false));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+          myBidAuctionsLoading: false, myBidAuctionsLoadingMore: false));
     }
   }
 }

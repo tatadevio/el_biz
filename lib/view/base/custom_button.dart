@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final String title;
   final double radius;
   final Color textColor;
+  final Widget? child;
   const CustomButton({
     Key? key,
     required this.width,
@@ -19,6 +20,7 @@ class CustomButton extends StatelessWidget {
     required this.title,
     this.radius = 10.0,
     this.textColor = Colors.white,
+    this.child,
   }) : super(key: key);
 
   @override
@@ -36,12 +38,13 @@ class CustomButton extends StatelessWidget {
       color: color,
       // color: Colors.transparent,
       // splashColor: Colors.transparent,
-      child: Text(
-        title,
-        style: button16.copyWith(color: textColor),
-        // const TextStyle(
-        // color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
-      ),
+      child: child ??
+          Text(
+            title,
+            style: button16.copyWith(color: textColor),
+            // const TextStyle(
+            // color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+          ),
     );
   }
 }
@@ -68,7 +71,8 @@ class CustomButtonLoader extends StatelessWidget {
         elevation: 0,
         height: height,
         minWidth: width,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         onPressed: () {},
         // color: color,
         child: SizedBox(

@@ -499,6 +499,17 @@
   "old" : "старый",
   "are_you_sure_to_add_this_account_as_primary_account?" : "Вы уверены, что добавите этот аккаунт в качестве основного?",
   "about_product" : "О товаре",
-  "selected_file" : "Выбранный файл: "
+  "selected_file" : "Выбранный файл: ",
+  "cancel_bid" : "Перебить",
+  "active_auctions" : "Активные аукционы",
+  "my_auctions": "Мои аукционы",
+  "my_bids": "Мои ставки",
+  "my_created": "Мои созданные",
+  "close_auction": "Закрыть аукцион",
+  "accept_the_buy_offer" : "Принять предложение покупателя",
+  "accept" : "Принять",
+  "winner_buy_offer" : "Победитель предложения покупателя",
+  "are_you_sure_to_close_auction" : "Вы уверены, что хотите закрыть аукцион?",
+  "as_auction_will_close_it_will_assign_to_higher_bid" : "Поскольку аукцион будет закрыт, он будет назначен на более высокую ставку."
 
 }

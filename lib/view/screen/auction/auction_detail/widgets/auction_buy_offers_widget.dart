@@ -1,4 +1,3 @@
-import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/model/response/auction/auction_detail_model.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +8,12 @@ import 'package:get/get.dart';
 import '../../../../../bloc/auction/auction_bid/auction_bid_bloc.dart';
 import '../../../../../bloc/auction/auction_bids_list/auction_bids_list_bloc.dart';
 import '../../../../../utils/Images.dart';
+import '../../../../../utils/appConstant.dart';
 import '../../../../../utils/custom_text_style.dart';
 
-class AuctionBetsWidget extends StatelessWidget {
+class AuctionBuyOffersWidget extends StatelessWidget {
   final AuctionDetailData auction;
-  const AuctionBetsWidget({super.key, required this.auction});
+  const AuctionBuyOffersWidget({super.key, required this.auction});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class AuctionBetsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'bets'.tr,
+                'buy_offers'.tr,
                 style: h16.copyWith(
                     color: ColorResources.darkGray, fontFamily: 'Inter'),
               ),
@@ -170,8 +170,7 @@ class AuctionBetsWidget extends StatelessWidget {
                         child: Row(
                           children: [
                             // my last bet then show this buttion
-                            if (bidItem.isCancellable == true &&
-                                auction.winner == null)
+                            if (bidItem.isCancellable == true)
                               BlocBuilder<AuctionBidBloc, AuctionBidState>(
                                 builder: (context, acuctionBidState) {
                                   return InkWell(
@@ -220,29 +219,26 @@ class AuctionBetsWidget extends StatelessWidget {
                                 },
                               ),
                             // if i win this auction then show this button on my bet 1
-                            if (auction.winner != null &&
-                                auction.winner?.type != 'buy_offer' &&
-                                index == 0)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 4, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: ColorResources.orange,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  'winner'.tr,
-                                  style: body14.copyWith(
-                                      color: ColorResources.white),
-                                ),
-                              ),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(
+                            //       horizontal: 8, vertical: 4),
+                            //   decoration: BoxDecoration(
+                            //     color: ColorResources.orange,
+                            //     borderRadius: BorderRadius.circular(20),
+                            //   ),
+                            //   child: Text(
+                            //     'winner'.tr,
+                            //     style: body14.copyWith(
+                            //         color: ColorResources.white),
+                            //   ),
+                            // ),
 
                             const Spacer(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  bidItem.totalPrice ?? '',
+                                  '${bidItem.totalPrice} ${AppConstants.currencyCode}',
 
                                   /// '100\$',
                                   style: TextStyle(
@@ -251,29 +247,22 @@ class AuctionBetsWidget extends StatelessWidget {
                                     color: ColorResources.darkGray,
                                   ),
                                 ),
-                                if (auction.creator?.id ==
-                                    context
-                                        .read<UserBloc>()
-                                        .state
-                                        .userInfo
-                                        ?.data
-                                        ?.id)
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "${bidItem.percentageIncrease}% ",
-                                        style: body12.copyWith(
-                                            color: ColorResources.gray,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Inter'),
-                                      ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      SvgPicture.asset(Images.svgTrendUp),
-                                    ],
-                                  ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "${bidItem.percentageIncrease}% ",
+                                      style: body12.copyWith(
+                                          color: ColorResources.gray,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'Inter'),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    SvgPicture.asset(Images.svgTrendUp),
+                                  ],
+                                ),
                               ],
                             ),
                           ],

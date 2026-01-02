@@ -37,6 +37,8 @@ class AppConstants {
 
   // auctions
   static const String publicAuctionsUrl = "api/auctions";
+  static const String myAuctionsUrl = "api/auctions/my";
+  static const String myBidAuctionsUrl = "api/auctions/my-bids";
   static const String similarAuctionsUrl = "api/auctions/related";
 
   // Auction
@@ -85,6 +87,8 @@ class AppConstants {
   static const String productStatusChangeUrl = "api/products/change-status";
   static const String deleteProductImageUrl = "api/products/delete-images";
   static const String relatedProductsUrl = "api/products/related";
+
+  static const String myProductsUrl = "api/products/my";
 
   // product review
   static const String productReviewsUrl = "api/reviews";

@@ -64,3 +64,36 @@ class UpdateAuctionsFilterEnable extends AuctionsEvent {
   @override
   List<Object> get props => [isEnable];
 }
+
+class GetMyAuctions extends AuctionsEvent {
+  final int page;
+  final bool isRefresh;
+  final String orderBy;
+  final String direction;
+
+  const GetMyAuctions(
+      {this.page = 1,
+      this.isRefresh = false,
+      this.orderBy = 'created_at',
+      this.direction = 'desc'});
+
+  @override
+  List<Object> get props => [page, isRefresh, orderBy, direction];
+}
+
+
+class GetMyBidAuctions extends AuctionsEvent {
+  final int page;
+  final bool isRefresh;
+  final String orderBy;
+  final String direction;
+
+  const GetMyBidAuctions(
+      {this.page = 1,
+      this.isRefresh = false,
+      this.orderBy = 'created_at',
+      this.direction = 'desc'});
+
+  @override
+  List<Object> get props => [page, isRefresh, orderBy, direction];
+}

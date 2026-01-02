@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import '../../../../bloc/auction/add_auction/add_auction_bloc.dart';
 import '../../../../data/model/response/cities_model.dart';
 import '../../../../data/model/response/company/company_product_model.dart';
+import '../../../../utils/appConstant.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/custom_text_style.dart';
 import '../../../base/custom_image.dart';
@@ -32,7 +33,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
   CityItem? selectedLocation;
   DateTime? startingDate;
   DateTime? completionDate;
-  String? selectedCurrency;
+  String? selectedCurrency = AppConstants.currencyCode;
   TextEditingController cancelTimeController = TextEditingController();
   TextEditingController minimumThresholdController = TextEditingController();
   TextEditingController targetPriceController = TextEditingController();
@@ -639,6 +640,63 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                   const SizedBox(
                     height: 10,
                   ),
+                  // Container(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  //   decoration: BoxDecoration(
+                  //     color: ColorResources.white,
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       if (selectedCurrency != null) ...[
+                  //         Text(
+                  //           'currency'.tr,
+                  //           style: TextStyle(
+                  //               fontSize: 13,
+                  //               fontWeight: FontWeight.w400,
+                  //               fontFamily: 'Inter',
+                  //               color: Colors.black.withOpacity(0.6)),
+                  //         ),
+                  //       ],
+                  //       DropdownButtonHideUnderline(
+                  //         child: DropdownButton<String>(
+                  //           isExpanded: true,
+
+                  //           hint: Text(
+                  //             'currency'.tr,
+                  //             style: TextStyle(
+                  //               color: ColorResources.darkGray,
+                  //               fontSize: 14,
+                  //             ),
+                  //           ),
+                  //           value:
+                  //               selectedCurrency, // Set this to your selected value
+                  //           onChanged: (String? newValue) {
+                  //             // Handle value change
+                  //             setState(() {
+                  //               selectedCurrency = newValue;
+                  //             });
+                  //           },
+                  //           items: <String>['Сом', 'Сом1']
+                  //               .map<DropdownMenuItem<String>>((String value) {
+                  //             return DropdownMenuItem<String>(
+                  //               value: value,
+                  //               child: Text(
+                  //                 value,
+                  //                 style: TextStyle(
+                  //                   color: ColorResources.darkGray,
+                  //                   fontSize: 14,
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           }).toList(),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -649,7 +707,7 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (selectedCurrency != null) ...[
+                        if (paymentMethod != null) ...[
                           Text(
                             'currency'.tr,
                             style: TextStyle(
@@ -659,39 +717,19 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                                 color: Colors.black.withOpacity(0.6)),
                           ),
                         ],
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-
-                            hint: Text(
-                              'currency'.tr,
+                        Row(
+                          children: [
+                            Text(
+                              // '$selectedCurrency'.tr,
+                              selectedCurrency ?? '',
                               style: TextStyle(
-                                color: ColorResources.darkGray,
-                                fontSize: 14,
+                                color: ColorResources.black.withOpacity(0.3),
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
-                            value:
-                                selectedCurrency, // Set this to your selected value
-                            onChanged: (String? newValue) {
-                              // Handle value change
-                              setState(() {
-                                selectedCurrency = newValue;
-                              });
-                            },
-                            items: <String>['Сом', 'Сом1']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                    color: ColorResources.darkGray,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                          ],
                         ),
                       ],
                     ),

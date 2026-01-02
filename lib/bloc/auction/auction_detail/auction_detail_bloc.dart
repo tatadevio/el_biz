@@ -15,6 +15,8 @@ class AuctionDetailBloc extends Bloc<AuctionDetailEvent, AuctionDetailState> {
     on<AuctionDetailEvent>((event, emit) {});
     on<GetAuctionDetail>(_onGetAuctionDetail);
     on<UpdateAuctionStatus>(_onUpdateAuctionStatus);
+    on<AuctionBidClosed>(_onAuctionBidClosed);
+    on<AuctionBidOpen>(_onAuctionBidOpen);
   }
 
   void _onGetAuctionDetail(
@@ -47,6 +49,32 @@ class AuctionDetailBloc extends Bloc<AuctionDetailEvent, AuctionDetailState> {
       // updatedAuction?.status = event.status;
       updatedAuction?.copyWith(status: event.status);
       emit(AuctionDetailSuccess(AuctionDetailModel(data: updatedAuction)));
+    }
+  }
+
+  void _onAuctionBidClosed(
+      AuctionBidClosed event, Emitter<AuctionDetailState> emit) async {
+    emit(AuctionDetailLoading());
+    final response = await auctionDetailRepo.closeAuctionBid(event.auctionId);
+    if (response.statusCode == 200) {
+      event.context.read<AuctionDetailBloc>().add(
+          GetAuctionDetail(auctionId: event.auctionId, context: event.context));
+    } else {
+      emit(AuctionDetailError(
+          response.body['message'] ?? "Something went wrong"));
+    }
+  }
+
+  void _onAuctionBidOpen(
+      AuctionBidOpen event, Emitter<AuctionDetailState> emit) async {
+    emit(AuctionDetailLoading());
+    final response = await auctionDetailRepo.openAuctionBid(event.auctionId);
+    if (response.statusCode == 200) {
+      event.context.read<AuctionDetailBloc>().add(
+          GetAuctionDetail(auctionId: event.auctionId, context: event.context));
+    } else {
+      emit(AuctionDetailError(
+          response.body['message'] ?? "Something went wrong"));
     }
   }
 }

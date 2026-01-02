@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../bloc/auction/auction_buy_offer/auction_buy_offer_bloc.dart';
 import '../../bloc/auction/auction_detail/auction_detail_bloc.dart';
 import '../../bloc/auction/search_auction/search_auction_bloc.dart';
 import '../../bloc/auction/similar_auctions/similar_auctions_bloc.dart';
@@ -52,6 +53,9 @@ class AuctionListItemWidget extends StatelessWidget {
                     currentPage: 1,
                   ),
                 );
+                // context
+                // .read<AuctionBuyOfferBloc>()
+                // .add(GetBuyOffersEvent(auction.id!));
             Get.to(() => AuctionDetailScreen(
                   auctionName: auction.title ?? '',
                   auctionId: auction.id!,
