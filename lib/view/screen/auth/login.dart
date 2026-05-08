@@ -21,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // TextEditingController _controller = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+
   bool terms = false;
   final FocusNode phoneFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
@@ -178,18 +178,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextField1(
-                        controller: passwordController,
-                        lableText: 'password'.tr,
-                        hintColor: '',
-                        inputType: TextInputType.visiblePassword,
-                        leading: '',
-                        readOnly: false,
-                        isObsureText: true,
-                      ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+
                       const SizedBox(
                         height: 20,
                       ),
@@ -202,31 +194,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             : () {
                                 print(
                                     'this is phone number : ${authState.countryCode + phoneController.text}');
-                                if (phoneController.text.isEmpty &&
-                                    passwordController.text.isEmpty) {
+                                if (phoneController.text.isEmpty) {
                                   showCustomSnackBar(
                                       "please_enter_phone_number".tr);
                                   return;
                                 }
-                                // if (passwordController.text.isEmpty) {
-                                //   showCustomSnackBar("Please enter password");
-                                //   return;
-                                // }
-                                if (phoneController.text.isNotEmpty &&
-                                    passwordController.text.isNotEmpty) {
-                                  context.read<AuthBloc>().add(Login(
+
+                                context.read<AuthBloc>().add(CheckUser(
                                       authState.countryCode +
                                           phoneController.text,
-                                      passwordController.text,
-                                      context));
-                                } else {
-                                  context.read<AuthBloc>().add(SendOtp(
-                                        authState.countryCode +
-                                            phoneController.text,
-                                      ));
-                                  // showCustomSnackBar(
-                                  //     "Please enter phone number and password");
-                                }
+                                    ));
                               },
                         child: Container(
                           width: Get.width * 0.9,

@@ -10,14 +10,17 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../../bloc/product_detail/product_detail_bloc.dart';
 import '../../../../bloc/product_review/product_review_bloc.dart';
+import '../../../../bloc/similar_companies/similar_companies_bloc.dart';
 import '../../../../bloc/similar_products/similar_products_bloc.dart';
 import '../../../../bloc/similar_tenders/similar_tenders_bloc.dart';
 import '../../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../../../utils/color_resources.dart';
 import '../../../../utils/utilities.dart';
 import '../../../base/custom_image.dart';
+import '../../company/company_page_screen.dart';
 import '../../product_detail/product_detail_screen.dart';
 import '../../tender/tender_detail_screen.dart';
 import './full_screen_image.dart';
@@ -100,6 +103,16 @@ class _ChatMessageWidget1State extends State<ChatMessageWidget1> {
     super.initState();
     _checkForProductLink(widget.data['text']);
   }
+
+  // void _openCompanyDetail(){
+  //   String productId = widget.data['product']['id'];
+  //     context
+  //       .read<CompanyDetailBloc>()
+  //       .add(GetCompanyDetail(productDetail.data!.company!.id.toString()));
+  //   context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+  //       companyId: productDetail.data!.company!.id.toString(), currentPage: 1));
+  //   Get.to(() => CompanyPageScreen());
+  // }
 
   @override
   Widget build(BuildContext context) {

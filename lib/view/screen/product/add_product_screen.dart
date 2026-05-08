@@ -91,279 +91,152 @@ class _AddProductScreenState extends State<AddProductScreen> {
       });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('new_product'.tr),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'brand'.tr,
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField1(
-                  controller: brandController,
-                  hintColor: '',
-                  inputType: TextInputType.text,
-                  lableText: 'Например: Loft',
-                  leading: '',
-                  readOnly: false,
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return 'required_field'.tr;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField1(
-                  controller: productNameController,
-                  hintColor: '',
-                  inputType: TextInputType.text,
-                  lableText: 'product_name'.tr,
-                  leading: '',
-                  readOnly: false,
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return 'required_field'.tr;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField1(
-                  controller: productCodeController,
-                  hintColor: '',
-                  inputType: TextInputType.text,
-                  lableText: 'product_code'.tr,
-                  leading: '',
-                  readOnly: false,
-                  validator: (p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return 'required_field'.tr;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: CustomTextField1(
-                        controller: priceController,
-                        hintColor: '',
-                        inputType: TextInputType.number,
-                        lableText: 'price'.tr,
-                        leading: '',
-                        readOnly: false,
-                        lableStyle:
-                            h16.copyWith(color: ColorResources.darkGray),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d*'),
-                          ),
-                        ],
-                        validator: (p0) {
-                          if (p0 == null || p0.isEmpty) {
-                            return 'required_field'.tr;
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: CustomTextField1(
-                        controller: currencyController,
-                        hintColor: '',
-                        inputType: TextInputType.none,
-                        lableText: 'currency'.tr,
-                        leading: '',
-                        readOnly: true,
-                        lableStyle:
-                            h16.copyWith(color: ColorResources.darkGray),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: CustomTextField1(
-                        controller: quantityController,
-                        hintColor: '',
-                        inputType: TextInputType.number,
-                        lableText: 'quantity'.tr,
-                        leading: '',
-                        readOnly: false,
-                        lableStyle:
-                            h16.copyWith(color: ColorResources.darkGray),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        // validator: (p0) {
-                        //   if (p0 == null || p0.isEmpty) {
-                        //     return 'required_field'.tr;
-                        //   }
-                        //   return null;
-                        // },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                        flex: 2,
-                        child: CustomTextField1(
-                          controller: currencyController,
-                          hintColor: '',
-                          inputType: TextInputType.none,
-                          lableText: 'Ед.изм',
-                          leading: '',
-                          readOnly: true,
-                          lableStyle:
-                              h16.copyWith(color: ColorResources.darkGray),
-                        )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                // RadioListTile(
-                //   dense: true,
-                //   contentPadding: const EdgeInsets.all(0),
-                //   value: true,
-                //   groupValue: checkAvailibity == '1',
-                //   onChanged: (val) {
-                //     print(
-                //         'this is the check availability $checkAvailibity and value $val');
-
-                //     setState(() {
-                //       checkAvailibity = val == true ? '1' : '0';
-                //       // if (checkAvailibity == val) {
-                //       //   // Already selected → unselect it
-                //       //   checkAvailibity = '0';
-                //       // } else {
-                //       //   // Select it
-                //       //   checkAvailibity = val ?? '';
-                //       // }
-                //     });
-                //   },
-                //   title: Text(
-                //     'check_availability'.tr,
-                //     style: body16.copyWith(color: ColorResources.darkGray),
-                //   ),
-                // ),
-                ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: Radio<bool>(
-                    value: true,
-                    groupValue: selected,
-                    // keep this so selecting from the radio also toggles
-                    onChanged: (_) => toggleSelected(),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('new_product'.tr),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                  title: Text(
-                    'check_availability'.tr,
-                    style: body16.copyWith(color: ColorResources.darkGray),
+                  Text(
+                    'brand'.tr,
+                    style: h16.copyWith(color: ColorResources.darkGray),
                   ),
-                  // This ensures tapping the whole tile always toggles (even if already selected)
-                  onTap: toggleSelected,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'dimensions_in_packaging'.tr,
-                  style: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: CustomTextField1(
-                        controller: dimensionsController,
-                        hintColor: '',
-                        inputType: TextInputType.text,
-                        lableText: 'Д/Ш/В. Например: 23/45/60',
-                        leading: '',
-                        readOnly: false,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\/?\d*\/?\d*'),
-                          ),
-                        ],
-                        //   validator: (p0) {
-                        //   if (p0 == null || p0.isEmpty) {
-                        //     return 'required_field'.tr;
-                        //   }
-                        //   return null;
-                        // },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                        flex: 2,
-                        child: CustomTextField1(
-                          controller: currencyController,
-                          hintColor: '',
-                          inputType: TextInputType.none,
-                          lableText: 'Ед.изм',
-                          leading: '',
-                          readOnly: true,
-                          lableStyle:
-                              h16.copyWith(color: ColorResources.darkGray),
-                        )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextField1(
+                    controller: brandController,
+                    hintColor: '',
+                    inputType: TextInputType.text,
+                    lableText: 'Например: Loft',
+                    leading: '',
+                    readOnly: false,
+                    validator: (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return 'required_field'.tr;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextField1(
+                    controller: productNameController,
+                    hintColor: '',
+                    inputType: TextInputType.text,
+                    lableText: 'product_name'.tr,
+                    leading: '',
+                    readOnly: false,
+                    validator: (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return 'required_field'.tr;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextField1(
+                    controller: productCodeController,
+                    hintColor: '',
+                    inputType: TextInputType.text,
+                    lableText: 'product_code'.tr,
+                    leading: '',
+                    readOnly: false,
+                    validator: (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return 'required_field'.tr;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
                         flex: 6,
                         child: CustomTextField1(
-                          controller: weightController,
+                          controller: priceController,
                           hintColor: '',
-                          inputType: TextInputType.text,
-                          lableText: 'package_weight'.tr,
+                          // inputType: TextInputType.number,
+                          lableText: 'price'.tr,
+                          leading: '',
+                          readOnly: false,
+                          lableStyle:
+                              h16.copyWith(color: ColorResources.darkGray),
+                          // inputFormatters: [
+                          //   FilteringTextInputFormatter.allow(
+                          //     RegExp(r'^\d*\.?\d*'),
+                          //   ),
+                          // ],
+                          inputType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d*\.?\d{0,2}')),
+                          ],
+                          validator: (p0) {
+                            if (p0 == null || p0.isEmpty) {
+                              return 'required_field'.tr;
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: CustomTextField1(
+                          controller: currencyController,
+                          hintColor: '',
+                          inputType: TextInputType.none,
+                          lableText: 'currency'.tr,
+                          leading: '',
+                          readOnly: true,
+                          lableStyle:
+                              h16.copyWith(color: ColorResources.darkGray),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: CustomTextField1(
+                          controller: quantityController,
+                          hintColor: '',
+                          inputType: TextInputType.number,
+                          lableText: 'quantity'.tr,
                           leading: '',
                           readOnly: false,
                           lableStyle:
                               h16.copyWith(color: ColorResources.darkGray),
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d*'),
-                            ),
+                            FilteringTextInputFormatter.digitsOnly,
                           ],
                           // validator: (p0) {
                           //   if (p0 == null || p0.isEmpty) {
@@ -371,88 +244,230 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           //   }
                           //   return null;
                           // },
-                        )),
-                    const SizedBox(
-                      width: 5,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                          flex: 2,
+                          child: CustomTextField1(
+                            controller: currencyController,
+                            hintColor: '',
+                            inputType: TextInputType.none,
+                            lableText: 'Ед.изм',
+                            leading: '',
+                            readOnly: true,
+                            lableStyle:
+                                h16.copyWith(color: ColorResources.darkGray),
+                          )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // RadioListTile(
+                  //   dense: true,
+                  //   contentPadding: const EdgeInsets.all(0),
+                  //   value: true,
+                  //   groupValue: checkAvailibity == '1',
+                  //   onChanged: (val) {
+                  //     print(
+                  //         'this is the check availability $checkAvailibity and value $val');
+
+                  //     setState(() {
+                  //       checkAvailibity = val == true ? '1' : '0';
+                  //       // if (checkAvailibity == val) {
+                  //       //   // Already selected → unselect it
+                  //       //   checkAvailibity = '0';
+                  //       // } else {
+                  //       //   // Select it
+                  //       //   checkAvailibity = val ?? '';
+                  //       // }
+                  //     });
+                  //   },
+                  //   title: Text(
+                  //     'check_availability'.tr,
+                  //     style: body16.copyWith(color: ColorResources.darkGray),
+                  //   ),
+                  // ),
+                  ListTile(
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<bool>(
+                      value: true,
+                      groupValue: selected,
+                      // keep this so selecting from the radio also toggles
+                      onChanged: (_) => toggleSelected(),
                     ),
-                    Expanded(
-                        flex: 2,
+                    title: Text(
+                      'check_availability'.tr,
+                      style: body16.copyWith(color: ColorResources.darkGray),
+                    ),
+                    // This ensures tapping the whole tile always toggles (even if already selected)
+                    onTap: toggleSelected,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'dimensions_in_packaging'.tr,
+                    style: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 6,
                         child: CustomTextField1(
-                          controller: weightUnitController,
+                          controller: dimensionsController,
                           hintColor: '',
-                          inputType: TextInputType.none,
-                          lableText: 'Ед.изм',
+                          inputType: TextInputType.text,
+                          lableText: 'Д/Ш/В. Например: 23/45/60',
                           leading: '',
-                          readOnly: true,
-                          lableStyle:
-                              h16.copyWith(color: ColorResources.darkGray),
-                        )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomTextField1(
-                  controller: regionController,
-                  hintColor: '',
-                  inputType: TextInputType.text,
-                  lableText: 'country_of_manufacture'.tr,
-                  leading: '',
-                  readOnly: false,
-                  // validator: (p0) {
-                  //   if (p0 == null || p0.isEmpty) {
-                  //     return 'required_field'.tr;
-                  //   }
-                  //   return null;
-                  // },
-                  lableStyle: h16.copyWith(color: ColorResources.darkGray),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+                          readOnly: false,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\/?\d*\/?\d*'),
+                            ),
+                          ],
+                          //   validator: (p0) {
+                          //   if (p0 == null || p0.isEmpty) {
+                          //     return 'required_field'.tr;
+                          //   }
+                          //   return null;
+                          // },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                          flex: 2,
+                          child: CustomTextField1(
+                            controller: currencyController,
+                            hintColor: '',
+                            inputType: TextInputType.none,
+                            lableText: 'Ед.изм',
+                            leading: '',
+                            readOnly: true,
+                            lableStyle:
+                                h16.copyWith(color: ColorResources.darkGray),
+                          )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex: 6,
+                          child: CustomTextField1(
+                            controller: weightController,
+                            hintColor: '',
+                            // inputType: TextInputType.text,
+                            lableText: 'package_weight'.tr,
+                            leading: '',
+                            readOnly: false,
+                            lableStyle:
+                                h16.copyWith(color: ColorResources.darkGray),
+                            inputType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d*\.?\d{0,2}')),
+                            ],
+                            // validator: (p0) {
+                            //   if (p0 == null || p0.isEmpty) {
+                            //     return 'required_field'.tr;
+                            //   }
+                            //   return null;
+                            // },
+                          )),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                          flex: 2,
+                          child: CustomTextField1(
+                            controller: weightUnitController,
+                            hintColor: '',
+                            inputType: TextInputType.none,
+                            lableText: 'Ед.изм',
+                            leading: '',
+                            readOnly: true,
+                            lableStyle:
+                                h16.copyWith(color: ColorResources.darkGray),
+                          )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextField1(
+                    controller: regionController,
+                    hintColor: '',
+                    inputType: TextInputType.text,
+                    lableText: 'country_of_manufacture'.tr,
+                    leading: '',
+                    readOnly: false,
+                    // validator: (p0) {
+                    //   if (p0 == null || p0.isEmpty) {
+                    //     return 'required_field'.tr;
+                    //   }
+                    //   return null;
+                    // },
+                    lableStyle: h16.copyWith(color: ColorResources.darkGray),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: CustomButton(
-            width: Get.width,
-            height: Get.height,
-            onTap: () {
-              if (_formKey.currentState!.validate()) {
-                final productData =
-                    context.read<AddProductBloc>().state.productData;
-                productData?.brandName = brandController.text.toString();
-                productData?.productName =
-                    productNameController.text.toString();
-                productData?.productCode =
-                    productCodeController.text.toString();
-                productData?.price = priceController.text.toString();
-                productData?.currency = currencyController.text.toString();
-                productData?.quantity = quantityController.text.isEmpty
-                    ? '0'
-                    : quantityController.text.toString();
-                productData?.quantityUnit = unitController.text.toString();
-                productData?.dimensions = dimensionsController.text.toString();
-                productData?.dimensionsUnit =
-                    dimensionsUnitController.text.toString();
-                productData?.weight = weightController.text.toString();
-                productData?.weightUnit = weightUnitController.text.toString();
-                productData?.region = regionController.text.toString();
-                productData?.availability = checkAvailibity;
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+          child: CustomButton(
+              width: Get.width,
+              height: Get.height,
+              onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  final productData =
+                      context.read<AddProductBloc>().state.productData;
+                  productData?.brandName = brandController.text.toString();
+                  productData?.productName =
+                      productNameController.text.toString();
+                  productData?.productCode =
+                      productCodeController.text.toString();
+                  productData?.price = priceController.text.toString();
+                  productData?.currency = currencyController.text.toString();
+                  productData?.quantity = quantityController.text.isEmpty
+                      ? '0'
+                      : quantityController.text.toString();
+                  productData?.quantityUnit = unitController.text.toString();
+                  productData?.dimensions =
+                      dimensionsController.text.toString();
+                  productData?.dimensionsUnit =
+                      dimensionsUnitController.text.toString();
+                  productData?.weight = weightController.text.toString();
+                  productData?.weightUnit =
+                      weightUnitController.text.toString();
+                  productData?.region = regionController.text.toString();
+                  productData?.availability = checkAvailibity;
 
-                Get.to(() => AddProduct3Screen(
-                      // addProductData: addProduct,
-                      isEdit: widget.isEdit,
-                      isAuction: widget.isAuction,
-                      // productFrom: widget.productFrom,
-                    ));
-              }
-            },
-            title: 'continue'.tr),
+                  Get.to(() => AddProduct3Screen(
+                        // addProductData: addProduct,
+                        isEdit: widget.isEdit,
+                        isAuction: widget.isAuction,
+                        // productFrom: widget.productFrom,
+                      ));
+                }
+              },
+              title: 'continue'.tr),
+        ),
       ),
     );
   }

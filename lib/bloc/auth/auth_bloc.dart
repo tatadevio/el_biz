@@ -1,6 +1,7 @@
 import 'package:el_biz/bloc/user/user_bloc.dart';
 import 'package:el_biz/data/repo/auth_repo.dart';
 import 'package:el_biz/view/base/custom_toast.dart';
+import 'package:el_biz/view/screen/auth/login_password_screen.dart';
 import 'package:el_biz/view/screen/auth/otp_screen.dart';
 import 'package:el_biz/view/screen/auth/password_changed_screen.dart';
 import 'package:el_biz/view/screen/dashboard/dashboard.dart';
@@ -22,6 +23,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   // FirebaseAuth
   AuthBloc(this.authRepo) : super(const AuthState()) {
+    on<CheckUser>((event, emit) async {
+      emit(state.copywith(isLoading: true));
+      final res = await authRepo.checkUser(event.phoneNumber);
+      print(res.body);
+      if (res.statusCode == 200) {
+        if (res.body['exists'] == true) {
+          Get.to(() => LoginPasswordScreen(phone: event.phoneNumber));
+        } else {
+          add(SendOtp(event.phoneNumber));
+        }
+        emit(state.copywith(isLoading: false));
+      }
+    });
     on<CheckLoginStatus>((event, emit) async {
       final loggedIn = await authRepo.isLoggedIn();
       print("this is loggedIn: $loggedIn");

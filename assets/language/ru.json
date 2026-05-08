@@ -510,6 +510,7 @@
   "accept" : "Принять",
   "winner_buy_offer" : "Победитель предложения покупателя",
   "are_you_sure_to_close_auction" : "Вы уверены, что хотите закрыть аукцион?",
-  "as_auction_will_close_it_will_assign_to_higher_bid" : "Поскольку аукцион будет закрыт, он будет назначен на более высокую ставку."
-
+  "as_auction_will_close_it_will_assign_to_higher_bid" : "Поскольку аукцион будет закрыт, он будет назначен на более высокую ставку.",
+  "add_new_product" : "Добавить новый товар",
+  "import_from_excel_file" : "Импорт из Excel файла"
 }

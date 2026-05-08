@@ -257,7 +257,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                   firstName: nameController.text,
                   lastName: familyNameController.text,
                   email: emailController.text,
-                  phoneNumber: userState.userInfo?.data?.phone ?? '',
+                  phoneNumber: "+996${phoneController.text}",
                   context: context));
             },
             title: 'save_changes'.tr,

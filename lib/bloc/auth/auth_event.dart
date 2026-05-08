@@ -60,6 +60,14 @@ class SendOtp extends AuthEvent {
   List<Object> get props => [phoneNumber];
 }
 
+class CheckUser extends AuthEvent {
+  final String phoneNumber;
+  const CheckUser(this.phoneNumber);
+
+  @override
+  List<Object> get props => [phoneNumber];
+}
+
 class VerifyOtp extends AuthEvent {
   final String otpToken;
   final String phone;

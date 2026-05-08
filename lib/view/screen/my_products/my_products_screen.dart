@@ -216,7 +216,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                         contentPadding: EdgeInsets.zero,
                         title: Row(
                           children: [
-                            Expanded(child: Text('New Product')),
+                            Expanded(child: Text('new_product'.tr)),
                             IconButton(
                                 onPressed: () {
                                   Get.back();
@@ -233,7 +233,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                 Get.back();
                                 Get.to(() => const AddProductScreen());
                               },
-                              title: Text('Add New Product'),
+                              title: Text('add_new_product'.tr),
                             ),
                             ClipRRect(
                               borderRadius: BorderRadius.vertical(
@@ -244,7 +244,7 @@ class _MyProductsScreenState extends State<MyProductsScreen> {
                                   Get.back();
                                   Get.to(() => ImportProductScreen());
                                 },
-                                title: Text('Import from Excel File'),
+                                title: Text('import_from_excel_file'.tr),
                               ),
                             )
                           ],

@@ -62,7 +62,22 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
 
     if (widget.isEdit) {
       loadTenderData();
+    } else {
+      initializeUserData();
     }
+  }
+
+  initializeUserData() {
+    final userData = context.read<UserBloc>().state.userInfo?.data;
+
+    emailController.text = userData?.email ?? '';
+    String rawPhone = userData?.phone ?? '';
+    String cleanedPhone = rawPhone.startsWith('+996')
+        ? rawPhone.replaceFirst('+996', '')
+        : rawPhone;
+
+    phoneController.text = cleanedPhone;
+    print('account id = ${userData?.id}');
   }
 
   loadTenderData() async {
@@ -469,7 +484,7 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
                               CustomTextField(
                                 controller: descriptionController,
                                 hintColor: 'description'.tr,
-                                inputType: TextInputType.none,
+                                inputType: TextInputType.text,
                                 leading: '',
                                 readOnly: false,
                                 maxLines: 4,
@@ -891,57 +906,74 @@ class _NewTende2ScreenState extends State<NewTende2Screen> {
 
                               BlocBuilder<CompanyBloc, CompanyState>(
                                 builder: (context, companyState) {
-                                  return Container(
-                                    height: 48,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                        width: 1,
-                                        color: ColorResources.lgColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: DropdownButton<CompanyItem>(
-                                      value:
-                                          state.newTenderModel.selectedCompany,
-                                      isExpanded: true,
-                                      hint: Text(
-                                        state.newTenderModel.selectedCompany
-                                                ?.name ??
-                                            'select_company'.tr,
-                                        style: body16.copyWith(
-                                            color: ColorResources.gray),
-                                      ),
-                                      underline:
-                                          const SizedBox(), // Remove default underline
-                                      onChanged: context
-                                                  .read<UserBloc>()
-                                                  .state
-                                                  .selectedAccountModel!
-                                                  .isUser ==
-                                              true
-                                          ? (CompanyItem? newValue) {
-                                              setState(() {
-                                                state.newTenderModel
-                                                    .selectedCompany = newValue;
-                                              });
-                                            }
-                                          : null,
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 48,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 14, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            width: 1,
+                                            color: ColorResources.lgColor,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: DropdownButton<CompanyItem>(
+                                          value: state
+                                              .newTenderModel.selectedCompany,
+                                          isExpanded: true,
+                                          hint: Text(
+                                            state.newTenderModel.selectedCompany
+                                                    ?.name ??
+                                                'select_company'.tr,
+                                            style: body16.copyWith(
+                                                color: ColorResources.gray),
+                                          ),
+                                          underline:
+                                              const SizedBox(), // Remove default underline
+                                          onChanged: context
+                                                      .read<UserBloc>()
+                                                      .state
+                                                      .selectedAccountModel!
+                                                      .isUser ==
+                                                  true
+                                              ? (CompanyItem? newValue) {
+                                                  setState(() {
+                                                    state.newTenderModel
+                                                            .selectedCompany =
+                                                        newValue;
+                                                  });
+                                                }
+                                              : null,
 
-                                      items: companyState.myCompanies
-                                          .map((CompanyItem city) {
-                                        return DropdownMenuItem<CompanyItem>(
-                                          value: city,
-                                          child: Text(city.name ?? '',
-                                              style: body16),
-                                        );
-                                      }).toList(),
-                                    ),
+                                          items: companyState.myCompanies
+                                              .map((CompanyItem city) {
+                                            return DropdownMenuItem<
+                                                CompanyItem>(
+                                              value: city,
+                                              child: Text(city.name ?? '',
+                                                  style: body16),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                      if (companyState.myCompanies.isEmpty)
+                                        Text(
+                                          'no_companies_found'.tr,
+                                          style: body14.copyWith(
+                                              color: Colors.red),
+                                        )
+                                    ],
                                   );
                                 },
                               ),
+
                               const SizedBox(
                                 height: 20,
                               ),

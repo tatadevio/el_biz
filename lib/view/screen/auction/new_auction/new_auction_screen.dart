@@ -621,6 +621,13 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                                     editingController:
                                         minimumThresholdController,
                                     hintText: '1',
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d*\.?\d{0,2}')),
+                                    ],
                                     suffixIcon: null),
                               ),
                             ],
@@ -773,6 +780,8 @@ class _NewAuctionScreenState extends State<NewAuctionScreen> {
                             child: customTextField(
                                 editingController: targetPriceController,
                                 hintText: '10',
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: false, signed: false),
                                 suffixIcon: Text(selectedCurrency ?? ''),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,

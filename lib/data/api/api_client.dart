@@ -211,7 +211,7 @@ class ApiClient extends GetxService {
 
       if (foundation.kDebugMode) {
         print('====> Multipart Response: [$statusCode] $uri');
-        print('====> Response Body: $responseString');
+        log('====> Response Body: $responseString');
       }
 
       dynamic body;

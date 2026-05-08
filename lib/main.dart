@@ -189,18 +189,40 @@ class MyApp extends StatelessWidget {
           fallbackLocale: Locale(AppConstants.languages[0].languageCode,
               AppConstants.languages[0].countryCode),
           navigatorObservers: [BotToastNavigatorObserver()],
+          // builder: (context, child) {
+          //   return BotToastInit()(
+          //     context,
+          //     Scaffold(
+          //       body: Stack(
+          //         children: [
+          //           child!,
+          //           const Align(
+          //             alignment: Alignment.bottomCenter,
+          //             child: ConnectivityBanner(),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   );
+          // },
           builder: (context, child) {
-            return BotToastInit()(
-              context,
-              Scaffold(
-                body: Stack(
-                  children: [
-                    child!,
-                    const Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ConnectivityBanner(),
-                    ),
-                  ],
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: BotToastInit()(
+                context,
+                Scaffold(
+                  body: Stack(
+                    children: [
+                      child!,
+                      const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ConnectivityBanner(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

@@ -16,6 +16,7 @@ class AppConstants {
   // static const String googleMapApiKey = "AIzaSyDzA_aNns0_2hD7DgwxvxqlUwuxtwsZEYs";
 
   /// Auth
+  static const String checkUserUrl = "api/auth/check-user";
   static const String sendOtpUrl = "api/auth/send-otp";
   static const String verifyOtpUrl = "api/auth/verify-otp";
   static const String changePasswordUrl = "api/users/change-password";

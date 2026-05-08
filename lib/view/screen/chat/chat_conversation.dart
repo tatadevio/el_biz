@@ -23,61 +23,36 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
+import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../bloc/product/product_bloc.dart';
+import '../../../bloc/product_detail/product_detail_bloc.dart';
+import '../../../bloc/product_review/product_review_bloc.dart';
+import '../../../bloc/similar_companies/similar_companies_bloc.dart';
+import '../../../bloc/similar_products/similar_products_bloc.dart';
+import '../../../bloc/similar_tenders/similar_tenders_bloc.dart';
+import '../../../bloc/tender_detail/tender_detail_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../data/model/response/chat/chat_list_model.dart';
 import '../../../data/model/response/chat/chat_list_model.dart' as user;
 import '../../../data/model/response/tender/tender_item_model.dart';
 import '../../../helper/send_notification.dart';
 import '../auth/login.dart';
+import '../company/company_page_screen.dart';
+import '../product_detail/product_detail_screen.dart';
 import '../select_tender/select_tender_screen.dart';
+import '../tender/tender_detail_screen.dart';
 import 'widgets/message_item.dart';
 
 class ChatConversation extends StatefulWidget {
   final ChatItem? chatItem;
   final bool isFirstMessage;
-  // final bool isSeller;
   final String? chatId;
-  // final String receiverId;
-  // final String senderId;
-  // final String firebaseChatId;
-  // final String chatId;
-  // final int userUnread;
-  // final int productUserId;
-  // final int ownerUnread;
-  // final String productName;
-  // final String productPrice;
-  // final ProductListItem product;
-  // final String type;
-  // final String
-  //     productId; // getting to init chat only coming form the product detail screen
-  // // final String tenderId;
-  // final String
-  //     tenderId; // getting to init tender chat from tender detail screen
-  // final TenderItem? tender;
-  // final int companyId;
+
   const ChatConversation({
     super.key,
     required this.chatItem,
-    // required this.isSeller,
     required this.isFirstMessage,
     this.chatId,
-    // this.receiverId = '',
-    // required this.senderId,
-    // // required this.productId,
-    // this.firebaseChatId = '',
-    // this.chatId = '',
-    // this.userUnread = 0,
-    // this.ownerUnread = 0,
-    // this.productUserId = 0,
-    // required this.productName,
-    // required this.productPrice,
-    // required this.product,
-    // this.type = 'product',
-    // this.tenderId = '0',
-    // this.tender,
-    // required this.companyId,
-    // this.productId = '0',
   });
 
   @override
@@ -108,7 +83,9 @@ class _ChatConversationState extends State<ChatConversation> {
     // _messagesStream = _createOptimizedMessageStream();
     if (!context.read<AuthBloc>().state.isLoggedIn) {
       Get.offAll(() => LoginScreen());
+      return;
     }
+    print('this is the company id = ${widget.chatItem?.company?.id}');
     if (widget.chatItem == null) {
       getAllDataWithChatItem();
     } else {
@@ -323,6 +300,7 @@ class _ChatConversationState extends State<ChatConversation> {
   }
 
   void _listenToNewMessages() {
+    print('this is the chat id = ${chatItem?.firebaseChatId}');
     _messagesSubscription = FirebaseFirestore.instance
         .collection('chat')
         .doc(chatItem?.firebaseChatId)
@@ -459,7 +437,35 @@ class _ChatConversationState extends State<ChatConversation> {
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
-          onTap: () {},
+          onTap: () {
+            if (chatItem?.type == 'product') {
+              if (chatItem?.product?.id == null) {
+                return;
+              }
+              context.read<ProductDetailBloc>().add(
+                  GetProductDetail(chatItem?.product?.id.toString() ?? ''));
+              context.read<ProductReviewBloc>().add(
+                  GetProductReviews(chatItem?.product?.id.toString() ?? '', 1));
+
+              context.read<SimilarProductsBloc>().add(GetSimilarProducts(
+                  productId: chatItem?.product?.id.toString() ?? '',
+                  currentPage: 1));
+
+              Get.to(() => const ProductDetailScreen());
+            } else {
+              if (chatItem?.tender?.id == null) {
+                return;
+              }
+              context.read<TenderDetailBloc>().add(
+                  GetTenderDetail(tenderId: chatItem!.tender!.id.toString()));
+              context.read<SimilarTendersBloc>().add(GetSimilarTenders(
+                  tenderId: chatItem!.tender!.id.toString(), currentPage: 1));
+              Get.to(() => TenderDetailScreen(
+                    // isProduct: false,
+                    tenderName: chatItem!.tender!.title ?? '',
+                  ));
+            }
+          },
           dense: true,
           contentPadding: const EdgeInsets.all(0),
           leading: CustomImage(
@@ -484,6 +490,45 @@ class _ChatConversationState extends State<ChatConversation> {
             style: body14.copyWith(color: ColorResources.blue),
           ),
         ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              if (widget.chatItem?.company != null) {
+                context
+                    .read<CompanyDetailBloc>()
+                    .add(GetCompanyDetail(chatItem!.company!.id.toString()));
+                context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+                    companyId: chatItem!.company!.id.toString(),
+                    currentPage: 1));
+                Get.to(() => CompanyPageScreen());
+              }
+            },
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                  color: ColorResources.blue,
+                  borderRadius: BorderRadius.circular(12)),
+              child: Center(
+                child: Icon(
+                  Icons.store,
+                  color: Colors.white,
+                  size: 28,
+                ),
+
+                //  SvgPicture.asset(
+                //   Images.sv,
+                //   height: 24,
+                //   width: 24,
+                //   colorFilter: const ColorFilter.mode(ColorResources.darkGray, BlendMode.srcIn),
+                // ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(55),
           child: Column(

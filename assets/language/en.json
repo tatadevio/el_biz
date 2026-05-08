@@ -509,5 +509,7 @@
   "accept" : "Accept",
   "winner_buy_offer" : "Winner buy offer",
   "are_you_sure_to_close_auction" : "Are you sure you want to close the auction?",
-  "as_auction_will_close_it_will_assign_to_higher_bid" : "As the auction will close, it will be assigned to the highest bid."
+  "as_auction_will_close_it_will_assign_to_higher_bid" : "As the auction will close, it will be assigned to the highest bid.",
+  "add_new_product" : "Add New Product",
+  "import_from_excel_file" : "Import from Excel File"
 }

@@ -112,6 +112,11 @@ class AuthRepo {
         .postData(AppConstants.sendOtpUrl, {"phone": phoneNumber});
   }
 
+  Future<Response> checkUser(String phoneNumber) async {
+    return await apiClient
+        .postData(AppConstants.checkUserUrl, {"phone": phoneNumber});
+  }
+
   Future<Response> verifyOtp(
       String otpToken, String phone, String otpCode) async {
     return await apiClient.postData(AppConstants.verifyOtpUrl,
