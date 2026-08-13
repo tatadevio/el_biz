@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:el_biz/data/repo/chat_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -35,8 +36,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessage>(
       (event, emit) async {
         try {
+          log('this is chat init sending data = ${event.productId}, ${event.tenderId}, ${event.type}');
           final response = await chatRepo.sendMessage(
-              event.productId, event.tenderId, event.type);
+              event.productId, event.tenderId, event.type, event.compnayId);
+          log('this is chat init response data = ${response.body}');
 
           if (response.statusCode == 200 &&
               response.body['data']['chat_id'] != null) {
@@ -73,12 +76,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     // );
     on<GetChatProductList>(_onGetChatProductList);
     on<GetChatTenderList>(_onGetChatTenderList);
+    on<GetChatCompanyList>(_onGetChatCompanyList);
     // on<DeleteChat>(_onDeleteChat);
     on<SendChatMedia>(_onSendChatMedia);
     on<UpdateLastMessage>(_onUpdateLastMessage);
     on<UpdateUnReadCount>(_onUpdateUnReadCount);
     on<SearchChatProducts>(_onSearchChatProducts);
     on<SearchChatTenders>(_onSearchChatTenders);
+    on<SearchChatCompany>(_onSearchChatCompany);
     on<ClearChatSearch>(_onClearChatSearch);
     on<FetchChatItemFromChatId>(_onFetchChatItemFromChatId);
   }
@@ -152,6 +157,42 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       print(e.toString());
     }
     emit(state.copyWith(isLoading: false, isLoadingTenderMore: false));
+  }
+
+  // get company chat list
+  Future<void> _onGetChatCompanyList(
+      GetChatCompanyList event, Emitter<ChatState> emit) async {
+    if (event.currentPage == 1) {
+      if (event.reload) {
+        emit(state.copyWith(isLoading: true));
+      }
+    } else {
+      emit(state.copyWith(isLoadingMore: true));
+    }
+    try {
+      final res = await chatRepo.getChatList('company', event.currentPage);
+
+      ChatListModel chatData = ChatListModel.fromJson(res.body);
+      if (event.currentPage == 1) {
+        final newList = chatData.data?.items ?? [];
+        emit(state.copyWith(
+          chatCompanyList: newList,
+          filteredChatCompanyList: newList,
+        ));
+      } else {
+        List<ChatItem> newItems = [
+          ...state.chatCompanyList,
+          ...chatData.data?.items ?? [],
+        ];
+        emit(state.copyWith(chatCompanyList: newItems));
+      }
+      int currentPage = chatData.data?.currentPage ?? 1;
+      int pageSize = chatData.data?.totalPages ?? 1;
+      emit(state.copyWith(pageSize: pageSize, currentPage: currentPage));
+    } catch (e) {
+      print(e.toString());
+    }
+    emit(state.copyWith(isLoading: false, isLoadingMore: false));
   }
 
   // Future<void> _onDeleteChat(DeleteChat event, Emitter<ChatState> emit) async {
@@ -405,6 +446,81 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(state.copyWith(
       isSearchingTenders: false,
       isLoadingTenderSearchMore: false,
+    ));
+  }
+
+// on search chat companies list
+  Future<void> _onSearchChatCompany(
+      SearchChatCompany event, Emitter<ChatState> emit) async {
+    final query = event.query;
+
+    if (event.currentPage == 1) {
+      emit(state.copyWith(
+        companySearchQuery: query,
+        isSearchingCompany: true,
+        filteredChatCompanyList: const [],
+        companySearchCurrentPage: 1,
+      ));
+    } else {
+      emit(state.copyWith(isLoadingCompanySearchMore: true));
+    }
+
+    try {
+      if (query.isEmpty) {
+        // If search is empty, load normal chat list
+        final res = await chatRepo.getChatList('company', event.currentPage);
+        ChatListModel chatData = ChatListModel.fromJson(res.body);
+
+        if (event.currentPage == 1) {
+          final newList = chatData.data?.items ?? [];
+          emit(state.copyWith(
+            filteredChatCompanyList: newList,
+            companySearchCurrentPage: chatData.data?.currentPage ?? 1,
+            companySearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        } else {
+          List<ChatItem> newItems = [
+            ...state.filteredChatCompanyList,
+            ...chatData.data?.items ?? [],
+          ];
+          emit(state.copyWith(
+            filteredChatCompanyList: newItems,
+            companySearchCurrentPage: chatData.data?.currentPage ?? 1,
+            companySearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        }
+      } else {
+        // Use search API
+        final res = await chatRepo.getSearchChatList(
+            'company', query, event.currentPage);
+        ChatListModel chatData = ChatListModel.fromJson(res.body);
+
+        if (event.currentPage == 1) {
+          final newList = chatData.data?.items ?? [];
+          emit(state.copyWith(
+            filteredChatCompanyList: newList,
+            companySearchCurrentPage: chatData.data?.currentPage ?? 1,
+            companySearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        } else {
+          List<ChatItem> newItems = [
+            ...state.filteredChatCompanyList,
+            ...chatData.data?.items ?? [],
+          ];
+          emit(state.copyWith(
+            filteredChatCompanyList: newItems,
+            companySearchCurrentPage: chatData.data?.currentPage ?? 1,
+            companySearchPageSize: chatData.data?.totalPages ?? 1,
+          ));
+        }
+      }
+    } catch (e) {
+      print('Search companies error: $e');
+    }
+
+    emit(state.copyWith(
+      isSearchingCompany: false,
+      isLoadingCompanySearchMore: false,
     ));
   }
 

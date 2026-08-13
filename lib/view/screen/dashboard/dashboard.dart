@@ -15,6 +15,7 @@ import '../../../utils/color_resources.dart';
 import '../auction/auctions/auctions_screen.dart';
 import '../chat/chat_screen.dart';
 import '../home/home_screen.dart';
+import '../menu/menu_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -40,7 +41,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       const TenderScreen(),
       const AuctionsScreen(),
       const ChatScreen(),
-      const ProductScreen(),
+      // const ProductScreen(),
+      const MenuScreen(),
     ];
     initNotify();
     updateFcmToken();
@@ -114,7 +116,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _barItem(Images.svgTenders, 'tenders', 1, state),
       _barItem(Images.svgChart, 'auctions', 2, state),
       _barItem(Images.svgChat, 'chats', 3, state),
-      _barItem(Images.svgCategory, 'products', 4, state),
+      // _barItem(Images.svgCategory, 'products', 4, state),
+      _barItem(Images.svgProfile, 'profile', 4, state),
     ];
 
     return list;

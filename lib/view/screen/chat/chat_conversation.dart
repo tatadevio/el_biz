@@ -240,6 +240,9 @@ class _ChatConversationState extends State<ChatConversation> {
                 tenderId: chatItem?.type == 'tender'
                     ? chatItem?.tender?.id.toString() ?? '0'
                     : '0',
+                compnayId: chatItem?.type == 'company'
+                    ? chatItem?.company?.id.toString() ?? '0'
+                    : '0',
                 // widget.tenderId,
                 completer: completer),
           );
@@ -452,7 +455,7 @@ class _ChatConversationState extends State<ChatConversation> {
                   currentPage: 1));
 
               Get.to(() => const ProductDetailScreen());
-            } else {
+            } else if (chatItem?.type == 'tender') {
               if (chatItem?.tender?.id == null) {
                 return;
               }
@@ -464,6 +467,14 @@ class _ChatConversationState extends State<ChatConversation> {
                     // isProduct: false,
                     tenderName: chatItem!.tender!.title ?? '',
                   ));
+            } else if (chatItem?.type == 'company') {
+              // need to get company detail data to go to the company detail page
+              context
+                  .read<CompanyDetailBloc>()
+                  .add(GetCompanyDetail(chatItem!.company!.id.toString()));
+              context.read<SimilarCompaniesBloc>().add(GetSimilarCompanies(
+                  companyId: chatItem!.company!.id.toString(), currentPage: 1));
+              Get.to(() => CompanyPageScreen());
             }
           },
           dense: true,
@@ -471,22 +482,28 @@ class _ChatConversationState extends State<ChatConversation> {
           leading: CustomImage(
               image: chatItem?.type == 'product'
                   ? chatItem?.product?.image ?? ''
-                  : chatItem?.tender?.image ?? '',
+                  : chatItem?.type == 'company'
+                      ? chatItem?.company?.logo ?? ''
+                      : chatItem?.tender?.image ?? '',
               height: 32,
               width: 32,
               radius: 5.3),
           title: Text(
             chatItem?.type == 'product'
                 ? chatItem?.product?.name ?? ''
-                : chatItem?.tender?.title ?? '',
+                : chatItem?.type == 'company'
+                    ? chatItem?.company?.name ?? ''
+                    : chatItem?.tender?.title ?? '',
             // widget.productName,
             // 'Садовая мебель Loft',
             style: h16.copyWith(color: ColorResources.darkGray),
           ),
           subtitle: Text(
-            chatItem?.type == 'product'
-                ? '${chatItem?.product?.price} сом/шт'
-                : "${chatItem?.tender?.budgetFrom} - ${chatItem?.tender?.budgetTo} сом",
+            chatItem?.type == 'company'
+                ? ''
+                : chatItem?.type == 'product'
+                    ? '${chatItem?.product?.price} сом/шт'
+                    : "${chatItem?.tender?.budgetFrom} - ${chatItem?.tender?.budgetTo} сом",
             style: body14.copyWith(color: ColorResources.blue),
           ),
         ),
@@ -743,61 +760,60 @@ class _ChatConversationState extends State<ChatConversation> {
                           width: 10,
                         ),
                         Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap:
+                          child: chatItem?.type == 'company'
+                              ? const SizedBox()
+                              : InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: () {
+                                    print(
+                                        "this is buyer id = ${receiverUser?.id}");
+                                    context
+                                        .read<AgreementBloc>()
+                                        .add(GetPaymentMethod(currentPage: 1));
+                                    Get.to(() =>
+                                        ConditionsCreatingContractScreen(
+                                          product: chatItem?.product ??
+                                              ProductListItem(),
+                                          tenderItem:
+                                              chatItem?.tender ?? TenderItem(),
+                                          buyerId:
+                                              receiverUser?.id.toString() ?? '',
+                                          type: chatItem?.type ?? '',
+                                          // tenderId:
+                                          //     widget.tender?.id.toString() ?? '0',
+                                          // productId: widget.productId,
+                                          companyId: chatItem?.company?.id ?? 0,
+                                        ));
 
-                                //  widget.type == 'tender'
-                                //     ? () {
-
-                                //       }
-                                //     :
-
-                                () {
-                              print("this is buyer id = ${receiverUser?.id}");
-                              context
-                                  .read<AgreementBloc>()
-                                  .add(GetPaymentMethod(currentPage: 1));
-                              Get.to(() => ConditionsCreatingContractScreen(
-                                    product:
-                                        chatItem?.product ?? ProductListItem(),
-                                    tenderItem:
-                                        chatItem?.tender ?? TenderItem(),
-                                    buyerId: receiverUser?.id.toString() ?? '',
-                                    type: chatItem?.type ?? '',
-                                    // tenderId:
-                                    //     widget.tender?.id.toString() ?? '0',
-                                    // productId: widget.productId,
-                                    companyId: chatItem?.company?.id ?? 0,
-                                  ));
-
-                              // there have to send the company id
-                            },
-                            child: Container(
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: ColorResources.green,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    width: 1, color: ColorResources.green),
-                                boxShadow: const [ColorResources.shadow1],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(Images.svgPlus),
-                                  const SizedBox(
-                                    width: 5,
+                                    // there have to send the company id
+                                  },
+                                  child: Container(
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.green,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                          width: 1,
+                                          color: ColorResources.green),
+                                      boxShadow: const [ColorResources.shadow1],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(Images.svgPlus),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          'agreement'.tr,
+                                          style: textSm.copyWith(
+                                              color: ColorResources.white),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    'agreement'.tr,
-                                    style: textSm.copyWith(
-                                        color: ColorResources.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                ),
                         ),
                       ],
                     ],

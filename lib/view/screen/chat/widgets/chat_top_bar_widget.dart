@@ -19,15 +19,19 @@ class ChatTopBarWidget extends StatefulWidget {
 class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
   final TextEditingController productSearchController = TextEditingController();
   final TextEditingController tenderSearchController = TextEditingController();
+  final TextEditingController companySearchController = TextEditingController();
   Timer? _productSearchTimer;
   Timer? _tenderSearchTimer;
+  Timer? _companySearchTimer;
 
   @override
   void dispose() {
     _productSearchTimer?.cancel();
     _tenderSearchTimer?.cancel();
+    _companySearchTimer?.cancel();
     productSearchController.dispose();
     tenderSearchController.dispose();
+    companySearchController.dispose();
     super.dispose();
   }
 
@@ -49,6 +53,15 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
     });
   }
 
+  void _onCompanySearchChanged(String query) {
+    _companySearchTimer?.cancel();
+    _companySearchTimer = Timer(const Duration(milliseconds: 300), () {
+      context
+          .read<ChatBloc>()
+          .add(SearchChatCompany(query: query, currentPage: 1));
+    });
+  }
+
   void _clearProductSearch() {
     productSearchController.clear();
     context.read<ChatBloc>().add(SearchChatProducts(query: '', currentPage: 1));
@@ -57,6 +70,11 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
   void _clearTenderSearch() {
     tenderSearchController.clear();
     context.read<ChatBloc>().add(SearchChatTenders(query: '', currentPage: 1));
+  }
+
+  void _clearCompanySearch() {
+    companySearchController.clear();
+    context.read<ChatBloc>().add(SearchChatCompany(query: '', currentPage: 1));
   }
 
   @override
@@ -69,8 +87,8 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    context.read<ChatBloc>().add(
-                        const UpdateShowAllMessages(showAllMessages: true));
+                    context.read<ChatBloc>().add(const UpdateShowAllMessages(
+                        showAllMessages: 'message'));
                     // chatState.updateShowAllMessages(true);
                   },
                   child: Container(
@@ -78,8 +96,9 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: chatState.isShowAllMessage ? 2 : 1,
-                          color: chatState.isShowAllMessage
+                          width:
+                              chatState.isShowAllMessage == 'message' ? 2 : 1,
+                          color: chatState.isShowAllMessage == 'message'
                               ? ColorResources.blue
                               : ColorResources.lgColor,
                         ),
@@ -90,7 +109,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                       'goods'.tr,
                       // 'all_messages'.tr,
                       style: textSm.copyWith(
-                          color: chatState.isShowAllMessage
+                          color: chatState.isShowAllMessage == 'message'
                               ? ColorResources.blue
                               : ColorResources.gray),
                     ),
@@ -101,7 +120,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                 child: InkWell(
                   onTap: () {
                     context.read<ChatBloc>().add(
-                        const UpdateShowAllMessages(showAllMessages: false));
+                        const UpdateShowAllMessages(showAllMessages: 'tender'));
                     // chatState.updateShowAllMessages(false);
                   },
                   child: Container(
@@ -109,8 +128,8 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: !chatState.isShowAllMessage ? 2 : 1,
-                          color: !chatState.isShowAllMessage
+                          width: chatState.isShowAllMessage == 'tender' ? 2 : 1,
+                          color: chatState.isShowAllMessage == 'tender'
                               ? ColorResources.blue
                               : ColorResources.lgColor,
                         ),
@@ -121,7 +140,40 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                       'tenders'.tr,
                       // 'unread'.tr,
                       style: textSm.copyWith(
-                          color: !chatState.isShowAllMessage
+                          color: chatState.isShowAllMessage == 'tender'
+                              ? ColorResources.blue
+                              : ColorResources.gray),
+                    ),
+                  ),
+                ),
+              ),
+              // there adding the company
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context.read<ChatBloc>().add(const UpdateShowAllMessages(
+                        showAllMessages: 'company'));
+                    // chatState.updateShowAllMessages(false);
+                  },
+                  child: Container(
+                    height: 36,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width:
+                              chatState.isShowAllMessage == 'company' ? 2 : 1,
+                          color: chatState.isShowAllMessage == 'company'
+                              ? ColorResources.blue
+                              : ColorResources.lgColor,
+                        ),
+                      ),
+                    ),
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'companies'.tr,
+                      // 'unread'.tr,
+                      style: textSm.copyWith(
+                          color: chatState.isShowAllMessage == 'company'
                               ? ColorResources.blue
                               : ColorResources.gray),
                     ),
@@ -131,7 +183,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
             ],
           ),
           const SizedBox(height: 10),
-          if (chatState.isShowAllMessage)
+          if (chatState.isShowAllMessage == 'message')
             CustomTextField(
               controller: productSearchController,
               hintColor: 'search_in_chats'.tr,
@@ -144,7 +196,7 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
                 icon: const Icon(Icons.close),
               ),
             ),
-          if (!chatState.isShowAllMessage) ...[
+          if (chatState.isShowAllMessage == 'tender') ...[
             CustomTextField(
               controller: tenderSearchController,
               hintColor: 'search_in_tenders'.tr,
@@ -154,6 +206,20 @@ class _ChatTopBarWidgetState extends State<ChatTopBarWidget> {
               onChanged: _onTenderSearchChanged,
               suffix: IconButton(
                 onPressed: _clearTenderSearch,
+                icon: const Icon(Icons.close),
+              ),
+            ),
+          ],
+          if (chatState.isShowAllMessage == 'company') ...[
+            CustomTextField(
+              controller: companySearchController,
+              hintColor: 'search_companies'.tr,
+              inputType: TextInputType.text,
+              leading: Images.svgSearch,
+              readOnly: false,
+              onChanged: _onCompanySearchChanged,
+              suffix: IconButton(
+                onPressed: _clearCompanySearch,
                 icon: const Icon(Icons.close),
               ),
             ),

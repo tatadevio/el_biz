@@ -3,9 +3,14 @@ import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
 import 'package:el_biz/view/base/appbar_notification_button.dart';
 import 'package:el_biz/view/base/company_item_widget.dart';
+import 'package:el_biz/view/screen/public_companies/search_public_companies_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import '../../../utils/Images.dart';
+import '../search/search_screen.dart';
 
 class PublicCompaniesScreen extends StatelessWidget {
   const PublicCompaniesScreen({super.key});
@@ -43,7 +48,28 @@ class PublicCompaniesScreen extends StatelessWidget {
             color: ColorResources.blackText,
           ),
         ),
-        actions: const [
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Get.to(() => SearchPublicCompaniesScreen());
+            },
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                  color: ColorResources.lgColor,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: SvgPicture.asset(Images.svgSearch),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
           AppbarNotificationButton(),
           SizedBox(
             width: 10,
@@ -101,32 +127,6 @@ class PublicCompaniesScreen extends StatelessWidget {
           }),
         ),
       ),
-      // bottomNavigationBar: BottomAppBar(
-      //   color: Colors.white,
-      //   child: CustomButtonWithIcon(
-      //     title: 'add_a_company'.tr,
-      //     svgIcon: Images.svgPlus,
-      //     borderColor: ColorResources.green,
-      //     onTap: () {
-      //       Get.back();
-
-      //       Get.dialog(
-      //         const CustomDialog(
-      //           widget: AlertDialog(
-      //             backgroundColor: Colors.white,
-      //             titlePadding: EdgeInsets.all(0),
-      //             contentPadding: EdgeInsets.all(5),
-      //             content: Padding(
-      //               padding: EdgeInsets.all(0),
-      //               child: FillCompanyDataBox(),
-      //             ),
-      //           ),
-      //         ),
-      //       );
-      //       // Get.to(() => AddCompanyScreen());
-      //     },
-      //   ),
-      // ),
     );
   }
 }

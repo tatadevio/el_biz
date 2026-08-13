@@ -16,7 +16,7 @@ class UpdateShowChat extends ChatEvent {
 }
 
 class UpdateShowAllMessages extends ChatEvent {
-  final bool showAllMessages;
+  final String showAllMessages;
   const UpdateShowAllMessages({required this.showAllMessages});
 
   @override
@@ -35,12 +35,14 @@ class SendMessage extends ChatEvent {
   final String productId;
   final String tenderId;
   final String type;
+  final String compnayId;
   final Completer<String> completer;
 
   const SendMessage({
     required this.productId,
     required this.tenderId,
     required this.type,
+    required this.compnayId,
     required this.completer,
   });
 
@@ -63,6 +65,16 @@ class GetChatTenderList extends ChatEvent {
   final bool reload;
 
   const GetChatTenderList({required this.currentPage, this.reload = true});
+
+  @override
+  List<Object> get props => [currentPage, reload];
+}
+
+class GetChatCompanyList extends ChatEvent {
+  final int currentPage;
+  final bool reload;
+
+  const GetChatCompanyList({required this.currentPage, this.reload = true});
 
   @override
   List<Object> get props => [currentPage, reload];
@@ -130,6 +142,15 @@ class SearchChatTenders extends ChatEvent {
   final String query;
   final int currentPage;
   const SearchChatTenders({required this.query, this.currentPage = 1});
+
+  @override
+  List<Object> get props => [query, currentPage];
+}
+
+class SearchChatCompany extends ChatEvent {
+  final String query;
+  final int currentPage;
+  const SearchChatCompany({required this.query, this.currentPage = 1});
 
   @override
   List<Object> get props => [query, currentPage];

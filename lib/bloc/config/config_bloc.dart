@@ -10,9 +10,8 @@ part 'config_state.dart';
 
 class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   final ConfigRepo configRepo;
-  ConfigBloc(this.configRepo) : 
-        super( ConfigState(pageController:   PageController(initialPage: 0))){
-          
+  ConfigBloc(this.configRepo)
+      : super(ConfigState(pageController: PageController(initialPage: 0))) {
     on<GetPrivacy>(_getPrivacy);
     on<GetTerms>(_getTerms);
     on<GetAbout>(_getAbout);
@@ -22,7 +21,6 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       emit(state.copywith(selectedIndex: event.value));
     });
   }
-
 
   Future<void> _getPrivacy(GetPrivacy event, Emitter<ConfigState> emit) async {
     emit(state.copywith(isLoading: true));

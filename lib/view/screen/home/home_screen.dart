@@ -78,74 +78,81 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-          return BlocBuilder<UserBloc, UserState>(
-              builder: (context, userState) {
-            if (authState.isLoggedIn) {
-              // final userData = userState.userInfo?.data;
-              return SizedBox(
-                width: Get.width * 0.5,
-                child: ListTile(
-                  onTap: () {
-                    Get.to(() => const MenuScreen());
-                  },
-                  contentPadding: const EdgeInsets.all(0),
-                  leading: CustomImage(
-                      image: userState.selectedAccountModel?.isUser == true
-                          ? userState.selectedAccountModel?.userImage ?? ''
-                          : userState.selectedAccountModel?.companyLogo ?? '',
-                      // image: userData?.image ?? '',
-                      height: 40,
-                      width: 40,
-                      radius: 40),
-                  title: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          userState.selectedAccountModel?.isUser == true
-                              ? userState.selectedAccountModel?.userName ?? ''
-                              : userState.selectedAccountModel?.companyName ??
-                                  '',
-                          // userData?.name ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: ColorResources.darkGray),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                        color: ColorResources.darkGray,
-                      )
-                    ],
-                  ),
-                  subtitle: Text(
-                    userState.selectedAccountModel?.isUser == true
-                        ? userState.selectedAccountModel?.userEmail ?? ''
-                        : userState.selectedAccountModel?.companyEmail ?? '',
-                    // userData?.email ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: ColorResources.gray),
-                  ),
-                ),
-              );
-            }
-            return SvgPicture.asset(Images.svgsplashLogo,
-                height: 40, width: 40);
-          });
-        }),
+        title: SizedBox(
+          height: 40,
+          // width: 60,
+          width: 60,
+          // child: Image.asset(Images.splashLogo),
+          child: SvgPicture.asset(Images.svgsplashLogo),
+        ),
+        // title: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+        //   return BlocBuilder<UserBloc, UserState>(
+        //       builder: (context, userState) {
+        //     if (authState.isLoggedIn) {
+        //       // final userData = userState.userInfo?.data;
+        //       return SizedBox(
+        //         width: Get.width * 0.5,
+        //         child: ListTile(
+        //           onTap: () {
+        //             Get.to(() => const MenuScreen());
+        //           },
+        //           contentPadding: const EdgeInsets.all(0),
+        //           leading: CustomImage(
+        //               image: userState.selectedAccountModel?.isUser == true
+        //                   ? userState.selectedAccountModel?.userImage ?? ''
+        //                   : userState.selectedAccountModel?.companyLogo ?? '',
+        //               // image: userData?.image ?? '',
+        //               height: 40,
+        //               width: 40,
+        //               radius: 40),
+        //           title: Row(
+        //             children: [
+        //               Expanded(
+        //                 child: Text(
+        //                   userState.selectedAccountModel?.isUser == true
+        //                       ? userState.selectedAccountModel?.userName ?? ''
+        //                       : userState.selectedAccountModel?.companyName ??
+        //                           '',
+        //                   // userData?.name ?? '',
+        //                   maxLines: 1,
+        //                   overflow: TextOverflow.ellipsis,
+        //                   style: TextStyle(
+        //                       fontFamily: 'Inter',
+        //                       fontSize: 18,
+        //                       fontWeight: FontWeight.w600,
+        //                       color: ColorResources.darkGray),
+        //                 ),
+        //               ),
+        //               const SizedBox(
+        //                 width: 5,
+        //               ),
+        //               Icon(
+        //                 Icons.arrow_forward_ios,
+        //                 size: 15,
+        //                 color: ColorResources.darkGray,
+        //               )
+        //             ],
+        //           ),
+        //           subtitle: Text(
+        //             userState.selectedAccountModel?.isUser == true
+        //                 ? userState.selectedAccountModel?.userEmail ?? ''
+        //                 : userState.selectedAccountModel?.companyEmail ?? '',
+        //             // userData?.email ?? '',
+        //             maxLines: 1,
+        //             overflow: TextOverflow.ellipsis,
+        //             style: TextStyle(
+        //                 fontFamily: 'Inter',
+        //                 fontSize: 13,
+        //                 fontWeight: FontWeight.w400,
+        //                 color: ColorResources.gray),
+        //           ),
+        //         ),
+        //       );
+        //     }
+        //     return SvgPicture.asset(Images.svgsplashLogo,
+        //         height: 40, width: 40);
+        //   });
+        // }),
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(12),

@@ -5,6 +5,8 @@ import 'package:el_biz/view/screen/chat/widgets/messages_list/get_tenders_chats_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'get_companies_chat_widget.dart';
+
 class ChatListWidget extends StatelessWidget {
   const ChatListWidget({super.key});
 
@@ -40,13 +42,19 @@ class ChatListWidget extends StatelessWidget {
         );
       }
 
-      if (chatState.isShowAllMessage) {
+      if (chatState.isShowAllMessage == 'message') {
         //showing all messages
         return GetProductsChatsWidget(
           currentUserId: userId,
         );
-      } else {
+      } else if (chatState.isShowAllMessage == 'company') {
         //showing unread messages
+        return GetCompaniesChatsWidget(
+          currentUserId: userId,
+        );
+        // GetTendersChatsWidget(currentUserId: userId);
+      } else {
+        //showing tenders
         return GetTendersChatsWidget(currentUserId: userId);
       }
     });

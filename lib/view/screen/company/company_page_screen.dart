@@ -1,3 +1,4 @@
+import 'package:el_biz/data/model/response/company/my_companies_model.dart';
 import 'package:el_biz/utils/Images.dart';
 import 'package:el_biz/utils/color_resources.dart';
 import 'package:el_biz/utils/custom_text_style.dart';
@@ -14,9 +15,12 @@ import 'package:get/get.dart';
 
 import '../../../bloc/company_detail/company_detail_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
+import '../../../data/model/response/chat/chat_list_model.dart';
 import '../../../data/model/response/company/company_detail_model.dart';
+import '../../../data/model/response/tender/tender_item_model.dart';
 import '../../../helper/date_helper.dart';
 import '../../base/custom_button.dart';
+import '../chat/chat_conversation.dart';
 import 'widgets/similar_companies_widget.dart';
 
 class CompanyPageScreen extends StatelessWidget {
@@ -418,7 +422,100 @@ class CompanyPageScreen extends StatelessWidget {
                             )),
                 );
               } else {
-                return SizedBox.shrink();
+                // return SizedBox.shrink();
+                return BottomAppBar(
+                  color: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                  child:
+
+                      // state.productDetailModel?.data?.user?.id == null
+                      //     ? SizedBox.shrink()
+                      //     :
+
+                      CustomButton(
+                          width: Get.width,
+                          height: 56,
+                          onTap: () {
+                            String myUserId = userState
+                                .selectedAccountModel!.userId
+                                .toString();
+                            print('this is my user id = $myUserId ');
+                            final myUser = userState.userInfo?.data;
+                            final chatItem = ChatItem(
+                              chatId: 0,
+                              // int.parse(getChatId(userState, state)),
+                              firebaseChatId:
+                                  "company_${companyData.data?.id}_user_$myUserId",
+                              type: 'company',
+                              // product: ProductListItem(
+                              //   id: state.productDetailModel?.data?.id,
+                              //   name: state.productDetailModel?.data?.name,
+                              //   price: state.productDetailModel?.data?.price,
+                              //   description:
+                              //       state.productDetailModel?.data?.description,
+                              //   slug: state.productDetailModel?.data?.slug,
+                              //   quantity:
+                              //       state.productDetailModel?.data?.quantity,
+                              //   image: state.productDetailModel?.data?.images
+                              //               ?.isNotEmpty ==
+                              //           true
+                              //       ? state.productDetailModel?.data?.images![0]
+                              //           .thumb
+                              //       : '',
+                              //   isFavorite: state
+                              //           .productDetailModel?.data?.isFavorite ??
+                              //       false,
+                              //   user: state.productDetailModel?.data?.user,
+                              // ),
+                              tender: TenderItem(),
+                              user: User(
+                                id: myUser?.id,
+                                name: myUser?.name,
+                                image: myUser?.image,
+                                phone: myUser?.phone,
+                                email: companyData.data?.owner?.email ?? '',
+                                fcmToken: myUser?.fcmToken,
+                              ),
+                              company: CompanyItem(
+                                id: companyData.data?.id,
+                                name: companyData.data?.name,
+                                logo: companyData.data?.logo,
+                                banner: companyData.data?.banner,
+                                description: companyData.data?.description,
+                                address: companyData.data?.address,
+                                owner: User(
+                                  id: companyData.data?.owner?.id,
+                                  name: companyData.data?.owner?.name,
+                                  image: companyData.data?.owner?.image,
+                                  phone: companyData.data?.owner?.phone,
+                                  email: companyData.data?.owner?.email ?? '',
+                                  // fcmToken: companyData.data?.owner?.,
+                                ),
+                                tinNumber: companyData.data?.tinNumber,
+                                phone: companyData.data?.phone,
+                                email: companyData.data?.email,
+                                reviewsAverageRating:
+                                    companyData.data?.reviewsAvgRating,
+                                // reviewsAvgRating:
+                                //     companyData.data?.reviewsAvgRating,
+                                // workingHours: companyData.data?.workingHours,
+                                // lunchBreak: companyData.data?.lunchBreak,
+                                // legalEntity: companyData.data?.legalEntity,
+                              ),
+                              lastMessage: '',
+                              lastMessageDate: companyData.data?.createdAt,
+                              userUnreadCount: 0,
+                              productOwnerUnreadCount: 0,
+                              createdAt: companyData.data?.createdAt,
+                            );
+                            Get.to(() => ChatConversation(
+                                  chatItem: chatItem,
+                                  isFirstMessage: true,
+                                ));
+                          },
+                          title: 'Чат с продавцом'),
+                );
               }
             },
           );

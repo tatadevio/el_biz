@@ -11,11 +11,12 @@ class ChatRepo {
   ChatRepo(this.apiClient);
 
   Future<Response> sendMessage(
-      String productId, String tenderId, String type) async {
+      String productId, String tenderId, String type, String companyId) async {
     return await apiClient.postData(AppConstants.messagesUrl, {
       'type': type,
       'tender_id': tenderId,
       'product_id': productId,
+      'company_id': companyId,
     });
   }
 

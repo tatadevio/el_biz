@@ -76,7 +76,9 @@ class ChatTile extends StatelessWidget {
       leading: CustomImage(
           image: chatData.type == 'product'
               ? chatData.product?.image ?? ''
-              : chatData.tender?.image ?? '',
+              : chatData.type == 'company'
+                  ? chatData.company?.logo ?? ''
+                  : chatData.tender?.image ?? '',
           height: 48,
           width: 48,
           radius: 48),
@@ -87,7 +89,9 @@ class ChatTile extends StatelessWidget {
             child: Text(
               chatData.type == 'product'
                   ? chatData.product?.name ?? ''
-                  : chatData.tender?.title ?? '',
+                  : chatData.type == 'company'
+                      ? chatData.company?.name ?? ''
+                      : chatData.tender?.title ?? '',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: h16.copyWith(color: ColorResources.darkGray),

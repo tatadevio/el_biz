@@ -33,6 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   loadData() {
     context.read<ChatBloc>().add(GetChatProductList(currentPage: 1));
     context.read<ChatBloc>().add(GetChatTenderList(currentPage: 1));
+    context.read<ChatBloc>().add(GetChatCompanyList(currentPage: 1));
     context.read<AgreementBloc>().add(GetMySales(currentPage: 1));
     context.read<AgreementBloc>().add(GetMyPurchases(currentPage: 1));
   }

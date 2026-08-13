@@ -69,7 +69,6 @@ class NotificationService {
       // Check if bloc is available before using it
       if (Get.isRegistered<CompanyDetailBloc>()) {
         Get.find<CompanyDetailBloc>().add(GetCompanyDetail(id));
-        
       }
       Get.to(() => CompanyPageScreen(isCompany: true));
     } catch (e) {
@@ -175,6 +174,13 @@ class MyNotification {
                     isFirstMessage: false,
                     chatItem: null,
                   ));
+            } else if (type == 'chat-company') {
+              Get.to(() => ChatConversation(
+                    chatId: id,
+                    // isSeller: true,
+                    isFirstMessage: false,
+                    chatItem: null,
+                  ));
             } else {
               NotificationService.handleNotificationClick(
                   type, contractId, notificationId, context);
@@ -216,6 +222,13 @@ class MyNotification {
                 isFirstMessage: false,
                 chatItem: null,
               ));
+        } else if (type == 'chat-company') {
+          Get.to(() => ChatConversation(
+                chatId: id,
+                // isSeller: true,
+                isFirstMessage: false,
+                chatItem: null,
+              ));
         } else {
           String notificationId = message?.data['notification_id'];
           String contractId = message?.data['contract_id'] ??
@@ -241,6 +254,10 @@ class MyNotification {
         context
             .read<ChatBloc>()
             .add(GetChatTenderList(currentPage: 1, reload: false));
+      } else if (type == 'chat-company') {
+        context
+            .read<ChatBloc>()
+            .add(GetChatCompanyList(currentPage: 1, reload: false));
       } else {
         context.read<NotificationBloc>().add(GetNotification(1));
 
@@ -293,13 +310,11 @@ class MyNotification {
               print('🔔 User not on contract screen, calling API');
               print(
                   '🔍 DEBUG: Calling GetContractDetail with contractId = $contractId');
-            
             }
           } else {
             print('❌ DEBUG: Contract ID is null from notification data');
           }
         }
-       
       }
       MyNotification.showNotification(
           message, flutterLocalNotificationsPlugin, true);
@@ -357,6 +372,13 @@ class MyNotification {
             ));
       } else if (type == 'chat-tender') {
         print('this is the tender open app chat id = $id');
+        Get.to(() => ChatConversation(
+              chatId: id,
+              // isSeller: true,
+              isFirstMessage: false,
+              chatItem: null,
+            ));
+      } else if (type == 'chat-company') {
         Get.to(() => ChatConversation(
               chatId: id,
               // isSeller: true,
